@@ -2,9 +2,11 @@
 //~ #include <cstdio>
 #include <pthread.h>
 #include <stdio.h>
+#include <iostream>
 #include <inttypes.h>
 #include <math.h>
 #include <thread>
+#include <chrono>
 #include <future>
 
 
@@ -80,7 +82,8 @@ void get_coords(decimal_n x_rel, decimal_n y_rel, decimal_n x, decimal_n y, deci
 
 int main(int argc, char *argv[])
 {
-
+	
+	auto start = std::chrono::steady_clock::now();
 	switch((char)argv[1][0]){
 		case '1':
 			printf("result %.10f", (decimal_n)calculate_omega(c_f(argv[2])));
@@ -94,7 +97,7 @@ int main(int argc, char *argv[])
 			printf("result %.10f", get_radius(c_i(argv[2]), c_i(argv[3])));
 			break;
 		
-		case '4':
+		case '4':{
 			auto var = std::async(c_f, argv[2]);
 			auto var1 = std::async(c_f, argv[3]);
 			auto var2 = std::async(c_f, argv[4]);
@@ -103,5 +106,15 @@ int main(int argc, char *argv[])
 			get_coords(var.get(), var1.get(), var2.get(), var3.get(), var4.get());
 			break;
 		}
+		case '5':
+			auto var = std::async(c_f, argv[2]);
+			auto var1 = std::async(c_f, argv[3]);
+			tank t;
+			t.assign_speeds(var.get(), var1.get());
+			break;
+		}
+	auto end = std::chrono::steady_clock::now();
+	std::chrono::duration<double> elapsed_seconds = end-start;
+	std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 	return 0;
 }
