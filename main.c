@@ -12,58 +12,66 @@
 #define r_wheel 0.044f // in meters
 #define pi 3.141592653589793238462643383279502884L
 #define dist_wheel 0.125f // in meters
-#define decimal float
-#define signed int16_t
 
-const decimal omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
-const decimal wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);
+#ifndef decimal_n
+	#define decimal_n float
+#endif
+
+#ifndef signed_n
+	#include <inttypes.h>
+	#define signed_n int16_t
+#endif
+
+
+const decimal_n omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
+const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);
 
 #include "./tank/tank.h"
 
-decimal calculate_omega(decimal T_avg = 0){
+decimal_n calculate_omega(decimal_n T_avg = 0){
 	//~ printf("omega con %f\nTavg %f\n %.20Lf\n", omega_wheel_const, T_avg, pi);
 	return (omega_wheel_const / T_avg);
 	}
 
-decimal calculate_T_avg(signed T_left = 0, signed T_right = 0){
-	return ((T_right - T_left) / (decimal)(T_right * T_left));
+decimal_n calculate_T_avg(signed_n T_left = 0, signed_n T_right = 0){
+	return ((T_right - T_left) / (decimal_n)(T_right * T_left));
 	}
 
-decimal calculate_distance_wheel(signed frequency, decimal time){
+decimal_n calculate_distance_wheel(signed_n frequency, decimal_n time){
 	return abs(frequency * time * wheel_step_lenght_const);
 	}
 
-decimal c_f(char * input){
-	return (decimal)atof(input);
+decimal_n c_f(char * input){
+	return (decimal_n)atof(input);
 	}
 
-signed c_i(char * input){
+signed_n c_i(char * input){
 	return atoi(input);
 	}
 
-decimal get_gamma(signed x_rel, signed y_rel){
-	return atan((decimal)y_rel / (decimal)x_rel);
+decimal_n get_gamma(signed_n x_rel, signed_n y_rel){
+	return atan((decimal_n)y_rel / (decimal_n)x_rel);
 	}
 	
-decimal get_radius(signed x_rel, signed y_rel){
+decimal_n get_radius(signed_n x_rel, signed_n y_rel){
 	return sqrt(pow(x_rel, 2) + pow(y_rel, 2));
 	}
 
 
-decimal coords_x(decimal alpha, decimal gamma, decimal radius, uint8_t dec){
+decimal_n coords_x(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec){
 	return -1*(((dec >> 1) & 1? 1 : -1))*cos((alpha) + ((dec & 1)? (1) : (-1))* gamma)*radius;
 	}
 
-decimal coords_y(decimal alpha, decimal gamma, decimal radius, uint8_t dec){
+decimal_n coords_y(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec){
 	return -1*(((dec >> 1) & 1? 1 : -1))*sin((alpha) + ((dec & 1)? (1) : (-1))* gamma)*radius;
 	}
 
-void get_coords(decimal x_rel, decimal y_rel, decimal x, decimal y, decimal alpha){
+void get_coords(decimal_n x_rel, decimal_n y_rel, decimal_n x, decimal_n y, decimal_n alpha){
 	auto var = std::async(get_gamma, x_rel, y_rel);
 	auto var1 = std::async(get_radius, x_rel, y_rel);
-	decimal ralpha = alpha * pi / 180.0f;
-	decimal gamma = var.get();
-	decimal radius = var1.get();
+	decimal_n ralpha = alpha * pi / 180.0f;
+	decimal_n gamma = var.get();
+	decimal_n radius = var1.get();
 	auto var2 = std::async(coords_x, ralpha, gamma, radius, (uint8_t) ((x_rel > 0) | (((x_rel < 0) & (y_rel > 0)) | ((x_rel > 0) && (y_rel < 0))) ));
 	auto var3 = std::async(coords_y, ralpha, gamma, radius, (uint8_t)((x_rel > 0) | (((x_rel < 0) & (y_rel > 0)) | ((x_rel > 0) && (y_rel < 0)))));
 	
@@ -75,7 +83,7 @@ int main(int argc, char *argv[])
 
 	switch((char)argv[1][0]){
 		case '1':
-			printf("result %.10f", (decimal)calculate_omega(c_f(argv[2])));
+			printf("result %.10f", (decimal_n)calculate_omega(c_f(argv[2])));
 			break;
 			
 		case '2':

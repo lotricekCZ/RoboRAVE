@@ -24,8 +24,23 @@
 #ifndef TANK_TANK_H
 #define TANK_TANK_H
 
+#ifndef decimal_n
+	#define decimal_n float
+#endif
+
+#ifndef signed_n
+	#include <inttypes.h>
+	#define signed_n int16_t
+#endif
+
+#ifndef unsigned_n
+	#include <inttypes.h>
+	#define unsigned_n uint16_t
+#endif
+
 class tank{
 	public:
+		unsigned_n joystick_range = 100; // default joystick range
 		
 	
 	
