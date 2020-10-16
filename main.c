@@ -29,6 +29,7 @@ const decimal_n omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
 const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);
 
 #include "./tank/tank.h"
+#include "./elements/radius/radius.h"
 
 decimal_n calculate_omega(decimal_n T_avg = 0){
 	//~ printf("omega con %f\nTavg %f\n %.20Lf\n", omega_wheel_const, T_avg, pi);
@@ -68,7 +69,7 @@ decimal_n coords_y(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t d
 	return -1*(((dec >> 1) & 1? 1 : -1))*sin((alpha) + ((dec & 1)? (1) : (-1))* gamma)*radius;
 	}
 
-void get_coords(decimal_n x_rel, decimal_n y_rel, decimal_n x, decimal_n y, decimal_n alpha){
+void get_coords(decimal_n x_rel, decimal_n y_rel, decimal_n x = 0, decimal_n y = 0, decimal_n alpha = 0){
 	auto var = std::async(get_gamma, x_rel, y_rel);
 	auto var1 = std::async(get_radius, x_rel, y_rel);
 	decimal_n ralpha = alpha * pi / 180.0f;
@@ -106,15 +107,29 @@ int main(int argc, char *argv[])
 			get_coords(var.get(), var1.get(), var2.get(), var3.get(), var4.get());
 			break;
 		}
-		case '5':
+		case '5':{
 			auto var = std::async(c_f, argv[2]);
 			auto var1 = std::async(c_f, argv[3]);
 			tank t;
 			t.assign_speeds(var.get(), var1.get());
 			break;
+			}
+		
+		case '6':{
+			auto var = std::async(c_f, argv[2]);
+			auto var1 = std::async(c_f, argv[3]);
+			float x = var.get();
+			float y = var1.get();
+			decimal_n rad = radius::from_hypotenuse(get_radius(x, y), get_gamma(x, y));
+			std::cout << "poloměr: " << rad << " mm" << std::endl;
+			std::cout << "tahlegamma: " << get_gamma(x, y) << " " << std::endl;
+			
+			printf("result [%f; %f]\n",coords_x(-get_gamma(x, y), 0, rad, 0), coords_y(-get_gamma(x, y), 0, rad, 0));
+			break;
+			}
 		}
 	auto end = std::chrono::steady_clock::now();
-	std::chrono::duration<double> elapsed_seconds = end-start;
+	std::chrono::duration<double> elapsed_seconds = end - start;
 	std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 	return 0;
 }
