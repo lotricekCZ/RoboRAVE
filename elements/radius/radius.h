@@ -24,8 +24,10 @@
 #ifndef ELEMENTS_RADIUS_H
 #define ELEMENTS_RADIUS_H
 
+#include "../../defines/typedefines.h"
+
 #include <pthread.h>
-#include <math.h>
+#include <cmath>
 #include <iostream>
 #include <future>
 #include <thread>
@@ -47,12 +49,30 @@
 
 class radius{
 	public:
-		static decimal_n from_hypotenuse(decimal_n length, decimal_n gamma){
-			std::cout << "gamma: " << gamma << " rad" << std::endl;
-			std::cout << "přepona: " << length << " mm" << std::endl;
-			return length / (2*cos(gamma));
+		
+		static decimal_n from_speeds(decimal_n speed_left, decimal_n speed_right){
+			return ((speed_left + speed_right) / (speed_left - speed_right)) * (dist_wheel / 2);
 			}
-	
+			
+		static decimal_n from_speeds(speeds sp){
+			return from_speeds(sp.left, sp.right);
+			}
+		
+		static coordinates coords(decimal_n in_radius, decimal_n hypotenuse, decimal_n x_rel, decimal_n y_rel){
+			decimal_n height = sqrt(pow((in_radius*100.0), 2) - pow((hypotenuse/2.0), 2));
+			decimal_n rho = acos(hypotenuse / (in_radius * 200.0)); // angle between hypotenuse and radius
+			decimal_n phi = atan(y_rel / x_rel);
+			decimal_n alpha = phi - rho;
+			coordinates ret;
+			ret.x = in_radius * 100 * cos(alpha);
+			ret.y = in_radius * 100 * sin(alpha);
+			return ret;
+			}
+		
+		static coordinates coords(decimal_n in_radius, decimal_n hypotenuse, coordinates rel){
+			return coords(in_radius, hypotenuse, rel.x, rel.y);
+			}
+		
 	};
 
 #endif // ELEMENTS_RADIUS_H

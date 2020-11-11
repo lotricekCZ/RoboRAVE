@@ -1,5 +1,3 @@
-//~ #include <iostream>
-//~ #include <cstdio>
 #include <pthread.h>
 #include <stdio.h>
 #include <iostream>
@@ -8,25 +6,18 @@
 #include <thread>
 #include <chrono>
 #include <future>
+#include "./utils/data_containers/setters/setters.tpp"
+#include "./utils/data_containers/speeds/speeds.cpp"
+#include "./utils/data_containers/coordinates/coordinates.cpp"
 
+#include "./defines/typedefines.h"
 
-#define N_wheel 200.0f
-#define r_wheel 0.044f // in meters
-#define pi 3.141592653589793238462643383279502884L
-#define dist_wheel 0.125f // in meters
+#define max(a, b) ((a>b)?a:b)
 
-#ifndef decimal_n
-	#define decimal_n float
-#endif
+#include "./defines/constants.h"
 
-#ifndef signed_n
-	#include <inttypes.h>
-	#define signed_n int16_t
-#endif
-
-
-const decimal_n omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
-const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);
+//~ const decimal_n omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
+//~ const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);
 
 #include "./tank/tank.h"
 #include "./elements/radius/radius.h"
@@ -120,12 +111,27 @@ int main(int argc, char *argv[])
 		case '6':{
 			auto var = std::async(c_f, argv[2]);
 			auto var1 = std::async(c_f, argv[3]);
+			
 			float x = var.get();
 			float y = var1.get();
-			decimal_n rad = radius::from_hypotenuse(get_radius(x, y), get_gamma(x, y));
-			std::cout << "poloměr: " << rad << " mm" << std::endl;
-			std::cout << "tahlegamma: " << get_gamma(x, y) << " " << std::endl;
-			printf("result [%f; %f]\n",	0, 0);
+			
+			decimal_n rad = radius::from_speeds(x, y);
+			std::cout << "poloměr: " << rad+dist_wheel/2 << " m" << std::endl;
+			
+			break;
+			}
+			
+		case '7':{
+			auto var = std::async(c_f, argv[2]);
+			auto var1 = std::async(c_f, argv[3]);
+			
+			float x = var.get();
+			float y = var1.get();
+			tank t;
+			t.assign_speeds(x, y);
+			decimal_n rad = radius::from_speeds(t.velocities.left, t.velocities.right);
+			coordinates r = radius::coords(rad, get_radius(x, y), x, y);
+			std::cout << r.x << " "<< r.y << std::endl;
 			break;
 			}
 		}

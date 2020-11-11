@@ -1,0 +1,1 @@
+Setters are templateable inheritable class, which can be used for handling the things for wheels.

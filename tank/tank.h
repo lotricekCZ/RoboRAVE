@@ -25,7 +25,7 @@
 #define TANK_TANK_H
 
 #include <pthread.h>
-#include <math.h>
+#include <cmath>
 #include <iostream>
 #include <future>
 #include <thread>
@@ -48,8 +48,9 @@
 class tank{
 	public:
 		decimal_n joystick_range = 100; // default joystick range
-		decimal_n speeds[2] = {0, 0};
-		void assign_speeds(decimal_n x_rel, decimal_n y_rel){
+		speeds velocities;
+		
+		speeds assign_speeds(decimal_n x_rel, decimal_n y_rel){
 			auto V = std::async(&tank::get_velocity, this, -1*x_rel, y_rel);
 			auto W = std::async(&tank::get_omega, this, -1*x_rel, y_rel);
 			
@@ -58,10 +59,12 @@ class tank{
 			
 			auto right = std::async(&tank::get_side_v, this, omega, velocity, 1);
 			auto left = std::async(&tank::get_side_v, this, omega, velocity, 0);
-			speeds[0] = left.get();
-			speeds[1] = right.get();
-			std::cout << "result: ["<< speeds[0] << ", " << speeds[1] << "]\n" << std::endl;
+			velocities.left = left.get();
+			velocities.right = right.get();
+			return velocities;
+			//~ std::cout << "result: ["<< velocities.left << ", " << velocities.right << "]\n" << std::endl;
 			}
+			
 		decimal_n get_side_v(decimal_n omega, decimal_n velocity, bool sig){
 			return (velocity + (sig? 1: -1) * omega) / 2; 
 			}
@@ -70,7 +73,7 @@ class tank{
 		decimal_n get_omega(decimal_n x, decimal_n y){
 			return ((decimal_n)joystick_range - abs((decimal_n)y)) * ((decimal_n)x / (decimal_n)joystick_range) + (decimal_n)x;
 			}
-			
+		
 		decimal_n get_velocity(decimal_n x, decimal_n y){
 			return ((decimal_n)joystick_range - abs((decimal_n)x)) * ((decimal_n)y / (decimal_n)joystick_range) + (decimal_n)y;
 			}
