@@ -31,6 +31,11 @@ speeds::speeds()
 	
 }
 
+speeds::speeds(decimal_n left, decimal_n right)
+	: setters(), left(left), right(right)
+{
+	
+}
 
 speeds::~speeds()
 {

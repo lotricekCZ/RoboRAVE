@@ -1,5 +1,5 @@
 /*
- * speeds.hpp
+ * map.hpp
  * 
  * Copyright 2020 Jakub Ramašeuski <jakub@jakub-ThinkPad-X250>
  * 
@@ -22,23 +22,25 @@
  */
 
 
-#ifndef UTILS_DATA_CONTAINERS_SPEEDS_SPEEDS_HPP
-#define UTILS_DATA_CONTAINERS_SPEEDS_SPEEDS_HPP
+#ifndef MAP_HPP
+#define MAP_HPP
 
-#include "../setters/setters.tpp"
-#include "../../../defines/typedefines.h"
+#include <vector>
+#include "location.cpp"
+#include "../../../defines/constants.h"
 
-class speeds: public setters<decimal_n>
+class map
 {
 	public:
-		decimal_n left;
-		decimal_n right;
-		speeds();
-		speeds(decimal_n, decimal_n);
-		virtual ~speeds();
-	
+		std::vector<location> _map;
+		
+		map();
+		void append(location);
+		//~ void alter(location);
+		std::vector<location> grid(int, int, int, int);
 	private:
 		/* add your private declarations */
 };
 
-#endif /* UTILS_DATA_CONTAINERS_SPEEDS_SPEEDS_HPP */ 
+			
+#endif /* MAP_HPP */ 

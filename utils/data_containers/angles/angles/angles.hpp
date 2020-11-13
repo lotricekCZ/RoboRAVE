@@ -1,5 +1,5 @@
 /*
- * speeds.hpp
+ * angles.hpp
  * 
  * Copyright 2020 Jakub Ramašeuski <jakub@jakub-ThinkPad-X250>
  * 
@@ -22,23 +22,20 @@
  */
 
 
-#ifndef UTILS_DATA_CONTAINERS_SPEEDS_SPEEDS_HPP
-#define UTILS_DATA_CONTAINERS_SPEEDS_SPEEDS_HPP
+#ifndef ANGLES_ANGLES_HPP
+#define ANGLES_ANGLES_HPP
 
-#include "../setters/setters.tpp"
-#include "../../../defines/typedefines.h"
+#include <vector>
+#include "../node/node.cpp"
 
-class speeds: public setters<decimal_n>
+class angles: public std::vector<node>
 {
 	public:
-		decimal_n left;
-		decimal_n right;
-		speeds();
-		speeds(decimal_n, decimal_n);
-		virtual ~speeds();
+		angles();
+		virtual ~angles();
 	
 	private:
 		/* add your private declarations */
 };
 
-#endif /* UTILS_DATA_CONTAINERS_SPEEDS_SPEEDS_HPP */ 
+#endif /* ANGLES_HPP */ 

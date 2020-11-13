@@ -6,13 +6,19 @@
 #include <thread>
 #include <chrono>
 #include <future>
+#include <mutex>  
+
+std::mutex mtx;
+
 #include "./utils/data_containers/setters/setters.tpp"
 #include "./utils/data_containers/speeds/speeds.cpp"
 #include "./utils/data_containers/coordinates/coordinates.cpp"
+#include "./utils/data_containers/map/map.cpp"
+#include "./utils/data_containers/angles/angles/angles.cpp"
 
 #include "./defines/typedefines.h"
 
-#define max(a, b) ((a>b)?a:b)
+#define my_max(a, b) ((a>b)?a:b)
 
 #include "./defines/constants.h"
 
@@ -21,6 +27,8 @@
 
 #include "./tank/tank.h"
 #include "./elements/radius/radius.h"
+
+
 
 decimal_n calculate_omega(decimal_n T_avg = 0){
 	//~ printf("omega con %f\nTavg %f\n %.20Lf\n", omega_wheel_const, T_avg, pi);
@@ -134,7 +142,38 @@ int main(int argc, char *argv[])
 			std::cout << r.x << " "<< r.y << std::endl;
 			break;
 			}
+			
+		case '8':{
+			uint8_t c =  1; // std::thread::hardware_concurrency();
+			
+			map m;
+			for(uint16_t g = 0; g < 4*255; g++){
+				std::vector<std::future< std::vector<location> > > o;
+				for (uint8_t t = 0; t < c; t ++){
+					o.push_back(std::move(std::async(&map::grid, m, t * map_h / c, 0, ((t+1) * map_h / c), map_l)));
+					
+					}
+				for (auto &i: o){
+					std::vector<location> out = i.get();
+					
+					m._map.insert(m._map.begin(), out.begin(), out.end());
+					
+					}
+				//~ std::cout << "size " << m._map.size() << std::endl;
+				m._map.clear();
+				//~ for (auto d: m._map){
+					
+					//~ std::cout << d._coordinates.x << std::endl;
+					//~ }
+				
+				}
+			}
+			
 		}
+
+	
+    //~ uint8_t c = std::thread::hardware_concurrency();
+    //~ std::cout << " number of cores: " << c << std::endl;
 	auto end = std::chrono::steady_clock::now();
 	std::chrono::duration<double> elapsed_seconds = end - start;
 	std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";

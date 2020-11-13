@@ -1,5 +1,5 @@
 /*
- * speeds.hpp
+ * node.hpp
  * 
  * Copyright 2020 Jakub Ramašeuski <jakub@jakub-ThinkPad-X250>
  * 
@@ -22,23 +22,27 @@
  */
 
 
-#ifndef UTILS_DATA_CONTAINERS_SPEEDS_SPEEDS_HPP
-#define UTILS_DATA_CONTAINERS_SPEEDS_SPEEDS_HPP
+#ifndef DATA_CONTAINERS_ANGLES_NODE_HPP
+#define DATA_CONTAINERS_ANGLES_NODE_HPP
 
-#include "../setters/setters.tpp"
-#include "../../../defines/typedefines.h"
-
-class speeds: public setters<decimal_n>
+class node
 {
 	public:
-		decimal_n left;
-		decimal_n right;
-		speeds();
-		speeds(decimal_n, decimal_n);
-		virtual ~speeds();
-	
+		decimal_n distance;
+		unsigned intensity:10;
+		decimal_n angle;
+		
+		node();
+		virtual ~node();
+		void set_distance(decimal_n);
+		void set_intensity(unsigned_n);
+		void set_angle(decimal_n);
+		
+		decimal_n get_distance();
+		unsigned_n get_intensity();
+		decimal_n get_angle();
 	private:
 		/* add your private declarations */
 };
 
-#endif /* UTILS_DATA_CONTAINERS_SPEEDS_SPEEDS_HPP */ 
+#endif /* NODE_HPP */ 

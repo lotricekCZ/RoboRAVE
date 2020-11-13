@@ -1,0 +1,9 @@
+# Tresholds to treat detected stuff like if they were there
+ 
+tresholds:
+	mAP:
+		candle:	 		0.2
+		line_border: 	0.3
+		line_surround: 	0.3
+		fire: 			0.6
+		barrier: 		0.2
