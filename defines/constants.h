@@ -11,6 +11,7 @@
 #define dist_wheel 0.125f // in meters
 
 #define map_raster 15 // in milimeters, x and y difference of unknown points
+#define map_unit map_raster // distance to be multiplied by influence
 #define map_l 3000 // in milimeters, x and y difference of unknown points
 #define map_h 4000 // in milimeters, x and y difference of unknown points
 
@@ -20,6 +21,7 @@ const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);
 
 /// tresholds
 /// TODO: config file, do it through config file
+
 namespace tresholds {
 	namespace mAP { 
 		// ammount of confidence image recognition needs to have
@@ -36,7 +38,7 @@ namespace tresholds {
 			decimal_n candle = 			8192;
 			decimal_n candle_blown = 	0;
 			decimal_n unknown = 		128;
-			decimal_n barrier = 		300;
+			decimal_n barrier = 		2;
 			decimal_n discovered =		-64;
 			decimal_n interesting =		1024;
 			decimal_n boring =			-128;

@@ -50,3 +50,19 @@ decimal_n location::get_distance(coordinates _coo){
 decimal_n location::get_distance(decimal_n x, decimal_n y){
 	return sqrt(pow(x - _coordinates.x, 2) + pow(y - _coordinates.y, 2));
 	}
+
+void location::set_interest(signed_b in){
+	classification.interest_level = in;
+	}
+	
+void location::set_point(uint8_t in){
+	classification.point_type = in;
+	}
+
+signed_b location::get_interest(){
+	return classification.interest_level;
+	} 
+
+uint8_t location::get_point(){
+	return classification.point_type;
+	}
