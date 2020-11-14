@@ -6,9 +6,9 @@
 #include <thread>
 #include <chrono>
 #include <future>
-#include <mutex>  
+//~ #include <mutex>  
 
-std::mutex mtx;
+//~ std::mutex mtx;
 
 #include "./utils/data_containers/setters/setters.tpp"
 #include "./utils/data_containers/speeds/speeds.cpp"
@@ -144,10 +144,10 @@ int main(int argc, char *argv[])
 			}
 			
 		case '8':{
-			uint8_t c =  1; // std::thread::hardware_concurrency();
+			uint8_t c = std::thread::hardware_concurrency();
 			
 			map m;
-			for(uint16_t g = 0; g < 4*255; g++){
+			for(uint16_t g = 0; g < 32; g++){
 				std::vector<std::future< std::vector<location> > > o;
 				for (uint8_t t = 0; t < c; t ++){
 					o.push_back(std::move(std::async(&map::grid, m, t * map_h / c, 0, ((t+1) * map_h / c), map_l)));

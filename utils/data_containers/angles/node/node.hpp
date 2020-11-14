@@ -33,6 +33,7 @@ class node
 		decimal_n angle;
 		
 		node();
+		node(decimal_n);
 		virtual ~node();
 		void set_distance(decimal_n);
 		void set_intensity(unsigned_n);

@@ -3,3 +3,5 @@ math
 
 *.gch
 *.o
+*.s
+.~lock.*

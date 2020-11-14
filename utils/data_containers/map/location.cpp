@@ -31,10 +31,22 @@ location::location()
 }
 
 location::location(decimal_n x, decimal_n y){
-	_coordinates.x = (x);
-	_coordinates.y = (y);
+	_coordinates.x = x;
+	_coordinates.y = y;
 	}
 	
 location::location(coordinates coo){
 	 _coordinates = coo;
+	}
+
+decimal_n location::get_distance(location _loc){
+	return get_distance(_loc._coordinates.x, _loc._coordinates.y);
+	}
+	
+decimal_n location::get_distance(coordinates _coo){
+	return get_distance(_coo.x, _coo.y);
+	}
+	
+decimal_n location::get_distance(decimal_n x, decimal_n y){
+	return sqrt(pow(x - _coordinates.x, 2) + pow(y - _coordinates.y, 2));
 	}

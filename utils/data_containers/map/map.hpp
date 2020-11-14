@@ -33,7 +33,9 @@ class map
 {
 	public:
 		std::vector<location> _map;
-		
+		coordinates interest_calculate();
+		uint8_t interest_maximal();
+		coordinates interest_scale(uint8_t);
 		map();
 		void append(location);
 		//~ void alter(location);

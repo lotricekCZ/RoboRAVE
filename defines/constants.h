@@ -20,14 +20,40 @@ const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);
 
 /// tresholds
 /// TODO: config file, do it through config file
-namespace tresholds{
-	namespace mAP{
-		decimal_n candle = 0.2f;
-		decimal_n line_border = 0.3f;
-		decimal_n line_surround = 0.3f;
-		decimal_n fire = 0.6f;
-		decimal_n barrier = 0.6f;
+namespace tresholds {
+	namespace mAP { 
+		// ammount of confidence image recognition needs to have
+		decimal_n candle = 			0.2f;
+		decimal_n line_border = 	0.3f;
+		decimal_n line_surround = 	0.3f;
+		decimal_n fire = 			0.6f;
+		decimal_n barrier = 		0.6f;
 		}
+		
+	namespace explo {
+		
+		namespace objects {
+			decimal_n candle = 			8192;
+			decimal_n candle_blown = 	0;
+			decimal_n unknown = 		128;
+			decimal_n barrier = 		300;
+			decimal_n discovered =		-64;
+			decimal_n interesting =		1024;
+			decimal_n boring =			-128;
+			}
+			
+		namespace influence {
+			decimal_n candle = 			6;
+			decimal_n candle_blown = 	4;
+			decimal_n unknown = 		4;
+			decimal_n barrier = 		8;
+			decimal_n discovered = 		9;
+			decimal_n boring = 			7;
+			decimal_n interesting = 	18;
+			}
+			 
+		}
+		
 	}
 
 #endif

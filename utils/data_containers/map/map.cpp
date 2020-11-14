@@ -29,6 +29,7 @@ map::map()
 {
 	
 }
+
 std::vector<location> map::grid(int s_height, int s_width, int height, int width){
 	//~ std::cout << s_height << "  " << height << std::endl;
 	//~ std::cout << s_width << "  " << width << std::endl;
@@ -51,6 +52,18 @@ std::vector<location> map::grid(int s_height, int s_width, int height, int width
 	return b;
 	}
 	
+coordinates map::interest_calculate(){
+	std::vector<location> _map_priority = _map;
+	}
+	
+uint8_t map::interest_maximal(){
+	
+	}
+	
+coordinates map::interest_scale(uint8_t max){
+	
+	}
+		
 void map::append(location in){
 	_map.push_back(in);
 	}

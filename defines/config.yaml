@@ -7,3 +7,19 @@ tresholds:
 		line_surround: 	0.3
 		fire: 			0.6
 		barrier: 		0.2
+
+priority:
+	exploration:
+		candle: 			8192
+		candle_blown: 		0
+		unknown: 			128
+		barrier: 			300
+		discovered:			-64
+		interesting:		1024
+		boring:				-128
+		
+		influence_unknown: 	2   	
+		#influence dividor of other unknown fields	
+		
+		influence_discovered: 	2
+		#influence of close location which is discovered
