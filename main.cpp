@@ -185,11 +185,11 @@ int main(int argc, char *argv[])
 				
 				}
 			//~ m._map[0].set_point(location::_discovered);
-			//~ m._map[30].set_point(location::_candle);
+			m._map[30].set_point(location::_candle);
 			std::cout << "x: " << m._map[0]._coordinates.x << "  y: " << m._map[0]._coordinates.y << std::endl;
 			location loo = m.interest_calculate();
 			std::cout << "x: " << loo._coordinates.x << "  y: " << loo._coordinates.y << std::endl;
-			m.interest_map();
+			//~ m.interest_map();
 			decimal_n loc = m.calculate_location(location(10, 10));
 			std::cout << "interest: " << loc << "\n";
 			}

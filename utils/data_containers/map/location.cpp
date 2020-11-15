@@ -64,7 +64,7 @@ decimal_n location::get_distance(decimal_n x, decimal_n y){
 	}
 
 void location::set_interest(decimal_n in){
-	std::cout << "autistrest: " << in << '\n';
+	//~ std::cout << "autistrest: " << in << '\n';
 	classification.interest_level = in;
 	}
 	

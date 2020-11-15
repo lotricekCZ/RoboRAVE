@@ -70,38 +70,38 @@ decimal_n map::calculate_location(location lo){
 	// scaled down part of map based on maximal range
 	//~ std::cout << "\ncoords:\nx: " << c.x << "\ty: " << c.y << std::endl;
 	for (auto o: _map){
-		if(abs(o._coordinates.x - x) < (influence::interesting * map_raster) || \
-			abs(o._coordinates.y - y) < (influence::interesting * map_raster)){
+		if(abs(o._coordinates.x - x) < (influence::interesting * map_unit) || \
+			abs(o._coordinates.y - y) < (influence::interesting * map_unit)){
 			distance = lo.get_distance(o);
 			switch(o.get_point()){
 				case location::_unknown:
-					interest += (distance < (influence::unknown * map_raster)? \
-									(1.0f - distance / (influence::unknown * map_raster)) * objects::unknown : 0);
+					interest += (distance < (influence::unknown * map_unit)? \
+									(1.0f - distance / (influence::unknown * map_unit)) * objects::unknown : 0);
 					break;
 					
 				case location::_candle:
-					interest += (distance < (influence::candle * map_raster)? \
-									(1.0f - distance / (influence::candle * map_raster)) * objects::candle : 0);
+					interest += (distance < (influence::candle * map_unit)? \
+									(1.0f - distance / (influence::candle * map_unit)) * objects::candle : 0);
 					break;
 					
 				case location::_interesting:
-					interest += (distance < (influence::interesting * map_raster)? \
-									(1.0f - distance / influence::interesting) * objects::interesting : 0);
+					interest += (distance < (influence::interesting * map_unit)? \
+									(1.0f - distance / (influence::interesting * map_unit)) * objects::interesting : 0);
 					break;
 					
 				case location::_barrier:
-					interest += (distance < (influence::barrier * map_raster)? \
-									(1.0f - distance / influence::barrier) * objects::barrier : 0);
+					interest += (distance < (influence::barrier * map_unit)? \
+									(1.0f - distance / (influence::barrier * map_unit)) * objects::barrier : 0);
 					break;
 					
 				case location::_discovered:
-					interest += (distance < (influence::discovered * map_raster)? \
-									(1.0f - distance / (influence::discovered * map_raster)) * objects::discovered : 0);
+					interest += (distance < (influence::discovered * map_unit)? \
+									(1.0f - distance / (influence::discovered * map_unit)) * objects::discovered : 0);
 					break;
 					
 				case location::_boring:
-					interest += (distance < (influence::boring * map_raster)? \
-									(1.0f - distance / influence::boring) * objects::boring : 0);
+					interest += (distance < (influence::boring * map_unit)? \
+									(1.0f - distance / (influence::boring * map_unit)) * objects::boring : 0);
 					break;
 				}
 				//~ interest += 			
