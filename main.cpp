@@ -169,6 +169,31 @@ int main(int argc, char *argv[])
 				}
 			}
 			
+		case '9':{
+			uint8_t c = std::thread::hardware_concurrency();
+			
+			map m;
+			std::vector<std::future< std::vector<location> > > o;
+			for (uint8_t t = 0; t < c; t ++){
+				o.push_back(std::move(std::async(&map::grid, m, t * map_h / c, 0, ((t+1) * map_h / c), map_l)));
+				
+				}
+			for (auto &i: o){
+				std::vector<location> out = i.get();
+				
+				m._map.insert(m._map.begin(), out.begin(), out.end());
+				
+				}
+			//~ m._map[0].set_point(location::_discovered);
+			//~ m._map[30].set_point(location::_candle);
+			std::cout << "x: " << m._map[0]._coordinates.x << "  y: " << m._map[0]._coordinates.y << std::endl;
+			location loo = m.interest_calculate();
+			std::cout << "x: " << loo._coordinates.x << "  y: " << loo._coordinates.y << std::endl;
+			m.interest_map();
+			decimal_n loc = m.calculate_location(location(10, 10));
+			std::cout << "interest: " << loc << "\n";
+			}
+			
 		}
 
 	
@@ -176,6 +201,7 @@ int main(int argc, char *argv[])
     //~ std::cout << " number of cores: " << c << std::endl;
 	auto end = std::chrono::steady_clock::now();
 	std::chrono::duration<double> elapsed_seconds = end - start;
+	
 	std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 	return 0;
 }

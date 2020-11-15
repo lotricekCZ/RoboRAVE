@@ -12,8 +12,8 @@
 
 #define map_raster 15 // in milimeters, x and y difference of unknown points
 #define map_unit map_raster // distance to be multiplied by influence
-#define map_l 3000 // in milimeters, x and y difference of unknown points
-#define map_h 4000 // in milimeters, x and y difference of unknown points
+#define map_l 90 // in milimeters, x and y difference of unknown points
+#define map_h 90 // in milimeters, x and y difference of unknown points
 
 
 const decimal_n omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
@@ -39,19 +39,27 @@ namespace tresholds {
 			decimal_n candle_blown = 	0;
 			decimal_n unknown = 		128;
 			decimal_n barrier = 		2;
-			decimal_n discovered =		-64;
+			decimal_n discovered =		-640;
 			decimal_n interesting =		1024;
 			decimal_n boring =			-128;
 			}
 			
 		namespace influence {
-			decimal_n candle = 			6;
-			decimal_n candle_blown = 	4;
-			decimal_n unknown = 		4;
-			decimal_n barrier = 		8;
-			decimal_n discovered = 		9;
-			decimal_n boring = 			7;
-			decimal_n interesting = 	18;
+			//~ decimal_n candle = 			6;
+			//~ decimal_n candle_blown = 	4;
+			//~ decimal_n unknown = 		4;
+			//~ decimal_n barrier = 		8;
+			//~ decimal_n discovered = 		9;
+			//~ decimal_n boring = 			7;
+			//~ decimal_n interesting = 	18;
+			
+			decimal_n candle = 			1;
+			decimal_n candle_blown = 	2;
+			decimal_n unknown = 		2.5;
+			decimal_n barrier = 		4;
+			decimal_n discovered = 		4;
+			decimal_n boring = 			3;
+			decimal_n interesting = 	9;
 			}
 			 
 		}

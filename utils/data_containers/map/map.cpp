@@ -23,6 +23,7 @@
 
 
 #include "map.hpp"
+#include <algorithm>
 
 
 map::map()
@@ -39,7 +40,7 @@ std::vector<location> map::grid(int s_height = 0, int s_width = 0, int height = 
 	
 	while(ht <= he){
 		while(wt <= we){
-			b.push_back(location(ht, wt));
+			b.push_back(location(ht, wt, location::_unknown));
 			wt += map_raster;
 			}
 		wt = w;
@@ -49,59 +50,61 @@ std::vector<location> map::grid(int s_height = 0, int s_width = 0, int height = 
 	}
 	
 	
-coordinates map::interest_calculate(){
-	std::vector<location> _map_priority = _map;
-	for (auto point: _map_priority){
-		point.set_interest(calculate_location(point));
+location map::interest_calculate(){
+	std::vector<location> _map_priority;
+	//~ _map_priority.assign(_map.begin(), _map.end());
+	//~ int points = 0;
+	for (auto& point: _map){
+		point.classification.interest_level = calculate_location(point);
 		}
-	_map = _map_priority;
+	//~ _map.assign(_map_priority.begin(), _map_priority.end());
 	return interest_maximal(_map)._coordinates;
 	}
 	
-signed_b map::calculate_location(location lo){
+	
+decimal_n map::calculate_location(location lo){
 	coordinates c = lo._coordinates;
 	decimal_n x = c.x, y = c.y, distance = 0, interest = 0;
 	
 	using namespace tresholds::explo;
 	// scaled down part of map based on maximal range
+	//~ std::cout << "\ncoords:\nx: " << c.x << "\ty: " << c.y << std::endl;
 	for (auto o: _map){
 		if(abs(o._coordinates.x - x) < (influence::interesting * map_raster) || \
 			abs(o._coordinates.y - y) < (influence::interesting * map_raster)){
-			distance = o.get_distance(c);
-			if(distance < (influence::interesting * map_raster)){
-				switch(lo.get_point()){
-					case location::_unknown:
-						interest += (distance < (influence::unknown * map_raster)? \
-										(1.0f - distance / influence::unknown) * objects::unknown : 0);
-						break;
-						
-					case location::_candle:
-						interest += (distance < (influence::candle * map_raster)? \
-										(1.0f - distance / influence::candle) * objects::candle : 0);
-						break;
-						
-					case location::_interesting:
-						interest += (distance < (influence::interesting * map_raster)? \
-										(1.0f - distance / influence::interesting) * objects::interesting : 0);
-						break;
-						
-					case location::_barrier:
-						interest += (distance < (influence::barrier * map_raster)? \
-										(1.0f - distance / influence::barrier) * objects::barrier : 0);
-						break;
-						
-					case location::_discovered:
-						interest += (distance < (influence::discovered * map_raster)? \
-										(1.0f - distance / influence::discovered) * objects::discovered : 0);
-						break;
-						
-					case location::_boring:
-						interest += (distance < (influence::boring * map_raster)? \
-										(1.0f - distance / influence::boring) * objects::boring : 0);
-						break;
-					}
-				//~ interest += 
-				}			
+			distance = lo.get_distance(o);
+			switch(o.get_point()){
+				case location::_unknown:
+					interest += (distance < (influence::unknown * map_raster)? \
+									(1.0f - distance / (influence::unknown * map_raster)) * objects::unknown : 0);
+					break;
+					
+				case location::_candle:
+					interest += (distance < (influence::candle * map_raster)? \
+									(1.0f - distance / (influence::candle * map_raster)) * objects::candle : 0);
+					break;
+					
+				case location::_interesting:
+					interest += (distance < (influence::interesting * map_raster)? \
+									(1.0f - distance / influence::interesting) * objects::interesting : 0);
+					break;
+					
+				case location::_barrier:
+					interest += (distance < (influence::barrier * map_raster)? \
+									(1.0f - distance / influence::barrier) * objects::barrier : 0);
+					break;
+					
+				case location::_discovered:
+					interest += (distance < (influence::discovered * map_raster)? \
+									(1.0f - distance / (influence::discovered * map_raster)) * objects::discovered : 0);
+					break;
+					
+				case location::_boring:
+					interest += (distance < (influence::boring * map_raster)? \
+									(1.0f - distance / influence::boring) * objects::boring : 0);
+					break;
+				}
+				//~ interest += 			
 			}
 		}
 		return interest;
@@ -113,16 +116,44 @@ location map::interest_maximal(std::vector<location> inmap){
 	
 	max.set_interest( -1*(1<<22));
 	for (auto o: inmap){
+		//~ std::cout << "interest: " << o.get_interest() << std::endl;
+		//~ std::cout << "x: " << o._coordinates.x << "  y: " << o._coordinates.y << std::endl;
 		if(o.get_interest() > max.get_interest()){
-			max.set_interest(o.get_interest());
+			max = o;
 			}
 		}
+	
+	std::cout << "interest max: " << max.get_interest() << std::endl;
 	return max;
 	}
 	
 	
-coordinates map::interest_scale(signed_b max){
+void map::interest_map(){
 	
+	std::sort(_map.begin(), _map.end(), [](location a, location b){return (a._coordinates.y < b._coordinates.y);});
+	std::vector<location> same_y;
+	decimal_n y = _map[0]._coordinates.y;
+	
+	for(auto i: _map){
+		if(y == i._coordinates.y){
+			same_y.push_back(i);
+			}
+		else {
+			y = i._coordinates.y;
+			std::sort(same_y.begin(), same_y.end(), [](location a, location b){return (a._coordinates.x < b._coordinates.x);});
+			
+			//~ for(auto o: same_y){
+				//~ std::cout << "x:" << o._coordinates.x <<  "y: "<< o._coordinates.y << "\t";
+				//~ }
+			std::cout << "\n";
+			for(auto o: same_y){
+				std::cout << "" << o.get_interest() <<  "\t";
+				}
+				
+			std::cout << "\n";
+			same_y.clear();
+			}
+		}
 	}
 	
 		

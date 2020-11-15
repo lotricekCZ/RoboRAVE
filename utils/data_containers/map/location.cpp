@@ -34,7 +34,19 @@ location::location(decimal_n x, decimal_n y){
 	_coordinates.x = x;
 	_coordinates.y = y;
 	}
+
+location::location(decimal_n x, decimal_n y, uint8_t t){
+	_coordinates.x = x;
+	_coordinates.y = y;
+	set_point(t);
+	}
 	
+location::location(decimal_n x, decimal_n y, type t){
+	_coordinates.x = x;
+	_coordinates.y = y;
+	set_point(t);
+	}
+
 location::location(coordinates coo){
 	 _coordinates = coo;
 	}
@@ -51,7 +63,8 @@ decimal_n location::get_distance(decimal_n x, decimal_n y){
 	return sqrt(pow(x - _coordinates.x, 2) + pow(y - _coordinates.y, 2));
 	}
 
-void location::set_interest(signed_b in){
+void location::set_interest(decimal_n in){
+	std::cout << "autistrest: " << in << '\n';
 	classification.interest_level = in;
 	}
 	

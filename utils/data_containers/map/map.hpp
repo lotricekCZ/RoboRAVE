@@ -33,12 +33,12 @@ class map
 {
 	public:
 		std::vector<location> _map;
-		coordinates interest_calculate();
+		location interest_calculate();
 		location interest_maximal(std::vector<location> inmap);
-		coordinates interest_scale(signed_b);
+		void interest_map();
 		map();
 		void append(location);
-		signed_b calculate_location(location lo);
+		decimal_n calculate_location(location lo);
 		//~ void alter(location);
 		std::vector<location> grid(int, int, int, int);
 	private:
