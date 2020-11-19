@@ -193,7 +193,7 @@ int main(int argc, char *argv[])
 			decimal_n loc = m.calculate_location(location(10, 10));
 			std::cout << "interest: " << loc << "\n";
 			std::cout << radius::from_3_points(coordinates(-4, 0), coordinates(4, 0), coordinates(0, 4));
-			coordinates d = radius::coords(coordinates(-4, 1), coordinates(4, 1), coordinates(0, 5));
+			coordinates d = radius::coords(coordinates(0, 0), coordinates(2, 2), coordinates(-1, 2.5));
 			std::cout << "\nx: " << d.x << " y: " << d.y <<"\n";
 			}
 			

@@ -71,16 +71,25 @@ class radius{
 			decimal_n ma = (b.y - a.y) / (b.x - a.x);
 			decimal_n mb = (c.y - b.y) / (c.x - b.x);
 			coordinates center;
+			decimal_n r = from_3_points(a, b, c);
+			decimal_n x_delta = a.x - center.x;
+			
 			center.x = (ma * mb * (a.y - c.y) + mb * (a.x + b.x) - ma * (b.x + c.x)) / (2 * (mb - ma));
-			center.y = sqrt(pow(a.x - center.x, 2) - pow(from_3_points(a, b, c), 2)) + a.y;
-			std::cout << "\nsqrt: " << pow(a.x - center.x, 2) - pow(from_3_points(a, b, c), 2) << " y: " << a.y <<"\n";
-			std::cout << "\nax: " << pow(a.x - center.x, 2)<< " r: " << pow(from_3_points(a, b, c), 2) <<"\n";
-			std::cout << "\nx: " << center.x << " y: " << center.y <<"\n";
+			center.y = (1 / (2 * (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)))) * (\
+						(pow(a.x, 2) + pow(a.y, 2)) * (c.x - b.x) + \
+						(pow(b.x, 2) + pow(b.y, 2)) * (a.x - c.x) + \
+						(pow(c.x, 2) + pow(c.y, 2)) * (b.x - a.x));
+			//~ std::cout << "\n: " << round(pow(r, 2) * 100) << "y:" << round(pow(x_delta, 2) * 100) <<"";
+			//~ std::cout << "\nbod A: " << "[" << a.x << "; " << a.y <<"]";
+			//~ std::cout << "\nbod B: " << "[" << b.x << "; " << b.y <<"]";
+			//~ std::cout << "\nbod C: " << "[" << c.x << "; " << c.y <<"]";
+			//~ std::cout << "\npolomer: " << r <<"";
+			//~ std::cout << "\nstred: x: " << center.x << " y: " << center.y <<"\n";
 			return center;
 			}
 		
 		static coordinates coords(decimal_n in_radius, decimal_n hypotenuse, decimal_n x_rel, decimal_n y_rel){
-			decimal_n height = sqrt(pow((in_radius*100.0), 2) - pow((hypotenuse/2.0), 2));
+			decimal_n height = sqrt(pow((in_radius * 100.0), 2) - pow((hypotenuse / 2.0), 2));
 			decimal_n rho = acos(hypotenuse / (in_radius * 200.0)); // angle between hypotenuse and radius
 			decimal_n phi = atan(y_rel / x_rel);
 			decimal_n alpha = phi - rho;
