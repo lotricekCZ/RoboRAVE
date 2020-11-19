@@ -1,5 +1,5 @@
 /*
- * coordinates.cpp
+ * triangle.hpp
  * 
  * Copyright 2020 Jakub Ramašeuski <jakub@jakub-ThinkPad-X250>
  * 
@@ -21,19 +21,23 @@
  * 
  */
 
+ 
+#ifndef TRIANGLE_HPP
+#define TRIANGLE_HPP
+#include "../../defines/typedefines.h"
 
-#include "coordinates.h"
-
-
-coordinates::coordinates()
+class triangle
 {
-	
-}
+	public:
+		coordinates a, b, c;
+		decimal_n len_a = 0, len_b = 0, len_c = 0;
+		triangle(location, location, location);
+		triangle(coordinates, coordinates, coordinates);
+		decimal_n herone_s();
+		decimal_n length();
+		~triangle();
+	private:
+		/* add your private declarations */
+};
 
-coordinates::coordinates(decimal_n x, decimal_n y)
-{
-	this -> x = x;
-	this -> y = y;
-}
-
-
+#endif /* TRIANGLE_HPP */ 

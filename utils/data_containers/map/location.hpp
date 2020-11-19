@@ -83,7 +83,7 @@ class location
 				} exp_level;
 			
 			unsigned point_type:LOCATION_PT_S;
-			decimal_n interest_level = 0; 			/* 	level of how much is the point
+			signed interest_level:22; 			/* 	level of how much is the point
 													interesting and gives us the 
 													need and priority of visiting
 													the place. Every surrounding _unknown and _interesting 

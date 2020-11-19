@@ -32,6 +32,7 @@ class coordinates
 {
 	public:
 		coordinates();
+		coordinates(decimal_n, decimal_n);
 		decimal_n x;
 		decimal_n y;
 	private:

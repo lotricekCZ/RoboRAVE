@@ -1,5 +1,5 @@
 /*
- * coordinates.cpp
+ * triangle.cpp
  * 
  * Copyright 2020 Jakub Ramašeuski <jakub@jakub-ThinkPad-X250>
  * 
@@ -22,18 +22,35 @@
  */
 
 
-#include "coordinates.h"
+#include "triangle.hpp"
 
 
-coordinates::coordinates()
+triangle::triangle(location a, location b, location c)
 {
+	this -> a = a._coordinates;
+	this -> b = b._coordinates;
+	this -> c = c._coordinates;
+	length();
+}
+
+triangle::triangle(coordinates a, coordinates b, coordinates c)
+{
+	this -> a = a;
+	this -> b = b;
+	this -> c = c;
+	length();
+}
+
+decimal_n triangle::herone_s(){
+	decimal_n s = (length())/2.0f;
+	return sqrt(s*(s - len_a) * (s - len_b) * (s - len_c));
+	}
 	
-}
+decimal_n triangle::length(){
+	len_c = sqrt(pow((a.x - b.x), 2.0f) + pow((a.y - b.y), 2.0f)); 
+	len_a = sqrt(pow((c.x - b.x), 2.0f) + pow((c.y - b.y), 2.0f)); 
+	len_b = sqrt(pow((a.x - c.x), 2.0f) + pow((a.y - c.y), 2.0f));
+	return len_a + len_b + len_c;
+	}
 
-coordinates::coordinates(decimal_n x, decimal_n y)
-{
-	this -> x = x;
-	this -> y = y;
-}
-
-
+triangle::~triangle(){}
