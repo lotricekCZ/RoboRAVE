@@ -20,7 +20,7 @@ const decimal_n omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
 const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);
 
 /// tresholds
-/// TODO: config file, do it through config file
+/// TODO: config file, do it through config file using YAML, since it's human readable
 
 namespace tresholds {
 	namespace mAP { 
