@@ -27,7 +27,7 @@
 
 #include "./tank/tank.h"
 #include "./elements/radius/radius.h"
-
+#include "./utils/logic/logic.cpp"
 
 
 decimal_n calculate_omega(decimal_n T_avg = 0){
