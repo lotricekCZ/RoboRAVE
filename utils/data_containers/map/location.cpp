@@ -58,10 +58,47 @@ decimal_n location::get_distance(location _loc){
 decimal_n location::get_distance(coordinates _coo){
 	return get_distance(_coo.x, _coo.y);
 	}
-	
+
+/**
+ * 
+ * name: location::get_distance
+ * @param x: x coordinate of destination point
+ * @param y: y coordinate of destination point
+ * 
+ * @return distance between the point and the location
+ * based on the Pythagorus triangle
+ * 
+ */
+
 decimal_n location::get_distance(decimal_n x, decimal_n y){
 	return sqrt(pow(x - _coordinates.x, 2) + pow(y - _coordinates.y, 2));
 	}
+
+
+
+decimal_n location::get_angle(location loc){
+	return get_angle(loc._coordinates.x, loc._coordinates.y);
+	}
+
+decimal_n location::get_angle(coordinates coo){
+	return get_angle(coo.x, coo.y);
+	}
+
+/**
+ * 
+ * name: location::get_angle
+ * @param x: x coordinate of destination point
+ * @param y: y coordinate of destination point
+ * 
+ * @return angle between the point and the location
+ * 
+ */
+ 
+decimal_n location::get_angle(decimal_n x, decimal_n y){
+	return (x == 0? asin(x / get_distance(x, y)) : atan(y / x));
+	}
+
+
 
 void location::set_interest(decimal_n in){
 	//~ std::cout << "autistrest: " << in << '\n';

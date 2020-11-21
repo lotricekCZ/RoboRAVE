@@ -65,6 +65,11 @@ class location
 		decimal_n get_distance(coordinates);
 		decimal_n get_distance(decimal_n, decimal_n);
 		
+		decimal_n get_angle(location);
+		decimal_n get_angle(coordinates);
+		decimal_n get_angle(decimal_n, decimal_n);
+		
+		
 		void set_interest(decimal_n); 
 		void set_point(uint8_t);
 		

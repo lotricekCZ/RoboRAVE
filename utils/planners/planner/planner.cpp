@@ -31,9 +31,12 @@ planner::planner()
 }
 
 std::vector<step> planner::plan_make(location goal, location start, decimal_n current_angle){
+	decimal_n distance = start.get_distance(goal);
+	decimal_n angle = start.get_angle(goal);
 	std::vector<step> out;
 	out.push_back(step());
-	for(auto ang: *sight){
+	for(signed_n ang = 0; ang < 360; ang++){ // get this thing from radians
+		
 		}
 	return out;
 	}
