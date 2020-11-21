@@ -15,7 +15,7 @@
 #include "./utils/data_containers/coordinates/coordinates.cpp"
 #include "./utils/data_containers/map/map.cpp"
 #include "./utils/data_containers/angles/angles/angles.cpp"
-
+#include "./utils/planners/planner/planner.cpp"
 #include "./defines/typedefines.h"
 
 #define my_max(a, b) ((a>b)?a:b)

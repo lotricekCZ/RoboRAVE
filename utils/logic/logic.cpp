@@ -1,7 +1,7 @@
 /*
- * node.cpp
+ * logic.cpp
  * 
- * Copyright 2020 Jakub Ramašeuski <jakub@skaryna.net>
+ * Copyright 2020 Jakub Ramašeuski <jakub@jakub-ThinkPad-X250>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,56 +22,12 @@
  */
 
 
-#include "node.hpp"
+#include "logic.hpp"
 
 
-node::node()
+logic::logic()
 {
 	
 }
 
-node::node(decimal_n distance)
-{
-	this -> distance = distance;
-}
-
-node::node(decimal_n distance, unsigned_n intensity)
-{
-	this -> distance = distance;
-	this -> intensity = intensity;
-}
-
-node::node(decimal_n distance, decimal_n angle)
-{
-	this -> distance = distance;
-	this -> angle = angle;
-}
-
-void node::set_distance(decimal_n i){
-	distance = i;
-	}
-	
-void node::set_intensity(unsigned_n i){
-	intensity = i;
-	}
-	
-void node::set_angle(decimal_n i){
-	angle = i;
-	}
-
-decimal_n node::get_distance(){
-	return distance;
-	}
-	
-unsigned_n node::get_intensity(){
-	return intensity;
-	}
-	
-decimal_n node::get_angle(){
-	return angle;
-	}
-node::~node()
-{
-	
-}
 

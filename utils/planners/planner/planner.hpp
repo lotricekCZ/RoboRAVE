@@ -1,7 +1,7 @@
 /*
  * planner.hpp
  * 
- * Copyright 2020 Jakub Ramašeuski <jakub@jakub-ThinkPad-X250>
+ * Copyright 2020 Jakub Ramašeuski <jakub@skaryna.net>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,8 @@
  * 
  * 
  */
-#include "../data_containers/map/map.cpp"
+#include "../../data_containers/map/map.cpp"
+#include "step.cpp"
 #include <vector>
 
 #ifndef PLANNER_HPP
@@ -29,9 +30,11 @@
 class planner
 {
 	public:
+		angles * sight;
 		planner();
-		std::vector<> plan_make(); // makes plan geometrically, does not assign speeds or something exact
-		std::vector<> plan_calculate(); // makes speeds assigned, new coordinates, angle and steps calculated
+		std::vector<step> plan;
+		std::vector<step> plan_make(location goal); // makes plan geometrically, does not assign speeds or something exact
+		std::vector<step> plan_calculate(std::vector<step>); // makes speeds assigned, new coordinates, angle and steps calculated
 	private:
 		/* add your private declarations */
 };

@@ -1,7 +1,7 @@
 /*
  * triangle.cpp
  * 
- * Copyright 2020 Jakub Ramašeuski <jakub@jakub-ThinkPad-X250>
+ * Copyright 2020 Jakub Ramašeuski <jakub@skaryna.net>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

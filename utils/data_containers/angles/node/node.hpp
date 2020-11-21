@@ -1,7 +1,7 @@
 /*
  * node.hpp
  * 
- * Copyright 2020 Jakub Ramašeuski <jakub@jakub-ThinkPad-X250>
+ * Copyright 2020 Jakub Ramašeuski <jakub@skaryna.net>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,8 @@ class node
 		
 		node();
 		node(decimal_n);
+		node(decimal_n, decimal_n);
+		node(decimal_n, unsigned_n);
 		virtual ~node();
 		void set_distance(decimal_n);
 		void set_intensity(unsigned_n);

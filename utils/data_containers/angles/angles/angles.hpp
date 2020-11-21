@@ -1,7 +1,7 @@
 /*
  * angles.hpp
  * 
- * Copyright 2020 Jakub Ramašeuski <jakub@jakub-ThinkPad-X250>
+ * Copyright 2020 Jakub Ramašeuski <jakub@skaryna.net>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,10 @@
 class angles: public std::vector<node>
 {
 	public:
+		using vector::push_back;
+	    using vector::operator[];
+	    using vector::begin;
+	    using vector::end;
 		angles();
 		virtual ~angles();
 	

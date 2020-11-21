@@ -1,7 +1,7 @@
 /*
  * step.hpp
  * 
- * Copyright 2020 Jakub Ramašeuski <jakub@jakub-ThinkPad-X250>
+ * Copyright 2020 Jakub Ramašeuski <jakub@skaryna.net>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@
  * 
  */
 
-#include "../data_containers/speeds/speeds.cpp"
-#include "../data_containers/coordinates/coordinates.cpp"
-#include "../data_containers/map/map.cpp"
+//~ #include "../../data_containers/speeds/speeds.cpp"
+//~ #include "../../data_containers/coordinates/coordinates.cpp"
+//~ #include "../../data_containers/map/map.cpp"
 #ifndef STEP_HPP
 #define STEP_HPP
 
@@ -34,8 +34,18 @@ class step
 	coordinates start;
 	coordinates end;
 	
+	coordinates center; 	// coordinates of a center around which the robot drives
+	
+	decimal_n time;
+	
+	decimal_n time_start; 	// time when the movement started
+	decimal_n omega;		// angle which is driven in one second
+	decimal_n phi; 			// total angle which is driven
 	
 	public:
+		//~ step(speeds, coordinates, coordinates, coordinates, decimal_n, decimal_n, decimal_n, decimal_n);step(speeds, coordinates, coordinates, coordinates, decimal_n, decimal_n, decimal_n, decimal_n);
+		step(coordinates, coordinates, coordinates);
+		step(coordinates, coordinates);
 		step();
 			
 	private:
