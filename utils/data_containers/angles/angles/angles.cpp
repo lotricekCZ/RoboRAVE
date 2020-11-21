@@ -34,7 +34,10 @@ angles::angles()
 	std::sort(this -> begin(), this -> end(), [](node a, node b){return (a.angle < b.angle);});
 }
 
-
+node angles::get_angle(signed_n angle){
+	return at(angle);
+	}
+	
 angles::~angles()
 {
 	

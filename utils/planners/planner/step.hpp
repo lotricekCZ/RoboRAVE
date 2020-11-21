@@ -39,8 +39,10 @@ class step
 	decimal_n time;
 	
 	decimal_n time_start; 	// time when the movement started
+	
 	decimal_n angle_start; 	// angle when the movement started
 	decimal_n angle_end; 	// angle when the movement is going to end
+	
 	decimal_n omega;		// angle which is driven in one second
 	decimal_n phi; 			// total angle which is driven
 	
