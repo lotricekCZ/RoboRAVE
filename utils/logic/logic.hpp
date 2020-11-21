@@ -26,10 +26,20 @@
 #define LOGIC_HPP
 
 class logic
-{
+{	
+	// properties of a vehicle
+	node 		main_rotation; 
+	speeds 		main_speeds;	
+	tank 		main_tank;
+	location 	main_location;
+	
+	// map & planning stuff
+	map 		main_map;
+	
 	public:
 		logic();
-			
+		void init();
+		
 	private:
 		/* add your private declarations */
 };

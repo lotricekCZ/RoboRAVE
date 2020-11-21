@@ -30,4 +30,9 @@ logic::logic()
 	
 }
 
-
+void logic::init(){
+	
+	main_rotation.angle = pi / 2; 
+	/// TODO: make it work better than setting a single value, by reading the line sensors
+	
+	}

@@ -40,7 +40,7 @@ class map
 		void append(location);
 		decimal_n calculate_location(location lo);
 		//~ void alter(location);
-		std::vector<location> grid(int, int, int, int);
+		std::vector<location> grid(signed_b, signed_b, signed_b, signed_b);
 	private:
 		/* add your private declarations */
 };

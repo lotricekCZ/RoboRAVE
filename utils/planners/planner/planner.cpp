@@ -30,14 +30,16 @@ planner::planner()
 	
 }
 
-std::vector<step> plan_make(location goal){
+std::vector<step> planner::plan_make(location goal, location start, decimal_n current_angle){
 	std::vector<step> out;
 	out.push_back(step());
+	for(auto ang: *sight){
+		}
 	return out;
 	}
 
 
-std::vector<step> plan_calculate(std::vector<step> in){
+std::vector<step> planner::plan_calculate(std::vector<step> in){
 	std::vector<step> out = in;
 	
 	return out;

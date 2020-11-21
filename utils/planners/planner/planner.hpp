@@ -33,8 +33,12 @@ class planner
 		angles * sight;
 		planner();
 		std::vector<step> plan;
-		std::vector<step> plan_make(location goal); // makes plan geometrically, does not assign speeds or something exact
-		std::vector<step> plan_calculate(std::vector<step>); // makes speeds assigned, new coordinates, angle and steps calculated
+		
+		std::vector<step> plan_make(location goal, location start, decimal_n current_angle); 
+		// makes plan geometrically, does not assign speeds or something exact
+		
+		std::vector<step> plan_calculate(std::vector<step>); 
+		// makes speeds assigned, new coordinates, angle and steps calculated
 	private:
 		/* add your private declarations */
 };
