@@ -4,9 +4,7 @@ Ve vývoji docházím k závěru, že existuje více možností, jak naplánovat
 
 ### lineární cesta
 
-Tato cesta probíhá za podmínky, kdy není v trajektorii překážka a cíl je v úhlu 
-
-$ \pi \over 2 $
+- Tato cesta probíhá za podmínky, kdy není v trajektorii překážka a cíl je v úhlu pi / 2 a její délka je rovna přeponě pravoúhlého trojúhelníku utvořeného na základě pravoúhlého trojúhelníku.
 
 **JAK STANOVIT BODY?!**
 
@@ -28,12 +26,12 @@ $ \pi \over 2 $
   - **JAK STANOVIT BODY?!**
 
     - Jak již bylo napsáno, prostřední bod je vždy v ose souřadnic, což je také bod, na němž by se měl podle lokáních souřadnic měl nacházet
-  - Bod [x; y] je stanoven buď podle přesných lokálních souřadnic cíle, nebo se jedná o mezicíl.
+    - Bod [x; y] je stanoven buď podle přesných lokálních souřadnic cíle, nebo se jedná o mezicíl.
       - Proti němu je vygenerován bod, který je mimo záporné y souřadnice identický.
-  
-  #### plný pohyb
-  
-  - V případě tohoto pohybu je krajní ze tří bodů [0; 0] a nevidím v něm úspěch - prozatimně nevím, jak stanovit všechny body, jedná se tedy za poměrně utopistickou představu.
-    - <img src="./kruznice_3.svg" alt="image-20201124205758210" style="zoom:120%;" />
-    - **JAK STANOVIT BODY?!**
 
+  #### plný pohyb
+
+  - <img src="./kruznice_3.svg" alt="image-20201124205758210" style="zoom:120%;" />
+  - **JAK STANOVIT BODY?!**
+    - V případě tohoto pohybu je krajní ze tří bodů [0; 0] a pro představu stačí říct, že mezibod je vytvořen ve vzdálenosti dané minimální vzdálenosti překážky a robota a vzdálenosti překážky.
+    - <img src="./kruznice_4.svg" alt="image-20201124205758210" style="zoom:120%;" />
