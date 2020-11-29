@@ -4,7 +4,9 @@ Ve vývoji docházím k závěru, že existuje více možností, jak naplánovat
 
 ### lineární cesta
 
-Tato cesta probíhá za podmínky, kdy není v trajektorii překážka
+Tato cesta probíhá za podmínky, kdy není v trajektorii překážka a cíl je v úhlu 
+
+$ \pi \over 2 $
 
 **JAK STANOVIT BODY?!**
 
@@ -13,6 +15,8 @@ Tato cesta probíhá za podmínky, kdy není v trajektorii překážka
 - pro kružnici je v každém případě potřeba trojice bodů
 
 - pohyb po kružnici je ale minimálně dvojího typu, a sice
+
+- <img src="./kruznice_2.svg" alt="image-20201124205758210" style="zoom:100%;" />
 
   #### pohyb z prostředního bodu
 
@@ -30,5 +34,6 @@ Tato cesta probíhá za podmínky, kdy není v trajektorii překážka
   #### plný pohyb
   
   - V případě tohoto pohybu je krajní ze tří bodů [0; 0] a nevidím v něm úspěch - prozatimně nevím, jak stanovit všechny body, jedná se tedy za poměrně utopistickou představu.
+    - <img src="./kruznice_3.svg" alt="image-20201124205758210" style="zoom:120%;" />
     - **JAK STANOVIT BODY?!**
 
