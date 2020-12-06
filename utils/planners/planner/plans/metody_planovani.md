@@ -14,14 +14,14 @@ Ve vývoji docházím k závěru, že existuje více možností, jak naplánovat
 
 - pohyb po kružnici je ale minimálně dvojího typu, a sice
 
-- <img src="./kruznice_2.svg" alt="image-20201124205758210" style="zoom:100%;" />
+- <img src="./kruznice_2.svg" alt="image-20201124205758210" style="zoom:100%; margin-left:0%" />
 
   #### pohyb z prostředního bodu
 
    - V tomto případě se jedná o načrtnutí z bodu osy lokálního souřadnicového systému [0; 0]
       a jsou projety pouze 2 ze 3
       
-      <img src="./kruznice_1.png" alt="image-20201124205758210" style="zoom:60%;" />
+      <img src="./kruznice_1.svg" alt="image-20201124205758210" style="zoom:120%;" />
       
   - **JAK STANOVIT BODY?!**
 

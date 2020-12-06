@@ -31,12 +31,29 @@ planner::planner()
 }
 
 std::vector<step> planner::plan_make(location goal, location start, decimal_n current_angle){
+	const uint8_t max = 90;
+	uint8_t target = 90;
 	decimal_n distance = start.get_distance(goal);
-	decimal_n angle = start.get_angle(goal);
+	decimal_n angle = start.get_angle(goal) - current_angle;
+	location temp_loc = start;
+	step temp_step;
 	std::vector<step> out;
 	out.push_back(step());
-	for(signed_n ang = 0; ang < 360; ang++){ // get this thing from radians
-		
+	decimal_n start_index = (angle / pi) * 180; // get this thing from radians
+	for(signed_n index = 0; index <= max; index++){ // it doesnt have much sense since hitting this barrier, rotation is needed 
+		if(sight -> get_angle((round(start_index) + index >= 360 ? -360: 0) + (round(start_index) + index)).get_distance() > distance){
+				target = index;
+				break;
+			}
+			
+		if(sight -> get_angle((round(start_index) - index < 0 ? 360: 0) + (round(start_index) - index)).get_distance() > distance){
+				target = index;
+				break;
+			}
+			
+		if(index == (max)){
+			
+			}
 		}
 	return out;
 	}
