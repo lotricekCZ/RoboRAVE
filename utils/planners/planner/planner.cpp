@@ -32,7 +32,7 @@ planner::planner()
 
 std::vector<step> planner::plan_make(location goal, location start, decimal_n current_angle){
 	const uint8_t max = 90;
-	uint8_t target = 90;
+	uint8_t target = max+1;
 	decimal_n distance = start.get_distance(goal);
 	decimal_n angle = start.get_angle(goal) - current_angle;
 	location temp_loc = start;
@@ -51,10 +51,12 @@ std::vector<step> planner::plan_make(location goal, location start, decimal_n cu
 				break;
 			}
 			
-		if(index == (max)){
-			
-			}
 		}
+		
+	if(target == (max + 1)){ // this means it is out of range and there never was a change of value
+			
+		}
+			
 	return out;
 	}
 

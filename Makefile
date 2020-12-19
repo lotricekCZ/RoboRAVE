@@ -1,9 +1,9 @@
 LIBS    = -pthread
-
+VER = -std=c++17
 
 all:
 	
-	g++ -o math.o main.cpp $(LIBS)
+	g++ $(VER) -o math.o main.cpp $(LIBS)
 #~ 	echo "makefile time!"
 #~ 	./math.o 7 30 40
 	

@@ -35,6 +35,16 @@ class coordinates
 		coordinates(decimal_n, decimal_n);
 		decimal_n x;
 		decimal_n y;
+		coordinates make_local(coordinates, coordinates, decimal_n ang);
+		coordinates make_local(coordinates, decimal_n, decimal_n);
+		decimal_n get_gamma(decimal_n x_rel, decimal_n y_rel);
+		decimal_n get_distance(decimal_n x_rel, decimal_n y_rel);
+		uint8_t get_dec(decimal_n x_rel, decimal_n y_rel);
+		uint8_t get_dec(decimal_n rads);
+		decimal_n get_rel_x(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec);
+		decimal_n get_rel_y(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec);
+		
+		
 	private:
 		/* add your private declarations */
 };

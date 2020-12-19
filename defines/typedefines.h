@@ -2,6 +2,7 @@
 #define typedefines_h
 
 #ifndef decimal_n
+	#include <inttypes.h>
 	#define decimal_n float
 #endif
 
@@ -28,6 +29,11 @@
 #ifndef signed_l // unsigned large
 	#include <inttypes.h>
 	#define signed_l int64_t
+#endif
+
+#ifndef signed_h // unsigned large
+	#include <inttypes.h>
+	#define signed_h int128_t
 #endif
 
 #ifndef signed_b // signed big

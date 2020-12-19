@@ -21,8 +21,9 @@
  * 
  */
 
-
+#include "../../../defines/constants.h"
 #include "coordinates.h"
+
 
 
 coordinates::coordinates()
@@ -36,4 +37,48 @@ coordinates::coordinates(decimal_n x, decimal_n y)
 	this -> y = y;
 }
 
+coordinates coordinates::make_local(coordinates abs, coordinates rel, decimal_n ang){
+	decimal_n distance = get_distance(rel.x, rel.y);
+	decimal_n gamma = get_gamma(rel.x, rel.y);
+	uint8_t dec = get_dec(rel.x, rel.y);
+	return coordinates(abs.x + get_rel_x(ang, gamma, distance, dec), abs.y + get_rel_y(ang, gamma, distance, dec));
+	}
 
+/*
+ * 
+ * name: coordinates::make_local
+ * @param abs: absolute coordinates on a map
+ * @param distance: distance to that point
+ * @param angle: absolute angle at which beam measured such distance, RADIANS
+ * @return
+ * 
+ */
+
+coordinates coordinates::make_local(coordinates abs, decimal_n distance, decimal_n ang){
+	
+	uint8_t dec = get_dec(0,0);
+	//~ decimal_n gamma = ;
+	return coordinates(abs.x + get_rel_x(ang, pi/4.0, distance, dec), abs.y + get_rel_y(ang, pi/4.0, distance, dec));
+	}
+
+decimal_n coordinates::get_gamma(decimal_n x_rel, decimal_n y_rel){
+	return atan((decimal_n)y_rel / (decimal_n)x_rel);
+	}
+	
+decimal_n coordinates::get_distance(decimal_n x_rel, decimal_n y_rel){
+	return sqrt(pow(x_rel, 2) + pow(y_rel, 2));
+	}
+
+
+decimal_n coordinates::get_rel_x(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec){
+	return -1*(((dec >> 1) & 1? 1 : -1))*cos((alpha) + ((dec & 1)? (1) : (-1))* gamma)*radius;
+	}
+
+decimal_n coordinates::get_rel_y(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec){
+	return -1*(((dec >> 1) & 1? 1 : -1))*sin((alpha) + ((dec & 1)? (1) : (-1))* gamma)*radius;
+	}
+	
+uint8_t coordinates::get_dec(decimal_n x_rel, decimal_n y_rel){
+	return (uint8_t) ((x_rel > 0) | (((x_rel < 0) & (y_rel > 0)) | ((x_rel > 0) && (y_rel < 0))));
+	}
+	

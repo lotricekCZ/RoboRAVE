@@ -14,6 +14,7 @@
 #include "./utils/data_containers/speeds/speeds.cpp"
 #include "./utils/data_containers/coordinates/coordinates.cpp"
 #include "./utils/data_containers/map/map.cpp"
+#include "./utils/log_maintainer/log_maintain.cpp"
 #include "./utils/data_containers/angles/angles/angles.cpp"
 #include "./utils/planners/planner/planner.cpp"
 #include "./defines/typedefines.h"
@@ -75,7 +76,7 @@ void get_coords(decimal_n x_rel, decimal_n y_rel, decimal_n x = 0, decimal_n y =
 	decimal_n gamma = var.get();
 	decimal_n radius = var1.get();
 	auto var2 = std::async(coords_x, ralpha, gamma, radius, (uint8_t) ((x_rel > 0) | (((x_rel < 0) & (y_rel > 0)) | ((x_rel > 0) && (y_rel < 0))) ));
-	auto var3 = std::async(coords_y, ralpha, gamma, radius, (uint8_t)((x_rel > 0) | (((x_rel < 0) & (y_rel > 0)) | ((x_rel > 0) && (y_rel < 0)))));
+	auto var3 = std::async(coords_y, ralpha, gamma, radius, (uint8_t) ((x_rel > 0) | (((x_rel < 0) & (y_rel > 0)) | ((x_rel > 0) && (y_rel < 0))) ));
 	
 	printf("result [%f; %f]\n",x + var2.get(), y + var3.get());	
 	}
@@ -88,7 +89,7 @@ int main(int argc, char *argv[])
 	auto start = std::chrono::steady_clock::now();
 	switch((char)argv[1][0]){
 		case '1':
-			printf("result %.10f\n", (decimal_n)calculate_omega(c_f(argv[2])));
+			log_writer("dear Odin, fuck you", "general.txt");
 			break;
 			
 		case '2':
