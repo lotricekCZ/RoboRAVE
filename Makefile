@@ -1,5 +1,5 @@
-LIBS    = -pthread
-VER = -std=c++17
+LIBS    = -pthread -lserial -lpthread
+VER = -std=c++11
 
 all:
 	

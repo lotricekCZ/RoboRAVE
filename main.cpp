@@ -6,9 +6,18 @@
 #include <thread>
 #include <chrono>
 #include <future>
+
+//~ #include <SerialPort.h>
+//~ #include <SerialStream.h>
 //~ #include <mutex>  
 
 //~ std::mutex mtx;
+
+#include <libserial/SerialPort.h>
+#include <libserial/SerialStream.h>
+#include <iostream>
+
+#include "./hardware_interfaces/Serial/serial_handler.cpp"
 
 #include "./utils/data_containers/setters/setters.tpp"
 #include "./utils/data_containers/speeds/speeds.cpp"
@@ -85,6 +94,8 @@ void get_coords(decimal_n x_rel, decimal_n y_rel, decimal_n x = 0, decimal_n y =
 
 int main(int argc, char *argv[])
 {
+	LibSerial::SerialStream stream;
+	LibSerial::SerialPort port;
 	
 	auto start = std::chrono::steady_clock::now();
 	switch((char)argv[1][0]){
