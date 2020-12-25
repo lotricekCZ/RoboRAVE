@@ -1,5 +1,5 @@
 /*
- * serial_handler.cpp
+ * serial.cpp
  * 
  * Copyright 2020 Jakub Ramašeuski <jakub@jakub-ThinkPad-X250>
  * 
@@ -25,14 +25,40 @@
 #include "serial_handler.hpp"
 
 
-serial_handler::serial_handler()
-{
+//~ serial::serial(){}
+
+//~ serial::serial(const std::string &device, BaudRate baudRate){
+	//~ }
+
+//~ serial::serial(const std::string &device, speed_t baudRate){
+	//~ }
+
+serial::~serial(){}
+
+void serial::open(){
+	mn::CppLinuxSerial::SerialPort::Open();
+	}
 	
-}
+void serial::close(){
+	mn::CppLinuxSerial::SerialPort::Close();
+	}
 
-serial_handler::~serial_handler()
-{
+void serial::write(const std::string& data){
+	mn::CppLinuxSerial::SerialPort::Write(data);
+	}
 	
-}
-
-
+void serial::read(std::string& data){
+	mn::CppLinuxSerial::SerialPort::Read(data);
+	}
+	
+void serial::baudrate(speed_t data){
+	mn::CppLinuxSerial::SerialPort::SetBaudRate(data);
+	}
+	
+void serial::port(std::string data){
+	mn::CppLinuxSerial::SerialPort::SetDevice(data);
+	}
+	
+void serial::baudrate(mn::CppLinuxSerial::BaudRate data){
+	mn::CppLinuxSerial::SerialPort::SetBaudRate(data);
+	}

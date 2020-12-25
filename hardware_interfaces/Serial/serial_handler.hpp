@@ -1,5 +1,5 @@
 /*
- * serial_handler.hpp
+ * serial.hpp
  * 
  * Copyright 2020 Jakub Ramašeuski <jakub@jakub-ThinkPad-X250>
  * 
@@ -22,24 +22,32 @@
  */
 
 
-#ifndef SERIAL_HANDLER_HPP
-#define SERIAL_HANDLER_HPP
+#ifndef SERIAL_HPP
+#define SERIAL_HPP
 
+#include <CppLinuxSerial/SerialPort.hpp>
 
-//~ using namespace LibSerial;
+using namespace mn::CppLinuxSerial;
 
-class serial_handler
+class serial: public SerialPort
 {	
 	
-    
-	
 	public:
+		void open();
+		void close();
+		void read(std::string&);
+		void write(const std::string&);
 		
+		void port(std::string); /// port like "/dev/ttyUSB0"
 		
-		serial_handler();
-		~serial_handler();
+		void baudrate(speed_t);
+		void baudrate(mn::CppLinuxSerial::BaudRate);
+		serial(): SerialPort(){}
+		serial(const std::string & a, BaudRate b): SerialPort(a, b){}
+		serial(const std::string & a, speed_t b): SerialPort(a, b){}
+		~serial();
 	private:
 		/* add your private declarations */
 };
 
-#endif /* SERIAL_HANDLER_HPP */ 
+#endif /* SERIAL_HPP */ 
