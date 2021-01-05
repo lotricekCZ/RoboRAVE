@@ -1,12 +1,12 @@
 # Představení
 
-<h6><b> Poznámka: všechny osy x a y jsou prohozeny</b> </h6>
+<h6><b> Poznámka: všechny osy x a y jsou prohozeny, nejedná se o přepis - celý kříž je otočen o mně neznámý násobek π/2 tak, aby směrem vertikálně byla ukázána cesta robota</b> </h6>
 
 Ve vývoji docházím k závěru, že existuje více možností, jak naplánovat jeden krok.
 
 ### lineární cesta
 
-- Tato cesta probíhá za podmínky, kdy není v trajektorii překážka a cíl je v úhlu pi / 2 a její délka je rovna přeponě pravoúhlého trojúhelníku utvořeného na základě pravoúhlého trojúhelníku.
+- Tato cesta probíhá za podmínky, kdy není v trajektorii překážka a cíl je v úhlu π / 2 a její délka je rovna přeponě pravoúhlého trojúhelníku utvořeného na základě pravoúhlého trojúhelníku.
 
 **JAK STANOVIT BODY?!**
 
@@ -29,7 +29,7 @@ Ve vývoji docházím k závěru, že existuje více možností, jak naplánovat
 
     - Jak již bylo napsáno, prostřední bod je vždy v ose souřadnic, což je také bod, na němž by se měl podle lokáních souřadnic měl nacházet
     - Bod [x; y] je stanoven buď podle přesných lokálních souřadnic cíle, nebo se jedná o mezicíl.
-      - Proti němu je vygenerován bod, který je mimo záporné y souřadnice identický.
+      - Proti němu je vygenerován bod, který je mimo záporné x souřadnice identický.
 
   #### plný pohyb
 
@@ -40,15 +40,15 @@ Ve vývoji docházím k závěru, že existuje více možností, jak naplánovat
 
 ### Dalším určením uskutečnění cesty je funkce sinus v absolutní hodnotě
 
-- robot je nasměřován v pi/2 a tam má i |sin(x)| = 1.
-  - naopak směrem kol (0 a pí) je 0 → tímto směrem je nejvíc nevýhodné se pohybovat, stejně jako směry blízkými
-- pokud je cíl robota vůči němu na x, kde platí, že **|sin(x)| < |cos(x)|**, je vhodné se pohybovat skrze více kroků.
+- robot je nasměřován v π/2 a tam má i |sin(y)| = 1.
+  - naopak směrem kol (0 a π) je 0 → tímto směrem je nejvíc nevýhodné se pohybovat, stejně jako směry blízkými
+- pokud je cíl robota vůči němu na **y**, kde platí, že **|sin(y)| < |cos(y)|**, je vhodné se pohybovat skrze více kroků.
 
 ### Další možný určovač pro tvorbu cesty je poměr vzdáleností 
 
-- Tady se pracuje s tím, že **y** středu kružnice **je rovno nule**
+- Tady se pracuje s tím, že **x** středu kružnice **je rovno nule**
 
-  - principem je jednoduché porovnání lokálních vzdáleností (vzdálenost středu a bodu od osy lokálních souřadnic) na ose **x**
+  - principem je jednoduché porovnání lokálních vzdáleností (vzdálenost středu a bodu od osy lokálních souřadnic) na ose **y**
 
     #### střed je blíž:
 
@@ -79,4 +79,6 @@ A následující obrázek již akorát znázorňuje, že vše mohlo proběhnout 
   - Tady je vhodné říct, že zde je krok 1 a 2 příkladem rozložení většího kroku.
     - tento větší krok byl zamýšlen k vyhnutí se překážce
     - samotný bod by ale byl dále než střed kružnice, z níž byl kružnicový oblouk vyseknut
+    - naopak je jeto po kružnici, než je dosažen úhel takový, že je cílový bod na ose robotově ose **y** nulový nebo s opačným znaménkem
+      - opačné znaménko svědčí o přejetí možnosti zabočit a potenciálně může prodloužit dráhu.
 
