@@ -9,10 +9,11 @@
 #define r_wheel 	0.044f // in meters
 #define pi 			3.141592653589793238462643383279502884L
 #define dist_wheel 	0.125f // in meters
+#define fric_wheel 	0.5097f // static friction coeficient against wood I measured using kitchen scale
 
-#define map_raster 	45 // in milimeters, x and y difference of unknown points
+#define map_raster 	15 // in milimeters, x and y difference of unknown points
 #define map_unit 	30 // distance to be multiplied by influence
-#define map_l 		450 // in milimeters, x and y difference of unknown points
+#define map_l 		1500 // in milimeters, x and y difference of unknown points
 #define map_h 		map_l // in milimeters, x and y difference of unknown points
 
 

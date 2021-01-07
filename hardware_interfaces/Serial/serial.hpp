@@ -1,4 +1,4 @@
-/*
+ /*
  * serial.hpp
  * 
  * Copyright 2020 Jakub Ramašeuski <jakub@jakub-ThinkPad-X250>
