@@ -25,7 +25,7 @@
 #include "./defines/constants.h"
 
 //~ const decimal_n omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
-//~ const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);
+//~ const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);9
 
 #include "./tank/tank.h"
 #include "./elements/radius/radius.h"
@@ -86,20 +86,20 @@ void get_coords(decimal_n x_rel, decimal_n y_rel, decimal_n x = 0, decimal_n y =
 
 int main(int argc, char *argv[]) {
 	auto start = std::chrono::steady_clock::now();
-	switch((char)argv[1][0]){
-		case '1':
+	switch(c_i(argv[1])){
+		case 1:
 			log_writer("dear Odin, fuck you", "general.txt");
 			break;
 			
-		case '2':
+		case 2:
 			printf("result %.10f\n", calculate_T_avg(c_f(argv[2]), c_f(argv[3])));
 			break;
 			
-		case '3':
+		case 3:
 			printf("result %.10f\n", get_radius(c_f(argv[2]), c_f(argv[3])));
 			break;
 		
-		case '4':{
+		case 4:{
 			auto var = std::async(c_f, argv[2]);
 			auto var1 = std::async(c_f, argv[3]);
 			auto var2 = std::async(c_f, argv[4]);
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
 			get_coords(var.get(), var1.get(), var2.get(), var3.get(), var4.get());
 			break;
 		}
-		case '5':{
+		case 5:{
 			auto var = std::async(c_f, argv[2]);
 			auto var1 = std::async(c_f, argv[3]);
 			tank t;
@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
 			break;
 			}
 		
-		case '6':{
+		case 6:{
 			auto var = std::async(c_f, argv[2]);
 			auto var1 = std::async(c_f, argv[3]);
 			
@@ -129,7 +129,7 @@ int main(int argc, char *argv[]) {
 			break;
 			}
 			
-		case '7':{
+		case 7:{
 			auto var = std::async(c_f, argv[2]);
 			auto var1 = std::async(c_f, argv[3]);
 			
@@ -143,7 +143,7 @@ int main(int argc, char *argv[]) {
 			break;
 			}
 			
-		case '8':{
+		case 8:{
 			uint8_t c = std::thread::hardware_concurrency();
 			
 			map m;
@@ -169,7 +169,7 @@ int main(int argc, char *argv[]) {
 				}
 			}
 			
-		case '9':{
+		case 9:{
 			uint8_t c = std::thread::hardware_concurrency();
 			
 			map m;
@@ -184,6 +184,8 @@ int main(int argc, char *argv[]) {
 				m._map.insert(m._map.begin(), out.begin(), out.end());
 				
 				}
+		
+		
 			//~ m._map[0].set_point(location::_discovered);
 			//~ m._map[30].set_point(location::_candle);
 			//~ std::cout << "x: " << m._map[0]._coordinates.x << "  y: " << m._map[0]._coordinates.y << std::endl;
@@ -195,6 +197,12 @@ int main(int argc, char *argv[]) {
 			std::cout << radius::from_3_points(coordinates(-4, 0), coordinates(4, 0), coordinates(0, 4));
 			coordinates d = radius::coords(coordinates(0, 0), coordinates(2, 2), coordinates(-1, 2.5));
 			std::cout << "\nx: " << d.x << " y: " << d.y <<"\n";
+			}
+		
+		case 10:{
+			std::vector<coordinates> c = radius::tangent_points(coordinates(c_f(argv[2]), c_f(argv[3])), c_f(argv[3]), coordinates(c_f(argv[4]), c_f(argv[5])));
+			if(c.size() == 2)
+				std::cout <<  c[0].x << "; "<< c[0].y << "\n" << c[1].x << "; "<< c[1].y <<  std::endl;
 			}
 			
 		}
