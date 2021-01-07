@@ -82,3 +82,5 @@ A následující obrázek již akorát znázorňuje, že vše mohlo proběhnout 
     - naopak je jeto po kružnici, než je dosažen úhel takový, že je cílový bod na ose robotově ose **y** nulový nebo s opačným znaménkem
       - opačné znaménko svědčí o přejetí možnosti zabočit a potenciálně může prodloužit dráhu.
 
+#### Poznatek - lineární cesta je tečnou vedenou z bodu cíle.
+

@@ -66,7 +66,11 @@ decimal_n coordinates::get_gamma(decimal_n x_rel, decimal_n y_rel){
 	}
 	
 decimal_n coordinates::get_distance(decimal_n x_rel, decimal_n y_rel){
-	return sqrt(pow(x_rel, 2) + pow(y_rel, 2));
+	return sqrt(pow(x_rel-this->x, 2) + pow(y_rel-this->y, 2));
+	}
+
+decimal_n coordinates::get_distance(coordinates c){
+	return get_distance(c.x, c.y);
 	}
 
 
