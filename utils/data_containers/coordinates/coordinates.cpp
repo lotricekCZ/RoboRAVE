@@ -37,28 +37,48 @@ coordinates::coordinates(decimal_n x, decimal_n y)
 	this -> y = y;
 }
 
-coordinates coordinates::make_local(coordinates abs, coordinates rel, decimal_n ang){
-	decimal_n distance = get_distance(rel.x, rel.y);
-	decimal_n gamma = get_gamma(rel.x, rel.y);
-	uint8_t dec = get_dec(rel.x, rel.y);
-	return coordinates(abs.x + get_rel_x(ang, gamma, distance, dec), abs.y + get_rel_y(ang, gamma, distance, dec));
-	}
 
 /*
  * 
  * name: coordinates::make_local
  * @param abs: absolute coordinates on a map
- * @param distance: distance to that point
- * @param angle: absolute angle at which beam measured such distance, RADIANS
- * @return
+ * @param rel: coordinates to be transformed to local
+ * @param angle: uhel, kterym robot na abs stoji, RADIANS
+ * @return lokalni souradnice bodu rel z bodu abs(jimz je napr robot) pod uhlem angle 
  * 
  */
 
-coordinates coordinates::make_local(coordinates abs, decimal_n distance, decimal_n ang){
+coordinates coordinates::make_local(coordinates abs, coordinates rel, decimal_n ang){
+	decimal_n distance = get_distance(rel.x, rel.y);
+	decimal_n gamma = get_gamma(rel.x, rel.y);
+	uint8_t dec = get_dec(rel.x, rel.y);
+	return coordinates((abs.x + get_rel_x(-ang-pi/2.0, gamma, distance, dec)), (abs.y + get_rel_y(-ang-pi/2.0, gamma, distance, dec)));
+	}
+
+/*
+ * 
+ * name: coordinates::make_global
+ * @param abs: absolute coordinates on a map
+ * @param distance: distance to that point
+ * @param angle: absolute angle at which beam measured such distance, RADIANS
+ * @return globalni souradnice bodu z bodu abs(jimz je napr robot), vuci nemuz jsme takto vzdaleni a pod timto uhlem
+ * 
+ */
+
+coordinates coordinates::make_global(coordinates abs, decimal_n distance, decimal_n ang){
 	
 	uint8_t dec = get_dec(0,0);
 	//~ decimal_n gamma = ;
-	return coordinates(abs.x + get_rel_x(ang, pi/4.0, distance, dec), abs.y + get_rel_y(ang, pi/4.0, distance, dec));
+	return coordinates((abs.x + get_rel_x(ang, pi, distance, dec)), (abs.y + get_rel_y(ang, pi, distance, dec)));
+	}
+	
+coordinates coordinates::make_global(coordinates abs, coordinates rel, decimal_n alpha){
+	coordinates c = make_rotation(rel, alpha);
+	return coordinates(abs.x + c.x, abs.y + c.y);
+	}
+	
+coordinates coordinates::make_rotation(coordinates rel, decimal_n alpha){
+	return coordinates(rel.x * cos(alpha) - (rel.y * sin(alpha)), rel.x * sin(alpha) + (rel.y * cos(alpha)));
 	}
 
 decimal_n coordinates::get_gamma(decimal_n x_rel, decimal_n y_rel){
@@ -83,6 +103,6 @@ decimal_n coordinates::get_rel_y(decimal_n alpha, decimal_n gamma, decimal_n rad
 	}
 	
 uint8_t coordinates::get_dec(decimal_n x_rel, decimal_n y_rel){
-	return (uint8_t) ((x_rel > 0) | (((x_rel < 0) & (y_rel > 0)) | ((x_rel > 0) && (y_rel < 0))));
+	return (uint8_t) ((x_rel > 0) | (((x_rel < 0) & (y_rel > 0)) | ((x_rel > 0) && (y_rel < 0))) );
 	}
 	

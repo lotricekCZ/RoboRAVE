@@ -1,7 +1,7 @@
 /*
- * planner.hpp
+ * obstacle.hpp
  * 
- * Copyright 2020 Jakub Ramašeuski <jakub@skaryna.net>
+ * Copyright 2021 Jakub Ramašeuski <jakub@skaryna.net>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,28 +20,23 @@
  * 
  * 
  */
-#include "../../data_containers/map/map.cpp"
-#include "../../../elements/radius/radius.h"
-#include "step.cpp"
-#include <vector>
 
-#ifndef PLANNER_HPP
-#define PLANNER_HPP
 
-class planner
-{
+#ifndef CIRCLE_HPP
+#define CIRCLE_HPP
+#include "obstacle.cpp"
+
+class circle: public obstacle {
 	public:
-		angles * sight;
-		planner();
-		std::vector<step> plan;
-		
-		std::vector<step> plan_make(location goal, location start, decimal_n current_angle); 
-		// makes plan geometrically, does not assign speeds or something exact
-		
-		std::vector<step> plan_calculate(std::vector<step>); 
-		// makes speeds assigned, new coordinates, angle and steps calculated
+		decimal_n radius_c = 1;
+		coordinates center;
+		circle();
+		bool inside(coordinates a);
+		bool inside(decimal_n x, decimal_n y);
+		std::vector<coordinates> points();
+		bool is_collision_course();
 	private:
 		/* add your private declarations */
 };
 
-#endif /* PLANNER_HPP */ 
+#endif /* OBSTACLE_HPP */ 

@@ -84,3 +84,9 @@ A následující obrázek již akorát znázorňuje, že vše mohlo proběhnout 
 
 #### Poznatek - lineární cesta je tečnou vedenou z bodu cíle.
 
+## Kolize
+
+Další důležité je zjišťovat, zda se nacházíme na kolizním kurzu s překážkami.
+
+Tady nelze uvažovat o čemkoliv jiném, než že buď se v intervalu hodnot, v nichž se nachází 
+

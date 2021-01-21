@@ -33,6 +33,7 @@ class map
 {
 	public:
 		std::vector<location> _map;
+		std::vector<obstacle> _map_obstacles;
 		location interest_calculate();
 		location interest_maximal(std::vector<location> inmap);
 		void interest_map();

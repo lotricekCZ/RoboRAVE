@@ -23,7 +23,8 @@
 
 
 #include "location.hpp"
-
+#ifndef LOCATION_CPP
+#define LOCATION_CPP
 
 location::location()
 {
@@ -116,3 +117,5 @@ signed_b location::get_interest(){
 uint8_t location::get_point(){
 	return classification.point_type;
 	}
+
+#endif // LOCATION_CPP

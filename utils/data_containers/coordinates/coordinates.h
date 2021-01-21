@@ -36,7 +36,10 @@ class coordinates
 		decimal_n x;
 		decimal_n y;
 		coordinates make_local(coordinates, coordinates, decimal_n ang);
-		coordinates make_local(coordinates, decimal_n, decimal_n);
+		coordinates make_global(coordinates, decimal_n, decimal_n);
+		coordinates make_global(coordinates, coordinates, decimal_n);
+		coordinates make_rotation(coordinates rel, decimal_n alpha);
+		
 		decimal_n get_gamma(decimal_n x_rel, decimal_n y_rel);
 		decimal_n get_distance(decimal_n x_rel, decimal_n y_rel);
 		decimal_n get_distance(coordinates c);
@@ -44,7 +47,14 @@ class coordinates
 		uint8_t get_dec(decimal_n rads);
 		decimal_n get_rel_x(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec);
 		decimal_n get_rel_y(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec);
-		
+		inline bool operator==(const coordinates& rhs){ 
+			const signed_b multiplier = 1000000;
+			const signed_b thres = 100;
+			signed_b x = abs(abs(this -> x * multiplier) - abs(rhs.x * multiplier));
+			signed_b y = abs(abs(this -> y * multiplier) - abs(rhs.y * multiplier));
+			/* do actual comparison */ 
+			return x <= thres && y <= thres;
+			}
 		
 	private:
 		/* add your private declarations */

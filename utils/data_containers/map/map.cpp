@@ -27,9 +27,8 @@
 #ifndef MAP_CPP
 #define MAP_CPP
 
-map::map()
-{
-	
+map::map(){
+	_map_obstacles.push_back(circle());
 }
 
 std::vector<location> map::grid(int s_height = 0, int s_width = 0, int height = 1000, int width = 1000){

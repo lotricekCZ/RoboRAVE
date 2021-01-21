@@ -29,6 +29,7 @@
 
 class step
 {
+	public:
 	speeds v;
 	
 	coordinates start;
