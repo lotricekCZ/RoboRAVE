@@ -44,13 +44,26 @@ coordinates::coordinates(decimal_n x, decimal_n y)
  * @param abs: absolute coordinates on a map
  * @param rel: coordinates to be transformed to local
  * @param alpha: uhel, kterym robot na abs stoji, RADIANS
- * @return lokalni souradnice bodu rel z bodu abs(jimz je napr robot) pod uhlem angle 
+ * @return lokalni souradnice bodu abs z bodu rel(jimz je napr robot) pod uhlem alpha 
  * 
  */
 
 coordinates coordinates::make_local(coordinates abs, coordinates rel, decimal_n alpha){
 	coordinates c = make_rotation(abs-rel, alpha - pi/2);
 	return c;
+	}
+
+/*
+ * 
+ * name: coordinates::make_local
+ * @param distance: coordinates to be transformed to local
+ * @param alpha: uhel, pod kterym byla vzdalenost namerena vuci ose y, RADIANS
+ * @return lokalni souradnice bodu abs z bodu rel(jimz je napr robot)
+ * 
+ */
+
+coordinates coordinates::make_local(decimal_n distance, decimal_n ang){
+	return coordinates(distance*cos(ang), distance*sin(ang));
 	}
 
 /*
@@ -62,13 +75,6 @@ coordinates coordinates::make_local(coordinates abs, coordinates rel, decimal_n 
  * @return globalni souradnice bodu z bodu abs(jimz je napr robot), vuci nemuz jsme takto vzdaleni a pod timto uhlem
  * 
  */
-
-coordinates coordinates::make_global(coordinates abs, decimal_n distance, decimal_n ang){
-	
-	uint8_t dec = get_dec(0,0);
-	//~ decimal_n gamma = ;
-	return coordinates((abs.x + get_rel_x(ang, pi, distance, dec)), (abs.y + get_rel_y(ang, pi, distance, dec)));
-	}
 	
 coordinates coordinates::make_global(coordinates abs, coordinates rel, decimal_n alpha){
 	coordinates c = make_rotation(rel, alpha + pi/2);
