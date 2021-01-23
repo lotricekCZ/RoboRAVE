@@ -28,12 +28,15 @@
 
 class circle: public obstacle {
 	public:
-		decimal_n radius_c = 1;
+		decimal_n radius = 1;
 		coordinates center;
 		circle();
+		circle(coordinates, decimal_n);
+		circle(decimal_n, decimal_n, decimal_n);
 		bool inside(coordinates a);
 		bool inside(decimal_n x, decimal_n y);
 		std::vector<coordinates> points();
+		std::vector<coordinates> intersects(line, circle); // function to decide if sth intersects
 		bool is_collision_course();
 	private:
 		/* add your private declarations */
