@@ -43,16 +43,14 @@ coordinates::coordinates(decimal_n x, decimal_n y)
  * name: coordinates::make_local
  * @param abs: absolute coordinates on a map
  * @param rel: coordinates to be transformed to local
- * @param angle: uhel, kterym robot na abs stoji, RADIANS
+ * @param alpha: uhel, kterym robot na abs stoji, RADIANS
  * @return lokalni souradnice bodu rel z bodu abs(jimz je napr robot) pod uhlem angle 
  * 
  */
 
-coordinates coordinates::make_local(coordinates abs, coordinates rel, decimal_n ang){
-	decimal_n distance = get_distance(rel.x, rel.y);
-	decimal_n gamma = get_gamma(rel.x, rel.y);
-	uint8_t dec = get_dec(rel.x, rel.y);
-	return coordinates((abs.x + get_rel_x(-ang-pi/2.0, gamma, distance, dec)), (abs.y + get_rel_y(-ang-pi/2.0, gamma, distance, dec)));
+coordinates coordinates::make_local(coordinates abs, coordinates rel, decimal_n alpha){
+	coordinates c = make_rotation(abs-rel, alpha - pi/2);
+	return c;
 	}
 
 /*
@@ -73,8 +71,8 @@ coordinates coordinates::make_global(coordinates abs, decimal_n distance, decima
 	}
 	
 coordinates coordinates::make_global(coordinates abs, coordinates rel, decimal_n alpha){
-	coordinates c = make_rotation(rel, alpha);
-	return coordinates(abs.x + c.x, abs.y + c.y);
+	coordinates c = make_rotation(rel, alpha + pi/2);
+	return abs + c;
 	}
 	
 coordinates coordinates::make_rotation(coordinates rel, decimal_n alpha){

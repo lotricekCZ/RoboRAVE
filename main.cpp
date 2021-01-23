@@ -14,7 +14,7 @@
 #include "./utils/data_containers/setters/setters.tpp"
 #include "./utils/data_containers/speeds/speeds.cpp"
 #include "./utils/data_containers/coordinates/coordinates.cpp"
-#include "./utils/data_containers/map/map.cpp"
+#include "./utils/data_containers/map/include.hpp"
 #include "./utils/log_maintainer/log_maintain.cpp"
 #include "./utils/data_containers/angles/angles/angles.cpp"
 #include "./utils/planners/planner/planner.cpp"
@@ -57,30 +57,33 @@ decimal_n get_gamma(signed_n x_rel, signed_n y_rel){
 	return atan((decimal_n)y_rel / (decimal_n)x_rel);
 	}
 	
-decimal_n get_radius(signed_n x_rel, signed_n y_rel){
+decimal_n get_radius(decimal_n x_rel, decimal_n y_rel){
 	return sqrt(pow(x_rel, 2) + pow(y_rel, 2));
 	}
 
 
 decimal_n coords_x(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec){
-	return -1*(((dec >> 1) & 1? 1 : -1))*cos((alpha) + ((dec & 1)? (1) : (-1))* gamma)*radius;
+	return (((dec >> 1) & 1? 1 : -1))*cos((alpha) + ((dec & 1)? (1) : (-1))* gamma)*radius;
 	}
 
 decimal_n coords_y(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec){
-	return -1*(((dec >> 1) & 1? 1 : -1))*sin((alpha) + ((dec & 1)? (1) : (-1))* gamma)*radius;
+	return (((dec >> 1) & 1? 1 : -1))*sin((alpha) + ((dec & 1)? (1) : (-1))* gamma)*radius;
+	}
+	
+/*
+ * 
+ * name: coords_n
+ * @param alpha - aktualni natoceni v prostoru
+ * @param rel - relative coordinates / vector
+ * @return delta souradnic v realnem prostoru
+ * 
+ */
+
+coordinates coords_n(decimal_n alpha, coordinates rel){
+	return coordinates(rel.x * cos(alpha) - (rel.y * sin(alpha)), rel.x * sin(alpha) + (rel.y * cos(alpha)));
 	}
 
-void get_coords(decimal_n x_rel, decimal_n y_rel, decimal_n x = 0, decimal_n y = 0, decimal_n alpha = 0){
-	auto var = std::async(get_gamma, x_rel, y_rel);
-	auto var1 = std::async(get_radius, x_rel, y_rel);
-	decimal_n ralpha = alpha * pi / 180.0f;
-	decimal_n gamma = var.get();
-	decimal_n radius = var1.get();
-	auto var2 = std::async(coords_x, ralpha, gamma, radius, (uint8_t) ((x_rel > 0) | (((x_rel < 0) & (y_rel > 0)) | ((x_rel > 0) && (y_rel < 0))) ));
-	auto var3 = std::async(coords_y, ralpha, gamma, radius, (uint8_t) ((x_rel > 0) | (((x_rel < 0) & (y_rel > 0)) | ((x_rel > 0) && (y_rel < 0))) ));
-	
-	printf("result [%f; %f]\n",x + var2.get(), y + var3.get());	
-	}
+
 
 
 
@@ -100,12 +103,71 @@ int main(int argc, char *argv[]) {
 			break;
 		
 		case 4:{
-			auto var = std::async(c_f, argv[2]);
-			auto var1 = std::async(c_f, argv[3]);
-			auto var2 = std::async(c_f, argv[4]);
-			auto var3 = std::async(c_f, argv[5]);
-			auto var4 = std::async(c_f, argv[6]);
-			get_coords(var.get(), var1.get(), var2.get(), var3.get(), var4.get());
+			coordinates a(-1, -2);
+			coordinates b(1, -1);
+			// ocekavane - 3, 4
+			decimal_n ang = -pi/2;
+			switch(c_i(argv[2])){
+				case 0:
+					ang = pi/4;
+					break;
+				case 1:
+					ang = 3*pi/4;
+					break;
+				case 2:
+					ang = 5*pi/4;
+					break;
+				case 3:
+					ang = 7*pi/4;
+					break;
+				case 4:
+					ang = pi;
+					break;
+				case 5:
+					ang = pi/2.0;
+					break;
+				case 6:
+					ang = -pi/2.0;
+					break;
+				default:
+					ang = 0;
+					break;
+				
+				}
+			coordinates c = c.make_global(a, b, -3*pi/4);
+			std::cout << c.x << "; " << c.y << std::endl;
+			c = c.make_local(c, a, 3*pi/4);
+			std::cout << c.x << "; " << c.y << std::endl;
+			//~ c = c.make_global(a, sqrt(5), pi/2 + atan(2));
+			//~ std::cout << c.x << "; " << c.y << std::endl;
+			//~ std::fstream f("t_1.svg", std::ios_base::app);
+			//~ for(uint8_t i = 0; i < 60; i++){
+				//~ c = c.make_global(a, coordinates(0, 4), -pi/2 + (decimal_n)i*1.6*(pi/180.0));
+				//~ f << "<circle r=\"0.7080836\" cy=\""<< std::to_string(80.240021 + c.y*13) \
+					//~ <<"\" cx=\"" << std::to_string(93.624962 + c.x*13) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path2"<< std::to_string(i)<<"\" />" << std::endl;
+				
+				//~ c = c.make_global(a, coordinates(4, 2), +pi/2+(decimal_n)i*(pi/180.0));
+				//~ f << "<circle r=\"1.080836\" cy=\""<< std::to_string(80.240021 + c.y*10) \
+					//~ <<"\" cx=\"" << std::to_string(93.624962 + c.x*10) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path3"<< std::to_string(i)<<"\" />" << std::endl;
+				
+				//~ c = c.make_global(a, coordinates(3, 0), +pi/2+(decimal_n)i*(pi/180.0));
+				//~ f << "<circle r=\"0.580836\" cy=\""<< std::to_string(80.240021 + c.y*10) \
+					//~ <<"\" cx=\"" << std::to_string(93.624962 + c.x*10) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path3"<< std::to_string(i)<<"\" />" << std::endl;
+				//~ std::cout << c.x << "; "<< c.y << std::endl;
+				//~ /// tenci je 3; 0
+				//~ }
+			//~ c = c.make_global(a, coordinates(4, 2), -pi/2);
+			//~ f << "<circle r=\"2.7080836\" cy=\""<< std::to_string(80.240021 - c.y*10) \
+					//~ <<"\" cx=\"" << std::to_string(93.624962 - c.x*10) << "\"style=\"fill:#ff0000;stroke:#ff0000;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path5"<< std::to_string(46)<<"\" />" << std::endl;
+			
+			//~ c = c.make_global(a, coordinates(4, 2), +pi/2);
+			//~ f << "<circle r=\"2.7080836\" cy=\""<< std::to_string(80.240021 + c.y*10) \
+					//~ <<"\" cx=\"" << std::to_string(93.624962 + c.x*10) << "\"style=\"fill:#ff0000;stroke:#ff0000;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path5"<< std::to_string(46)<<"\" />" << std::endl;
+			
+			//~ c = c.make_global(a, coordinates(3, 0), +pi/2);
+			//~ f << "<circle r=\"2.7080836\" cy=\""<< std::to_string(80.240021 + c.y*10) \
+					//~ <<"\" cx=\"" << std::to_string(93.624962 + c.x*10) << "\"style=\"fill:#ff0000;stroke:#ff0000;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path5"<< std::to_string(55)<<"\" />" << std::endl;
+			//~ f << "\n</g>\n</svg>\n";
 			break;
 		}
 		case 5:{
@@ -203,6 +265,74 @@ int main(int argc, char *argv[]) {
 			std::vector<coordinates> c = radius::tangent_points(coordinates(c_f(argv[2]), c_f(argv[3])), c_f(argv[3]), coordinates(c_f(argv[4]), c_f(argv[5])));
 			if(c.size() == 2)
 				std::cout <<  c[0].x << "; "<< c[0].y << "\n" << c[1].x << "; "<< c[1].y <<  std::endl;
+			}
+			
+		case 11:{
+			coordinates a(0, 0);
+			decimal_n ang = -pi/4;
+			switch(c_i(argv[2])){
+				case 0:
+					ang = pi/4;
+					break;
+				case 1:
+					ang = 3*pi/4;
+					break;
+				case 2:
+					ang = 5*pi/4;
+					break;
+				case 3:
+					ang = 7*pi/4;
+					break;
+				default:
+					ang = 0;
+					break;
+				
+				}
+			//~ decimal_n ang = 0;
+			//~ decimal_n ang = -pi/6;
+			decimal_n len = 5;
+			coordinates c = a.make_global(a, len, ang);
+			std::cout << c.x << "; " << c.y << std::endl;
+			break;			
+			}
+			
+		case 12:{
+			coordinates a(0, 0);
+			coordinates b(-1, -1);
+			// ocekavane - 3, 4
+			decimal_n ang = -pi/2;
+			switch(c_i(argv[2])){
+				case 0:
+					ang = pi/4;
+					break;
+				case 1:
+					ang = 3*pi/4;
+					break;
+				case 2:
+					ang = 5*pi/4;
+					break;
+				case 3:
+					ang = 7*pi/4;
+					break;
+				case 4:
+					ang = pi;
+					break;
+				case 5:
+					ang = pi/2.0;
+					break;
+				case 6:
+					ang = -pi/2.0;
+					break;
+				default:
+					ang = 0;
+					break;
+				
+				}
+			//~ decimal_n ang = -pi/6;
+			//~ decimal_n ang = 0;
+			coordinates c = coords_n(ang+pi/2, b);
+			std::cout << c.x << "; " << c.y << std::endl;
+			break;
 			}
 			
 		}

@@ -21,6 +21,11 @@
 	#define unsigned_b uint32_t
 #endif
 
+#ifndef signed_b // signed big
+	#include <inttypes.h>
+	#define signed_b int32_t
+#endif
+
 #ifndef unsigned_l // unsigned large
 	#include <inttypes.h>
 	#define unsigned_l uint64_t
@@ -34,11 +39,6 @@
 #ifndef signed_h // unsigned large
 	#include <inttypes.h>
 	#define signed_h int128_t
-#endif
-
-#ifndef signed_b // signed big
-	#include <inttypes.h>
-	#define signed_b int32_t
 #endif
 
 #endif
