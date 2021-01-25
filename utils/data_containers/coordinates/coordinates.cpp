@@ -58,7 +58,7 @@ coordinates coordinates::make_local(coordinates abs, coordinates rel, decimal_n 
  * name: coordinates::make_local
  * @param distance: coordinates to be transformed to local
  * @param alpha: uhel, pod kterym byla vzdalenost namerena vuci ose y, RADIANS
- * @return lokalni souradnice bodu abs z bodu rel(jimz je napr robot)
+ * @return lokalni souradnice bodu rel daneho uhlu a vzdalenosti
  * 
  */
 

@@ -1,5 +1,5 @@
 /*
- * obstacle.hpp
+ * line.hpp
  * 
  * Copyright 2021 Jakub Ramašeuski <jakub@skaryna.net>
  * 
@@ -22,20 +22,27 @@
  */
 
 
-#ifndef OBSTACLE_HPP
-#define OBSTACLE_HPP
+#ifndef LINE_HPP
+#define LINE_HPP
 
-class obstacle
+class line
 {
 	public:
-		obstacle();
-		location::type _type;
-		virtual bool inside(coordinates a){return false;}
-		virtual bool inside(decimal_n x, decimal_n y){return false;}
-		virtual std::vector<coordinates> points(){return std::vector<coordinates> ();}
-		virtual bool is_collision_course(){return false;}
+		// pracuje se s ax + bx + c = 0
+		decimal_n a;
+		decimal_n b;
+		decimal_n c;
+		decimal_n get_x(decimal_n);
+		decimal_n get_y(decimal_n);
+		
+		line();
+		line(coordinates, coordinates);
+		line(decimal_n, decimal_n, decimal_n);
+		
+		line operator /(decimal_n);
+		coordinates intersection(line, line);
 	private:
 		/* add your private declarations */
 };
 
-#endif /* OBSTACLE_HPP */ 
+#endif /* LINE_HPP */ 

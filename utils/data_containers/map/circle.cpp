@@ -28,10 +28,6 @@
 #ifndef CIRCLE_CPP
 #define CIRCLE_CPP
 
-circle::circle()
-{
-	
-}
 
 circle::circle(decimal_n x = 0, decimal_n y = 0, decimal_n r = 0){
 	this -> center.x = x;
@@ -60,7 +56,7 @@ bool circle::is_collision_course(){
 	return true;
 	}
 
-std::vector<coordinates> circle::intersects(line l, circle c) {
+std::vector<coordinates> circle::intersection(line l, circle c) {
 	// Set ax + by = c equal to (x - X)^2 + (y - Y)^2 = r^2 and expand:
 	// (a^2 + b^2)x^2 + (2abY - 2ac + - 2b^2X)x + b^2X^2 + b^2Y^2 - 2bcY + c^2 - b^2r^2 = 0
 	// Then use quadratic formula X = (-b +- sqrt(a^2 - 4ac))/2a to find the

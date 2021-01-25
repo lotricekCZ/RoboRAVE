@@ -138,6 +138,9 @@ int main(int argc, char *argv[]) {
 			std::cout << c.x << "; " << c.y << std::endl;
 			c = c.make_local(c, a, 3*pi/4);
 			std::cout << c.x << "; " << c.y << std::endl;
+			
+			c = c.make_local(sqrt(5), -atan(1.0/2.0));
+			std::cout << c.x << "; " << c.y << std::endl;
 			//~ c = c.make_global(a, sqrt(5), pi/2 + atan(2));
 			//~ std::cout << c.x << "; " << c.y << std::endl;
 			//~ std::fstream f("t_1.svg", std::ios_base::app);
@@ -291,7 +294,7 @@ int main(int argc, char *argv[]) {
 			//~ decimal_n ang = 0;
 			//~ decimal_n ang = -pi/6;
 			decimal_n len = 5;
-			coordinates c = a.make_global(a, len, ang);
+			coordinates c = a.make_local(len, ang);
 			std::cout << c.x << "; " << c.y << std::endl;
 			break;			
 			}
@@ -332,6 +335,14 @@ int main(int argc, char *argv[]) {
 			//~ decimal_n ang = 0;
 			coordinates c = coords_n(ang+pi/2, b);
 			std::cout << c.x << "; " << c.y << std::endl;
+			break;
+			}
+			
+		case 13:{
+			coordinates c = line().intersection(line(5, 2, -14), line(-3, 5, -4));
+			std::cout << c.x << "; " << c.y << std::endl;
+			std::vector<coordinates> a = circle().intersection(line(-1, 1, 1), circle(0, 0, 3));
+			std::cout << a[1].x << "; " << a[1].y << std::endl;
 			break;
 			}
 			
