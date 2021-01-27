@@ -22,7 +22,7 @@
  */
 
 #include <cmath> 
-#include "include.hpp"
+//~ #include "include.hpp"
 #include "circle.hpp"
 
 #ifndef CIRCLE_CPP
@@ -119,7 +119,26 @@ std::vector<coordinates> circle::intersection(line l, circle c) {
 	return ret;
 }
 
-
+std::vector<coordinates> circle::intersection(circle k, circle c) {
+	std::vector<coordinates> ret;
+    decimal_n dx = c.center.x - k.center.x;
+    decimal_n dy = c.center.y - k.center.y;
+    decimal_n d = c.center.get_distance(k.center);
+		// Circles too far apart
+	if (d > k.radius + c.radius) { return ret; }
+		
+	// One circle completely inside the other
+	if (d < std::abs(k.radius - c.radius)) { return ret; }
+	dx /= d;
+	dy /= d;
+	decimal_n a = (pow(k.radius, 2) - pow(c.radius, 2) + pow(d, 2)) / (2 * d);
+	decimal_n px = k.center.x + a * dx;
+	decimal_n py = k.center.y + a * dy;
+	decimal_n h = sqrt(pow(k.radius, 2) - pow(a, 2));
+	ret.push_back(coordinates(px + h * dy, py - h * dx));
+	if (h != 0) ret.push_back(coordinates(px - h * dy, py + h * dx));
+	return ret;
+};
 
 #endif
 

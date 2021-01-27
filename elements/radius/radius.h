@@ -103,6 +103,7 @@ class radius{
 		static coordinates coords(decimal_n in_radius, decimal_n hypotenuse, coordinates rel){
 			return coords(in_radius, hypotenuse, rel.x, rel.y);
 		}
+		
 		// tecny z bodu
 		static std::vector<coordinates> tangent_points(coordinates center, decimal_n radius_c, coordinates point){
 			decimal_n diff_x = point.x - center.x;
@@ -112,9 +113,9 @@ class radius{
 			decimal_n distance = center.get_distance(point);
 			std::vector<coordinates> ret;
 			if (distance >= radius_c){
-				decimal_n rho = radius_c/distance;
+				decimal_n rho = radius_c / distance;
 				decimal_n ad = pow(rho, 2);
-				decimal_n bd = rho*sqrt(1-pow(rho, 2));
+				decimal_n bd = rho * sqrt(1-pow(rho, 2));
 				ret.push_back(coordinates(center.x + ad * diff_x + bd*dxr, center.y + ad*diff_y + bd*dyr));
 				ret.push_back(coordinates(center.x + ad * diff_x - bd*dxr, center.y + ad*diff_y - bd*dyr));
 				}

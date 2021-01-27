@@ -24,9 +24,8 @@
 
 #ifndef CIRCLE_HPP
 #define CIRCLE_HPP
-#include "obstacle.cpp"
 
-class circle: public obstacle {
+class circle{
 	public:
 		decimal_n radius = 1;
 		coordinates center;
@@ -36,6 +35,7 @@ class circle: public obstacle {
 		bool inside(decimal_n x, decimal_n y);
 		std::vector<coordinates> points();
 		std::vector<coordinates> intersection(line, circle); // function to decide if sth intersects
+		std::vector<coordinates> intersection(circle k, circle c);
 		bool is_collision_course();
 	private:
 		/* add your private declarations */
