@@ -30,6 +30,7 @@
 class wall: public obstacle
 {
 	static uint8_t 	count;
+	public:
 	
 	struct{
 		line 		walls[4];
@@ -37,13 +38,14 @@ class wall: public obstacle
 		uint8_t 	id;
 		} properties;
 		
-	public:
+	
 		wall();
+		wall(coordinates[4]);
 		location::type _type;
-		virtual bool inside(coordinates a){return false;}
-		virtual bool inside(decimal_n x, decimal_n y){return false;}
-		virtual std::vector<coordinates> points(){return std::vector<coordinates> ();}
-		virtual bool is_collision_course(){return false;}
+		bool inside(coordinates a);
+		bool inside(decimal_n x, decimal_n y){return false;}
+		std::vector<coordinates> points(){return std::vector<coordinates> ();}
+		coordinates is_collision_course(line);
 	private:
 		/* add your private declarations */
 };

@@ -39,7 +39,7 @@ class coordinates
 		coordinates make_local(decimal_n, decimal_n);
 		coordinates make_global(coordinates, coordinates, decimal_n);
 		coordinates make_rotation(coordinates rel, decimal_n alpha);
-		
+		std::string print();
 		decimal_n get_gamma(decimal_n x_rel, decimal_n y_rel);
 		decimal_n get_distance(decimal_n x_rel, decimal_n y_rel);
 		decimal_n get_distance(coordinates c);

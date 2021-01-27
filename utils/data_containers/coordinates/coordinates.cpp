@@ -110,3 +110,6 @@ uint8_t coordinates::get_dec(decimal_n x_rel, decimal_n y_rel){
 	return (uint8_t) ((x_rel > 0) | (((x_rel < 0) & (y_rel > 0)) | ((x_rel > 0) && (y_rel < 0))) );
 	}
 	
+std::string coordinates::print(){
+	return std::string("["+ std::to_string(x) +"; "+ std::to_string(y) +"]");
+	}
