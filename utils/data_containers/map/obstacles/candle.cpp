@@ -1,5 +1,5 @@
 /*
- * obstacle.hpp
+ * candle.cpp
  * 
  * Copyright 2021 Jakub Ramašeuski <jakub@skaryna.net>
  * 
@@ -22,21 +22,15 @@
  */
 
 
-#ifndef OBSTACLE_HPP
-#define OBSTACLE_HPP
+#include "candle.hpp"
 
-class obstacle
+#ifndef CANDLE_CPP
+#define CANDLE_CPP
+
+candle::candle()
+	: obstacle()
 {
-	public:
-		obstacle();
-		location::type _type;
-		virtual bool inside(coordinates a){return false;}
-		virtual bool alter(coordinates a){return false;}
-		virtual bool inside(decimal_n x, decimal_n y){return false;}
-		virtual std::vector<coordinates> points(){return std::vector<coordinates> ();}
-		std::vector<coordinates> is_collision_course(){return std::vector<coordinates>();}
-	private:
-		/* add your private declarations */
-};
+	
+}
 
-#endif /* OBSTACLE_HPP */ 
+#endif

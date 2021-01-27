@@ -41,11 +41,11 @@ class wall: public obstacle
 	
 		wall();
 		wall(coordinates[4]);
-		location::type _type;
+		location::type _type = location::_barrier;
 		bool inside(coordinates a);
 		bool inside(decimal_n x, decimal_n y){return false;}
 		std::vector<coordinates> points(){return std::vector<coordinates> ();}
-		coordinates is_collision_course(line);
+		std::vector<coordinates>  is_collision_course(line);
 	private:
 		/* add your private declarations */
 };

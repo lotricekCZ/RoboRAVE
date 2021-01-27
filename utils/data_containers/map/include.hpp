@@ -5,10 +5,9 @@
 #include "../../../elements/circle/circle.cpp"
 #include "location.cpp"
 #include "obstacles/obstacle.cpp"
-//~ #include "surround_circle.cpp"
+#include "obstacles/surround_circle.cpp"
 #include "obstacles/wall.cpp"
-//~ #include "candle.cpp"
-//~ #include "line.cpp"
+#include "obstacles/candle.cpp"
 #include "map.cpp"
 
 #endif // MAP_

@@ -1,5 +1,5 @@
 /*
- * obstacle.hpp
+ * surround_circle.cpp
  * 
  * Copyright 2021 Jakub Ramašeuski <jakub@skaryna.net>
  * 
@@ -22,21 +22,16 @@
  */
 
 
-#ifndef OBSTACLE_HPP
-#define OBSTACLE_HPP
+#include "surround_circle.hpp"
 
-class obstacle
+#ifndef SURROUND_CIRCLE_CPP
+#define SURROUND_CIRCLE_CPP
+
+surround_circle::surround_circle(coordinates a)
+	: obstacle()
 {
-	public:
-		obstacle();
-		location::type _type;
-		virtual bool inside(coordinates a){return false;}
-		virtual bool alter(coordinates a){return false;}
-		virtual bool inside(decimal_n x, decimal_n y){return false;}
-		virtual std::vector<coordinates> points(){return std::vector<coordinates> ();}
-		std::vector<coordinates> is_collision_course(){return std::vector<coordinates>();}
-	private:
-		/* add your private declarations */
-};
+	outer = circle(a, outer_r);
+	inner = circle(a, outer_r - outer_w);
+}
 
-#endif /* OBSTACLE_HPP */ 
+#endif

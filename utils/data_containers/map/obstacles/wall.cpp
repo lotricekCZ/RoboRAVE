@@ -56,16 +56,14 @@ bool wall::inside(coordinates a){
 	return (0 <= abam && abam <= abab) && (0 <= adam && adam <= adad);
 	}
 
-coordinates wall::is_collision_course(line l){
-	coordinates inter[4] = {properties.walls[0].intersection(l, properties.walls[0]),
-						properties.walls[1].intersection(l, properties.walls[1]),
-						properties.walls[2].intersection(l, properties.walls[2]),
-						properties.walls[3].intersection(l, properties.walls[3])};
+std::vector<coordinates> wall::is_collision_course(line l){
+	std::vector<coordinates> inter;
+	for(uint8_t i = 0; i < 4; i++){
+		coordinates a = (properties.walls[i].intersection(l, properties.walls[i]));
+		if (inside(a))
+			inter.push_back(a);
+	}
 	
-	for(uint8_t i = 0; i < 4; i++)
-		if (inside(inter[i]))
-			return inter[i];			
-	
-	return coordinates(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity());
+	return inter;
 	}
 #endif
