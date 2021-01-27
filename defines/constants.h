@@ -17,8 +17,12 @@
 #define map_h 		map_l // in milimeters, x and y difference of unknown points
 
 /// obstacles parameters
-#define barrier_w 	0.4f // m barrier width
-#define barrier_d	0.04f  // m barrier depth
+/// 	wall
+#define barrier_w 	0.3f 	// m barrier width
+#define barrier_d	0.04f  	// m barrier depth
+/// 	surround_circle
+#define outer_r		0.2f //	m radius of circle	
+#define outer_w		0.025f //	m width of line	
 
 const decimal_n omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
 const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);

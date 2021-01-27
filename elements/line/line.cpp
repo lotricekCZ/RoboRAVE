@@ -66,6 +66,19 @@ decimal_n line::get_x(decimal_n y){
 line line::operator /(decimal_n d){
 	return (d != 0)?(line(this -> a / d, this -> b / d, this -> c / d)) : line(0, 0, 0);
 	}
+	
+line line::make_parallel (coordinates c){
+	return line(this -> a, this -> b, -(this -> a * c.x + this -> b * c.y));
+	}
+
+std::string line::print (line l){
+	return 	std::string(std::to_string(l.a) + "x" +((l.b >= 0)?"+":"") +\
+			std::to_string(l.b) + "y"+ ((l.c >= 0)?"+":"") + std::to_string(l.c) + " = 0");
+	}
+	
+std::string line::print (){
+	return print(*this);
+	}
 
 coordinates line::intersection(line a, line b){
 	if((a.b * b.a - b.b * a.a) == 0) return coordinates(std::numeric_limits<float>::infinity(), \

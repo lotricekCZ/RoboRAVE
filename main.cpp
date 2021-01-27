@@ -6,6 +6,7 @@
 #include <thread>
 #include <chrono>
 #include <future>
+#include <limits>
 
 #include <iostream>
 
@@ -347,6 +348,24 @@ int main(int argc, char *argv[]) {
 			a = circle().intersection(circle(1, 1, 2), circle(1, 2, 3));
 			std::cout << a[a.size()-1].x << "; " << a[a.size()-1].y << std::endl;
 			std::cout << a.size() << std::endl;
+			break;
+			}
+		case 14:{
+			line l(1, 1, 4);
+			line d = l.make_parallel(coordinates(2, 5));
+			std::cout << d.print(d) << std::endl;
+			break;
+			}
+			
+		case 15:{
+			coordinates points[4] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			wall w(points);
+			bool c = w.inside(coordinates(c_f(argv[2]), c_f(argv[3])));
+			std::cout << c << std::endl;
+			std::vector<coordinates>  co = w.is_collision_course(line(-1, 1, 1));
+			std::cout << co[co.size()-1].print() << std::endl;
+			for(uint8_t i = 0; i < 4; i++)
+				std::cout << w.properties.walls[i].print(w.properties.walls[i]) << std::endl;
 			break;
 			}
 			

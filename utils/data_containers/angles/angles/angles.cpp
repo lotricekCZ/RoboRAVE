@@ -43,3 +43,15 @@ angles::~angles()
 	
 }
 
+// loads the virtual angles on any coordinate on the map... Well at least this is what it should do
+angles angles::load_virtual(coordinates a, map &m){
+	for(unsigned_n i = 0; i <= 180; i ++){
+		line l(a, a.make_local(1, i/180f*pi);
+		for(auto& a: m._map_obstacles){
+			if(a.is_collision_course(l))
+			}
+		push_back(node(0.0f, (decimal_n)i));
+		}
+	std::sort(this -> begin(), this -> end(), [](node a, node b){return (a.angle < b.angle);});
+	}
+

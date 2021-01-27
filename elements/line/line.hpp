@@ -39,6 +39,9 @@ class line
 		line(coordinates, coordinates);
 		line(decimal_n, decimal_n, decimal_n);
 		
+		line make_parallel(coordinates);
+		std::string print(line);
+		std::string print();
 		line operator /(decimal_n);
 		coordinates intersection(line, line);
 	private:

@@ -32,13 +32,16 @@ class angles: public std::vector<node>
 {
 	public:
 		using std::vector<node>::push_back;
+		using std::vector<node>::pop_back;
 	    using std::vector<node>::operator[];
 	    using std::vector<node>::begin;
+	    using std::vector<node>::erase;
 	    using std::vector<node>::end;
 	    using std::vector<node>::at;
 		angles();
 		virtual ~angles();
 		node get_angle(signed_n);
+		angles load_virtual(coordinates);
 		
 	private:
 		/* add your private declarations */
