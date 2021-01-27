@@ -339,10 +339,14 @@ int main(int argc, char *argv[]) {
 			}
 			
 		case 13:{
-			coordinates c = line().intersection(line(5, 2, -14), line(-3, 5, -4));
+			coordinates c = line().intersection(line(0, 2, -14), line(-3, 5, -4));
 			std::cout << c.x << "; " << c.y << std::endl;
-			std::vector<coordinates> a = circle().intersection(line(-1, 1, 1), circle(0, 0, 3));
+			std::vector<coordinates> a = circle().intersection(line(-1, 1, 1), circle(1, 2, 3));
 			std::cout << a[1].x << "; " << a[1].y << std::endl;
+			
+			a = circle().intersection(circle(1, 1, 2), circle(1, 2, 3));
+			std::cout << a[a.size()-1].x << "; " << a[a.size()-1].y << std::endl;
+			std::cout << a.size() << std::endl;
 			break;
 			}
 			

@@ -16,6 +16,9 @@
 #define map_l 		1500 // in milimeters, x and y difference of unknown points
 #define map_h 		map_l // in milimeters, x and y difference of unknown points
 
+/// obstacles parameters
+#define barrier_w 	0.4f // m barrier width
+#define barrier_d	0.04f  // m barrier depth
 
 const decimal_n omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
 const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);

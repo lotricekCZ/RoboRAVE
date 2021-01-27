@@ -1,5 +1,5 @@
 /*
- * obstacle.cpp
+ * wall.hpp
  * 
  * Copyright 2021 Jakub Ramašeuski <jakub@skaryna.net>
  * 
@@ -22,16 +22,30 @@
  */
 
 
-#include "include.hpp"
-#include "obstacle.hpp"
+#ifndef WALL_HPP
+#define WALL_HPP
 
-#ifndef OBSTACLE_CPP
-#define OBSTACLE_CPP
+#include "obstacle.cpp"
 
-obstacle::obstacle()
+class wall: public obstacle
 {
+	static uint8_t 	count;
 	
-}
+	struct{
+		line 		walls[4];
+		coordinates edges[4];
+		uint8_t 	id;
+		} properties;
+		
+	public:
+		wall();
+		location::type _type;
+		virtual bool inside(coordinates a){return false;}
+		virtual bool inside(decimal_n x, decimal_n y){return false;}
+		virtual std::vector<coordinates> points(){return std::vector<coordinates> ();}
+		virtual bool is_collision_course(){return false;}
+	private:
+		/* add your private declarations */
+};
 
-
-#endif
+#endif /* WALL_HPP */ 
