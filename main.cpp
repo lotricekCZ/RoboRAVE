@@ -369,6 +369,17 @@ int main(int argc, char *argv[]) {
 			break;
 			}
 			
+		case 16:{
+			coordinates points[4] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			wall w(points);
+			map m;
+			m._map_walls.push_back(w);
+			angles a = angles().load_virtual(coordinates(0, 0), m);
+			for(auto i: a)
+				std::cout << i.angle << "\t" << i.position._coordinates.print() << std::endl;
+			break;
+			}
+			
 		}
 
 	

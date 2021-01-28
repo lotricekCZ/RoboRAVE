@@ -81,11 +81,16 @@ angles angles::load_virtual(coordinates a, map &m){
 			}
 			
 		}
-	for(unsigned_n i = 0; i < 360; i++){
-		if(!crossed[i]){
+		std::cout << "outcome" << std::endl;
+	for(signed_n i = 359; i >= 0; i--){
+		std::cout << ret[i].angle << "\t" << ret[i].distance << "\t" << ret[i].position._coordinates.print() << std::endl;
+		if(ret[i].distance == 0 || ret[i].distance >= MAX_DISTANCE || \
+			ret[i].position._coordinates.get_distance(a) >= MAX_DISTANCE || \
+			ret[i].position._coordinates == coordinates(0, 0)){
 			ret.erase(ret.begin() + i);
 			}
 		}
+		std::cout << "outcome end" << std::endl;
 	
 	std::sort(ret.begin(), ret.end(), [](node a, node b){return (a.angle < b.angle);});
 	return ret;
