@@ -1,5 +1,5 @@
 /*
- * obstacle.hpp
+ * circle.hpp
  * 
  * Copyright 2021 Jakub Ramašeuski <jakub@skaryna.net>
  * 
@@ -36,7 +36,6 @@ class circle{
 		std::vector<coordinates> points();
 		std::vector<coordinates> intersection(line, circle); // function to decide if sth intersects
 		std::vector<coordinates> intersection(circle k, circle c);
-		bool is_collision_course();
 	private:
 		/* add your private declarations */
 };

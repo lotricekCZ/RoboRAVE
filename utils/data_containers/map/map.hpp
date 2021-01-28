@@ -26,6 +26,7 @@
 #define MAP_HPP
 
 #include <vector>
+#include <variant>
 #include "location.cpp"
 #include "../../../defines/constants.h"
 
@@ -33,7 +34,11 @@ class map
 {
 	public:
 		std::vector<location> _map;
-		std::vector<obstacle> _map_obstacles;
+		
+		std::vector<wall> _map_walls;
+		std::vector<candle> _map_candles;
+		std::vector<surround_circle> _map_surround_circles;
+		
 		location interest_calculate();
 		location interest_maximal(std::vector<location> inmap);
 		void interest_map();

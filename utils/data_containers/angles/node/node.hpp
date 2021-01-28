@@ -31,11 +31,14 @@ class node
 		decimal_n distance;
 		unsigned intensity:10;
 		decimal_n angle;
+		location position;
 		
 		node();
 		node(decimal_n);
 		node(decimal_n, decimal_n);
 		node(decimal_n, unsigned_n);
+		node(decimal_n, location, unsigned_n);
+		node(decimal_n, coordinates, unsigned_n);
 		virtual ~node();
 		void set_distance(decimal_n);
 		void set_intensity(unsigned_n);

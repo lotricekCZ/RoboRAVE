@@ -47,6 +47,20 @@ node::node(decimal_n distance, decimal_n angle)
 	this -> angle = angle;
 }
 
+node::node(decimal_n angle, location p, unsigned_n intensity = 0)
+{
+	this -> position = p;
+	this -> angle = angle;
+	this -> intensity = intensity;
+}
+
+node::node(decimal_n angle, coordinates p, unsigned_n intensity = 0)
+{
+	this -> position._coordinates = p;
+	this -> angle = angle;
+	this -> intensity = intensity;
+}
+
 void node::set_distance(decimal_n i){
 	distance = i;
 	}

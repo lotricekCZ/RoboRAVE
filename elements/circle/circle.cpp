@@ -1,5 +1,5 @@
 /*
- * obstacle.cpp
+ * circle.cpp
  * 
  * Copyright 2021 Jakub Ramašeuski <jakub@skaryna.net>
  * 
@@ -50,10 +50,6 @@ bool circle::inside(decimal_n x, decimal_n y){
 	
 std::vector<coordinates> circle::points(){
 	return std::vector<coordinates>();
-	}
-	
-bool circle::is_collision_course(){
-	return true;
 	}
 
 std::vector<coordinates> circle::intersection(line l, circle c) {

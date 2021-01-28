@@ -41,7 +41,7 @@ class angles: public std::vector<node>
 		angles();
 		virtual ~angles();
 		node get_angle(signed_n);
-		angles load_virtual(coordinates);
+		angles load_virtual(coordinates, map &m);
 		
 	private:
 		/* add your private declarations */

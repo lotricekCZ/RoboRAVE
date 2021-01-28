@@ -45,13 +45,49 @@ angles::~angles()
 
 // loads the virtual angles on any coordinate on the map... Well at least this is what it should do
 angles angles::load_virtual(coordinates a, map &m){
-	for(unsigned_n i = 0; i <= 180; i ++){
-		line l(a, a.make_local(1, i/180f*pi);
-		for(auto& a: m._map_obstacles){
-			if(a.is_collision_course(l))
+	angles ret;
+	std::vector<bool> crossed; 
+	crossed.resize(360);
+	for(unsigned_n i = 0; i < 180; i ++){
+		std::vector<coordinates> intersects_an; // all the places that are intersected on map
+		
+		coordinates n = a+a.make_local(1, (decimal_n)i/180.0*pi);
+		line l(a, n);
+		
+		for(auto k: m._map_walls){ // to get all possible intersections with walls
+			std::vector<coordinates> in = k.is_collision_course(l);
+			intersects_an.insert(std::end(intersects_an), std::begin(in), std::end(in));
 			}
-		push_back(node(0.0f, (decimal_n)i));
+		/// TODO: optimize this war crime
+		for(auto k: intersects_an){
+			if(k.x != std::numeric_limits<float>::infinity()){
+				decimal_n to_a = a.get_distance(k);
+				decimal_n to_n = n.get_distance(k);
+				if(to_a < to_n){ // to znamena, ze je na opacne strane, nez co beha iterator
+					if(ret[i+180].distance > to_a || ret[i+180].distance == 0){
+						ret[i+180] = node(i+180, k);
+						ret[i+180].distance = to_a;
+						crossed[i+180] = 1;
+						}
+					} else {
+						if(ret[i].distance > to_a || ret[i].distance == 0){
+							crossed[i] = 1;
+							ret[i] = node(i, k);
+							ret[i].distance = to_a;
+							}
+						}
+				
+				}
+			}
+			
 		}
-	std::sort(this -> begin(), this -> end(), [](node a, node b){return (a.angle < b.angle);});
+	for(unsigned_n i = 0; i < 360; i++){
+		if(!crossed[i]){
+			ret.erase(ret.begin() + i);
+			}
+		}
+	
+	std::sort(ret.begin(), ret.end(), [](node a, node b){return (a.angle < b.angle);});
+	return ret;
 	}
 
