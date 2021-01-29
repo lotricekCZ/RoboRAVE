@@ -66,4 +66,19 @@ std::vector<coordinates> wall::is_collision_course(line l){
 	
 	return inter;
 	}
+
+
+std::vector<coordinates>  wall::is_collision_course(circle c){
+	std::vector<coordinates> inter;
+	for(uint8_t i = 0; i < 4; i++){
+		std::vector<coordinates> b = c.intersection(properties.walls[i], c);
+		for(auto a: b)
+			if (inside(a))
+				inter.push_back(a);
+	}
+	
+	return inter;
+	
+	}
+	
 #endif

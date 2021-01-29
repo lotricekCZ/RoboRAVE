@@ -33,4 +33,8 @@ candle::candle()
 	
 }
 
+candle::candle(coordinates c) : obstacle(){
+	tube = circle(c, candle_r);
+	
+	}
 #endif

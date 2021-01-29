@@ -30,8 +30,17 @@
 class candle: public obstacle
 {
 	public:
+		location::type _type = location::_candle;
+		circle tube;
+		
 		candle();
-			
+		candle(coordinates);
+		
+		bool inside(coordinates a){return tube.inside(a);}
+		bool inside(decimal_n x, decimal_n y){return tube.inside(x, y);}
+		std::vector<coordinates> points(){return std::vector<coordinates> ();}
+		std::vector<coordinates> is_collision_course(line l){return tube.intersection(l, tube);}
+		std::vector<coordinates> is_collision_course(circle c){return tube.intersection(c, tube);}
 	private:
 		/* add your private declarations */
 };

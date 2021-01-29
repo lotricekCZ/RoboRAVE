@@ -30,14 +30,16 @@
 class surround_circle: public obstacle
 {
 	public:
+		location::type _type = location::_line_surround;
 		circle inner;
 		circle outer;
+		
 		surround_circle(coordinates);
-		location::type _type = location::_line_surround;
 		bool inside(coordinates a){return outer.inside(a);}
 		bool inside(decimal_n x, decimal_n y){return outer.inside(x, y);}
 		std::vector<coordinates> points(){return std::vector<coordinates> ();}
 		std::vector<coordinates> is_collision_course(line l){return outer.intersection(l, outer);}
+		std::vector<coordinates> is_collision_course(circle c){return outer.intersection(c, outer);}
 		
 	private:
 		/* add your private declarations */

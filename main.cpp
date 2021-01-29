@@ -370,13 +370,33 @@ int main(int argc, char *argv[]) {
 			}
 			
 		case 16:{
-			coordinates points[4] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
-			wall w(points);
+			
 			map m;
-			m._map_walls.push_back(w);
-			angles a = angles().load_virtual(coordinates(0, 0), m);
+			coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 7), coordinates(-6, 6)};
+			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			
+			m._map_walls.push_back(wall(c));
+			m._map_walls.push_back(wall(x));
+			std::cout << m._map_walls[0].is_collision_course(circle(coordinates(-5, 2), 6))[1].print() << std::endl;
+			angles a = angles().load_virtual(coordinates(-5, 2), m);
 			for(auto i: a)
-				std::cout << i.angle << "\t" << i.position._coordinates.print() << std::endl;
+				std::cout << "uhel: " << i.angle << "   vzdalenost: " << i.distance << "\t" << i.position._coordinates.print() << std::endl;
+			break;
+			}
+			
+		case 17:{ 
+			/// this creates map and does math to calculations to make heatmap, therefore selecting the hottest spot and designing trace to it
+			map m;
+			m.grid(0, 0, 600, 450);
+			coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 7), coordinates(-6, 6)};
+			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			
+			m._map_walls.push_back(wall(c));
+			m._map_walls.push_back(wall(x));
+			std::cout << m._map_walls[0].is_collision_course(circle(coordinates(-5, 2), 6))[1].print() << std::endl;
+			angles a = angles().load_virtual(coordinates(-5, 2), m);
+			for(auto i: a)
+				std::cout << "uhel: " << i.angle << "   vzdalenost: " << i.distance << "\t" << i.position._coordinates.print() << std::endl;
 			break;
 			}
 			

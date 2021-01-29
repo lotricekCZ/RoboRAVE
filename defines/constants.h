@@ -23,7 +23,10 @@
 /// 	surround_circle
 #define outer_r		0.2f //	m radius of circle	
 #define outer_w		0.025f //	m width of line	
+/// 	candle
+#define candle_r	0.03f //	m radius of circle	
 
+#define MAX_DISTANCE 170 //maximum distance to have 3 cm difference between lines that are 1 degree apart
 const decimal_n omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
 const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);
 

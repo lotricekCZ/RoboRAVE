@@ -37,15 +37,15 @@ class wall: public obstacle
 		coordinates edges[4];
 		uint8_t 	id;
 		} properties;
-		
+	location::type _type = location::_barrier;
 	
 		wall();
 		wall(coordinates[4]);
-		location::type _type = location::_barrier;
 		bool inside(coordinates a);
 		bool inside(decimal_n x, decimal_n y){return false;}
 		std::vector<coordinates> points(){return std::vector<coordinates> ();}
 		std::vector<coordinates>  is_collision_course(line);
+		std::vector<coordinates>  is_collision_course(circle);
 	private:
 		/* add your private declarations */
 };
