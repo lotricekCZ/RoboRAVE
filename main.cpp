@@ -391,13 +391,16 @@ int main(int argc, char *argv[]) {
 			coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 7), coordinates(-6, 6)};
 			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
 			
-			m._map_walls.push_back(wall(c));
-			m._map_walls.push_back(wall(x));
+			m.append(candle(coordinates(4,3)));
+			m.append(wall(c));
+			m.append(wall(x));
 			//~ std::cout << m._map_walls[0].is_collision_course(circle(coordinates(-5, 2), 6))[1].print() << std::endl;
-			angles a = angles().load_virtual_circular(coordinates(-5, 2), m, 10, 20, 0.1);
+			angles a = angles().load_virtual_circular(coordinates(-5, 2), m, 0, 20, 0.06);
 			//~ angles a = angles().load_virtual(coordinates(-5, 2), m);
 			for(auto i: a)
 				std::cout << "uhel: " << i.angle << "   vzdalenost: " << i.distance << "\t" << i.position._coordinates.print() << std::endl;
+			std::cout << m._map_walls[0].get_box()[1].print() << "\t" << m._map_walls[0].get_box()[0].print() << std::endl;
+			std::cout << m._map_candles[0].get_box()[1].print() << "\t" << m._map_candles[0].get_box()[0].print() << std::endl;
 			break;
 			}
 			

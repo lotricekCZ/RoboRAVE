@@ -64,9 +64,9 @@ angles angles::load_virtual_circular(coordinates c, map &m, decimal_n min, decim
 		// potrebuju jejich lokalni souradnice
 		coordinates d = a-c;
 		decimal_n to_a = c.get_distance(a);
-		std::cout << d.x << "\t" << d.y << "\t" << (d.y < 0) << "\t" << ((d.y < 0)? 360:0) + ((atan2f(d.y, d.x)*180)/pi) <<"\t";
+		//~ std::cout << d.x << "\t" << d.y << "\t" << (d.y < 0) << "\t" << ((d.y < 0)? 360:0) + ((atan2f(d.y, d.x)*180)/pi) <<"\t";
 		signed_n ang = ((d.y < 0)? 360:0) + atan2f(d.y, d.x)*180/pi;
-		std::cout << ang << std::endl;
+		//~ std::cout << ang << std::endl;
 		if(ret[ang].distance > to_a || ret[ang].distance == 0){
 			crossed[ang] = 1;
 			ret[ang] = node(ang, a);

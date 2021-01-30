@@ -80,5 +80,17 @@ std::vector<coordinates>  wall::is_collision_course(circle c){
 	return inter;
 	
 	}
-	
+
+std::array<coordinates, 2> wall::get_box(){
+	decimal_n min_x = properties.edges[0].x, min_y = properties.edges[0].y, 
+				max_x = properties.edges[0].x, max_y = properties.edges[0].y;
+	for(uint8_t i = 1; i < 4; i++){
+		min_x = (min_x > properties.edges[i].x)? min_x : properties.edges[i].x;
+		min_y = (min_y > properties.edges[i].y)? min_y : properties.edges[i].y;
+		
+		max_x = (max_x < properties.edges[i].x)? max_x : properties.edges[i].x;
+		max_y = (max_y < properties.edges[i].y)? max_y : properties.edges[i].y;
+		}
+	return {coordinates(min_x, min_y), coordinates(max_x, max_y)};
+	}
 #endif

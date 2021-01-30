@@ -46,6 +46,7 @@ class wall: public obstacle
 		std::vector<coordinates> points(){return std::vector<coordinates> ();}
 		std::vector<coordinates>  is_collision_course(line);
 		std::vector<coordinates>  is_collision_course(circle);
+		std::array<coordinates, 2> get_box();
 	private:
 		/* add your private declarations */
 };
