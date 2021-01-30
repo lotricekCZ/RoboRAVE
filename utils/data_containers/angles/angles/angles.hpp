@@ -42,6 +42,7 @@ class angles: public std::vector<node>
 		virtual ~angles();
 		node get_angle(signed_n);
 		angles load_virtual(coordinates, map &m);
+		angles load_virtual_circular(coordinates, map &m, decimal_n, decimal_n, decimal_n);
 		
 	private:
 		/* add your private declarations */

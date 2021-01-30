@@ -43,7 +43,54 @@ angles::~angles()
 	
 }
 
-// loads the virtual angles on any coordinate on the map... Well at least this is what it should do
+angles angles::load_virtual_circular(coordinates c, map &m, decimal_n min, decimal_n max, decimal_n step = 10){
+	angles ret;
+	std::vector<bool> crossed; 
+	crossed.resize(360);
+	std::vector<coordinates> intersects_an;
+	for(decimal_n i = min; i < max; i += step){
+		//~ std::cout << i << std::endl;
+		circle k(c, i);
+		for(auto a: m._map_walls){ // to get all possible intersections with walls
+			std::vector<coordinates> in = a.is_collision_course(k);
+			intersects_an.insert(std::end(intersects_an), std::begin(in), std::end(in));
+			}
+	} // nasbirani vsech bodu dotyku
+	
+	//~ coordinates nx(c.x+1, c.y);
+	//~ coordinates ny(c.x, c.y+1);
+	
+	for(auto a: intersects_an){
+		// potrebuju jejich lokalni souradnice
+		coordinates d = a-c;
+		decimal_n to_a = c.get_distance(a);
+		std::cout << d.x << "\t" << d.y << "\t" << (d.y < 0) << "\t" << ((d.y < 0)? 360:0) + ((atan2f(d.y, d.x)*180)/pi) <<"\t";
+		signed_n ang = ((d.y < 0)? 360:0) + atan2f(d.y, d.x)*180/pi;
+		std::cout << ang << std::endl;
+		if(ret[ang].distance > to_a || ret[ang].distance == 0){
+			crossed[ang] = 1;
+			ret[ang] = node(ang, a);
+			ret[ang].distance = to_a;
+			ret[ang].position._type = location::_barrier;
+		}
+		//
+	} // filtrovani vsech bodu dotyku
+	
+	for(signed_n i = 359; i >= 0; i--){
+		//~ std::cout << ret[i].angle << "\t" << ret[i].distance << "\t" << ret[i].position._coordinates.print() << std::endl;
+		if(ret[i].distance == 0 || ret[i].distance >= MAX_DISTANCE || \
+			ret[i].position._coordinates.get_distance(c) >= MAX_DISTANCE || \
+			ret[i].position._coordinates == coordinates(0, 0) || !crossed[i]){
+			ret.erase(ret.begin() + i);
+			}
+		}
+		//~ std::cout << "outcome end" << std::endl;
+	
+	std::sort(ret.begin(), ret.end(), [](node a, node b){return (a.angle < b.angle);});
+	return ret;
+}
+
+// loads the virtual angles on any coordinate on the map... Well at least this is what it should do and partially does
 angles angles::load_virtual(coordinates a, map &m){
 	angles ret;
 	std::vector<bool> crossed; 
@@ -67,6 +114,7 @@ angles angles::load_virtual(coordinates a, map &m){
 					if(ret[i+180].distance > to_a || ret[i+180].distance == 0){
 						ret[i+180] = node(i+180, k);
 						ret[i+180].distance = to_a;
+						ret[i+180].position._type = location::_barrier;
 						crossed[i+180] = 1;
 						}
 					} else {
@@ -74,6 +122,7 @@ angles angles::load_virtual(coordinates a, map &m){
 							crossed[i] = 1;
 							ret[i] = node(i, k);
 							ret[i].distance = to_a;
+							ret[i].position._type = location::_barrier;
 							}
 						}
 				
@@ -81,16 +130,16 @@ angles angles::load_virtual(coordinates a, map &m){
 			}
 			
 		}
-		std::cout << "outcome" << std::endl;
+		//~ std::cout << "outcome" << std::endl;
 	for(signed_n i = 359; i >= 0; i--){
-		std::cout << ret[i].angle << "\t" << ret[i].distance << "\t" << ret[i].position._coordinates.print() << std::endl;
+		//~ std::cout << ret[i].angle << "\t" << ret[i].distance << "\t" << ret[i].position._coordinates.print() << std::endl;
 		if(ret[i].distance == 0 || ret[i].distance >= MAX_DISTANCE || \
 			ret[i].position._coordinates.get_distance(a) >= MAX_DISTANCE || \
 			ret[i].position._coordinates == coordinates(0, 0)){
 			ret.erase(ret.begin() + i);
 			}
 		}
-		std::cout << "outcome end" << std::endl;
+		//~ std::cout << "outcome end" << std::endl;
 	
 	std::sort(ret.begin(), ret.end(), [](node a, node b){return (a.angle < b.angle);});
 	return ret;

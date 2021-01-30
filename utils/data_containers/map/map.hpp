@@ -44,6 +44,11 @@ class map
 		void interest_map();
 		map();
 		void append(location);
+		
+		void append(wall);
+		void append(candle);
+		void append(surround_circle);
+		
 		decimal_n calculate_location(location lo);
 		//~ void alter(location);
 		std::vector<location> grid(signed_b, signed_b, signed_b, signed_b);

@@ -393,10 +393,16 @@ int main(int argc, char *argv[]) {
 			
 			m._map_walls.push_back(wall(c));
 			m._map_walls.push_back(wall(x));
-			std::cout << m._map_walls[0].is_collision_course(circle(coordinates(-5, 2), 6))[1].print() << std::endl;
-			angles a = angles().load_virtual(coordinates(-5, 2), m);
+			//~ std::cout << m._map_walls[0].is_collision_course(circle(coordinates(-5, 2), 6))[1].print() << std::endl;
+			angles a = angles().load_virtual_circular(coordinates(-5, 2), m, 10, 20, 0.1);
+			//~ angles a = angles().load_virtual(coordinates(-5, 2), m);
 			for(auto i: a)
 				std::cout << "uhel: " << i.angle << "   vzdalenost: " << i.distance << "\t" << i.position._coordinates.print() << std::endl;
+			break;
+			}
+			
+		case 18:{ 
+			std::cout << ((c_f(argv[2]) < 0)? 360:0) + atan2(c_f(argv[2]), c_f(argv[3])) * 180/pi << std::endl;
 			break;
 			}
 			

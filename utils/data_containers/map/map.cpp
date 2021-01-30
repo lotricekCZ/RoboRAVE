@@ -161,4 +161,16 @@ void map::append(location in){
 	_map.push_back(in);
 	}
 	
+void map::append(surround_circle in){
+	_map_surround_circles.push_back(in);
+	}
+	
+void map::append(candle in){
+	_map_candles.push_back(in);
+	}
+
+void map::append(wall in){
+	_map_walls.push_back(in);
+	}
+	
 #endif
