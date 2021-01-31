@@ -72,6 +72,7 @@ class location
 		
 		void set_interest(decimal_n); 
 		void set_point(uint8_t);
+		void set_point(type);
 		
 		signed_b get_interest(); 
 		uint8_t get_point();

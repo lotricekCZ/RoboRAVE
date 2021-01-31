@@ -54,6 +54,18 @@ class coordinates
 		coordinates operator + (const coordinates& rhs){
 			return coordinates(this -> x + rhs.x, this -> y + rhs.y);
 			}
+			
+		coordinates operator / (const decimal_n& rhs){
+			return coordinates(this -> x / rhs, this -> y / rhs);
+			}
+			
+		coordinates operator * (const decimal_n& rhs){
+			return coordinates(this -> x * rhs, this -> y * rhs);
+			}
+			
+		coordinates operator *= (const decimal_n& rhs){
+			return coordinates(this -> x * rhs, this -> y * rhs);
+			}
 		inline bool operator==(const coordinates& rhs){ 
 			const signed_b multiplier = 1000000;
 			const signed_b thres = 100;

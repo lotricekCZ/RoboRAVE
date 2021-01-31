@@ -39,15 +39,24 @@ class map
 		std::vector<candle> _map_candles;
 		std::vector<surround_circle> _map_surround_circles;
 		
+		std::vector<location *> strip(std::array<coordinates, 2>);
 		location interest_calculate();
 		location interest_maximal(std::vector<location> inmap);
 		void interest_map();
 		map();
 		void append(location);
 		
+		/// appends obstacles to their maps
 		void append(wall);
 		void append(candle);
 		void append(surround_circle);
+		
+		/// alters map on specific coordinates
+		void edit_map(wall);
+		//~ void edit_map(candle);
+		//~ void edit_map(surround_circle);
+		
+		
 		
 		decimal_n calculate_location(location lo);
 		//~ void alter(location);

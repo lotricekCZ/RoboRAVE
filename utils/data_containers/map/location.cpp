@@ -109,6 +109,10 @@ void location::set_interest(decimal_n in){
 void location::set_point(uint8_t in){
 	classification.point_type = in;
 	}
+	
+void location::set_point(type in){
+	classification.point_type = in;
+	}
 
 signed_b location::get_interest(){
 	return classification.interest_level;

@@ -172,5 +172,30 @@ void map::append(candle in){
 void map::append(wall in){
 	_map_walls.push_back(in);
 	}
+
+std::vector<location *> map::strip(std::array<coordinates, 2> limits){
+	//~ std::cout << "this horny bulshit" << std::endl;
+	std::vector<location *> ret;
+	//~ std::cout << "this fucking bulshit" << std::endl;
+	coordinates ed[4] = {limits[0], coordinates(limits[0].x, limits[1].y), limits[1], coordinates(limits[1].x, limits[0].y)};
+	wall r(ed);
+	for(auto &i: _map){
+		//~ std::cout << "this horny loop" << std::endl;
+		if(r.inside(i._coordinates)){
+			std::cout << i._coordinates.print() << std::endl;
+			ret.push_back(&i);
+		}
+	}
+	return ret;
+}
+
+void map::edit_map(wall w){
+	std::array<coordinates, 2> range = w.get_box();
+	range[0] = coordinates((signed_l) range[0].x / map_raster, (signed_l) range[0].y / map_raster);
+	range[1] = coordinates((signed_l) range[0].x / map_raster, (signed_l) range[0].y / map_raster);
+	range[0] *= map_raster;
+	range[1] *= map_raster;
+	
+	}
 	
 #endif
