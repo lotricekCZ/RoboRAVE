@@ -58,8 +58,10 @@ class location
 		location();
 		location(decimal_n, decimal_n);
 		location(coordinates);
-		location (decimal_n, decimal_n, uint8_t);
-		location (decimal_n, decimal_n, location::type);
+		location(coordinates, uint8_t);
+		location(coordinates, location::type);
+		location(decimal_n, decimal_n, uint8_t);
+		location(decimal_n, decimal_n, location::type);
 		
 		decimal_n get_distance(location);
 		decimal_n get_distance(coordinates);

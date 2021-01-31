@@ -51,6 +51,16 @@ location::location(decimal_n x, decimal_n y, type t){
 location::location(coordinates coo){
 	 _coordinates = coo;
 	}
+	
+location::location(coordinates coo, type t){
+	 _coordinates = coo;
+	 set_point(t);
+	}
+	
+location::location(coordinates coo, uint8_t t){
+	 _coordinates = coo;
+	 set_point(t);
+	}
 
 decimal_n location::get_distance(location _loc){
 	return get_distance(_loc._coordinates.x, _loc._coordinates.y);
@@ -96,7 +106,7 @@ decimal_n location::get_angle(coordinates coo){
  */
  
 decimal_n location::get_angle(decimal_n x, decimal_n y){
-	return (x == 0? asin(x / get_distance(x, y)) : atan(y / x));
+	return ((y < 0)? pi: 0) + (atan2(y, x));
 	}
 
 

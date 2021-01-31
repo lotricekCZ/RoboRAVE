@@ -49,7 +49,7 @@ namespace tresholds {
 			decimal_n candle = 			8192;
 			decimal_n candle_blown = 	0;
 			decimal_n unknown = 		128;
-			decimal_n barrier = 		2;
+			decimal_n barrier = 		-10;
 			decimal_n discovered =		-640;
 			decimal_n interesting =		1024;
 			decimal_n boring =			-128;

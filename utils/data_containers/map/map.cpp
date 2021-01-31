@@ -190,12 +190,72 @@ std::vector<location *> map::strip(std::array<coordinates, 2> limits){
 }
 
 void map::edit_map(wall w){
-	std::array<coordinates, 2> range = w.get_box();
-	range[0] = coordinates((signed_l) range[0].x / map_raster, (signed_l) range[0].y / map_raster);
-	range[1] = coordinates((signed_l) range[0].x / map_raster, (signed_l) range[0].y / map_raster);
-	range[0] *= map_raster;
-	range[1] *= map_raster;
-	
+	std::array<coordinates, 2> limits = w.get_box();
+	std::vector<location *> edit_box = strip(w.get_box());
+	for(auto a: edit_box){
+		if(w.inside(a -> _coordinates)){
+			a -> set_point(location::_barrier); // alterovani existujicixh bodu
+			}
+		}
+	std::cout << "\n\nrastr\n" << std::endl;
+	std::cout << limits[0].print() << std::endl;
+	std::cout << limits[1].print() << std::endl;
+	/// doplneni polovicnim rastrem
+	for(decimal_n x = limits[1].x; x < limits[0].x; x += (map_raster/2)){
+		for(decimal_n y = limits[1].y; y < limits[0].y; y += (map_raster/2)){
+			coordinates c(x, y);
+			if(w.inside(c)){
+				std::cout << c.print() << std::endl;
+				append(location(c, location::_barrier));
+			}
+		}		
 	}
+}
+
+void map::edit_map(surround_circle w){
+	std::array<coordinates, 2> limits = w.get_box();
+	std::vector<location *> edit_box = strip(w.get_box());
+	for(auto a: edit_box){
+		if(w.inside(a -> _coordinates)){
+			a -> set_point(location::_barrier); // alterovani existujicich bodu
+			}
+		}
+	std::cout << "\n\nrastr\n" << std::endl;
+	std::cout << limits[0].print() << std::endl;
+	std::cout << limits[1].print() << std::endl;
+	/// doplneni polovicnim rastrem
+	for(decimal_n x = limits[1].x; x < limits[0].x; x += (map_raster/2)){
+		for(decimal_n y = limits[1].y; y < limits[0].y; y += (map_raster/2)){
+			coordinates c(x, y);
+			if(w.inside(c)){
+				std::cout << c.print() << std::endl;
+				append(location(c, location::_barrier));
+			}
+		}		
+	}
+}
+
+void map::edit_map(candle w){
+	std::array<coordinates, 2> limits = w.get_box();
+	std::vector<location *> edit_box = strip(w.get_box());
+	for(auto a: edit_box){
+		if(w.inside(a -> _coordinates)){
+			a -> set_point(location::_barrier); // alterovani existujicich bodu
+			}
+		}
+	std::cout << "\n\nrastr\n" << std::endl;
+	std::cout << limits[0].print() << std::endl;
+	std::cout << limits[1].print() << std::endl;
+	/// doplneni polovicnim rastrem
+	for(decimal_n x = limits[1].x; x < limits[0].x; x += (map_raster/2)){
+		for(decimal_n y = limits[1].y; y < limits[0].y; y += (map_raster/2)){
+			coordinates c(x, y);
+			if(w.inside(c)){
+				std::cout << c.print() << std::endl;
+				append(location(c, location::_barrier));
+			}
+		}		
+	}
+}
 	
 #endif

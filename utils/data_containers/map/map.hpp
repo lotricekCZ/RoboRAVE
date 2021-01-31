@@ -53,8 +53,8 @@ class map
 		
 		/// alters map on specific coordinates
 		void edit_map(wall);
-		//~ void edit_map(candle);
-		//~ void edit_map(surround_circle);
+		void edit_map(candle);
+		void edit_map(surround_circle);
 		
 		
 		

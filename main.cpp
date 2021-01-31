@@ -387,13 +387,15 @@ int main(int argc, char *argv[]) {
 		case 17:{ 
 			/// this creates map and does math to calculations to make heatmap, therefore selecting the hottest spot and designing trace to it
 			map m;
-			m._map = m.grid(0, 0, 90, 90);
+			m._map = m.grid(0, 0, 150, 150);
 			coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 7), coordinates(-6, 6)};
 			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			coordinates z[] = {coordinates(10, 10), coordinates(0, 20), coordinates(40, 60), coordinates(50, 50)};
 			
 			m.append(candle(coordinates(4,3)));
 			m.append(wall(c));
 			m.append(wall(x));
+			m.append(wall(z));
 			//~ std::cout << m._map_walls[0].is_collision_course(circle(coordinates(-5, 2), 6))[1].print() << std::endl;
 			angles a = angles().load_virtual_circular(coordinates(-5, 2), m, 0, 20, 0.06);
 			//~ angles a = angles().load_virtual(coordinates(-5, 2), m);
@@ -401,8 +403,8 @@ int main(int argc, char *argv[]) {
 				std::cout << "uhel: " << i.angle << "   vzdalenost: " << i.distance << "\t" << i.position._coordinates.print() << std::endl;
 			std::cout << m._map_walls[0].get_box()[1].print() << "\t" << m._map_walls[0].get_box()[0].print() << std::endl;
 			std::cout << m._map_candles[0].get_box()[1].print() << "\t" << m._map_candles[0].get_box()[0].print() << std::endl;
-			m.strip({coordinates(10, 10), coordinates(60, 60)})[0] -> set_point(location::_candle);
-			
+			//~ m.strip({coordinates(10, 10), coordinates(60, 60)})[0] -> set_point(location::_candle);
+			m.edit_map(z);
 			m.interest_calculate();
 			m.interest_map();
 			break;
