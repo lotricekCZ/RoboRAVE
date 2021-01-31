@@ -67,11 +67,9 @@ class coordinates
 			return coordinates(this -> x * rhs, this -> y * rhs);
 			}
 		inline bool operator==(const coordinates& rhs){ 
-			///  TODO: std::abs
-			const signed_b multiplier = 1000000;
-			const signed_b thres = 100;
-			signed_b x = abs(abs(this -> x * multiplier) - abs(rhs.x * multiplier));
-			signed_b y = abs(abs(this -> y * multiplier) - abs(rhs.y * multiplier));
+			const signed_b thres = 10; // 10mm
+			signed_b x = std::abs(std::abs(this -> x) - std::abs(rhs.x));
+			signed_b y = std::abs(std::abs(this -> y) - std::abs(rhs.y));
 			/* do actual comparison */ 
 			return x <= thres && y <= thres;
 			}
