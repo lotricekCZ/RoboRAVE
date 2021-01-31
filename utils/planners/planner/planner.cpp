@@ -30,6 +30,10 @@ planner::planner()
 	
 }
 
+circle planner::create_perimeter(coordinates c){
+	return circle(c, robot_radius*2.0);
+	}
+
 std::vector<step> planner::plan_make(location goal, location start, decimal_n current_angle){
 	const uint8_t max = 90;
 	bool reached = false;

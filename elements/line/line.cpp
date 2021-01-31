@@ -25,7 +25,8 @@
 #include "line.hpp"
 
 
-
+#ifndef LINE_CPP
+#define LINE_CPP
 
 line::line(coordinates a, coordinates b) {
 
@@ -88,3 +89,5 @@ coordinates line::intersection(line a, line b){
 	// just believe me, this should be ok
 	return coordinates(x, a.get_y(x));
 	}
+
+#endif //LINE_CPP

@@ -90,3 +90,6 @@ Další důležité je zjišťovat, zda se nacházíme na kolizním kurzu s pře
 
 Tady nelze uvažovat o čemkoliv jiném, než že buď se v intervalu hodnot, v nichž se nachází 
 
+## Kružnice × přímka
+
+- Ze soustavy dvou kružnic a jejich vnitřní tečny vzešlo, že je žádoucí, aby se směr přímky a lineární cesta nabyla co nejdříve - cesta je poté nejkratší a existuje dlouhá část cesty, na níž lze zrychlit. 

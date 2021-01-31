@@ -24,6 +24,11 @@
 //~ #include "../../data_containers/speeds/speeds.cpp"
 //~ #include "../../data_containers/coordinates/coordinates.cpp"
 //~ #include "../../data_containers/map/map.cpp"
+#include "../../../elements/circle/circle.cpp"
+#include "../../../elements/line/line.cpp"
+#include <limits>
+#include <variant>
+
 #ifndef STEP_HPP
 #define STEP_HPP
 
@@ -35,7 +40,13 @@ class step
 	coordinates start;
 	coordinates end;
 	
-	coordinates center; 	// coordinates of a center around which the robot drives
+	circle c;
+	line l;
+	enum equation_type{
+		line_e = 0,
+		circle_e = 1
+		};
+	equation_type _type;
 	
 	decimal_n time;
 	
@@ -52,6 +63,7 @@ class step
 		step(coordinates, coordinates, coordinates);
 		step(coordinates, coordinates);
 		step();
+		std::string inkscape_print();
 			
 	private:
 		/* add your private declarations */

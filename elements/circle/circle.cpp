@@ -136,10 +136,10 @@ std::vector<coordinates> circle::intersection(circle k, circle c) {
 	return ret;
 };
 
-void circle::circle_tangents (coordinates c, double r1, double r2, std::vector<line> & ans) {
-    double r = r2 - r1;
-    double z = pow(c.x, 2) + pow(c.y, 2);
-    double d = z - pow(r, 2);
+void circle::circle_tangents (coordinates c, decimal_n r1, decimal_n r2, std::vector<line> & ans) {
+    decimal_n r = r2 - r1;
+    decimal_n z = pow(c.x, 2) + pow(c.y, 2);
+    decimal_n d = z - pow(r, 2);
     if (d < -(1e-9))  return;
     d = sqrt (abs (d));
     line l;

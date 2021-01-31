@@ -415,6 +415,16 @@ int main(int argc, char *argv[]) {
 			break;
 			}
 			
+		case 19:{
+			std::cout << circle().intersection(circle().circle_tangents(circle(coordinates(-6, -2), 5), circle(coordinates(6, 9), 5))[0], circle(coordinates(-6, -2), 5))[0].print() << std::endl;
+			break;
+			}
+			
+		case 20:{
+			std::cout << step(coordinates(-50, 0), coordinates(0, 50), coordinates(0, 0)).inkscape_print() << std::endl;
+			break;
+			}
+			
 		}
 
 	

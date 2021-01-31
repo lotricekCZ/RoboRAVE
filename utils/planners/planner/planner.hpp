@@ -34,6 +34,7 @@ class planner
 		angles * sight;
 		planner();
 		std::vector<step> plan;
+		circle create_perimeter(coordinates);
 		
 		std::vector<step> plan_make(location goal, location start, decimal_n current_angle); 
 		// makes plan geometrically, does not assign speeds or something exact

@@ -34,11 +34,39 @@ step::step()
 step::step(coordinates start, coordinates end, coordinates center){
 	this -> start = start;
 	this -> end = end;
-	this -> center = center;
+	this -> _type = circle_e;
+	this -> c = circle(center, start.get_distance(center));
 	}
 	
 	
 step::step(coordinates start, coordinates end){
 	this -> start = start;
 	this -> end = end;	
+	this -> _type = line_e;
+	this -> l = line(start, end);
+	
+	}
+
+std::string step::inkscape_print(){
+	switch(_type){
+		case line_e:
+			return " <path id=\"path853\" d=\"M "+ std::to_string(start.x)+","+ std::to_string(start.y)+","+ \
+				std::to_string(end.x)+","+ std::to_string(end.y)+"style=\"fill:none;stroke:#000000;stroke-width:0.564583px;\
+				stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\" />";
+			
+			
+		case circle_e:
+			return "<path style=\"opacity:1;fill:none;stroke:#008080;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers\"\
+			\tid=\"path833\"\n\
+			\tsodipodi:type=\"arc\" \n\
+			\tsodipodi:cx=\"" + std::to_string(c.center.x) +"\"\n\
+			\tsodipodi:cy=\"" + std::to_string(c.center.y) +"\"\n\
+			\tsodipodi:rx=\"" + std::to_string(c.radius) +"\"\n\
+			\tsodipodi:ry=\"" + std::to_string(c.radius) +"\"\n\
+			\tsodipodi:start=\"" + std::to_string(c.center.get_gamma(start)) +"\"\n\
+			\tsodipodi:end=\"" + std::to_string(c.center.get_gamma(end)) +"\"\n\
+			\tsodipodi:arc-type=\"arc\"\n\
+			\tsodipodi:open=\"false\" />\n";
+		}
+	return "";
 	}

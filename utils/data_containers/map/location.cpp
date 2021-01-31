@@ -106,7 +106,7 @@ decimal_n location::get_angle(coordinates coo){
  */
  
 decimal_n location::get_angle(decimal_n x, decimal_n y){
-	return ((y < 0)? pi: 0) + (atan2(y, x));
+	return ((y < 0)? 2 * pi: 0) + (atan2(y, x));
 	}
 
 
