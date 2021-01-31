@@ -136,6 +136,29 @@ std::vector<coordinates> circle::intersection(circle k, circle c) {
 	return ret;
 };
 
+void circle::circle_tangents (coordinates c, double r1, double r2, std::vector<line> & ans) {
+    double r = r2 - r1;
+    double z = pow(c.x, 2) + pow(c.y, 2);
+    double d = z - pow(r, 2);
+    if (d < -(1e-9))  return;
+    d = sqrt (abs (d));
+    line l;
+    l.a = (c.x * r + c.y * d) / z;
+    l.b = (c.y * r - c.x * d) / z;
+    l.c = r1;
+    ans.push_back(line((c.x * r + c.y * d) / z, (c.y * r - c.x * d) / z, r1));
+}
+
+std::vector<line> circle::circle_tangents(circle a, circle b) {
+    std::vector<line> ans;
+	for (int i=-1; i<=1; i+=2)
+		for (int j=-1; j<=1; j+=2)
+			circle_tangents (b.center-a.center, a.radius*i, b.radius*j, ans);
+	for (size_t i=0; i<ans.size(); ++i)
+		ans[i].c -= ans[i].a * a.center.x + ans[i].b * a.center.y;
+	return ans;
+}
+
 #endif
 
 
