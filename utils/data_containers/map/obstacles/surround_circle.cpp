@@ -34,4 +34,17 @@ surround_circle::surround_circle(coordinates a)
 	inner = circle(a, outer_r - outer_w);
 }
 
+std::string surround_circle::inkscape_print(){
+	return "<path style=\"opacity:1;fill:none;stroke:#008080;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers\"\
+			\tid=\"path833\"\n\
+			\tsodipodi:type=\"arc\" \n\
+			\tsodipodi:cx=\"" + std::to_string(outer.center.x) +"\"\n\
+			\tsodipodi:cy=\"" + std::to_string(outer.center.y) +"\"\n\
+			\tsodipodi:rx=\"" + std::to_string(outer.radius) +"\"\n\
+			\tsodipodi:ry=\"" + std::to_string(outer.radius) +"\"\n\
+			\tsodipodi:start=\"" + std::to_string(0) +"\"\n\
+			\tsodipodi:end=\"" + std::to_string(2*pi) +"\"\n\
+			\tsodipodi:arc-type=\"arc\"\n\
+			\tsodipodi:open=\"false\" />\n";
+	}
 #endif

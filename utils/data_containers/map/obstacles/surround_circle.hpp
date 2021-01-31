@@ -41,6 +41,7 @@ class surround_circle: public obstacle
 		std::vector<coordinates> is_collision_course(line l){return outer.intersection(l, outer);}
 		std::vector<coordinates> is_collision_course(circle c){return outer.intersection(c, outer);}
 		std::array<coordinates, 2> get_box(){return {outer.center - coordinates(outer.radius, outer.radius), outer.center + coordinates(outer.radius, outer.radius)};};
+		std::string inkscape_print();
 	private:
 		/* add your private declarations */
 };

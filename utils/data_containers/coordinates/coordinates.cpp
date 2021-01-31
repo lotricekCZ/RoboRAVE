@@ -90,7 +90,7 @@ decimal_n coordinates::get_gamma(decimal_n x_rel, decimal_n y_rel){
 	}
 	
 decimal_n coordinates::get_gamma(coordinates c){
-	return ((c.y < 0)? 2 * pi : 0 ) + atan2(c.y, c.x);
+	return get_gamma(c.x - x, c.y - y);
 	}
 	
 decimal_n coordinates::get_distance(decimal_n x_rel, decimal_n y_rel){

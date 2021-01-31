@@ -93,4 +93,17 @@ std::array<coordinates, 2> wall::get_box(){
 		}
 	return {coordinates(min_x, min_y), coordinates(max_x, max_y)};
 	}
+
+std::string wall::inkscape_print(){
+	return "<rect \n\
+	inkscape:transform-center-y=\"-20\"\
+    inkscape:transform-center-x=\"2\"\
+	transform=\"rotate("+ std::to_string(properties.edges[0].get_gamma(properties.edges[1])) +")\"\n\
+	y=\""+ std::to_string(properties.edges[0].y) +"\"\n\
+	x=\""+ std::to_string(properties.edges[0].x) +"\"\n\
+	height=\"40\"\n\
+	width=\"4\"\n\
+	id=\"rect2551\"\n\
+	style=\"fill:#000000;stroke:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers\" />\n";		
+	}
 #endif
