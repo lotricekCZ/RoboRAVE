@@ -26,7 +26,7 @@
 
 
 angles::angles()
-	: vector()
+	: vector<node>()
 {
 	for(unsigned_n i = 0; i < 360; i ++){
 		push_back(node(0.0f, (decimal_n)i));
@@ -34,8 +34,16 @@ angles::angles()
 	std::sort(this -> begin(), this -> end(), [](node a, node b){return (a.angle < b.angle);});
 }
 
-node angles::get_angle(signed_n angle){
-	return at(angle);
+node angles::get_angle(unsigned_n angle){
+	//~ std::cout << angle << std::endl;
+	for(unsigned_n i = 0; i < (this -> size() -1); i++){
+		if(at(i).angle == angle){
+			//~ std::cout << at(i).get_angle() << at(i).position._coordinates.print() << std::endl;
+			//~ std::cout << "podminka splnena " << i << std::endl;
+			return at(i);
+			}
+		}
+	return node(-1);
 	}
 	
 angles::~angles()
@@ -48,6 +56,7 @@ angles angles::load_virtual_circular(coordinates c, map &m, decimal_n min, decim
 	std::vector<bool> crossed; 
 	crossed.resize(360);
 	std::vector<coordinates> intersects_an;
+	
 	for(decimal_n i = min; i < max; i += step){
 		//~ std::cout << i << std::endl;
 		circle k(c, i);
@@ -82,6 +91,7 @@ angles angles::load_virtual_circular(coordinates c, map &m, decimal_n min, decim
 			ret[i].position._coordinates.get_distance(c) >= MAX_DISTANCE || \
 			ret[i].position._coordinates == coordinates(0, 0) || !crossed[i]){
 			ret.erase(ret.begin() + i);
+			
 			}
 		}
 		//~ std::cout << "outcome end" << std::endl;
@@ -134,8 +144,9 @@ angles angles::load_virtual(coordinates a, map &m){
 	for(signed_n i = 359; i >= 0; i--){
 		//~ std::cout << ret[i].angle << "\t" << ret[i].distance << "\t" << ret[i].position._coordinates.print() << std::endl;
 		if(ret[i].distance == 0 || ret[i].distance >= MAX_DISTANCE || \
-			ret[i].position._coordinates.get_distance(a) >= MAX_DISTANCE || \
-			ret[i].position._coordinates == coordinates(0, 0)){
+			ret[i].position._coordinates.get_distance(a) >= MAX_DISTANCE/* || \
+			ret[i].position._coordinates == coordinates(0, 0)*/){
+			//~ std::cout << ret[i].angle << "\t" << ret[i].distance << "\t" << ret[i].position._coordinates.print() << std::endl;
 			ret.erase(ret.begin() + i);
 			}
 		}

@@ -36,11 +36,12 @@ class angles: public std::vector<node>
 	    using std::vector<node>::operator[];
 	    using std::vector<node>::begin;
 	    using std::vector<node>::erase;
+	    using std::vector<node>::size;
 	    using std::vector<node>::end;
 	    using std::vector<node>::at;
 		angles();
 		virtual ~angles();
-		node get_angle(signed_n);
+		node get_angle(unsigned_n);
 		angles load_virtual(coordinates, map &m);
 		angles load_virtual_circular(coordinates, map &m, decimal_n, decimal_n, decimal_n);
 		
