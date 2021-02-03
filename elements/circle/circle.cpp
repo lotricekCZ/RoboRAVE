@@ -22,6 +22,7 @@
  */
 
 #include <cmath> 
+#include <string> 
 //~ #include "include.hpp"
 #include "circle.hpp"
 
@@ -158,6 +159,19 @@ std::vector<line> circle::circle_tangents(circle a, circle b) {
 		ans[i].c -= ans[i].a * a.center.x + ans[i].b * a.center.y;
 	return ans;
 }
+
+std::string circle::print(){
+	std::string ret = "(x";
+	ret += ((center.x > 0)?"":"+");
+	ret += std::to_string(-1*center.x);
+	ret += ")^2 + (y";
+	ret += ((center.y > 0)?"":"+");
+	ret += std::to_string(-1*center.y);
+	ret += ")^2 =";
+	ret += std::to_string(pow(radius, 2));
+	
+	return ret;
+	}
 
 #endif
 

@@ -80,6 +80,10 @@ std::string line::print (line l){
 std::string line::print (){
 	return print(*this);
 	}
+	
+bool line::on_segment (coordinates on_seg, coordinates a_seg, coordinates b_seg){
+	return on_seg.get_distance(a_seg) + on_seg.get_distance(b_seg) <= a_seg.get_distance(b_seg);
+	}
 
 coordinates line::intersection(line a, line b){
 	if((a.b * b.a - b.b * a.a) == 0) return coordinates(std::numeric_limits<float>::infinity(), \

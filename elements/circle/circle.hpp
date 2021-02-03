@@ -39,6 +39,11 @@ class circle{
 		
 		void circle_tangents(coordinates c, decimal_n r1, decimal_n r2, std::vector<line> & ans);
 		std::vector<line> circle_tangents(circle a, circle b);
+		std::string print();
+		
+		inline bool operator==(const circle& rhs){ 
+			return this -> center == rhs.center && this -> radius == rhs.radius;
+			}
 	private:
 		/* add your private declarations */
 };

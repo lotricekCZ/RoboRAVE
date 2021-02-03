@@ -42,6 +42,7 @@ class line
 		line make_parallel(coordinates);
 		std::string print(line);
 		std::string print();
+		bool on_segment(coordinates, coordinates, coordinates);
 		line operator /(decimal_n);
 		coordinates intersection(line, line);
 	private:
