@@ -98,7 +98,7 @@ std::string wall::inkscape_print(){
 	return "<rect \n\
 	inkscape:transform-center-y=\"-20\"\
     inkscape:transform-center-x=\"2\"\
-	transform=\"rotate("+ std::to_string(properties.edges[0].get_gamma(properties.edges[1])) +")\"\n\
+	transform=\"rotate("+ std::to_string(properties.edges[0].get_gamma(properties.edges[1]) / pi * 180) +")\"\n\
 	y=\""+ std::to_string(properties.edges[0].y) +"\"\n\
 	x=\""+ std::to_string(properties.edges[0].x) +"\"\n\
 	height=\"40\"\n\

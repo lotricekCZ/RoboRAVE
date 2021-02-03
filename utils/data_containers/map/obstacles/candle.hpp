@@ -42,7 +42,7 @@ class candle: public obstacle
 		std::vector<coordinates> is_collision_course(line l){return tube.intersection(l, tube);}
 		std::vector<coordinates> is_collision_course(circle c){return tube.intersection(c, tube);}
 		std::array<coordinates, 2> get_box(){return {tube.center - coordinates(tube.radius, tube.radius), tube.center + coordinates(tube.radius, tube.radius)};};
-		std::string candle::inkscape_print();
+		std::string inkscape_print();
 	private:
 		/* add your private declarations */
 };

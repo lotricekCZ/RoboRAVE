@@ -421,14 +421,53 @@ int main(int argc, char *argv[]) {
 			}
 			
 		case 20:{
-			std::cout << step(coordinates(-50, 0), coordinates(0, 50), coordinates(0, 0)).inkscape_print() << std::endl;
+			std::cout << step(coordinates(-50, 10), coordinates(0, 60), coordinates(0, 10)).inkscape_print() << std::endl;
+			break;
+			}
+		
+		case 21:{ 
+			/// this creates map and does math to calculations to make heatmap, therefore selecting the hottest spot and designing trace to it
+			map m;
+	
+			//~ coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 7), coordinates(-6, 6)};
+			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			
+			//~ m.append(candle(coordinates(4,3)));
+			//~ m.append(wall(c));
+			m.append(wall(x));
+			planner p;
+			angles a = angles().load_virtual(coordinates(-5, 2), m);
+			//~ for(auto i: a)
+			std::cout << a.get_angle(0).position._coordinates.print() << std::endl;
+			std::cout << a.get_angle(0).distance << std::endl;
+			//~ std::cout << a.size() << std::endl;
+			std::vector <coordinates> plan = p.plan_make(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m);
+			std::vector <line> clan = p.plan_trace(plan, coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m);
+			//~ std::cout << m._map_walls[0].is_collision_course(circle(coordinates(-5, 2), 6))[1].print() << std::endl;
+			
+			for(auto i: plan)
+				std::cout << i.print() << std::endl;
+				
+			for(auto i: clan)
+				std::cout << i.print() << std::endl;
+			//~ m.strip({coordinates(10, 10), coordinates(60, 60)})[0] -> set_point(location::_candle);
 			break;
 			}
 			
+		case 22:{
+			std::cout << (coordinates(-50, 10) == coordinates(c_f(argv[2]), c_f(argv[3]))) << std::endl;
+			break;
+			}
+			
+		case 23:{
+			
+			break;
+			}
+		
 		}
 
 	
-    //~ uint8_t c = std::thread::hardware_concurrency();
+    //~ uint8_t c = std::thread::hardware_concurrency();	
     //~ std::cout << " number of cores: " << c << std::endl;
 	auto end = std::chrono::steady_clock::now();
 	std::chrono::duration<double> elapsed_seconds = end - start;
