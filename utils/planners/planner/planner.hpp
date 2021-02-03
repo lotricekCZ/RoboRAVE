@@ -36,7 +36,13 @@ class planner
 		std::vector<step> plan;
 		circle create_perimeter(coordinates);
 		
-		std::vector<step> plan_make(location goal, location start, decimal_n current_angle); 
+		std::vector<coordinates> plan_make(coordinates goal, coordinates start, map &); 
+		std::vector<line> plan_trace(std::vector<coordinates>, coordinates goal, coordinates start, map &); // traces the path in lines, perhaps it'll sort the stuff
+		bool collides(wall w, coordinates start, coordinates end);
+		//~ void plan_make(coordinates goal, coordinates start, std::vector<coordinates>&, map &); // useless
+		
+		//~ std::vector<step> plan_make(location goal, location start, decimal_n current_angle, map &); 
+		//~ void plan_make(location goal, location start, decimal_n current_angle, std::vector<step>&, map &); 
 		// makes plan geometrically, does not assign speeds or something exact
 		
 		std::vector<step> plan_calculate(std::vector<step>); 
