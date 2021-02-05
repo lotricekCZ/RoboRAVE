@@ -34,10 +34,15 @@ class planner
 		angles * sight;
 		planner();
 		std::vector<step> plan;
+		std::vector<circle> perimeters;
 		circle create_perimeter(coordinates);
 		
+		std::vector<circle> circle_generate(coordinates goal, coordinates start, map &); // function to create all circles with goal coordinate on it
+		std::vector<circle> perimeter_generate(map &m);
+		
 		std::vector<coordinates> plan_make(coordinates goal, coordinates start, map &); 
-		std::vector<line> plan_trace(std::vector<coordinates>, coordinates goal, coordinates start, map &); // traces the path in lines, perhaps it'll sort the stuff
+		std::vector<coordinates> coincidental_points_generate(std::vector<circle>& circles);
+		//~ std::vector<step> plan_trace(std::vector<coordinates>, coordinates goal, coordinates start, map &); // traces the path in lines, perhaps it'll sort the stuff
 		bool collides(wall w, coordinates start, coordinates end);
 		//~ void plan_make(coordinates goal, coordinates start, std::vector<coordinates>&, map &); // useless
 		

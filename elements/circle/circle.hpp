@@ -44,6 +44,10 @@ class circle{
 		inline bool operator==(const circle& rhs){ 
 			return this -> center == rhs.center && this -> radius == rhs.radius;
 			}
+			
+		inline bool operator!=(const circle& rhs){ 
+			return !(*this == rhs)	;
+			}
 	private:
 		/* add your private declarations */
 };

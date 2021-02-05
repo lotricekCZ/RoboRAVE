@@ -87,50 +87,59 @@ bool planner::collides(wall w, coordinates start, coordinates end){
 	return false;
 }
 
-std::vector<line> planner::plan_trace(std::vector<coordinates> c, coordinates goal, coordinates start, map &m){
-	std::vector<coordinates> temp = c;
-	std::vector<line> sketch;
-	coordinates curr = start;
-	coordinates next = goal;
+//~ std::vector<step> planner::plan_trace(std::vector<coordinates> c, coordinates goal, coordinates start, map &m){
+	//~ std::vector<coordinates> temp = c;
+	//~ std::vector<step> sketch;
+	//~ coordinates curr = start;
+	//~ coordinates next = goal;
+	//~ bool does_collide = false;
 	
-	while(temp.size() != 0){
-		for(size_t a = 0; a < temp.size(); a++){
-			std::cout << curr.print() << "   " << next.print() << std::endl;
-			bool possible = true;
-			bool possible_goal = true;
-			for(auto w: m._map_walls){
-				if(possible_goal){
-					possible_goal = !collides(w, curr, goal);
-					}
-				if(possible){
-					possible = !collides(w, curr, next);
-					}
-				}
-				
-			if(possible_goal){
-				sketch.push_back(line(curr, goal));
-				return sketch;
-				}
-				
-			if(possible){
-				sketch.push_back(line(curr, next));
-				curr = next;
-				}
-			next = temp[a];
-			temp.erase(temp.begin() + a);
-			//~ if(possible){
-				//~ sketch.push_back(curr_l);
-				//~ if(next == goal){
-					//~ return sketch;
+	//~ for(auto a: c){
+		//~ for(auto b: c){
+			//~ if(a == b)
+				//~ break;
+			//~ for(auto w: m._map_walls){
+				//~ if(!does_collide){
+					//~ does_collide = collides(w, a, b);
+					//~ }
 				//~ }
-				//~ curr = temp[a];
-				//~ temp.erase(temp.begin() + a);
-				//~ curr_l = line()
+			//~ if(!does_collide){
+				//~ sketch.push_back(a, b);
 				//~ }
+			//~ }
+		//~ }
+	//~ return sketch;
+	//~ }
+
+std::vector<circle> planner::circle_generate(coordinates goal, coordinates start, map &m){
+	std::vector<circle> out;
+	out.push_back(circle(start, start.get_distance(goal)));
+	for(wall w: m._map_walls)
+		for(coordinates c: w.properties.edges)
+			out.push_back(circle(c, c.get_distance(goal)));
+	return out;	
+}
+
+std::vector<circle> planner::perimeter_generate(map &m){
+	std::vector<circle> out;
+	
+	for(wall w: m._map_walls)
+		for(coordinates c: w.properties.edges)
+			out.push_back(create_perimeter(c));
+	return out;	
+}
+
+std::vector<coordinates> planner::coincidental_points_generate(std::vector<circle>& circles){
+	std::vector<coordinates> out;
+	for(std::vector<circle>::iterator a = circles.begin(); a != circles.end(); ++a)
+		for(std::vector<circle>::iterator b = a; b != circles.end(); ++b)
+			if(*a != *b){
+				std::vector<coordinates> n = b -> intersection(*a, *b);
+				out.insert(out.end(), n.begin(), n.end());
 			}
-		}
-	return sketch;
+	return out;	
 	}
+
 	
 std::vector<step> planner::plan_calculate(std::vector<step> in){
 	std::vector<step> out = in;
