@@ -22,7 +22,10 @@
  */
 
 
+#include "belman_ford.cpp"
+#include "travel_node.cpp"
 #include "planner.hpp"
+//~ #include "track_seeker.hpp"
 
 
 planner::planner()
@@ -87,6 +90,15 @@ bool planner::collides(wall w, coordinates start, coordinates end){
 	return false;
 }
 
+bool planner::collides_nowhere(map &m, coordinates start, coordinates end){
+	line lin(start, end);
+	for(auto w: m._map_walls){
+		if(collides(w, start, end))
+			return false;
+		}
+	return true;
+}
+
 //~ std::vector<step> planner::plan_trace(std::vector<coordinates> c, coordinates goal, coordinates start, map &m){
 	//~ std::vector<coordinates> temp = c;
 	//~ std::vector<step> sketch;
@@ -131,12 +143,30 @@ std::vector<circle> planner::perimeter_generate(map &m){
 
 std::vector<coordinates> planner::coincidental_points_generate(std::vector<circle>& circles){
 	std::vector<coordinates> out;
-	for(std::vector<circle>::iterator a = circles.begin(); a != circles.end(); ++a)
-		for(std::vector<circle>::iterator b = a; b != circles.end(); ++b)
+	for(std::vector<circle>::iterator a = circles.begin(); a != circles.end(); ++a){
+		for(std::vector<circle>::iterator b = a; b != circles.end(); ++b){
 			if(*a != *b){
 				std::vector<coordinates> n = b -> intersection(*a, *b);
 				out.insert(out.end(), n.begin(), n.end());
+				
+				}
+					
 			}
+		}
+		
+	for(std::vector<coordinates>::iterator a = out.begin(); a != out.end(); ++a){
+		for(std::vector<coordinates>::iterator b = a; b != out.end(); ++b){
+			if(a != b){
+				if(*a == *b){
+					out.erase(b);
+					--b;
+					}				
+				}
+					
+			}
+		}
+	//~ for(auto a: out)
+		//~ std::cout << a.print() << std::endl;
 	return out;	
 	}
 
@@ -145,4 +175,75 @@ std::vector<step> planner::plan_calculate(std::vector<step> in){
 	std::vector<step> out = in;
 	
 	return out;
+	}
+
+std::vector<travel_node> planner::expand(std::vector<travel_node> nodes, std::vector<travel_node> prev_nodes,  unsigned_b id_curr){
+	std::vector<travel_node> curr_nodes;
+	travel_node i = search_by_id(id_curr, nodes);
+	for(auto o: i.connected){
+		bool inside = false;
+		for(auto u: prev_nodes){
+			if(o.second -> id == u.id){
+				inside = true;
+				}
+			if(!inside){
+				curr_nodes.push_back(*o.second);
+				}
+			}
+		}
+			
+	return curr_nodes;	
+	}
+
+
+travel_node planner::search_by_id(unsigned_b id, std::vector<travel_node> &nodes){
+	for(auto i: nodes){
+		if(i.id == id)
+			return i;
+		}
+	return travel_node(-1, coordinates());
+	}
+
+
+std::vector<step> planner::make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m){
+	std::vector<coordinates> temp = c;
+	temp.push_back(start);
+
+	std::vector<travel_node> nodes = travel_node::convert(temp);
+	std::vector<edge> edges;
+	std::vector<travel_node> out;
+	
+	unsigned_b id_start = 0;
+	unsigned_b id_end = 0;
+	std::cout << "<ajdicka hovad>\n";
+	for(auto a: nodes){
+		std::cout << a.id << ", ";
+		if(a.coords == start){
+			id_start = a.id;
+			}
+			
+		if(a.coords == end){
+			id_start = a.id;
+			}
+		}
+	std::cout << "</ajdicka hovad>\n";
+	for(auto &a: nodes){
+		for(auto &b: nodes){
+			if(a != b){
+				if(collides_nowhere(m, a.coords, b.coords)){
+					edges.push_back(edge{a.id+1, b.id+1, a.coords.get_distance(b.coords)});
+					edges.push_back(edge{b.id+1, a.id+1, a.coords.get_distance(b.coords)});
+					//~ a.connect(&b);
+					//~ b.connect(&a);
+				}
+			}
+		}
+	}
+	std::vector<unsigned_b> ind = bellman_ford(nodes.size(), edges, id_start+1, edges.size(), id_end+1);
+	std::cout << "size: " << ind.size() << std::endl;
+	for(auto i: ind)
+		std::cout << search_by_id(i	, nodes).coords.print() <<"\n";
+	std::cout << std::endl;
+	
+	return std::vector<step>();
 	}

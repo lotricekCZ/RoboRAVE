@@ -22,6 +22,7 @@
  */
 #include "../../data_containers/map/map.cpp"
 #include "../../../elements/radius/radius.h"
+//~ #include "./optimization/ant_colony.cpp"
 #include "step.cpp"
 #include <vector>
 
@@ -44,14 +45,19 @@ class planner
 		std::vector<coordinates> coincidental_points_generate(std::vector<circle>& circles);
 		//~ std::vector<step> plan_trace(std::vector<coordinates>, coordinates goal, coordinates start, map &); // traces the path in lines, perhaps it'll sort the stuff
 		bool collides(wall w, coordinates start, coordinates end);
+		bool collides_nowhere(map& m, coordinates start, coordinates end);
 		//~ void plan_make(coordinates goal, coordinates start, std::vector<coordinates>&, map &); // useless
-		
+		std::vector<travel_node> expand(std::vector<travel_node> nodes, std::vector<travel_node> prev_nodes,  unsigned_b id_curr);
 		//~ std::vector<step> plan_make(location goal, location start, decimal_n current_angle, map &); 
 		//~ void plan_make(location goal, location start, decimal_n current_angle, std::vector<step>&, map &); 
 		// makes plan geometrically, does not assign speeds or something exact
-		
+		std::vector<step> make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m);
 		std::vector<step> plan_calculate(std::vector<step>); 
 		// makes speeds assigned, new coordinates, angle and steps calculated
+		
+		
+		travel_node search_by_id(unsigned_b id, std::vector<travel_node> &nodes);
+		
 	private:
 		/* add your private declarations */
 };

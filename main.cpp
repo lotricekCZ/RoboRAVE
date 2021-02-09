@@ -252,15 +252,15 @@ int main(int argc, char *argv[]) {
 				}
 		
 		
-			//~ m._map[0].set_point(location::_discovered);
-			//~ m._map[30].set_point(location::_candle);
-			//~ std::cout << "x: " << m._map[0]._coordinates.x << "  y: " << m._map[0]._coordinates.y << std::endl;
+			m._map[0].set_point(location::_discovered);
+			m._map[30].set_point(location::_candle);
+			std::cout << "x: " << m._map[0]._coordinates.x << "  y: " << m._map[0]._coordinates.y << std::endl;
 			location loo = m.interest_calculate();
 			std::cout << "x: " << loo._coordinates.x << "  y: " << loo._coordinates.y << std::endl;
-			//~ m.interest_map();
+			m.interest_map();
 			decimal_n loc = m.calculate_location(location(10, 10));
 			std::cout << "interest: " << loc << "\n";
-			std::cout << radius::from_3_points(coordinates(-4, 0), coordinates(4, 0), coordinates(0, 4));
+			std::cout << radius::from_3_points(coordinates(4, 4), coordinates(-1, 1), coordinates(2, 4));
 			coordinates d = radius::coords(coordinates(0, 0), coordinates(2, 2), coordinates(-1, 2.5));
 			std::cout << "\nx: " << d.x << " y: " << d.y <<"\n";
 			}
@@ -431,25 +431,32 @@ int main(int argc, char *argv[]) {
 	
 			//~ coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 7), coordinates(-6, 6)};
 			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
 			
 			//~ m.append(candle(coordinates(4,3)));
 			//~ m.append(wall(c));
 			m.append(wall(x));
+			m.append(wall(y));
 			planner p;
 			angles a = angles().load_virtual(coordinates(-5, 2), m);
 			//~ for(auto i: a)
 			std::cout << a.get_angle(0).position._coordinates.print() << std::endl;
 			std::cout << a.get_angle(0).distance << std::endl;
 			//~ std::cout << a.size() << std::endl;
-			std::vector <coordinates> plan = p.plan_make(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m);
-			std::vector <line> clan = p.plan_trace(plan, coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m);
+			std::vector <circle> plan = p.circle_generate(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m);
+			//~ std::vector <line> clan = p.plan_trace(plan, coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m);
 			//~ std::cout << m._map_walls[0].is_collision_course(circle(coordinates(-5, 2), 6))[1].print() << std::endl;
 			
 			for(auto i: plan)
 				std::cout << i.print() << std::endl;
-				
-			for(auto i: clan)
+			
+			for(auto i: p.coincidental_points_generate(plan))
 				std::cout << i.print() << std::endl;
+			std::vector<coordinates> g = p.coincidental_points_generate(plan);
+			p.make_path(g, coordinates(-5, 2), coordinates(c_f(argv[2]), c_f(argv[3])), m);
+			
+			//~ for(auto i: clan)
+				//~ std::cout << i.print() << std::endl;
 			//~ m.strip({coordinates(10, 10), coordinates(60, 60)})[0] -> set_point(location::_candle);
 			break;
 			}
