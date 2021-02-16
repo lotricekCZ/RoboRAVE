@@ -1,5 +1,6 @@
 main
 math
+build
 
 *.gch
 *.o
