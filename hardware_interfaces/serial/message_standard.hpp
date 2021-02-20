@@ -10,7 +10,7 @@ namespace msg_std{
 	
 	const uint8_t start		 	= '$';
 	const uint8_t end	 		= ';';
-	const 
+	const uint8_t message_space_size = length - (2 + head + head_size);
 	};
 
 #endif

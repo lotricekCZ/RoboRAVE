@@ -40,8 +40,8 @@ class message
 			uint8_t message_space[16]; // prinasi 2^128 moznosti vyuziti (10bitova data po osmi - 80b)
 		};
 		
-		bool decode(uint8_t in[22], content &);
-		bool encode(content in, uint8_t &buffer[22]);
+		bool decode(uint8_t in[22], content &in);
+		void encode(content in, uint8_t &buffer[22]);
 		message();
 		
 	private:
