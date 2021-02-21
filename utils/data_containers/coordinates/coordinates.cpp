@@ -49,7 +49,7 @@ coordinates::coordinates(decimal_n x, decimal_n y)
  */
 
 coordinates coordinates::make_local(coordinates abs, coordinates rel, decimal_n alpha){
-	coordinates c = make_rotation(abs-rel, alpha - pi/2);
+	coordinates c = make_rotation(abs-rel, alpha - pi_const/2);
 	return c;
 	}
 
@@ -77,7 +77,7 @@ coordinates coordinates::make_local(decimal_n distance, decimal_n ang){
  */
 	
 coordinates coordinates::make_global(coordinates abs, coordinates rel, decimal_n alpha){
-	coordinates c = make_rotation(rel, alpha + pi/2);
+	coordinates c = make_rotation(rel, alpha + pi_const/2);
 	return abs + c;
 	}
 	
@@ -86,7 +86,7 @@ coordinates coordinates::make_rotation(coordinates rel, decimal_n alpha){
 	}
 
 decimal_n coordinates::get_gamma(decimal_n x_rel, decimal_n y_rel){
-	return ((y_rel < 0)? 2 * pi : 0 ) + atan2((decimal_n)y_rel, (decimal_n)x_rel);
+	return ((y_rel < 0)? 2 * pi_const : 0 ) + atan2((decimal_n)y_rel, (decimal_n)x_rel);
 	}
 	
 decimal_n coordinates::get_gamma(coordinates c){

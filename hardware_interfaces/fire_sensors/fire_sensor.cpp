@@ -22,8 +22,9 @@
  */
 
 
-#include "fire_sensor.hpp"
+#include "../serial/chat.cpp"
 #include "../../utils/data_containers/angles/node/node.cpp"
+#include "fire_sensor.hpp"
 #include <vector>
 
 /*

@@ -2,7 +2,8 @@
 #include <vector>
 #include <limits>
 #include "../../../defines/typedefines.h"
-using namespace std; 
+
+//~ using namespace std; 
 typedef struct edge {
 	unsigned_b src = 0; 
 	unsigned_b dest = 0; 
@@ -37,11 +38,13 @@ std::vector<unsigned_b> bellman_ford(unsigned_b number_vertice,
 		
 			if(dis[u] != std::numeric_limits<decimal_n>::infinity() && (dis[u] + weight) < dis[v]){
 				dis[v] = dis[u] + weight;
+				
 			}	
 		}
 	}
 	
-	/* checking if negative cycle is present */
+	/*
+	 * checking if negative cycle is present
 	for(j = 0; j < number_edge; j++){
 		u = e[j].src; 
 		v = e[j].dest; 
@@ -50,6 +53,11 @@ std::vector<unsigned_b> bellman_ford(unsigned_b number_vertice,
 			//~ std::cout << "\n\nNEGATIVE CYCLE PRESENT..!!\n"; 
 			return std::vector<unsigned_b>(); 
 		}	
+	}
+	*/
+	std::cout << "\nvertex" << "	Distance from source"; 
+	for(i = 1; i <= number_vertice; i++){
+		std::cout << "\n" << i << "\t" << dis[i]; 
 	}
 	//~ nods.push_front(end);
 	int end_val = end;// dis[end];

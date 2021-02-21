@@ -23,7 +23,8 @@
 
 
 #include "node.hpp"
-
+#ifndef DATA_CONTAINERS_ANGLES_NODE_CPP
+#define DATA_CONTAINERS_ANGLES_NODE_CPP
 
 node::node()
 {
@@ -89,3 +90,4 @@ node::~node()
 	
 }
 
+#endif //

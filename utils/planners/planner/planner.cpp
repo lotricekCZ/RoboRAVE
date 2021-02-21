@@ -22,7 +22,7 @@
  */
 
 
-#include "belman_ford.cpp"
+#include "bellman_ford.cpp"
 #include "travel_node.cpp"
 #include "planner.hpp"
 //~ #include "track_seeker.hpp"
@@ -83,7 +83,7 @@ bool planner::collides(wall w, coordinates start, coordinates end){
 	line lin(start, end);
 	for(auto l: w.properties.walls){
 		coordinates inters = lin.intersection(l, lin);
-		if(lin.on_segment(inters, start, end) && w.inside(inters)){
+		if((lin.on_segment(inters, start, end) && w.inside(inters)) || w.inside(start) || w.inside(end)){
 			return true;
 		}
 	}
@@ -97,7 +97,7 @@ bool planner::collides_nowhere(map &m, coordinates start, coordinates end){
 			return false;
 		}
 	return true;
-}
+}	
 
 //~ std::vector<step> planner::plan_trace(std::vector<coordinates> c, coordinates goal, coordinates start, map &m){
 	//~ std::vector<coordinates> temp = c;
@@ -198,6 +198,7 @@ std::vector<travel_node> planner::expand(std::vector<travel_node> nodes, std::ve
 
 travel_node planner::search_by_id(unsigned_b id, std::vector<travel_node> &nodes){
 	for(auto i: nodes){
+		//~ std::cout << i.id << "\t" << i.coords.print() << std::endl;
 		if(i.id == id)
 			return i;
 		}
@@ -208,6 +209,7 @@ travel_node planner::search_by_id(unsigned_b id, std::vector<travel_node> &nodes
 std::vector<step> planner::make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m){
 	std::vector<coordinates> temp = c;
 	temp.push_back(start);
+	//~ temp.push_back(end);
 
 	std::vector<travel_node> nodes = travel_node::convert(temp);
 	std::vector<edge> edges;
@@ -226,23 +228,28 @@ std::vector<step> planner::make_path(std::vector<coordinates> &c, coordinates st
 			id_start = a.id;
 			}
 		}
-	std::cout << "</ajdicka hovad>\n";
+	//~ std::cout << "</ajdicka hovad>\n";
 	for(auto &a: nodes){
 		for(auto &b: nodes){
 			if(a != b){
 				if(collides_nowhere(m, a.coords, b.coords)){
-					edges.push_back(edge{a.id+1, b.id+1, a.coords.get_distance(b.coords)});
-					edges.push_back(edge{b.id+1, a.id+1, a.coords.get_distance(b.coords)});
+					edges.push_back(edge{a.id, b.id, a.coords.get_distance(b.coords)});
+					//~ edges.push_back(edge{b.id+1, a.id+1, a.coords.get_distance(b.coords)});
+					std::cout << a.coords.print() << " → " << b.coords.print() << std::endl;
 					//~ a.connect(&b);
 					//~ b.connect(&a);
 				}
 			}
 		}
 	}
-	std::vector<unsigned_b> ind = bellman_ford(nodes.size(), edges, id_start+1, edges.size(), id_end+1);
+	std::vector<unsigned_b> ind = bellman_ford(nodes.size()-1, edges, id_start, edges.size(), id_end);
+	
 	std::cout << "size: " << ind.size() << std::endl;
+	std::cout << "start: " << search_by_id(id_start-1, nodes).coords.print() << std::endl;
+	std::cout << "end: " << search_by_id(id_end, nodes).coords.print() << std::endl;
+	std::cout << "vybrane body: " << std::endl;
 	for(auto i: ind)
-		std::cout << search_by_id(i	, nodes).coords.print() <<"\n";
+		std::cout << search_by_id(i-1, nodes).coords.print() <<"\n";
 	std::cout << std::endl;
 	
 	return std::vector<step>();

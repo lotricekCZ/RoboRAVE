@@ -42,12 +42,12 @@ std::string candle::inkscape_print(){
 	return "<path style=\"opacity:1;fill:none;stroke:#008080;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers\"\
 			\tid=\"path833\"\n\
 			\tsodipodi:type=\"arc\" \n\
-			\tsodipodi:cx=\"" + std::to_string(tube.center.x) +"\"\n\
-			\tsodipodi:cy=\"" + std::to_string(tube.center.y) +"\"\n\
-			\tsodipodi:rx=\"" + std::to_string(tube.radius) +"\"\n\
-			\tsodipodi:ry=\"" + std::to_string(tube.radius) +"\"\n\
-			\tsodipodi:start=\"" + std::to_string(0) +"\"\n\
-			\tsodipodi:end=\"" + std::to_string(2*pi) +"\"\n\
+			\tsodipodi:cx=\"" + std::to_string(tube.center.x) + "\"\n\
+			\tsodipodi:cy=\"" + std::to_string(tube.center.y) + "\"\n\
+			\tsodipodi:rx=\"" + std::to_string(tube.radius) + "\"\n\
+			\tsodipodi:ry=\"" + std::to_string(tube.radius) + "\"\n\
+			\tsodipodi:start=\"" + std::to_string(0) + "\"\n\
+			\tsodipodi:end=\"" + std::to_string(2 * pi_const) + "\"\n\
 			\tsodipodi:arc-type=\"arc\"\n\
 			\tsodipodi:open=\"false\" />\n";
 	}

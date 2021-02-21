@@ -257,5 +257,5 @@ void map::edit_map(candle w){
 		}		
 	}
 }
-	
+
 #endif

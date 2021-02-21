@@ -36,7 +36,8 @@ class speeds: public setters<decimal_n>
 		speeds();
 		speeds(decimal_n, decimal_n);
 		virtual ~speeds();
-	
+		signed_n to_hw_speed(decimal_n);
+		decimal_n from_hw_speed(decimal_n);
 	private:
 		/* add your private declarations */
 };

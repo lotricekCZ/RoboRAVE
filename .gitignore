@@ -1,6 +1,7 @@
 main
 math
 build
+libtorch
 
 *.gch
 *.o

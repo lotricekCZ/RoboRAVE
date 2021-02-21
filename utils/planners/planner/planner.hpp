@@ -47,7 +47,7 @@ class planner
 		bool collides(wall w, coordinates start, coordinates end);
 		bool collides_nowhere(map& m, coordinates start, coordinates end);
 		//~ void plan_make(coordinates goal, coordinates start, std::vector<coordinates>&, map &); // useless
-		std::vector<travel_node> expand(std::vector<travel_node> nodes, std::vector<travel_node> prev_nodes,  unsigned_b id_curr);
+		std::vector<travel_node> expand(std::vector<travel_node> nodes, std::vector<travel_node> prev_nodes, unsigned_b id_curr);
 		//~ std::vector<step> plan_make(location goal, location start, decimal_n current_angle, map &); 
 		//~ void plan_make(location goal, location start, decimal_n current_angle, std::vector<step>&, map &); 
 		// makes plan geometrically, does not assign speeds or something exact

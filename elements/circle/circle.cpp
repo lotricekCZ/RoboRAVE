@@ -23,6 +23,7 @@
 
 #include <cmath> 
 #include <string> 
+#include <vector> 
 //~ #include "include.hpp"
 #include "circle.hpp"
 

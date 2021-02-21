@@ -43,7 +43,7 @@ std::string surround_circle::inkscape_print(){
 			\tsodipodi:rx=\"" + std::to_string(outer.radius) +"\"\n\
 			\tsodipodi:ry=\"" + std::to_string(outer.radius) +"\"\n\
 			\tsodipodi:start=\"" + std::to_string(0) +"\"\n\
-			\tsodipodi:end=\"" + std::to_string(2*pi) +"\"\n\
+			\tsodipodi:end=\"" + std::to_string(2*pi_const) +"\"\n\
 			\tsodipodi:arc-type=\"arc\"\n\
 			\tsodipodi:open=\"false\" />\n";
 	}

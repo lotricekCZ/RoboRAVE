@@ -1,3 +1,11 @@
+#include <opencv2/opencv.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/videoio.hpp>
+#include <torch/script.h> // One-stop header.
+#include <memory>
+
 #include <pthread.h>
 #include <stdio.h>
 #include <iostream>
@@ -9,8 +17,6 @@
 #include <limits>
 
 #include <iostream>
-
-#include "./hardware_interfaces/Serial/serial.cpp"
 
 #include "./utils/data_containers/setters/setters.tpp"
 #include "./utils/data_containers/speeds/speeds.cpp"
@@ -32,6 +38,8 @@
 #include "./elements/radius/radius.h"
 #include "./utils/logic/logic.cpp"
 
+//~ #include "./hardware_interfaces/serial/serial.cpp"
+#include "./hardware_interfaces/fire_sensors/fire_sensor.cpp"
 
 decimal_n calculate_omega(decimal_n T_avg = 0){
 	//~ printf("omega con %f\nTavg %f\n %.20Lf\n", omega_wheel_const, T_avg, pi);
@@ -107,37 +115,37 @@ int main(int argc, char *argv[]) {
 			coordinates a(-1, -2);
 			coordinates b(1, -1);
 			// ocekavane - 3, 4
-			decimal_n ang = -pi/2;
+			decimal_n ang = -pi_const/2;
 			switch(c_i(argv[2])){
 				case 0:
-					ang = pi/4;
+					ang = pi_const/4;
 					break;
 				case 1:
-					ang = 3*pi/4;
+					ang = 3*pi_const/4;
 					break;
 				case 2:
-					ang = 5*pi/4;
+					ang = 5*pi_const/4;
 					break;
 				case 3:
-					ang = 7*pi/4;
+					ang = 7*pi_const/4;
 					break;
 				case 4:
-					ang = pi;
+					ang = pi_const;
 					break;
 				case 5:
-					ang = pi/2.0;
+					ang = pi_const/2.0;
 					break;
 				case 6:
-					ang = -pi/2.0;
+					ang = -pi_const/2.0;
 					break;
 				default:
 					ang = 0;
 					break;
 				
 				}
-			coordinates c = c.make_global(a, b, -3*pi/4);
+			coordinates c = c.make_global(a, b, -3*pi_const/4);
 			std::cout << c.x << "; " << c.y << std::endl;
-			c = c.make_local(c, a, 3*pi/4);
+			c = c.make_local(c, a, 3*pi_const/4);
 			std::cout << c.x << "; " << c.y << std::endl;
 			
 			c = c.make_local(sqrt(5), -atan(1.0/2.0));
@@ -273,19 +281,19 @@ int main(int argc, char *argv[]) {
 			
 		case 11:{
 			coordinates a(0, 0);
-			decimal_n ang = -pi/4;
+			decimal_n ang = -pi_const/4;
 			switch(c_i(argv[2])){
 				case 0:
-					ang = pi/4;
+					ang = pi_const/4;
 					break;
 				case 1:
-					ang = 3*pi/4;
+					ang = 3*pi_const/4;
 					break;
 				case 2:
-					ang = 5*pi/4;
+					ang = 5*pi_const/4;
 					break;
 				case 3:
-					ang = 7*pi/4;
+					ang = 7*pi_const/4;
 					break;
 				default:
 					ang = 0;
@@ -293,7 +301,7 @@ int main(int argc, char *argv[]) {
 				
 				}
 			//~ decimal_n ang = 0;
-			//~ decimal_n ang = -pi/6;
+			//~ decimal_n ang = -pi_const/6;
 			decimal_n len = 5;
 			coordinates c = a.make_local(len, ang);
 			std::cout << c.x << "; " << c.y << std::endl;
@@ -304,37 +312,37 @@ int main(int argc, char *argv[]) {
 			coordinates a(0, 0);
 			coordinates b(-1, -1);
 			// ocekavane - 3, 4
-			decimal_n ang = -pi/2;
+			decimal_n ang = -pi_const/2;
 			switch(c_i(argv[2])){
 				case 0:
-					ang = pi/4;
+					ang = pi_const/4;
 					break;
 				case 1:
-					ang = 3*pi/4;
+					ang = 3*pi_const/4;
 					break;
 				case 2:
-					ang = 5*pi/4;
+					ang = 5*pi_const/4;
 					break;
 				case 3:
-					ang = 7*pi/4;
+					ang = 7*pi_const/4;
 					break;
 				case 4:
-					ang = pi;
+					ang = pi_const;
 					break;
 				case 5:
-					ang = pi/2.0;
+					ang = pi_const/2.0;
 					break;
 				case 6:
-					ang = -pi/2.0;
+					ang = -pi_const/2.0;
 					break;
 				default:
 					ang = 0;
 					break;
 				
 				}
-			//~ decimal_n ang = -pi/6;
+			//~ decimal_n ang = -pi_const/6;
 			//~ decimal_n ang = 0;
-			coordinates c = coords_n(ang+pi/2, b);
+			coordinates c = coords_n(ang+pi_const/2, b);
 			std::cout << c.x << "; " << c.y << std::endl;
 			break;
 			}
@@ -411,7 +419,7 @@ int main(int argc, char *argv[]) {
 			}
 			
 		case 18:{ 
-			std::cout << ((c_f(argv[2]) < 0)? 360:0) + atan2(c_f(argv[2]), c_f(argv[3])) * 180/pi << std::endl;
+			std::cout << ((c_f(argv[2]) < 0)? 360:0) + atan2(c_f(argv[2]), c_f(argv[3])) * 180/pi_const << std::endl;
 			break;
 			}
 			
@@ -467,8 +475,50 @@ int main(int argc, char *argv[]) {
 			}
 			
 		case 23:{
-			
+			std::cout << std::to_string(speeds().to_hw_speed(c_f(argv[2]))) << std::endl;
+			std::cout << std::to_string(speeds().from_hw_speed(c_f(argv[3]))) << std::endl;
 			break;
+			}
+			
+			
+		case 24:{
+			using namespace cv;
+			const decimal_n FPS_SMOOTHING = 0.9;
+			cv::VideoCapture cap(0);//cap.set(cv::CAP_PROP_FRAME_WIDTH, 4);
+		    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 800);
+		    //~ dnn::readNetFromONNX
+		    //~ dnn::DetectionModel d("best.mlmodel");
+		    cap.set(cv::CAP_PROP_FPS, 8);
+		    //~ std::vector<int> classIds;
+		    //~ std::vector<float> confidences;
+			//~ std::vector<cv::Rect> boxes;
+			static const std::string wname = "n";
+		    cv::Mat frame;
+		    cv::namedWindow(wname);
+		    //~ Mat edit;
+		    float fps = 0.0;
+		    double prev = clock(); 
+		    while (true){
+		        double now = (clock()/(double)CLOCKS_PER_SEC);
+		        
+		        fps = (fps*FPS_SMOOTHING + (1/(now - prev))*(1.0 - FPS_SMOOTHING));
+		        prev = now;
+				
+		        printf("fps: %.1f\n", fps);
+		
+		        if (cap.isOpened()){
+		            cap.read(frame);
+		            //~ d.detect(frame, classIds, confidences, boxes);
+		        }
+			//~ blur( frame, edit, Size( 16, 64 ), Point(-1,-1) );
+				
+		        cv::imshow(wname, frame);
+		        //~ cv::imwrite("heck.png", frame);
+		        //~ imshow("edit", edit);
+		        if (cv::waitKey(2) == 27){
+		            break;
+		        }
+		    }
 			}
 		
 		}

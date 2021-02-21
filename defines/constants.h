@@ -7,7 +7,7 @@
 /// robot parameters
 #define N_wheel 	200.0f
 #define r_wheel 	0.044f // in meters
-#define pi 			3.141592653589793238462643383279502884L
+#define pi_const 	3.141592653589793238462643383279502884L
 #define dist_wheel 	0.125f // in meters
 #define fric_wheel 	0.5097f // static friction coeficient against wood I measured using kitchen scale
 //~ #define robot_radius 0.10f // in meters
@@ -29,8 +29,8 @@
 #define candle_r	0.03f //	m radius of circle	
 
 #define MAX_DISTANCE 170 //maximum distance to have 3 cm difference between lines that are 1 degree apart
-const decimal_n omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
-const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);
+const decimal_n omega_wheel_const = (pi_const * r_wheel) / (N_wheel * dist_wheel);
+const decimal_n wheel_step_lenght_const = (2 * pi_const * r_wheel) / (N_wheel);
 
 /// tresholds
 /// TODO: config file, do it through config file using YAML, since it's human readable

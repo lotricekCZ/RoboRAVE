@@ -74,7 +74,7 @@ angles angles::load_virtual_circular(coordinates c, map &m, decimal_n min, decim
 		coordinates d = a-c;
 		decimal_n to_a = c.get_distance(a);
 		//~ std::cout << d.x << "\t" << d.y << "\t" << (d.y < 0) << "\t" << ((d.y < 0)? 360:0) + ((atan2f(d.y, d.x)*180)/pi) <<"\t";
-		signed_n ang = ((d.y < 0)? 360:0) + atan2f(d.y, d.x)*180/pi;
+		signed_n ang = ((d.y < 0)? 360:0) + atan2f(d.y, d.x)*180/pi_const;
 		//~ std::cout << ang << std::endl;
 		if(ret[ang].distance > to_a || ret[ang].distance == 0){
 			crossed[ang] = 1;
@@ -108,7 +108,7 @@ angles angles::load_virtual(coordinates a, map &m){
 	for(unsigned_n i = 0; i < 180; i ++){
 		std::vector<coordinates> intersects_an; // all the places that are intersected on map
 		
-		coordinates n = a+a.make_local(1, (decimal_n)i/180.0*pi);
+		coordinates n = a+a.make_local(1, (decimal_n)i / 180.0 * pi_const);
 		line l(a, n);
 		
 		for(auto k: m._map_walls){ // to get all possible intersections with walls

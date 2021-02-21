@@ -22,11 +22,11 @@
  */
 
 
+#include "../../../defines/constants.h"
 #include "speeds.hpp"
 
 
-speeds::speeds()
-	: setters()
+speeds::speeds(): setters()
 {
 	
 }
@@ -42,3 +42,14 @@ speeds::~speeds()
 	
 }
 
+signed_n speeds::to_hw_speed(decimal_n speed){ // 2^15 - 1 = overflow
+	//~ std::cout << (2.0 * pi_const * r_wheel)/(N_wheel * speed) << std::endl;
+	signed_n ret = (decimal_n)(2.0 * pi_const * r_wheel)/(N_wheel * speed) * 1000000;
+	return (ret >= (1 << 14) || ret < -(1 << 14))? 1 << 14: ret;
+}
+
+decimal_n speeds::from_hw_speed(decimal_n time){ // 2^15 - 1 = overflow
+	//~ std::cout << (2.0 * pi * r_wheel)/(N_wheel * speed) << std::endl;
+	decimal_n ret = (decimal_n)(2000000.0 * pi_const * r_wheel)/(N_wheel * (decimal_n)time);
+	return ret;
+}

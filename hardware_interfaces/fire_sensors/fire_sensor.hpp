@@ -24,7 +24,7 @@
 
 #ifndef FIRE_SENSOR_HPP
 #define FIRE_SENSOR_HPP
-#include "../../utils/data_containers/angles/node/node.cpp"
+
 
 class fire_sensor{
 	public:
@@ -35,7 +35,7 @@ class fire_sensor{
 		
 		fire_sensor(uint8_t, decimal_n, decimal_n);
 		bool update();
-		std::pair<node> get_data(bool update);
+		std::vector<node> get_data(bool update);
 	private:
 		/* add your private declarations */
 };
