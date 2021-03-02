@@ -35,6 +35,13 @@ const decimal_n wheel_step_lenght_const = (2 * pi_const * r_wheel) / (N_wheel);
 /// tresholds
 /// TODO: config file, do it through config file using YAML, since it's human readable
 
+namespace camera_prop {
+	decimal_n angle_horizontal = 66; /// degrees
+	decimal_n angle_vertical = 37; /// degrees
+	decimal_n size_horizontal = 192; /// px
+	decimal_n size_vertical = 108; /// px
+	};
+	
 namespace tresholds {
 	namespace mAP { 
 		// ammount of confidence image recognition needs to have

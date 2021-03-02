@@ -30,6 +30,7 @@
 #define my_max(a, b) ((a>b)?a:b)
 
 #include "./defines/constants.h"
+#include "./defines/yaml_worker.cpp"
 
 //~ const decimal_n omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
 //~ const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);9
@@ -97,6 +98,7 @@ coordinates coords_n(decimal_n alpha, coordinates rel){
 
 
 int main(int argc, char *argv[]) {
+	load_config();
 	auto start = std::chrono::steady_clock::now();
 	switch(c_i(argv[1])){
 		case 1:

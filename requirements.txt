@@ -1,4 +1,4 @@
 CppLinuxSerial	https://github.com/gbmhunter/CppLinuxSerial/tree/master/src
 OpenCV [4.5.1]
 Yaml-cpp [0.6.3] https://github.com/jbeder/yaml-cpp
-libtorch
+libtorch [1.7.1 with c++11 ABI]
