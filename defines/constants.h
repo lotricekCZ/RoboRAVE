@@ -35,11 +35,23 @@ const decimal_n wheel_step_lenght_const = (2 * pi_const * r_wheel) / (N_wheel);
 /// tresholds
 /// TODO: config file, do it through config file using YAML, since it's human readable
 
-namespace camera_prop {
-	decimal_n angle_horizontal = 66; /// degrees
-	decimal_n angle_vertical = 37; /// degrees
-	decimal_n size_horizontal = 192; /// px
-	decimal_n size_vertical = 108; /// px
+namespace properties {
+	namespace camera{
+		decimal_n angle_horizontal = 66; /// degrees
+		decimal_n angle_vertical = 37; /// degrees
+		unsigned_n size_recognition_horizontal = 192; /// px
+		unsigned_n size_recognition_vertical = 320; /// px
+		unsigned_n size_footage_horizontal = 192; /// px
+		unsigned_n size_footage_vertical = 320; /// px
+		};
+		
+	namespace heights{
+		/// TODO: All these heights should be remeasured
+		decimal_n lidar =			175; /// mm
+		decimal_n camera = 			130; /// mm
+		decimal_n fire_sensors = 	175; /// mm
+		
+		};
 	};
 	
 namespace tresholds {
@@ -50,6 +62,8 @@ namespace tresholds {
 		decimal_n line_surround = 	0.3f;
 		decimal_n fire = 			0.6f;
 		decimal_n barrier = 		0.6f;
+		decimal_n person = 			0.6f;
+		decimal_n Maker_Jakub_Ramaseuski = 0.6f;
 		}
 		
 	namespace explo {

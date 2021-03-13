@@ -460,8 +460,8 @@ int main(int argc, char *argv[]) {
 			for(auto i: plan)
 				std::cout << i.print() << std::endl;
 			
-			for(auto i: p.coincidental_points_generate(plan))
-				std::cout << i.print() << std::endl;
+			//~ for(auto i: p.coincidental_points_generate(plan))
+				//~ std::cout << i.print() << std::endl;
 			std::vector<coordinates> g = p.coincidental_points_generate(plan);
 			p.make_path(g, coordinates(-5, 2), coordinates(c_f(argv[2]), c_f(argv[3])), m);
 			
@@ -512,8 +512,9 @@ int main(int argc, char *argv[]) {
 		            cap.read(frame);
 		            //~ d.detect(frame, classIds, confidences, boxes);
 		        }
-			//~ blur( frame, edit, Size( 16, 64 ), Point(-1,-1) );
-				
+		        cvtColor(frame, frame, COLOR_BGR2GRAY);
+				GaussianBlur(frame, frame, Size(5, 5), 1.5);
+				cv::Canny(frame, frame, 50, 200);       
 		        cv::imshow(wname, frame);
 		        //~ cv::imwrite("heck.png", frame);
 		        //~ imshow("edit", edit);
@@ -521,6 +522,53 @@ int main(int argc, char *argv[]) {
 		            break;
 		        }
 		    }
+			}
+			
+		case 25:{
+			map m;
+			
+			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
+			
+			m.append(wall(x));
+			//~ m.append(wall(y));
+			
+			dijkstra d(m);
+			
+			//~ dijk_node a(1, x[0]);
+			//~ dijk_node b(2, x[1]);
+			//~ dijk_node c(3, x[2]);
+			
+			std::vector<coordinates> coords;
+			coords.push_back(coordinates(-5, 2));
+			coords.push_back(coordinates(1, 4));
+			coords.push_back(coordinates(0, -1));
+			coords.push_back(coordinates(4, -1));
+			coords.push_back(coordinates(4, 9));
+			coords.push_back(coordinates(7, 7));
+			coords.push_back(coordinates(4, 3));
+			
+			d.nodes = d.generate_nodes(coords, coords[0]);
+			//~ edge e1(a, c, 8.0);
+			//~ edge e2(a, b, 6.0);
+			//~ edge e3(b, c, 2.3);
+			//~ edge e1(*d.nodes[0], *d.nodes[2], 8.0);
+			//~ edge e2(*d.nodes[0], *d.nodes[1], 6.0);
+			//~ edge e3(*d.nodes[1], *d.nodes[2], 2);
+			//~ d.edges.push_back(&e1);
+			//~ d.edges.push_back(&e2);
+			//~ d.edges.push_back(&e3);
+			d.edges = d.generate_edges(d.nodes, m);
+			//~ d.nodes.push_back(&a);
+			//~ d.nodes.push_back(&b);
+			//~ d.nodes.push_back(&c);
+			//~ a.distance_start = 0;
+			d.dijkstras(d.nodes, d.edges);
+			std::cout << d.nodes[5] -> id << std::endl;
+			std::cout << d.nodes[2] -> id << std::endl;
+			d.print_shortest_route(d.nodes[5]);
+			d.print_shortest_route(d.nodes[4]);
+			break;
 			}
 		
 		}

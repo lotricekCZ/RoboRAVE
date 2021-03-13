@@ -22,7 +22,8 @@
  */
 
 
-#include "bellman_ford.cpp"
+#include "dijkstra.cpp"
+//~ #include "bellman_ford.cpp"
 #include "travel_node.cpp"
 #include "planner.hpp"
 //~ #include "track_seeker.hpp"
@@ -126,9 +127,25 @@ bool planner::collides_nowhere(map &m, coordinates start, coordinates end){
 std::vector<circle> planner::circle_generate(coordinates goal, coordinates start, map &m){
 	std::vector<circle> out;
 	out.push_back(circle(start, start.get_distance(goal)));
-	for(wall w: m._map_walls)
+	for(wall w: m._map_walls) /// generation of circles between the wals and goal
 		for(coordinates c: w.properties.edges)
 			out.push_back(circle(c, c.get_distance(goal)));
+			
+	for(wall w: m._map_walls) /// generation of circles between the wals and start
+		for(coordinates c: w.properties.edges)
+			out.push_back(circle(c, c.get_distance(start)));
+			
+	for(wall w: m._map_walls) /// generation of perimeter circles between of the wall edges
+		for(coordinates c: w.properties.edges)
+			out.push_back(create_perimeter(c));
+	decimal_n goal_start_distance = goal.get_distance(start);
+	
+	//~ unsigned_n iterations = 3;
+	//~ for(uint8_t i = 1; i < iterations; i++){ /// generation of circles between start and end
+		//~ out.push_back(circle(start, (goal_start_distance * (decimal_n)i) /  (decimal_n)iterations));
+		//~ out.push_back(circle(goal, (goal_start_distance * (decimal_n)i) /  (decimal_n)iterations));
+		//~ }
+	
 	return out;	
 }
 
@@ -206,51 +223,68 @@ travel_node planner::search_by_id(unsigned_b id, std::vector<travel_node> &nodes
 	}
 
 
-std::vector<step> planner::make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m){
-	std::vector<coordinates> temp = c;
-	temp.push_back(start);
-	//~ temp.push_back(end);
+//~ std::vector<step> planner::make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m){
+	//~ std::vector<coordinates> temp = c;
+	//~ for(unsigned_b i = 0; i < temp.size(); i++){
+		//~ for(auto b: m._map_walls){
+			//~ if(b.inside(temp[i])){
+				//~ temp.erase(temp.begin() + i--);				
+				//~ }
+		//~ }
+	//~ }
+	//~ std::cout << "Temp velikost " << temp.size() << std::endl;
+	//~ temp.push_back(start);
+	//temp.push_back(end);
 
-	std::vector<travel_node> nodes = travel_node::convert(temp);
-	std::vector<edge> edges;
-	std::vector<travel_node> out;
+	//~ std::vector<travel_node> nodes = travel_node::convert(temp);
+	//~ std::vector<edge> edges;
+	//~ std::vector<travel_node> out;
 	
-	unsigned_b id_start = 0;
-	unsigned_b id_end = 0;
-	std::cout << "<ajdicka hovad>\n";
-	for(auto a: nodes){
-		std::cout << a.id << ", ";
-		if(a.coords == start){
-			id_start = a.id;
-			}
+	//~ unsigned_b id_start = 0;
+	//~ unsigned_b id_end = 0;
+	//~ std::cout << "<ajdicka hovad>\n";
+	//~ for(auto a: nodes){
+		//~ std::cout << a.id << ", ";
+		//~ if(a.coords == start){
+			//~ id_start = a.id;
+			//~ }
 			
-		if(a.coords == end){
-			id_start = a.id;
-			}
-		}
-	//~ std::cout << "</ajdicka hovad>\n";
-	for(auto &a: nodes){
-		for(auto &b: nodes){
-			if(a != b){
-				if(collides_nowhere(m, a.coords, b.coords)){
-					edges.push_back(edge{a.id, b.id, a.coords.get_distance(b.coords)});
-					//~ edges.push_back(edge{b.id+1, a.id+1, a.coords.get_distance(b.coords)});
-					std::cout << a.coords.print() << " → " << b.coords.print() << std::endl;
-					//~ a.connect(&b);
-					//~ b.connect(&a);
-				}
-			}
-		}
-	}
-	std::vector<unsigned_b> ind = bellman_ford(nodes.size()-1, edges, id_start, edges.size(), id_end);
+		//~ if(a.coords == end){
+			//~ id_start = a.id;
+			//~ }
+		//~ }
 	
-	std::cout << "size: " << ind.size() << std::endl;
-	std::cout << "start: " << search_by_id(id_start-1, nodes).coords.print() << std::endl;
-	std::cout << "end: " << search_by_id(id_end, nodes).coords.print() << std::endl;
-	std::cout << "vybrane body: " << std::endl;
-	for(auto i: ind)
-		std::cout << search_by_id(i-1, nodes).coords.print() <<"\n";
-	std::cout << std::endl;
 	
-	return std::vector<step>();
+	//~ for(auto &a: nodes){
+		//~ for(auto &b: nodes){
+			//~ if(a != b){
+				//~ if(collides_nowhere(m, a.coords, b.coords)){
+					//~ edges.push_back(edge{a.id, b.id, a.coords.get_distance(b.coords)});
+					// edges.push_back(edge{b.id+1, a.id+1, a.coords.get_distance(b.coords)});
+					// std::cout << a.coords.print() << " → " << b.coords.print() << std::endl;
+					// a.connect(&b);
+					// b.connect(&a);
+				//~ }
+			//~ }
+		//~ }
+	//~ }
+	//~ for(auto i: nodes)
+		//~ std::cout << i.coords.print() << std::endl;
+	//~ std::vector<unsigned_b> ind = bellman_ford(nodes.size(), edges, id_start, edges.size(), id_end, temp);
+	
+	//~ std::cout << std::endl;
+	//~ std::cout << "size: " << ind.size() << std::endl;
+	//~ std::cout << "start: " << search_by_id(id_start, nodes).coords.print() << std::endl;
+	//~ std::cout << "end: " << search_by_id(id_end, nodes).coords.print() << id_end << std::endl;
+	//~ std::cout << "vybrane body: " << std::endl;
+	//~ for(auto i: ind)
+		//~ std::cout << search_by_id(i, nodes).coords.print() <<"\n";
+	//~ std::cout << std::endl;
+	
+	//~ return std::vector<step>();
+	//~ }
+	
+std::vector<step> planner::make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m){
+	dijkstra dijkstra(m);
+	
 	}
