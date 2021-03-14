@@ -26,37 +26,82 @@
 #include "dijkstra.hpp"
 
 
-void dijkstra::dijkstras(std::vector<dijk_node*>& nodes, std::vector<edge*>& edges) {
-	while (nodes.size() > 0) {
-		dijk_node* smallest = extract_smallest(nodes);
-		std::vector<dijk_node*> adjacent_nodes = adjacent_remaining_nodes(smallest, nodes, edges);
-
-		const int size = adjacent_nodes.size();
-		for (unsigned_b i = 0; i < size; ++i) {
-			dijk_node* adjacent = adjacent_nodes.at(i);
-			decimal_n dist = distance(smallest, adjacent) +
-							 smallest -> distance_start;
-
-			if (dist < adjacent -> distance_start) {
-				adjacent -> distance_start = dist;
-				adjacent -> previous = smallest;
+std::vector<dijk_node> dijkstra::dijkstras(std::vector<dijk_node*>& p_nodes, std::vector<edge*>& p_edges) {
+	std::vector<dijk_node> out;
+	dijk_node* smallest = nullptr;
+	dijk_node* smallest_out = nullptr;
+	unsigned_b smallest_index = 0;
+	do{
+		smallest = extract_smallest(p_nodes, &smallest_index);
+		//~ std::cout << " velikost: "  << p_nodes.size() << std::endl;
+		smallest_out = add_smallest(smallest, out);
+		std::vector<edge> edges_connected = connected_edges(smallest, p_edges);
+		//~ std::cout << "pocet v setu: " << edges_connected.size() << std::endl;
+		for(edge e: edges_connected){
+			//~ std::cout << "tato edge spojuje " << e.dijk_node1 -> id << " s " << e.dijk_node2 -> id << std::endl;
+			dijk_node* other = e.other(smallest);
+			//~ std::cout << other -> distance_start << " > "  << e.distance << " + " << smallest -> distance_start << std::endl;
+			if(other -> distance_start > (e.distance + smallest -> distance_start)){
+				//~ std::cout << " dojde ke změně! "  << e.distance << " + " << smallest -> distance_start << " = " <<  e.distance + smallest -> distance_start << std::endl;
+				/// sets the other ones start distance
+				other -> distance_start = e.distance + smallest -> distance_start;
+				/// sets to smallest_out since it's a pointer that will be soon no longer valid
+				other -> previous = smallest_out; 
+				}
 			}
-		}
+		//~ std::cout << "konec pro spoje z " << smallest -> id << std::endl << std::endl;
+		p_nodes.erase(p_nodes.begin() + smallest_index);
+		} while(p_nodes.size() != 0 && p_edges.size() != 0);
+	return out;
 	}
-}
 
-std::vector<dijk_node*> dijkstra::generate_nodes(std::vector<coordinates>& coords, coordinates start){
+
+
+std::vector<dijk_node> dijkstra::generate_nodes(std::vector<coordinates>& coords, coordinates start){
 	unsigned_b size = coords.size();
-	std::vector<dijk_node*> nodes;
-	dijk_node *node1 = NULL;
+	std::vector<dijk_node> nodes;
 	for(unsigned_b i = 0; i < size; i++){
-		node1 = new dijk_node(i, coords[i]);
-		nodes.push_back(node1);
+		nodes.push_back(dijk_node(i, coords[i]));
 		if(coords[i] == start){
-			nodes[i] -> distance_start = 0;
+			nodes[i].distance_start = 0;
+			nodes[i].is_first = true;
 			}
 		}
 	return nodes;
+	}
+
+std::vector<dijk_node*> dijkstra::generate_node_pointers(std::vector<dijk_node>& dijk_nodes){
+	std::vector<dijk_node*> pointers;
+	for(auto &a: dijk_nodes){
+		pointers.push_back(&a);
+		}
+	return pointers;
+	}
+
+std::vector<edge> dijkstra::generate_edges(std::vector<dijk_node>& nodes, map& m){
+	std::vector<edge> edges;
+	unsigned_b size = nodes.size();
+	for(unsigned_b i = 0; i < size; i++){
+		for(unsigned_b o = i ; o < size; o++){
+			if(collides_nowhere(m, *nodes[i].coords, *nodes[o].coords) && (nodes[o].id != nodes[i].id) ){
+				//~ std::cout << "Edge z " << nodes[i].coords -> print() << " do " << nodes[o].coords -> print() << "\tVZNIKA, delka\t" << nodes[o].coords -> get_distance(*nodes[i].coords) << std::endl;
+				edges.push_back(edge(&nodes[i], &nodes[o], nodes[i].coords -> get_distance(*nodes[o].coords)));
+				}
+				//~ else{
+					//~ std::cout << "Edge z " << nodes[i].coords -> print() << " do " << nodes[o].coords -> print() << "\tNEVZNIKA" << std::endl;					
+					//~ }
+			}
+		}
+	std::cout << "Pocet hran: " << edges.size() << std::endl;
+	return edges;
+	}
+
+std::vector<edge*> dijkstra::generate_edge_pointers(std::vector<edge>& edges){
+	std::vector<edge*> pointers;
+	for(auto &a: edges){
+		pointers.push_back(&a);
+		}
+	return pointers;
 	}
 
 bool dijkstra::collides_nowhere(map &m, coordinates start, coordinates end){
@@ -79,21 +124,6 @@ bool dijkstra::collides(wall w, coordinates start, coordinates end){
 	return false;
 }
 
-std::vector<edge*> dijkstra::generate_edges(std::vector<dijk_node*>& nodes, map& m){
-	std::vector<edge*> edges;
-	edge* edge1;
-	unsigned_b size = nodes.size();
-	for(unsigned_b i = 0; i < size; i++){
-		for(unsigned_b o = i+1 ; o < size; o++){
-			if(collides_nowhere(m, *nodes[i] -> coords, *nodes[o] -> coords)){
-				edge1 = new edge(*nodes[i], *nodes[o], nodes[i] -> coords -> get_distance(*nodes[o] -> coords));
-				edges.push_back(edge1);
-				
-				}
-			}
-		}
-	return edges;
-	}
 
 void dijkstra::calculate_edges(){
 	edges.clear();
@@ -103,19 +133,19 @@ void dijkstra::calculate_edges(){
 	}
 
 
-std::vector<dijk_node*> dijkstra::adjacent_remaining_nodes(dijk_node* Node, std::vector<dijk_node*>& dijk_nodes, std::vector<edge*>& edges) {
+std::vector<dijk_node*> dijkstra::adjacent_remaining_nodes(dijk_node* Node, std::vector<dijk_node*>& p_dijk_nodes, std::vector<edge*>& p_edges) {
 	std::vector<dijk_node*> adjacent_nodes;
-	const unsigned_b size = edges.size();
+	const unsigned_b size = p_edges.size();
 	for (unsigned_b i = 0; i < size; ++i) {
-		edge* edge = edges.at(i);
-		dijk_node* adjacent = NULL;
-		if (edge -> dijk_node1 == Node) {
-			adjacent = edge -> dijk_node2;
-		} else if (edge -> dijk_node2 == Node) {
-			adjacent = edge -> dijk_node1;
+		edge* p_edge = p_edges.at(i);
+		dijk_node* p_adjacent = nullptr;
+		if (p_edge -> dijk_node1 == Node) {
+			p_adjacent = p_edge -> dijk_node2;
+		} else if (p_edge -> dijk_node2 == Node) {
+			p_adjacent = p_edge -> dijk_node1;
 		}
-		if (adjacent && contains(dijk_nodes, adjacent)) {
-			adjacent_nodes.push_back(adjacent);
+		if (p_adjacent && contains(p_dijk_nodes, p_adjacent)) {
+			adjacent_nodes.push_back(p_adjacent);
 		}
 	}
 	return adjacent_nodes;
@@ -126,10 +156,10 @@ void dijkstra::print_shortest_route(dijk_node* destination) {
 	dijk_node* previous = destination;
 	std::cout << "distance from start: "
 		 << destination -> distance_start << std::endl;
-	while (previous) {
-		std::cout << previous -> id << " ";
+	do {
+		std::cout << previous -> id << " " << previous -> coords -> print() << previous -> is_first << std::endl;
 		previous = previous -> previous;
-	}
+	} while (previous != nullptr && !(previous -> is_first));
 	std::cout << std::endl;
 }
 
@@ -146,34 +176,53 @@ bool dijkstra::contains(std::vector<dijk_node*>& dijk_nodes, dijk_node* d_node) 
 
 
 decimal_n dijkstra::distance(dijk_node* node1, dijk_node* node2) {
-	const unsigned_b size = edges.size();
+	const unsigned_b size = p_edges.size();
 	for (unsigned_b i = 0; i < size; ++i) {
-		edge* edge_o = edges.at(i);
-		if (edge_o -> Connects(node1, node2)) {
+		edge* edge_o = p_edges.at(i);
+		if (edge_o -> connects(node1, node2)) {
 			return edge_o -> distance;
 		}
 	}
 	return -1;	// should never happen
 }
 
+dijk_node* dijkstra::add_smallest(dijk_node* smallest, std::vector<dijk_node>& dijk_nodes){
+	dijk_nodes.push_back(*smallest);
+	return &dijk_nodes[dijk_nodes.size() -1];
+	}
 
-dijk_node* dijkstra::extract_smallest(std::vector<dijk_node*>& dijk_nodes) {
-	unsigned_b size = dijk_nodes.size();
-	if (size == 0) return NULL;
-	decimal_n smallest_position = 0;
-	dijk_node* smallest = dijk_nodes.at(0);
+dijk_node* dijkstra::extract_smallest(std::vector<dijk_node*>& p_dijk_nodes, unsigned_b* position, bool erase) {
+	unsigned_b size = p_dijk_nodes.size();
+	if (size == 0) return nullptr;
+	unsigned_b smallest_position = 0;
+	dijk_node* smallest = p_dijk_nodes.at(0);
 	for (unsigned_b i = 1; i < size; ++i) {
-		dijk_node* current = dijk_nodes.at(i);
+		dijk_node* current = p_dijk_nodes.at(i);
 		if (current -> distance_start <
 			smallest -> distance_start) {
 			smallest = current;
 			smallest_position = i;
 		}
 	}
-	dijk_nodes.erase(dijk_nodes.begin() + smallest_position);
+	if(position != nullptr){ /// in case I wanted to erase it directly from loop, not using this function
+		*position = smallest_position; 
+		}
+	if(erase){
+		p_dijk_nodes.erase(p_dijk_nodes.begin() + smallest_position);
+	}
 	return smallest;
 }
 
+std::vector<edge> dijkstra::connected_edges(dijk_node* d_node, std::vector<edge*> edges){
+	std::vector<edge> connected;
+	for(unsigned_b e = 0; e < edges.size(); e++){
+		if(edges[e] -> has(d_node)){
+			connected.push_back(*edges[e]);
+			edges.erase(edges.begin() + e--);
+			}		
+		}
+	return connected;
+	}
 
 
 #endif // DIJKSTRA_CPP

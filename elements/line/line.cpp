@@ -82,7 +82,7 @@ std::string line::print (){
 	}
 	
 bool line::on_segment (coordinates on_seg, coordinates a_seg, coordinates b_seg){
-	return on_seg.get_distance(a_seg) + on_seg.get_distance(b_seg) <= a_seg.get_distance(b_seg);
+	return std::abs((on_seg.get_distance(a_seg) + on_seg.get_distance(b_seg)) - a_seg.get_distance(b_seg)) <= 1e-4;
 	}
 
 coordinates line::intersection(line a, line b){

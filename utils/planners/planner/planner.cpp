@@ -63,8 +63,8 @@ std::vector<coordinates> planner::plan_make(coordinates goal, coordinates start,
 			}
 		}
 	
-	for(uint16_t i = 0; i < circles.size(); i++){
-		for(uint16_t e = 0; i < circles.size(); i++){
+	for(uint32_t i = 0; i < circles.size(); i++){
+		for(uint32_t e = 0; i < circles.size(); i++){
 			if(!(circles[e] == circles[i])){
 				std::vector<coordinates> tangs = circle().intersection(circles[e], circles[i]);
 				out.insert(out.end(), tangs.begin(), tangs.end());
@@ -127,11 +127,11 @@ bool planner::collides_nowhere(map &m, coordinates start, coordinates end){
 std::vector<circle> planner::circle_generate(coordinates goal, coordinates start, map &m){
 	std::vector<circle> out;
 	out.push_back(circle(start, start.get_distance(goal)));
-	for(wall w: m._map_walls) /// generation of circles between the wals and goal
+	for(wall w: m._map_walls) /// generation of circles between the walls and goal
 		for(coordinates c: w.properties.edges)
 			out.push_back(circle(c, c.get_distance(goal)));
 			
-	for(wall w: m._map_walls) /// generation of circles between the wals and start
+	for(wall w: m._map_walls) /// generation of circles between the walls and start
 		for(coordinates c: w.properties.edges)
 			out.push_back(circle(c, c.get_distance(start)));
 			
@@ -140,11 +140,11 @@ std::vector<circle> planner::circle_generate(coordinates goal, coordinates start
 			out.push_back(create_perimeter(c));
 	decimal_n goal_start_distance = goal.get_distance(start);
 	
-	//~ unsigned_n iterations = 3;
-	//~ for(uint8_t i = 1; i < iterations; i++){ /// generation of circles between start and end
-		//~ out.push_back(circle(start, (goal_start_distance * (decimal_n)i) /  (decimal_n)iterations));
-		//~ out.push_back(circle(goal, (goal_start_distance * (decimal_n)i) /  (decimal_n)iterations));
-		//~ }
+	unsigned_n iterations = 3;
+	for(uint8_t i = 1; i < iterations; i++){ /// generation of circles between start and end
+		out.push_back(circle(start, (goal_start_distance * (decimal_n)i) /  (decimal_n)iterations));
+		out.push_back(circle(goal, (goal_start_distance * (decimal_n)i) /  (decimal_n)iterations));
+		}
 	
 	return out;	
 }
@@ -285,6 +285,32 @@ travel_node planner::search_by_id(unsigned_b id, std::vector<travel_node> &nodes
 	//~ }
 	
 std::vector<step> planner::make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m){
-	dijkstra dijkstra(m);
+	std::vector<coordinates> temp = c;
+	for(unsigned_b i = 0; i < temp.size(); i++){
+		for(auto b: m._map_walls){
+			if(b.inside(temp[i])){
+				temp.erase(temp.begin() + i--);				
+				}
+		}
+	}
+	dijkstra d(m);
+	d.nodes = d.generate_nodes(temp, start);
+	d.p_nodes = d.generate_node_pointers(d.nodes);
+
+	d.edges = d.generate_edges(d.nodes, m);
+	d.p_edges = d.generate_edge_pointers(d.edges);
 	
+	std::vector<dijk_node> nodes = d.dijkstras(d.p_nodes, d.p_edges);
+	std::cout << nodes.size() << std::endl;
+	//~ for(auto i: nodes){
+		//~ std::cout << i.id << "  " << i.distance_start << " " << i.coords -> print() << std::endl;
+		//~ }
+	std::cout << std::endl << d.nodes.size() << std::endl;
+	for(auto &o: nodes)
+		if(*o.coords == end){
+			d.print_shortest_route(&o);
+			break;
+			}
+	
+	return std::vector<step>();
 	}

@@ -549,25 +549,28 @@ int main(int argc, char *argv[]) {
 			coords.push_back(coordinates(4, 3));
 			
 			d.nodes = d.generate_nodes(coords, coords[0]);
-			//~ edge e1(a, c, 8.0);
-			//~ edge e2(a, b, 6.0);
-			//~ edge e3(b, c, 2.3);
-			//~ edge e1(*d.nodes[0], *d.nodes[2], 8.0);
-			//~ edge e2(*d.nodes[0], *d.nodes[1], 6.0);
-			//~ edge e3(*d.nodes[1], *d.nodes[2], 2);
-			//~ d.edges.push_back(&e1);
-			//~ d.edges.push_back(&e2);
-			//~ d.edges.push_back(&e3);
+			d.p_nodes = d.generate_node_pointers(d.nodes);
+
 			d.edges = d.generate_edges(d.nodes, m);
+			d.p_edges = d.generate_edge_pointers(d.edges);
 			//~ d.nodes.push_back(&a);
 			//~ d.nodes.push_back(&b);
 			//~ d.nodes.push_back(&c);
 			//~ a.distance_start = 0;
-			d.dijkstras(d.nodes, d.edges);
-			std::cout << d.nodes[5] -> id << std::endl;
-			std::cout << d.nodes[2] -> id << std::endl;
-			d.print_shortest_route(d.nodes[5]);
-			d.print_shortest_route(d.nodes[4]);
+			std::vector<dijk_node> nodes = d.dijkstras(d.p_nodes, d.p_edges);
+			//~ std::cout << d.nodes[5].id << std::endl;
+			//~ std::cout << d.nodes[2].id << std::endl;
+			//~ std::cout << d.nodes[4].id << std::endl;
+			for(auto i: nodes){
+				std::cout << i.id << "  " << i.distance_start << " " << i.coords -> print() << std::endl;
+				}
+			std::cout << std::endl << d.nodes.size() << std::endl;
+			for(auto &o: nodes)
+				if(*o.coords == coords[5]){
+					d.print_shortest_route(&o);
+					break;
+					}
+			//~ d.print_shortest_route(d.nodes[4]);
 			break;
 			}
 		
