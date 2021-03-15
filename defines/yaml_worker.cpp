@@ -37,6 +37,7 @@ void load_config(){
 	tresholds::mAP::fire = 						config["tresholds"]["mAP"]["fire"].as<decimal_n>();
 	tresholds::mAP::line_surround = 			config["tresholds"]["mAP"]["line_surround"].as<decimal_n>();
 	tresholds::mAP::line_border = 				config["tresholds"]["mAP"]["line_border"].as<decimal_n>();
+	tresholds::mAP::Maker_Jakub_Ramaseuski = 	config["tresholds"]["mAP"]["Maker_Jakub_Ramaseuski"].as<decimal_n>();
 	
 	tresholds::explo::objects::barrier = 		config["priority"]["exploration"]["barrier"].as<decimal_n>();
 	tresholds::explo::objects::candle = 		config["priority"]["exploration"]["candle"].as<decimal_n>();
@@ -45,20 +46,23 @@ void load_config(){
 	tresholds::explo::objects::discovered = 	config["priority"]["exploration"]["discovered"].as<decimal_n>();
 	tresholds::explo::objects::interesting = 	config["priority"]["exploration"]["interesting"].as<decimal_n>();
 	tresholds::explo::objects::boring = 		config["priority"]["exploration"]["boring"].as<decimal_n>();
-	//~ YAML::Node ch = config["thresholds"];
-	//~ YAML::Node ar = ch["mAP"];
-	std::cout << tresholds::explo::objects::barrier 		 << std::endl;
-	std::cout << tresholds::explo::objects::candle 		 	<< std::endl;
-	std::cout << tresholds::explo::objects::unknown 		 << std::endl;
-	std::cout << tresholds::explo::objects::candle_blown 	 << std::endl;
-	std::cout << tresholds::explo::objects::discovered 	 	<< std::endl;
-	std::cout << tresholds::explo::objects::interesting 	 << std::endl;
-	std::cout << tresholds::explo::objects::boring 		 	<< std::endl;
 	
-	//~ const double username = config["candle"].as<double>();
-	//~ std::cout << password << std::endl;
-	//~ std::cout << username << std::endl;
-	//~ std::cout << list[2] << std::endl;
+	tresholds::explo::influence::barrier = 		config["priority"]["influence"]["barrier"].as<decimal_n>();
+	tresholds::explo::influence::candle = 		config["priority"]["influence"]["candle"].as<decimal_n>();
+	tresholds::explo::influence::unknown = 		config["priority"]["influence"]["unknown"].as<decimal_n>();
+	tresholds::explo::influence::candle_blown = config["priority"]["influence"]["candle_blown"].as<decimal_n>();
+	tresholds::explo::influence::discovered = 	config["priority"]["influence"]["discovered"].as<decimal_n>();
+	tresholds::explo::influence::interesting = 	config["priority"]["influence"]["interesting"].as<decimal_n>();
+	tresholds::explo::influence::boring = 		config["priority"]["influence"]["boring"].as<decimal_n>();
+	
+	properties::camera::angle_horizontal = 				config["properties"]["camera"]["angle_horizontal"].as<decimal_n>();
+	properties::camera::angle_vertical = 				config["properties"]["camera"]["angle_vertical"].as<decimal_n>();
+	properties::camera::size_recognition_horizontal = 	config["properties"]["camera"]["size_recognition_horizontal"].as<unsigned_n>();
+	properties::camera::size_recognition_vertical = 	config["properties"]["camera"]["size_recognition_vertical"].as<unsigned_n>();
+	properties::camera::size_footage_horizontal = 		config["properties"]["camera"]["size_footage_horizontal"].as<unsigned_n>();
+	properties::camera::size_footage_vertical = 		config["properties"]["camera"]["size_footage_vertical"].as<unsigned_n>();
+	
+	
 	//~ std::ofstream fout("../defines/config.yaml");
 	//~ fout << config;	
 	}

@@ -51,7 +51,7 @@ std::vector<dijk_node> dijkstra::dijkstras(std::vector<dijk_node*>& p_nodes, std
 			}
 		//~ std::cout << "konec pro spoje z " << smallest -> id << std::endl << std::endl;
 		p_nodes.erase(p_nodes.begin() + smallest_index);
-		} while(p_nodes.size() != 0 && p_edges.size() != 0);
+		} while(p_nodes.size() != 0 /*&& p_edges.size() != 0*/);
 	return out;
 	}
 
@@ -125,66 +125,18 @@ bool dijkstra::collides(wall w, coordinates start, coordinates end){
 }
 
 
-void dijkstra::calculate_edges(){
-	edges.clear();
-	for(auto i: nodes){
-		
-		}
-	}
-
-
-std::vector<dijk_node*> dijkstra::adjacent_remaining_nodes(dijk_node* Node, std::vector<dijk_node*>& p_dijk_nodes, std::vector<edge*>& p_edges) {
-	std::vector<dijk_node*> adjacent_nodes;
-	const unsigned_b size = p_edges.size();
-	for (unsigned_b i = 0; i < size; ++i) {
-		edge* p_edge = p_edges.at(i);
-		dijk_node* p_adjacent = nullptr;
-		if (p_edge -> dijk_node1 == Node) {
-			p_adjacent = p_edge -> dijk_node2;
-		} else if (p_edge -> dijk_node2 == Node) {
-			p_adjacent = p_edge -> dijk_node1;
-		}
-		if (p_adjacent && contains(p_dijk_nodes, p_adjacent)) {
-			adjacent_nodes.push_back(p_adjacent);
-		}
-	}
-	return adjacent_nodes;
-}
-
 
 void dijkstra::print_shortest_route(dijk_node* destination) {
 	dijk_node* previous = destination;
 	std::cout << "distance from start: "
 		 << destination -> distance_start << std::endl;
 	do {
-		std::cout << previous -> id << " " << previous -> coords -> print() << previous -> is_first << std::endl;
+		std::cout << previous -> id << " " << previous -> coords -> print() << std::endl;
 		previous = previous -> previous;
 	} while (previous != nullptr && !(previous -> is_first));
 	std::cout << std::endl;
 }
 
-
-bool dijkstra::contains(std::vector<dijk_node*>& dijk_nodes, dijk_node* d_node) {
-	const unsigned_b size = dijk_nodes.size();
-	for (unsigned_b i = 0; i < size; ++i) {
-		if (d_node == dijk_nodes.at(i)) {
-			return true;
-		}
-	}
-	return false;
-}
-
-
-decimal_n dijkstra::distance(dijk_node* node1, dijk_node* node2) {
-	const unsigned_b size = p_edges.size();
-	for (unsigned_b i = 0; i < size; ++i) {
-		edge* edge_o = p_edges.at(i);
-		if (edge_o -> connects(node1, node2)) {
-			return edge_o -> distance;
-		}
-	}
-	return -1;	// should never happen
-}
 
 dijk_node* dijkstra::add_smallest(dijk_node* smallest, std::vector<dijk_node>& dijk_nodes){
 	dijk_nodes.push_back(*smallest);

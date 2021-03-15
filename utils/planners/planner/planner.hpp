@@ -38,18 +38,15 @@ class planner
 		std::vector<circle> perimeters;
 		circle create_perimeter(coordinates);
 		
-		std::vector<circle> circle_generate(coordinates goal, coordinates start, map &); // function to create all circles with goal coordinate on it
+		std::vector<circle> circle_generate(coordinates goal, coordinates start, map &, uint8_t it = 0, decimal_n multiplier = 1); // function to create all circles with goal coordinate on it
 		std::vector<circle> perimeter_generate(map &m);
 		
 		std::vector<coordinates> plan_make(coordinates goal, coordinates start, map &); 
 		std::vector<coordinates> coincidental_points_generate(std::vector<circle>& circles);
-		//~ std::vector<step> plan_trace(std::vector<coordinates>, coordinates goal, coordinates start, map &); // traces the path in lines, perhaps it'll sort the stuff
 		bool collides(wall w, coordinates start, coordinates end);
 		bool collides_nowhere(map& m, coordinates start, coordinates end);
-		//~ void plan_make(coordinates goal, coordinates start, std::vector<coordinates>&, map &); // useless
 		std::vector<travel_node> expand(std::vector<travel_node> nodes, std::vector<travel_node> prev_nodes, unsigned_b id_curr);
 		//~ std::vector<step> plan_make(location goal, location start, decimal_n current_angle, map &); 
-		//~ void plan_make(location goal, location start, decimal_n current_angle, std::vector<step>&, map &); 
 		// makes plan geometrically, does not assign speeds or something exact
 		std::vector<step> make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m);
 		std::vector<step> plan_calculate(std::vector<step>); 

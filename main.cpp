@@ -15,7 +15,7 @@
 #include <chrono>
 #include <future>
 #include <limits>
-
+#include <ctime>
 #include <iostream>
 
 #include "./utils/data_containers/setters/setters.tpp"
@@ -439,24 +439,27 @@ int main(int argc, char *argv[]) {
 			/// this creates map and does math to calculations to make heatmap, therefore selecting the hottest spot and designing trace to it
 			map m;
 	
-			//~ coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 7), coordinates(-6, 6)};
+			coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 8), coordinates(-6, 7)};
 			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
 			coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
+			coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
 			
 			//~ m.append(candle(coordinates(4,3)));
-			//~ m.append(wall(c));
+			m.append(wall(c));
 			m.append(wall(x));
-			m.append(wall(y));
+			//~ m.append(wall(y));
+			//~ m.append(wall(z));
 			planner p;
-			angles a = angles().load_virtual(coordinates(-5, 2), m);
+			//~ angles a = angles().load_virtual(coordinates(-5, 2), m);
 			//~ for(auto i: a)
-			std::cout << a.get_angle(0).position._coordinates.print() << std::endl;
-			std::cout << a.get_angle(0).distance << std::endl;
+			//~ std::cout << a.get_angle(0).position._coordinates.print() << std::endl;
+			//~ std::cout << a.get_angle(0).distance << std::endl;
 			//~ std::cout << a.size() << std::endl;
-			std::vector <circle> plan = p.circle_generate(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m);
+			std::vector <circle> plan = p.circle_generate(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m, c_i(argv[4]));
 			//~ std::vector <line> clan = p.plan_trace(plan, coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m);
 			//~ std::cout << m._map_walls[0].is_collision_course(circle(coordinates(-5, 2), 6))[1].print() << std::endl;
-			
+			std::srand(std::time(nullptr)); 
+				
 			for(auto i: plan)
 				std::cout << i.print() << std::endl;
 			
@@ -468,6 +471,9 @@ int main(int argc, char *argv[]) {
 			//~ for(auto i: clan)
 				//~ std::cout << i.print() << std::endl;
 			//~ m.strip({coordinates(10, 10), coordinates(60, 60)})[0] -> set_point(location::_candle);
+			for(uint8_t i = 0; i < 255; i++){
+				std::cout << line((decimal_n)((std::rand() % 256)-128)/128.0, ((decimal_n)((std::rand() % 256)-128))/128.0, 0).make_parallel(coordinates(-5, 2)).print() << std::endl;
+				}
 			break;
 			}
 			

@@ -3,11 +3,13 @@
 tresholds:
   # mean Average perception needed to recognise object
   mAP:
-    candle: 		0.2
-    line_border: 	0.3
-    line_surround: 	0.3
-    fire: 			0.6
-    barrier: 		0.2
+    candle: 				0.2
+    line_border: 			0.3
+    line_surround: 			0.3
+    fire: 					0.6
+    barrier: 				0.2
+    person: 				0.8
+    Maker_Jakub_Ramaseuski: 0.8
 
 
 priority:
@@ -21,8 +23,38 @@ priority:
     interesting: 	1024
     boring: 		-128
     
-    influence_unknown: 2       
+    #~ influence_unknown: 2       
     #influence dividor of other unknown fields    
     
-    influence_discovered: 2
+    #~ influence_discovered: 2
     #influence of close location which is discovered
+    
+  influence:
+    # influence of how such place in tiles.
+    candle: 		6
+    candle_blown: 	4
+    unknown: 		4
+    barrier:		8
+    discovered: 	9
+    interesting: 	7
+    boring: 		18
+    
+    #~ influence_unknown: 2       
+    #influence dividor of other unknown fields    
+    
+    #~ influence_discovered: 2
+    #influence of close location which is discovered
+properties:
+  camera:
+    angle_vertical: 				37
+    angle_horizontal: 				66
+    size_recognition_horizontal: 	192
+    size_recognition_vertical: 		320
+    size_footage_horizontal: 		360
+    size_footage_vertical: 			640
+  
+  #~ robot:
+    #~ wheel:
+      #~ radius: 	0.044
+      #~ steps: 	200
+      

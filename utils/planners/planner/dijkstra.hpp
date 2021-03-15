@@ -53,7 +53,7 @@ class edge {
 	decimal_n distance;
 };
 
-class dijkstra{
+class dijkstra {
 	public:
 		dijkstra(map &m){
 			this -> m = &m;
@@ -75,14 +75,10 @@ class dijkstra{
 		dijk_node* add_smallest(dijk_node* smallest, std::vector<dijk_node>& dijk_nodes);
 		
 		std::vector<dijk_node> dijkstras(std::vector<dijk_node*>& p_nodes, std::vector<edge*>& p_edges);
-		std::vector<dijk_node*> adjacent_remaining_nodes(dijk_node* Node, std::vector<dijk_node*>& dijk_nodes, std::vector<edge*>& edges);
 		
 		bool collides(wall w, coordinates start, coordinates end);
 		bool collides_nowhere(map &m, coordinates start, coordinates end);
 		void print_shortest_route(dijk_node* destination);
-		void calculate_edges();
-		bool contains(std::vector<dijk_node*>& dijk_nodes, dijk_node* d_node);
-		decimal_n distance(dijk_node* node1, dijk_node* node2);
 };
 
 
