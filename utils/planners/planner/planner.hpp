@@ -41,14 +41,13 @@ class planner
 		std::vector<circle> circle_generate(coordinates goal, coordinates start, map &, uint8_t it = 0, decimal_n multiplier = 1); // function to create all circles with goal coordinate on it
 		std::vector<circle> perimeter_generate(map &m);
 		
-		std::vector<coordinates> plan_make(coordinates goal, coordinates start, map &); 
+		std::vector<step> plan_make(std::vector<coordinates> selected, map &m, decimal_n initial_rotation = 0); 
 		std::vector<coordinates> coincidental_points_generate(std::vector<circle>& circles);
 		bool collides(wall w, coordinates start, coordinates end);
 		bool collides_nowhere(map& m, coordinates start, coordinates end);
 		std::vector<travel_node> expand(std::vector<travel_node> nodes, std::vector<travel_node> prev_nodes, unsigned_b id_curr);
-		//~ std::vector<step> plan_make(location goal, location start, decimal_n current_angle, map &); 
 		// makes plan geometrically, does not assign speeds or something exact
-		std::vector<step> make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m);
+		std::vector<coordinates> make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m);
 		std::vector<step> plan_calculate(std::vector<step>); 
 		// makes speeds assigned, new coordinates, angle and steps calculated
 		

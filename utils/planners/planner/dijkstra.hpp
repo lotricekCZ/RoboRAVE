@@ -78,7 +78,7 @@ class dijkstra {
 		
 		bool collides(wall w, coordinates start, coordinates end);
 		bool collides_nowhere(map &m, coordinates start, coordinates end);
-		void print_shortest_route(dijk_node* destination);
+		std::vector<coordinates> print_shortest_route(dijk_node* destination);
 };
 
 

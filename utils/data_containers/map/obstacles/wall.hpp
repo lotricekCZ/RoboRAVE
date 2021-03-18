@@ -43,9 +43,11 @@ class wall: public obstacle
 		wall(coordinates[4]);
 		bool inside(coordinates a);
 		bool inside(decimal_n x, decimal_n y){return false;}
+		coordinates closest_point(coordinates);		
+		/// TODO: Please get this working
 		std::vector<coordinates> points(){return std::vector<coordinates> ();}
-		std::vector<coordinates>  is_collision_course(line);
-		std::vector<coordinates>  is_collision_course(circle);
+		std::vector<coordinates> is_collision_course(line);
+		std::vector<coordinates> is_collision_course(circle);
 		std::array<coordinates, 2> get_box();
 		std::string inkscape_print();
 	private:

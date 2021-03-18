@@ -80,7 +80,7 @@ std::string line::print (line l){
 std::string line::print (){
 	return print(*this);
 	}
-	
+	 
 bool line::on_segment (coordinates on_seg, coordinates a_seg, coordinates b_seg){
 	return std::abs((on_seg.get_distance(a_seg) + on_seg.get_distance(b_seg)) - a_seg.get_distance(b_seg)) <= 1e-4;
 	}
@@ -91,7 +91,48 @@ coordinates line::intersection(line a, line b){
 	decimal_n x = (- a.b * b.c + b.b * a.c) / (a.b * b.a - b.b * a.a); 
 	// place for wtf, but it should work
 	// just believe me, this should be ok
-	return coordinates(x, a.get_y(x));
+	return coordinates(x, (a.b != 0? a.get_y(x): b.get_y(x)));
 	}
 
+line line::make_perpendicular(coordinates c){
+	return line(this -> b, -this -> a, - (this -> a * c.x + this -> b * c.x));
+	}
+
+
+line line::make_axis(line a, line b){
+	 /// parallel lines, returns the same with average c
+	if((a.b * b.a - b.b * a.a) == 0) return line(a.a, b.b, (a.c+b.c)/2);
+	coordinates c = a.intersection(a, b);
+
+	std::cout << c.print() << std::endl;
+	decimal_n angle = (a.get_angle() + b.get_angle()) / 2.0;
+	return line(angle, c);
+	}
+	
+//~ line line::make_perpendicular(coordinates c){
+	//~ return line(this -> b, -this -> a, - (this -> a * c.x + this -> b * c.x));
+	//~ }
+
+line::line(decimal_n angle){
+	this -> a = 1;
+	this -> b = atan(angle);
+	c = 0;
+	}
+
+line::line(decimal_n angle, coordinates c){
+	this -> b = 1;
+	this -> a = -tan(angle);
+	this -> c = -(c.x * this -> a + c.y * this -> b);
+	}
+	
+line::line(decimal_n angle, decimal_n c){
+	this -> b = 1;
+	this -> a = -tan(angle);
+	this -> c = c;
+	}
+	
+decimal_n line::get_angle(){
+	return atan2f(-a, b);
+	}
+	
 #endif //LINE_CPP

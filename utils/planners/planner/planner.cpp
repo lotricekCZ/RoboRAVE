@@ -35,44 +35,31 @@ planner::planner()
 
 circle planner::create_perimeter(coordinates c){
 	std::cout << c.print() << std::endl;
-	return circle(c, robot_radius*2.0);
+	return circle(c, robot_radius * 2.0);
 	}
 
-std::vector<coordinates> planner::plan_make(coordinates goal, coordinates start, map &m){
-	std::cout << "start: " << start.print() << "  goal: " << goal.print() << std::endl;
-	std::vector<coordinates> out;
-	std::vector<circle> circles;
-	if(start == goal) return out;
-	out.push_back(start);
-	angles local_sight = angles().load_virtual(start, m);
-	
-	decimal_n distance = start.get_distance(goal);
-	circle range(start, distance);
-	circles.push_back(range);
-	
-	for(auto w: m._map_walls){
-		for(auto poi: w.properties.edges){
-			if(range.inside(poi) && (poi.get_distance(start) < distance)){
-				std::cout << circle(poi, poi.get_distance(goal)).print() << std::endl;
-				circles.push_back(circle(poi, poi.get_distance(goal)));
-				}
-			}
+/**
+ * 
+ * name: planner::plan_make
+ * planner::plan_make takes in the road 
+ * designed by planner::make_path and creates 
+ * a path that does have lines and turns.
+ * 
+ * Main idea behind it is that all the points noted are 
+ * actually 
+ * 
+ * @param selected: coordinates that create the possible path
+ * @param m: current map object
+ * @param initial_rotation: rotation robot is currently headed
+ * @return
+ * 
+ */
+
+
+std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, decimal_n initial_rotation){
+	for(unsigned_b i = 1; i < selected.size(); i++){
+		//~ selected[i] 
 		}
-	
-	for(uint32_t i = 0; i < circles.size(); i++){
-		for(uint32_t e = 0; i < circles.size(); i++){
-			if(!(circles[e] == circles[i])){
-				std::vector<coordinates> tangs = circle().intersection(circles[e], circles[i]);
-				out.insert(out.end(), tangs.begin(), tangs.end());
-				}
-			}
-		}
-	
-	std::sort(out.begin(), out.end(), [](coordinates a, coordinates b){return (a.x < b.x) || (a.y < b.y);});
-	out.erase( unique( out.begin(), out.end() ), out.end() );
-	
-	
-	return out;
 	}
 
 bool planner::collides(wall w, coordinates start, coordinates end){
@@ -195,8 +182,9 @@ travel_node planner::search_by_id(unsigned_b id, std::vector<travel_node> &nodes
 	}
 
 
-std::vector<step> planner::make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m){
+std::vector<coordinates> planner::make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m){
 	std::vector<coordinates> temp = c;
+	std::vector<coordinates> out;
 	for(unsigned_b i = 0; i < temp.size(); i++){
 		for(auto b: m._map_walls){
 			if(b.inside(temp[i])){
@@ -205,6 +193,7 @@ std::vector<step> planner::make_path(std::vector<coordinates> &c, coordinates st
 		}
 	}
 	dijkstra d(m);
+	//~ temp.push_back(start);
 	d.nodes = d.generate_nodes(temp, start);
 	d.p_nodes = d.generate_node_pointers(d.nodes);
 
@@ -215,11 +204,17 @@ std::vector<step> planner::make_path(std::vector<coordinates> &c, coordinates st
 	std::cout << nodes.size() << std::endl;
 
 	std::cout << std::endl << d.nodes.size() << std::endl;
-	for(auto &o: nodes)
+	for(auto &o: nodes){
 		if(*o.coords == end){
-			d.print_shortest_route(&o);
+			out = d.print_shortest_route(&o);
 			break;
-			}
+		}
+	}
 	
-	return std::vector<step>();
+	out.push_back(start);
+	std::reverse(out.begin(), out.end());
+	for(auto o: out){
+		std::cout << o.print() << std::endl;
+		}
+	return out;
 	}

@@ -34,12 +34,18 @@ class line
 		decimal_n c;
 		decimal_n get_x(decimal_n);
 		decimal_n get_y(decimal_n);
+		decimal_n get_angle();
 		
 		line();
 		line(coordinates, coordinates);
 		line(decimal_n, decimal_n, decimal_n);
+		line(decimal_n); // used to create line based on angle in RADIANS against plane
+		line(decimal_n, coordinates); // used to create line based on angle in RADIANS against plane
+		line(decimal_n, decimal_n); // used to create line based on angle in RADIANS against plane
 		
 		line make_parallel(coordinates);
+		line make_perpendicular(coordinates);
+		line make_axis(line, line);
 		std::string print(line);
 		std::string print();
 		bool on_segment(coordinates, coordinates, coordinates);

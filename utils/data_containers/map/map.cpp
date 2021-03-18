@@ -258,4 +258,35 @@ void map::edit_map(candle w){
 	}
 }
 
+
+wall map::closest_wall(coordinates c){
+	decimal_n minimal_distance = std::numeric_limits<decimal_n>::infinity();
+	wall *ret;
+	for(auto &w: _map_walls){
+		for(coordinates edges: w.properties.edges){
+			decimal_n current = c.get_distance(edges);
+			if(minimal_distance > current){
+				minimal_distance = current;
+				ret = &w;
+				}
+			}
+		}
+	return *ret;
+	}
+
+
+candle map::closest_candle(coordinates c){
+	decimal_n minimal_distance = std::numeric_limits<decimal_n>::infinity();
+	candle *ret;
+	for(auto &cn: _map_candles){
+		decimal_n current = c.get_distance(cn.tube.center);
+		if(minimal_distance > current){
+			minimal_distance = current;
+			ret = &cn;
+			}
+		}
+	
+	return *ret;
+	}
+
 #endif

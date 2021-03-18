@@ -48,6 +48,7 @@ class coordinates
 		uint8_t get_dec(decimal_n rads);
 		decimal_n get_rel_x(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec);
 		decimal_n get_rel_y(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec);
+		
 		coordinates operator - (const coordinates& rhs){
 			return coordinates(this -> x - rhs.x, this -> y - rhs.y);
 			}

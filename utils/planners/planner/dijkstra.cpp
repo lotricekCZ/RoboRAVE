@@ -63,6 +63,7 @@ std::vector<dijk_node> dijkstra::generate_nodes(std::vector<coordinates>& coords
 	for(unsigned_b i = 0; i < size; i++){
 		nodes.push_back(dijk_node(i, coords[i]));
 		if(coords[i] == start){
+			//~ std::cout << "start " << nodes[i].id << nodes[i].coords -> print() << std::endl;
 			nodes[i].distance_start = 0;
 			nodes[i].is_first = true;
 			}
@@ -124,17 +125,22 @@ bool dijkstra::collides(wall w, coordinates start, coordinates end){
 	return false;
 }
 
+//~ #define DEBUG_DIJK
 
-
-void dijkstra::print_shortest_route(dijk_node* destination) {
+std::vector<coordinates> dijkstra::print_shortest_route(dijk_node* destination) {
+	std::vector<coordinates> coords;
 	dijk_node* previous = destination;
-	std::cout << "distance from start: "
-		 << destination -> distance_start << std::endl;
+	//~ std::cout << "distance from start: " << destination -> distance_start << std::endl;
 	do {
-		std::cout << previous -> id << " " << previous -> coords -> print() << std::endl;
+		coords.push_back(*previous -> coords);
+		#ifdef DEBUG_DIJK
+			std::cout << previous -> id << " " << previous -> coords -> print() << std::endl;
+		#endif 
 		previous = previous -> previous;
-	} while (previous != nullptr && !(previous -> is_first));
+	} while (!(previous -> is_first));
+	
 	std::cout << std::endl;
+	return coords;
 }
 
 

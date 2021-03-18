@@ -56,6 +56,9 @@ class map
 		void edit_map(candle);
 		void edit_map(surround_circle);
 		
+		/// returns the closest obstacle of that kind
+		wall closest_wall(coordinates);
+		candle closest_candle(coordinates);
 		
 		
 		decimal_n calculate_location(location lo);

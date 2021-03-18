@@ -106,4 +106,18 @@ std::string wall::inkscape_print(){
 	id=\"rect2551\"\n\
 	style=\"fill:#000000;stroke:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers\" />\n";		
 	}
+
+coordinates wall::closest_point(coordinates c){
+	decimal_n minimal_distance = std::numeric_limits<decimal_n>::infinity();
+	coordinates *ret;
+	for(auto &coo: properties.edges){
+		decimal_n current = c.get_distance(coo);
+		if(minimal_distance > current){
+			minimal_distance = current;
+			ret = &coo;
+			}
+		}
+	return *ret;
+	};
+
 #endif
