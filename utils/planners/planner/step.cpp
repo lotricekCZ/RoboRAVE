@@ -35,7 +35,7 @@ step::step(coordinates start, coordinates end, coordinates center){
 	this -> start = start;
 	this -> end = end;
 	this -> _type = circle_e;
-	this -> c = circle(center, start.get_distance(center));
+	this -> formula = circle(center, start.get_distance(center));
 	}
 	
 	
@@ -43,7 +43,7 @@ step::step(coordinates start, coordinates end){
 	this -> start = start;
 	this -> end = end;	
 	this -> _type = line_e;
-	this -> l = line(start, end);
+	this -> formula = line(start, end);
 	
 	}
 
@@ -59,12 +59,12 @@ std::string step::inkscape_print(){
 			return "<path style=\"opacity:1;fill:none;stroke:#008080;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers\"\
 			\tid=\"path833\"\n\
 			\tsodipodi:type=\"arc\" \n\
-			\tsodipodi:cx=\"" + std::to_string(c.center.x) +"\"\n\
-			\tsodipodi:cy=\"" + std::to_string(c.center.y) +"\"\n\
-			\tsodipodi:rx=\"" + std::to_string(c.radius) +"\"\n\
-			\tsodipodi:ry=\"" + std::to_string(c.radius) +"\"\n\
-			\tsodipodi:start=\"" + std::to_string(c.center.get_gamma(start)) +"\"\n\
-			\tsodipodi:end=\"" + std::to_string(c.center.get_gamma(end)) +"\"\n\
+			\tsodipodi:cx=\"" + std::to_string(std::get<circle>(formula).center.x) +"\"\n\
+			\tsodipodi:cy=\"" + std::to_string(std::get<circle>(formula).center.y) +"\"\n\
+			\tsodipodi:rx=\"" + std::to_string(std::get<circle>(formula).radius) +"\"\n\
+			\tsodipodi:ry=\"" + std::to_string(std::get<circle>(formula).radius) +"\"\n\
+			\tsodipodi:start=\"" + std::to_string(std::get<circle>(formula).center.get_gamma(start)) +"\"\n\
+			\tsodipodi:end=\"" + std::to_string(std::get<circle>(formula).center.get_gamma(end)) +"\"\n\
 			\tsodipodi:arc-type=\"arc\"\n\
 			\tsodipodi:open=\"false\" />\n";
 		}

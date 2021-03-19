@@ -40,8 +40,7 @@ class step
 	coordinates start;
 	coordinates end;
 	
-	circle c;
-	line l;
+	std::variant<circle, line> formula;
 	enum equation_type{
 		line_e = 0,
 		circle_e = 1
