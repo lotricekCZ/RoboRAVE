@@ -36,6 +36,7 @@ class coordinates
 		decimal_n x;
 		decimal_n y;
 		coordinates make_local(coordinates, coordinates, decimal_n ang);
+		coordinates make_local(coordinates, decimal_n ang);
 		coordinates make_local(decimal_n, decimal_n);
 		coordinates make_global(coordinates, coordinates, decimal_n);
 		coordinates make_rotation(coordinates rel, decimal_n alpha);

@@ -447,7 +447,7 @@ int main(int argc, char *argv[]) {
 			//~ m.append(candle(coordinates(4,3)));
 			m.append(wall(c));
 			m.append(wall(x));
-			//~ m.append(wall(y));
+			m.append(wall(y));
 			//~ m.append(wall(z));
 			planner p;
 			//~ angles a = angles().load_virtual(coordinates(-5, 2), m);
@@ -471,9 +471,9 @@ int main(int argc, char *argv[]) {
 			//~ for(auto i: clan)
 				//~ std::cout << i.print() << std::endl;
 			//~ m.strip({coordinates(10, 10), coordinates(60, 60)})[0] -> set_point(location::_candle);
-			for(uint8_t i = 0; i < 255; i++){
-				std::cout << line((decimal_n)((std::rand() % 256)-128)/128.0, ((decimal_n)((std::rand() % 256)-128))/128.0, 0).make_parallel(coordinates(-5, 2)).print() << std::endl;
-				}
+			//~ for(uint8_t i = 0; i < 255; i++){
+				//~ std::cout << line((decimal_n)((std::rand() % 256)-128)/128.0, ((decimal_n)((std::rand() % 256)-128))/128.0, 0).make_parallel(coordinates(-5, 2)).print() << std::endl;
+				//~ }
 			break;
 			}
 			
@@ -579,6 +579,53 @@ int main(int argc, char *argv[]) {
 			//~ d.print_shortest_route(d.nodes[4]);
 			break;
 			}
+			
+			case 26:{
+				std::cout << line(1, 3, -4).make_perpendicular(coordinates(4, -4)).print() << std::endl;
+				std::cout << line(1, 3, -4).print() << std::endl;
+				break;
+				}
+				
+			case 27:{
+				coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+				coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
+				map m;	
+				m.append(wall(x));
+				m.append(wall(y));
+				
+				std::cout << m.closest_wall(coordinates(2, 5)).closest_point(coordinates(2, 5)).print() << std::endl;				
+				break;
+				}
+				
+			case 28:{
+				std::cout << line(c_f(argv[2]), c_f(argv[3]), 0).print() << std::endl;				
+				std::cout << line(c_f(argv[2]), c_f(argv[3]), 0).get_angle()/pi_const*180 << std::endl;				
+				}
+				
+			case 29:{
+				std::cout << line(c_f(argv[2]), c_f(argv[3]), 0).print() << std::endl;				
+				std::cout << line(line(c_f(argv[2]), c_f(argv[3]), 0).get_angle(), coordinates(1, 1)).print() << std::endl;				
+				break;
+				}
+				
+			case 30:{
+				std::cout << line(1, 0, -3).print() << std::endl;				
+				std::cout << line(c_f(argv[2]), c_f(argv[3]), c_f(argv[4])).print() << std::endl;				
+				std::cout << line().make_axis(line(1, 0, -3), line(c_f(argv[2]), c_f(argv[3]), c_f(argv[4]))).print() << std::endl;				
+				break;
+				}
+				
+			case 31:{
+				std::cout << line(1, 2, -3).print() << std::endl;				
+				std::cout << line().get_distance(line(1, 2, -3), coordinates(c_f(argv[2]), c_f(argv[3]))) << std::endl;
+				break;
+				}
+				
+			case 32:{
+				std::cout << line(1, 2, -3).print() << std::endl;				
+				std::cout << line(1, 2, -3).get_distance(line(1, 2, c_f(argv[2]))) << std::endl;
+				break;
+				}
 		
 		}
 

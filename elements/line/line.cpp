@@ -46,7 +46,25 @@ line::line(decimal_n a, decimal_n b, decimal_n c) {
     this -> b = b;
     this -> c = c;
 	}
+
+line::line(decimal_n angle){
+	this -> a = 1;
+	this -> b = atan(angle);
+	c = 0;
+	}
+
+line::line(decimal_n angle, coordinates c){
+	this -> b = 1;
+	this -> a = -tan(angle);
+	this -> c = -(c.x * this -> a + c.y * this -> b);
+	}
 	
+line::line(decimal_n angle, decimal_n c){
+	this -> b = 1;
+	this -> a = -tan(angle);
+	this -> c = c;
+	}	
+
 line::line() {
 	}
 
@@ -95,7 +113,11 @@ coordinates line::intersection(line a, line b){
 	}
 
 line line::make_perpendicular(coordinates c){
-	return line(this -> b, -this -> a, - (this -> a * c.x + this -> b * c.x));
+	return line((std::abs(this -> a) < 1e-3)?(-1):(1)*this -> b, (std::abs(this -> b) < 1e-3)?(1):(-1)*this -> a, (this -> a * c.y - this -> b * c.x));
+	}
+	
+line line::make_perpendicular(){ /// for uses of making distance measurements among two parallel lines
+	return line(-b, a, c);
 	}
 
 
@@ -112,27 +134,31 @@ line line::make_axis(line a, line b){
 //~ line line::make_perpendicular(coordinates c){
 	//~ return line(this -> b, -this -> a, - (this -> a * c.x + this -> b * c.x));
 	//~ }
-
-line::line(decimal_n angle){
-	this -> a = 1;
-	this -> b = atan(angle);
-	c = 0;
-	}
-
-line::line(decimal_n angle, coordinates c){
-	this -> b = 1;
-	this -> a = -tan(angle);
-	this -> c = -(c.x * this -> a + c.y * this -> b);
-	}
-	
-line::line(decimal_n angle, decimal_n c){
-	this -> b = 1;
-	this -> a = -tan(angle);
-	this -> c = c;
-	}
 	
 decimal_n line::get_angle(){
 	return atan2f(-a, b);
+	}
+	
+decimal_n line::get_angle(line l){
+	return get_angle() - l.get_angle();
+	}
+	
+decimal_n line::get_distance(line l, coordinates c){
+	return std::abs(l.a * c.x + l.b * c.y + l.c)/(sqrt(pow(l.a, 2) + pow(l.b, 2)));
+	}
+	
+decimal_n line::get_distance(line l){
+	line n = make_perpendicular();
+	return intersection(*this, n).get_distance(intersection(l, n));
+	}
+	
+decimal_n line::get_distance(line l, line m){
+	line n = l.make_perpendicular();
+	//~ std::cout << intersection(m, n).print() << std::endl;
+	//~ std::cout << intersection(l, n).print() << std::endl;
+	//~ std::cout << n.print() << std::endl;
+	//~ std::cout << line(intersection(l, n), intersection(m, n)).print() << std::endl;
+ 	return intersection(m, n).get_distance(intersection(l, n));
 	}
 	
 #endif //LINE_CPP

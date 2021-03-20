@@ -67,7 +67,7 @@ std::vector<coordinates> circle::intersection(line l, circle c) {
 
 	decimal_n D = pow(B, 2) - 4 * A * C;
 	decimal_n x1, y1, x2, y2;
-	decimal_n tolerance = 1e-5;
+	decimal_n tolerance = 1e-4;
 	// Vertical line case :0
 	if (std::abs(l.b) < tolerance) {
 
@@ -142,7 +142,7 @@ void circle::circle_tangents (coordinates c, decimal_n r1, decimal_n r2, std::ve
     decimal_n r = r2 - r1;
     decimal_n z = pow(c.x, 2) + pow(c.y, 2);
     decimal_n d = z - pow(r, 2);
-    if (d < -(1e-9))  return;
+    if (d < -(1e-4))  return;
     d = sqrt (abs (d));
     line l;
     l.a = (c.x * r + c.y * d) / z;

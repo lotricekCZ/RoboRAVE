@@ -52,6 +52,19 @@ coordinates coordinates::make_local(coordinates abs, coordinates rel, decimal_n 
 	coordinates c = make_rotation(abs-rel, alpha - pi_const/2);
 	return c;
 	}
+	
+/*
+ * 
+ * name: coordinates::make_local
+ * @param abs: absolute coordinates on a map
+ * @param alpha: uhel, kterym robot na abs stoji, RADIANS
+ * @return lokalni souradnice bodu abs z bodu rel(jimz je napr robot) pod uhlem alpha 
+ * 
+ */
+
+coordinates coordinates::make_local(coordinates abs, decimal_n alpha){
+	return make_local(abs, (*this), alpha));
+	}
 
 /*
  * 

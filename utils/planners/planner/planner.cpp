@@ -33,9 +33,9 @@ planner::planner()
 	
 }
 
-circle planner::create_perimeter(coordinates c){
-	std::cout << c.print() << std::endl;
-	return circle(c, robot_radius * 2.0);
+circle planner::create_perimeter(coordinates c, decimal_n radius){
+	//~ std::cout << c.print() << std::endl;
+	return circle(c, radius);
 	}
 
 /**
@@ -56,10 +56,37 @@ circle planner::create_perimeter(coordinates c){
  */
 
 
+
 std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, decimal_n initial_rotation){
+	// There must be at least two points - start and end
+	std::vector<step> steps; /// steps based on coordinates selected by Dijkstra
+	std::vector<circle> circles; /// TODO: Description
+	
+	line l(initial_rotation, selected[0]);
+	std::vector<std::pair<step*, std::array<line, 2>>> crosses; /// cross that'll be constructed on Dijkstra point
+	//~ if( selected)
 	for(unsigned_b i = 1; i < selected.size(); i++){
-		//~ selected[i] 
+		 steps.push_back(step(selected[i-1], selected[i]));
+		 /// steps that do connect these points, these are definitely lines
 		}
+		
+	line cross(initial_rotation, steps[0].start);
+	crosses.push_back(std::make_pair(&steps[0], std::array<line, 2>({line(initial_rotation, steps[0].start), cross.make_perpendicular(steps[0].start)})));
+	for(unsigned_b i = 0; i < steps.size()-1; i++){
+		cross = line().make_axis(std::get<line>(steps[i].formula), std::get<line>(steps[i+1].formula));
+		
+		crosses.push_back(std::make_pair(&steps[i+1], std::array<line, 2>({cross, cross.make_perpendicular(steps[i].start)})));
+		//~ steps[i]
+		//~ std::cout << 
+		}
+	}
+
+circle planner::make_first_move(map& m, coordinates start, coordinates next, decimal_n initial_rotation){
+	coordinates next_local = start.make_local(next, initial_rotation);
+	decimal_n distance = start.get_distance(next);
+	next_local.x = 0;
+	if(distance > limits::maximal::circle){}
+	
 	}
 
 bool planner::collides(wall w, coordinates start, coordinates end){

@@ -53,7 +53,22 @@ namespace properties {
 		
 		};
 	};
+
+namespace limits {
+	namespace maximal {
+		decimal_n wheel_velocity = 0.46; 	/// m*s^-1 maximal wheel velocity that is allowed and proably safe
+		decimal_n circle = 0.4; 			/// m maximal allowed circle, speed is key.
+		unsigned_n period = 16383; 			/// us, maximal time between pulses 
+		};
+		
+	namespace minimal {
+		decimal_n wheel_velocity = 0.084; 	/// m*s^-1 maximal wheel velocity that is allowed and proably safe
+		decimal_n circle = 0.09; 			/// m maximal allowed circle, speed is key.
+		unsigned_n period = 3000; 			/// us, maximal time between pulses 
+		};
 	
+	};
+
 namespace tresholds {
 	namespace mAP { 
 		// ammount of confidence image recognition needs to have

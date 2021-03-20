@@ -36,7 +36,7 @@ class planner
 		planner();
 		std::vector<step> plan;
 		std::vector<circle> perimeters;
-		circle create_perimeter(coordinates);
+		circle create_perimeter(coordinates, decimal_n radius = robot_radius * 2.0);
 		
 		std::vector<circle> circle_generate(coordinates goal, coordinates start, map &, uint8_t it = 0, decimal_n multiplier = 1); // function to create all circles with goal coordinate on it
 		std::vector<circle> perimeter_generate(map &m);
@@ -46,6 +46,7 @@ class planner
 		bool collides(wall w, coordinates start, coordinates end);
 		bool collides_nowhere(map& m, coordinates start, coordinates end);
 		std::vector<travel_node> expand(std::vector<travel_node> nodes, std::vector<travel_node> prev_nodes, unsigned_b id_curr);
+		circle make_first_move(map& m, coordinates start, coordinates next, decimal_n initial_rotation);
 		// makes plan geometrically, does not assign speeds or something exact
 		std::vector<coordinates> make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m);
 		std::vector<step> plan_calculate(std::vector<step>); 

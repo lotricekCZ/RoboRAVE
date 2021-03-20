@@ -35,6 +35,10 @@ class line
 		decimal_n get_x(decimal_n);
 		decimal_n get_y(decimal_n);
 		decimal_n get_angle();
+		decimal_n get_angle(line);
+		decimal_n get_distance(line, coordinates);
+		decimal_n get_distance(line);
+		decimal_n get_distance(line, line);
 		
 		line();
 		line(coordinates, coordinates);
@@ -45,9 +49,12 @@ class line
 		
 		line make_parallel(coordinates);
 		line make_perpendicular(coordinates);
+		line make_perpendicular();
 		line make_axis(line, line);
 		std::string print(line);
 		std::string print();
+		
+		
 		bool on_segment(coordinates, coordinates, coordinates);
 		line operator /(decimal_n);
 		coordinates intersection(line, line);
