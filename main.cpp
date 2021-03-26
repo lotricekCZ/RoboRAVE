@@ -626,6 +626,12 @@ int main(int argc, char *argv[]) {
 				std::cout << line(1, 2, -3).get_distance(line(1, 2, c_f(argv[2]))) << std::endl;
 				break;
 				}
+				
+			case 33:{
+				std::cout << circle(coordinates(2, 0), 2).print() << std::endl;				
+				std::cout << circle(coordinates(2, 0), 2).on_segment(coordinates(0, 0), coordinates(2, 2), coordinates(4, 0), 1) << std::endl;				
+				break;
+				}
 		
 		}
 

@@ -18,6 +18,8 @@
 #define map_l 		1500 // in milimeters, x and y difference of unknown points
 #define map_h 		map_l // in milimeters, x and y difference of unknown points
 
+#define meters		1000 // 1000mm == 1m, for conversion from standard unit
+
 /// obstacles parameters
 /// 	wall
 #define barrier_w 	0.3f 	// m barrier width
@@ -39,10 +41,10 @@ namespace properties {
 	namespace camera{
 		decimal_n angle_horizontal = 66; /// degrees
 		decimal_n angle_vertical = 37; /// degrees
-		unsigned_n size_recognition_horizontal = 192; /// px
-		unsigned_n size_recognition_vertical = 320; /// px
-		unsigned_n size_footage_horizontal = 192; /// px
-		unsigned_n size_footage_vertical = 320; /// px
+		unsigned_n size_recognition_horizontal = 	192; /// px
+		unsigned_n size_recognition_vertical = 		320; /// px
+		unsigned_n size_footage_horizontal = 		192; /// px
+		unsigned_n size_footage_vertical = 			320; /// px
 		};
 		
 	namespace heights{
@@ -56,15 +58,15 @@ namespace properties {
 
 namespace limits {
 	namespace maximal {
-		decimal_n wheel_velocity = 0.46; 	/// m*s^-1 maximal wheel velocity that is allowed and proably safe
+		decimal_n wheel_velocity = 0.46; 	/// m*s^-1 maximal wheel velocity that is allowed and proably safe (3ms:3ms)
 		decimal_n circle = 0.4; 			/// m maximal allowed circle, speed is key.
 		unsigned_n period = 16383; 			/// us, maximal time between pulses 
 		};
 		
 	namespace minimal {
 		decimal_n wheel_velocity = 0.084; 	/// m*s^-1 maximal wheel velocity that is allowed and proably safe
-		decimal_n circle = 0.09; 			/// m maximal allowed circle, speed is key.
-		unsigned_n period = 3000; 			/// us, maximal time between pulses 
+		decimal_n circle = 0.1; 			/// m minimal allowed circle, speed is key. (it's ratio is 14ms:3ms )
+		unsigned_n period = 3000; 			/// us, minimal time between pulses, lower values might will make mess with motor
 		};
 	
 	};

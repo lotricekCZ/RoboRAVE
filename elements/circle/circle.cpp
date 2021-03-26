@@ -50,6 +50,10 @@ bool circle::inside(decimal_n x, decimal_n y){
 	return pow(x - center.x, 2) + pow(y - center.y, 2) <= pow(radius, 2);
 	}
 	
+bool circle::is_on(coordinates c){
+	return std::abs(pow(c.x - center.x, 2) + pow(c.y - center.y, 2) - pow(radius, 2)) <= 1e-3;
+	}
+	
 std::vector<coordinates> circle::points(){
 	return std::vector<coordinates>();
 	}
@@ -173,6 +177,34 @@ std::string circle::print(){
 	
 	return ret;
 	}
+	
+bool circle::on_segment(coordinates start, coordinates end, coordinates point, bool angle){
+	if(!is_on(point)){
+		return false;
+		}
+		
+	line cut(start, end);
+	line perp = cut.make_perpendicular(this -> center);
+		
+	std::vector<coordinates> intersections = intersection(perp, (*this));
+	/// it's sure there are exactly two intersections, both do have exact same distance to start and end
+	decimal_n d0 = start.get_distance(intersections[0]);
+	decimal_n d1 = start.get_distance(intersections[1]);
+	decimal_n max;
+	coordinates* p_center;
+	if(d0 > d1){ // checks which of them is further -> that one also has bigger angle
+		p_center = &intersections[0];
+		max = d0;
+		}else{
+			p_center = &intersections[1];
+			max = d1;
+			}
+	
+	// returns true if the point is on bigger segment if bigger angle is set (1)
+	// it is checked by a fact that it is actually closer than start/end
+	// if that is not the case, it already is on the circle, so it must be on the smaller angle
+	return angle == (p_center -> get_distance(point) < max);
+	};
 
 #endif
 

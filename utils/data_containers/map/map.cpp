@@ -174,13 +174,10 @@ void map::append(wall in){
 	}
 
 std::vector<location *> map::strip(std::array<coordinates, 2> limits){
-	//~ std::cout << "this horny bulshit" << std::endl;
 	std::vector<location *> ret;
-	//~ std::cout << "this fucking bulshit" << std::endl;
 	coordinates ed[4] = {limits[0], coordinates(limits[0].x, limits[1].y), limits[1], coordinates(limits[1].x, limits[0].y)};
 	wall r(ed);
 	for(auto &i: _map){
-		//~ std::cout << "this horny loop" << std::endl;
 		if(r.inside(i._coordinates)){
 			std::cout << i._coordinates.print() << std::endl;
 			ret.push_back(&i);
@@ -197,9 +194,6 @@ void map::edit_map(wall w){
 			a -> set_point(location::_barrier); // alterovani existujicixh bodu
 			}
 		}
-	std::cout << "\n\nrastr\n" << std::endl;
-	std::cout << limits[0].print() << std::endl;
-	std::cout << limits[1].print() << std::endl;
 	/// doplneni polovicnim rastrem
 	for(decimal_n x = limits[1].x; x < limits[0].x; x += (map_raster/2)){
 		for(decimal_n y = limits[1].y; y < limits[0].y; y += (map_raster/2)){
@@ -220,9 +214,9 @@ void map::edit_map(surround_circle w){
 			a -> set_point(location::_barrier); // alterovani existujicich bodu
 			}
 		}
-	std::cout << "\n\nrastr\n" << std::endl;
-	std::cout << limits[0].print() << std::endl;
-	std::cout << limits[1].print() << std::endl;
+	//~ std::cout << "\n\nrastr\n" << std::endl;
+	//~ std::cout << limits[0].print() << std::endl;
+	//~ std::cout << limits[1].print() << std::endl;
 	/// doplneni polovicnim rastrem
 	for(decimal_n x = limits[1].x; x < limits[0].x; x += (map_raster/2)){
 		for(decimal_n y = limits[1].y; y < limits[0].y; y += (map_raster/2)){
@@ -243,9 +237,9 @@ void map::edit_map(candle w){
 			a -> set_point(location::_barrier); // alterovani existujicich bodu
 			}
 		}
-	std::cout << "\n\nrastr\n" << std::endl;
-	std::cout << limits[0].print() << std::endl;
-	std::cout << limits[1].print() << std::endl;
+	//~ std::cout << "\n\nrastr\n" << std::endl;
+	//~ std::cout << limits[0].print() << std::endl;
+	//~ std::cout << limits[1].print() << std::endl;
 	/// doplneni polovicnim rastrem
 	for(decimal_n x = limits[1].x; x < limits[0].x; x += (map_raster/2)){
 		for(decimal_n y = limits[1].y; y < limits[0].y; y += (map_raster/2)){
@@ -287,6 +281,13 @@ candle map::closest_candle(coordinates c){
 		}
 	
 	return *ret;
+	}
+
+std::vector<coordinates> map::collidors(circle c, collidor_types cols){
+	std::vector<coordinates> ret;
+	if((cols & collidor_types::walls) == collidor_types::walls){
+		
+		}
 	}
 
 #endif

@@ -33,6 +33,7 @@ class circle{
 		circle(decimal_n, decimal_n, decimal_n);
 		bool inside(coordinates a);
 		bool inside(decimal_n x, decimal_n y);
+		bool is_on(coordinates c);
 		std::vector<coordinates> points();
 		std::vector<coordinates> intersection(line, circle); // function to decide if sth intersects
 		std::vector<coordinates> intersection(circle k, circle c);
@@ -40,7 +41,7 @@ class circle{
 		void circle_tangents(coordinates c, decimal_n r1, decimal_n r2, std::vector<line> & ans);
 		std::vector<line> circle_tangents(circle a, circle b);
 		std::string print();
-		
+		bool on_segment(coordinates, coordinates, coordinates, bool);
 		inline bool operator==(const circle& rhs){ 
 			return this -> center == rhs.center && this -> radius == rhs.radius;
 			}

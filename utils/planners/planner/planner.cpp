@@ -24,6 +24,7 @@
 
 #include "dijkstra.cpp"
 #include "travel_node.cpp"
+#include "movement_utils.cpp"
 #include "planner.hpp"
 
 
@@ -81,11 +82,30 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 		}
 	}
 
-circle planner::make_first_move(map& m, coordinates start, coordinates next, decimal_n initial_rotation){
+circle planner::make_first_move(map& m, coordinates start, coordinates next, decimal_n initial_rotation, speeds v){
 	coordinates next_local = start.make_local(next, initial_rotation);
 	decimal_n distance = start.get_distance(next);
 	next_local.x = 0;
-	if(distance > limits::maximal::circle){}
+	if(std::abs(next_local.y) <= 1e-1 && next_local.x > 0){ /// means next is right in front of us -> don't create any circle
+		return circle(start, 0);
+	}
+	
+	if(std::abs(next_local.y) <= 1e-1 && next_local.x < 0){ /// means next is right behind us -> this has specific conditions
+		/// in case there are more interesting points on the right and is it possible to look there, no obstacles on the left turn slowly left, 
+		/// if that's on the other side... You got the point
+	}
+	if(distance > limits::maximal::circle){ 
+		/// distance is bigger than the radius of maximal circle, thus making it inefficient to drive on circular path.
+		/// radius is given by halving the one that's on the correct side of coordinates
+		wall closest_w = m.closest_wall(start);
+		//~ if()
+		/// checks if the trace doesn't collide with any object within range 
+		/// checks if the trace doesn't collide with any object
+		}
+		
+	if(distance < limits::maximal::circle){ 
+		/// distance is bigger than the radius of maximal circle, thus making it inefficient to drive on circular path.
+		}
 	
 	}
 

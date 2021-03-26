@@ -44,7 +44,8 @@ class edge {
 	}
 	
 	dijk_node* other(dijk_node* dijk_node1) { /// Checks if such node is being connected via this route
-		return ((dijk_node1 == this -> dijk_node1)? this -> dijk_node2: (dijk_node1 == this -> dijk_node2)? this -> dijk_node1 : nullptr /* god be with us if that happen*/);
+		return ((dijk_node1 == this -> dijk_node1)? this -> dijk_node2: (dijk_node1 == this -> dijk_node2)? \
+				this -> dijk_node1 : nullptr /* god be with us if that happen*/);
 	}
 
 	public:

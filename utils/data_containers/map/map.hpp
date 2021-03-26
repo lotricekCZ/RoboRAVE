@@ -33,6 +33,12 @@
 class map
 {
 	public:
+		enum collidor_types: uint8_t {walls = 0b1, 
+							candles = 0b10, 
+							surround_circles = 0b100, 
+							borders = 0b1000, 
+							any = 0b1111
+							};
 		std::vector<location> _map;
 		
 		std::vector<wall> _map_walls;
@@ -60,7 +66,8 @@ class map
 		wall closest_wall(coordinates);
 		candle closest_candle(coordinates);
 		
-		
+		std::vector<coordinates> collidors(circle, collidor_types cols = map::collidor_types::any);
+			
 		decimal_n calculate_location(location lo);
 		//~ void alter(location);
 		std::vector<location> grid(signed_b, signed_b, signed_b, signed_b);

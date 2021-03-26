@@ -8,9 +8,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 project(roborave VERSION 0.1)
 #~ target_link_libraries(roborave libserial pthread)
 
-file(GLOB SOURCE_FILES *.cpp)
+file(GLOB SOURCE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+	)
 
-#~ add_executable(roborave ${SOURCE_FILES}) # 	main.cpp)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 find_package(PkgConfig REQUIRED)

@@ -63,7 +63,7 @@ coordinates coordinates::make_local(coordinates abs, coordinates rel, decimal_n 
  */
 
 coordinates coordinates::make_local(coordinates abs, decimal_n alpha){
-	return make_local(abs, (*this), alpha));
+	return make_local(abs, (*this), alpha);
 	}
 
 /*

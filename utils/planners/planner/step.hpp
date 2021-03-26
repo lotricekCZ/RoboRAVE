@@ -41,12 +41,11 @@ class step
 	coordinates end;
 	
 	std::variant<circle, line> formula;
-	enum equation_type{
+	enum equation_type: bool{
 		line_e = 0,
 		circle_e = 1
 		};
 	equation_type _type;
-	
 	decimal_n time;
 	
 	decimal_n time_start; 	// time when the movement started
@@ -62,6 +61,7 @@ class step
 		step(coordinates, coordinates, coordinates);
 		step(coordinates, coordinates);
 		step();
+		
 		std::string inkscape_print();
 			
 	private:
