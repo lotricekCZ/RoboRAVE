@@ -121,6 +121,12 @@ std::vector<coordinates> circle::intersection(line l, circle c) {
 	return ret;
 }
 
+
+std::vector<coordinates> circle::intersection(line l) {
+	return intersection(l, *this);
+};
+
+
 std::vector<coordinates> circle::intersection(circle k, circle c) {
 	std::vector<coordinates> ret;
     decimal_n dx = c.center.x - k.center.x;
@@ -140,6 +146,10 @@ std::vector<coordinates> circle::intersection(circle k, circle c) {
 	ret.push_back(coordinates(px + h * dy, py - h * dx));
 	if (h != 0) ret.push_back(coordinates(px - h * dy, py + h * dx));
 	return ret;
+};
+
+std::vector<coordinates> circle::intersection(circle c) {
+	return intersection(c, *this);
 };
 
 void circle::circle_tangents (coordinates c, decimal_n r1, decimal_n r2, std::vector<line> & ans) {

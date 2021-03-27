@@ -80,19 +80,23 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 		//~ steps[i]
 		//~ std::cout << 
 		}
+	return steps;
 	}
 
-circle planner::make_first_move(map& m, coordinates start, coordinates next, decimal_n initial_rotation, speeds v){
+std::vector<step> planner::make_first_move(map& m, coordinates start, coordinates next, decimal_n initial_rotation, speeds v){
+	std::vector<step> ret;
 	coordinates next_local = start.make_local(next, initial_rotation);
 	decimal_n distance = start.get_distance(next);
 	next_local.x = 0;
 	if(std::abs(next_local.y) <= 1e-1 && next_local.x > 0){ /// means next is right in front of us -> don't create any circle
-		return circle(start, 0);
+		ret.push_back(step(start, next));
+		return ret;
 	}
 	
 	if(std::abs(next_local.y) <= 1e-1 && next_local.x < 0){ /// means next is right behind us -> this has specific conditions
 		/// in case there are more interesting points on the right and is it possible to look there, no obstacles on the left turn slowly left, 
 		/// if that's on the other side... You got the point
+		std::array<std::vector<location *>, 4> interestings = m.subdivide(start, initial_rotation);
 	}
 	if(distance > limits::maximal::circle){ 
 		/// distance is bigger than the radius of maximal circle, thus making it inefficient to drive on circular path.
@@ -106,7 +110,7 @@ circle planner::make_first_move(map& m, coordinates start, coordinates next, dec
 	if(distance < limits::maximal::circle){ 
 		/// distance is bigger than the radius of maximal circle, thus making it inefficient to drive on circular path.
 		}
-	
+	return ret;
 	}
 
 bool planner::collides(wall w, coordinates start, coordinates end){

@@ -52,7 +52,7 @@ class location
 		_interesting = 		0b1101, 	// point that is interesting due some obstacles or strange consistency
 		_discovered = 		0b1110, 	// place that was discovered.
 		_boring = 			0b1111 	// place that was discovered and has no usage.
-	 }_type;
+	 };
 	 
 	
 		location();

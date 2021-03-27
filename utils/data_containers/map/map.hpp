@@ -40,6 +40,7 @@ class map
 							any = 0b1111
 							};
 		std::vector<location> _map;
+		std::vector<location*> _map_interesting;
 		
 		std::vector<wall> _map_walls;
 		std::vector<candle> _map_candles;
@@ -67,7 +68,8 @@ class map
 		candle closest_candle(coordinates);
 		
 		std::vector<coordinates> collidors(circle, collidor_types cols = map::collidor_types::any);
-			
+		std::vector<coordinates> collidors(line, collidor_types cols = map::collidor_types::any);
+		std::array<std::vector<location*>, 4> subdivide(coordinates c, decimal_n angle, location::type selected_type = location::type::_interesting);
 		decimal_n calculate_location(location lo);
 		//~ void alter(location);
 		std::vector<location> grid(signed_b, signed_b, signed_b, signed_b);

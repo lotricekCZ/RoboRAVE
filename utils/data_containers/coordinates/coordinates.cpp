@@ -98,6 +98,23 @@ coordinates coordinates::make_rotation(coordinates rel, decimal_n alpha){
 	return coordinates(rel.x * cos(alpha) - (rel.y * sin(alpha)), rel.x * sin(alpha) + (rel.y * cos(alpha)));
 	}
 
+coordinates coordinates::get_closest(std::vector<coordinates> &c){
+	if(c.size() == 0){return coordinates(std::numeric_limits<decimal_n>::infinity(), 
+										 std::numeric_limits<decimal_n>::infinity());
+					}
+	decimal_n shortest = std::numeric_limits<decimal_n>::infinity();
+	coordinates* closest;
+	decimal_n curr;
+	for(auto &s: c){
+		curr = this -> get_distance(s);
+		if(shortest > curr){
+			shortest = curr;
+			closest = &s;
+			}
+		}
+	return *closest;
+	}
+
 decimal_n coordinates::get_gamma(decimal_n x_rel, decimal_n y_rel){
 	return ((y_rel < 0)? 2 * pi_const : 0 ) + atan2((decimal_n)y_rel, (decimal_n)x_rel);
 	}

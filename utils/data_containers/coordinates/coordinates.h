@@ -22,8 +22,8 @@
  */
 
 
-#ifndef UTILS_DATA_CONTAINERS_COORDINATES_COORDINATES_H
-#define UTILS_DATA_CONTAINERS_COORDINATES_COORDINATES_H
+#ifndef UTILS_DATA_CONTAINERS_COORDINATES_COORDINATES_HPP
+#define UTILS_DATA_CONTAINERS_COORDINATES_COORDINATES_HPP
 
 
 #include "../../../defines/typedefines.h"
@@ -40,6 +40,7 @@ class coordinates
 		coordinates make_local(decimal_n, decimal_n);
 		coordinates make_global(coordinates, coordinates, decimal_n);
 		coordinates make_rotation(coordinates rel, decimal_n alpha);
+		coordinates get_closest(std::vector<coordinates>&);
 		std::string print();
 		decimal_n get_gamma(decimal_n x_rel, decimal_n y_rel);
 		decimal_n get_gamma(coordinates c);
@@ -79,4 +80,4 @@ class coordinates
 		/* add your private declarations */
 };
 
-#endif /* COORDINATES_H */ 
+#endif /* UTILS_DATA_CONTAINERS_COORDINATES_COORDINATES_HPP */ 

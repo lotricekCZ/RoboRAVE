@@ -80,7 +80,7 @@ angles angles::load_virtual_circular(coordinates c, map &m, decimal_n min, decim
 			crossed[ang] = 1;
 			ret[ang] = node(ang, a);
 			ret[ang].distance = to_a;
-			ret[ang].position._type = location::_barrier;
+			ret[ang].position.classification.point_type = location::_barrier;
 		}
 		//
 	} // filtrovani vsech bodu dotyku
@@ -124,7 +124,7 @@ angles angles::load_virtual(coordinates a, map &m){
 					if(ret[i+180].distance > to_a || ret[i+180].distance == 0){
 						ret[i+180] = node(i+180, k);
 						ret[i+180].distance = to_a;
-						ret[i+180].position._type = location::_barrier;
+						ret[i+180].position.classification.point_type = location::_barrier;
 						crossed[i+180] = 1;
 						}
 					} else {
@@ -132,7 +132,7 @@ angles angles::load_virtual(coordinates a, map &m){
 							crossed[i] = 1;
 							ret[i] = node(i, k);
 							ret[i].distance = to_a;
-							ret[i].position._type = location::_barrier;
+							ret[i].position.classification.point_type = location::_barrier;
 							}
 						}
 				

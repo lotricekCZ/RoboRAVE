@@ -159,6 +159,9 @@ void map::interest_map(){
 		
 void map::append(location in){
 	_map.push_back(in);
+	if(in.classification.point_type == location::type::_interesting){
+		_map_interesting.push_back(&_map.back());
+		}
 	}
 	
 void map::append(surround_circle in){
@@ -286,8 +289,78 @@ candle map::closest_candle(coordinates c){
 std::vector<coordinates> map::collidors(circle c, collidor_types cols){
 	std::vector<coordinates> ret;
 	if((cols & collidor_types::walls) == collidor_types::walls){
-		
+		for(wall w: _map_walls){
+			if(w.closest_point(c.center).get_distance(c.center) <= c.radius){
+				std::vector<coordinates> curr = w.is_collision_course(c);
+				ret.insert(ret.end(), curr.begin(), curr.end());
+				}
+			}
 		}
+	if((cols & collidor_types::candles) == collidor_types::candles){
+		for(candle ca: _map_candles){
+			if(ca.tube.radius + c.radius < c.center.get_distance(ca.tube.center)){
+				std::vector<coordinates> curr = ca.is_collision_course(c);
+				ret.insert(ret.end(), curr.begin(), curr.end());
+				}
+			}
+		}
+		
+	if((cols & collidor_types::surround_circles) == collidor_types::surround_circles){
+		for(surround_circle su: _map_surround_circles){
+			if(su.outer.radius + c.radius < c.center.get_distance(su.outer.center)){
+				std::vector<coordinates> curr = su.is_collision_course(c);
+				ret.insert(ret.end(), curr.begin(), curr.end());
+				}
+			}
+		}
+		
+	/// TODO: Other objects 
+	return ret;
+	}
+	
+std::vector<coordinates> map::collidors(line l, collidor_types cols){
+	std::vector<coordinates> ret;
+	if((cols & collidor_types::walls) == collidor_types::walls){
+		for(wall w: _map_walls){
+			std::vector<coordinates> curr = w.is_collision_course(l);
+			ret.insert(ret.end(), curr.begin(), curr.end());
+			}
+		}
+	if((cols & collidor_types::candles) == collidor_types::candles){
+		for(candle ca: _map_candles){
+			std::vector<coordinates> curr = ca.is_collision_course(l);
+			ret.insert(ret.end(), curr.begin(), curr.end());
+			}
+		}
+		
+	if((cols & collidor_types::surround_circles) == collidor_types::surround_circles){
+		for(surround_circle su: _map_surround_circles){
+			std::vector<coordinates> curr = su.is_collision_course(l);
+			ret.insert(ret.end(), curr.begin(), curr.end());
+			}
+		}
+		
+	/// TODO: Other objects 
+	return ret;
+	}
+
+std::array<std::vector<location*>, 4> map::subdivide(coordinates c, decimal_n angle, location::type selected_type){
+	std::array<std::vector<location*>, 4> ret;
+	coordinates local;
+	if(selected_type == location::type::_interesting){
+		for(location* l: _map_interesting){
+			local = c.make_local(l -> _coordinates, angle);
+			ret[((local.x > 0) << 1) | ((local.y > 0))].push_back(l);
+			}
+	} else {
+		for(location &l: _map){
+			if(l.classification.point_type == selected_type){
+				local = c.make_local(l._coordinates, angle);
+				ret[((local.x > 0) << 1) | ((local.y > 0))].push_back(&l);
+				}
+			}
+		}
+	return ret;	
 	}
 
 #endif

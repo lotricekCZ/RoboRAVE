@@ -38,8 +38,8 @@ class surround_circle: public obstacle
 		bool inside(coordinates a){return outer.inside(a);}
 		bool inside(decimal_n x, decimal_n y){return outer.inside(x, y);}
 		std::vector<coordinates> points(){return std::vector<coordinates> ();}
-		std::vector<coordinates> is_collision_course(line l){return outer.intersection(l, outer);}
-		std::vector<coordinates> is_collision_course(circle c){return outer.intersection(c, outer);}
+		std::vector<coordinates> is_collision_course(line l){return outer.intersection(l);}
+		std::vector<coordinates> is_collision_course(circle c){return outer.intersection(c);}
 		std::array<coordinates, 2> get_box(){return {outer.center - coordinates(outer.radius, outer.radius), outer.center + coordinates(outer.radius, outer.radius)};};
 		std::string inkscape_print();
 	private:
