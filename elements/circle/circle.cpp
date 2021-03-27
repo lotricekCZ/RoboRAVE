@@ -25,6 +25,15 @@
 #include <string> 
 #include <vector> 
 //~ #include "include.hpp"
+#include <limits>
+#include <string>
+#include <iostream>
+#include <inttypes.h>
+
+#include "../../defines/constants.h"
+#include "../../utils/data_containers/coordinates/coordinates.cpp"
+
+#include "../line/line.cpp"
 #include "circle.hpp"
 
 #ifndef CIRCLE_CPP

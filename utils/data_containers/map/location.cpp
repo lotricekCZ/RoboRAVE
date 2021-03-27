@@ -22,6 +22,11 @@
  */
 
 
+#include <inttypes.h>
+#include <cmath>
+
+#include "../../../defines/constants.h"
+#include "../coordinates/coordinates.cpp"
 #include "location.hpp"
 #ifndef LOCATION_CPP
 #define LOCATION_CPP

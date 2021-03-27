@@ -39,7 +39,7 @@
 #include "./elements/radius/radius.h"
 #include "./utils/logic/logic.cpp"
 
-//~ #include "./hardware_interfaces/serial/serial.cpp"
+#include "./hardware_interfaces/serial/serial.cpp"
 #include "./hardware_interfaces/fire_sensors/fire_sensor.cpp"
 
 decimal_n calculate_omega(decimal_n T_avg = 0){
@@ -627,7 +627,7 @@ int main(int argc, char *argv[]) {
 				break;
 				}
 				
-			case 33:{
+			case 34:{
 				std::cout << circle(coordinates(2, 0), 2).print() << std::endl;				
 				std::cout << circle(coordinates(2, 0), 2).on_segment(coordinates(0, 0), coordinates(2, 2), coordinates(4, 0), 1) << std::endl;				
 				break;

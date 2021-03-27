@@ -22,6 +22,7 @@
  */
 
 
+#include "../include.hpp"
 #include "candle.hpp"
 
 #ifndef CANDLE_CPP

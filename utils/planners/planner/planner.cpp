@@ -70,7 +70,11 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 		 steps.push_back(step(selected[i-1], selected[i]));
 		 /// steps that do connect these points, these are definitely lines
 		}
-		
+	
+	for(unsigned_b i = 1; i < selected.size() - 1; i++){ 
+		/// creates all the circles between start and end except start and end
+		circles.push_back(create_perimeter(selected[i]));
+		}
 	line cross(initial_rotation, steps[0].start);
 	crosses.push_back(std::make_pair(&steps[0], std::array<line, 2>({line(initial_rotation, steps[0].start), cross.make_perpendicular(steps[0].start)})));
 	for(unsigned_b i = 0; i < steps.size()-1; i++){
@@ -96,7 +100,7 @@ std::vector<step> planner::make_first_move(map& m, coordinates start, coordinate
 	if(std::abs(next_local.y) <= 1e-1 && next_local.x < 0){ /// means next is right behind us -> this has specific conditions
 		/// in case there are more interesting points on the right and is it possible to look there, no obstacles on the left turn slowly left, 
 		/// if that's on the other side... You got the point
-		std::array<std::vector<location *>, 4> interestings = m.subdivide(start, initial_rotation);
+		std::array<std::vector<location *>, 4> interestings = m.subdivide(start, initial_rotation);	
 	}
 	if(distance > limits::maximal::circle){ 
 		/// distance is bigger than the radius of maximal circle, thus making it inefficient to drive on circular path.

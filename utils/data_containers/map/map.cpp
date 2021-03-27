@@ -22,8 +22,14 @@
  */
 
 
-#include "map.hpp"
 #include <algorithm>
+#include <vector>
+#include <array>
+#include <iostream>
+
+#include "include.hpp"
+#include "map.hpp"
+
 #ifndef MAP_CPP
 #define MAP_CPP
 

@@ -22,6 +22,7 @@
  */
 
 
+#include <string>
 #include "serial.hpp"
 
 

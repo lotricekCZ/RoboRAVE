@@ -22,6 +22,9 @@
  */
 
 
+#include "../../../../defines/constants.h"
+#include "../../coordinates/coordinates.cpp"
+#include "../../map/location.cpp"
 #include "node.hpp"
 #ifndef DATA_CONTAINERS_ANGLES_NODE_CPP
 #define DATA_CONTAINERS_ANGLES_NODE_CPP

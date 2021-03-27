@@ -25,6 +25,8 @@
 #include "../../../defines/constants.h"
 #include "speeds.hpp"
 
+#ifndef SPEEDS_CPP
+#define SPEEDS_CPP
 
 speeds::speeds(): setters()
 {
@@ -53,3 +55,5 @@ decimal_n speeds::from_hw_speed(decimal_n time){ // 2^15 - 1 = overflow
 	decimal_n ret = (decimal_n)(2000000.0 * pi_const * r_wheel)/(N_wheel * (decimal_n)time);
 	return ret;
 }
+
+#endif

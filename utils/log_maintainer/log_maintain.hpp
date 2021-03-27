@@ -4,8 +4,8 @@
 #include <locale>
 #include <ctime> 
 
-#ifndef LOG_MAINTAIN
-#define LOG_MAINTAIN
+#ifndef LOG_MAINTAIN_HPP
+#define LOG_MAINTAIN_HPP
 
 class log_writer{
 	public:

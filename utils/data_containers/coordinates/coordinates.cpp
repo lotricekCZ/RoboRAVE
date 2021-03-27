@@ -22,9 +22,13 @@
  */
 
 #include "../../../defines/constants.h"
+#include <vector>
+#include <cmath>
+#include <string>
 #include "coordinates.h"
 
-
+#ifndef COORDINATES_CPP
+#define COORDINATES_CPP
 
 coordinates::coordinates()
 {
@@ -147,3 +151,5 @@ uint8_t coordinates::get_dec(decimal_n x_rel, decimal_n y_rel){
 std::string coordinates::print(){
 	return std::string("["+ std::to_string(x) +"; "+ std::to_string(y) +"]");
 	}
+
+#endif

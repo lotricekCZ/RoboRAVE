@@ -1,5 +1,5 @@
 /*
- * fire_sensor.cpp
+ * camera.hpp
  * 
  * Copyright 2021 Jakub Ramašeuski <jakub@skaryna.net>
  * 
@@ -22,34 +22,24 @@
  */
 
 
-#include "../serial/chat.cpp"
-#include "../../utils/data_containers/angles/node/node.cpp"
-#include "fire_sensor.hpp"
-#include <vector>
+#ifndef CAMERA_HPP
+#define CAMERA_HPP
 
-/*
- * 
- * name: fire_sensor
- * @param sensors - number of sensors included
- * @param spread - spread of each sensor 
- * @param range - general range of sensors
- * 
- */
-
-fire_sensor::fire_sensor(uint8_t sensors = 8, decimal_n spread = 45 /*degrees*/, decimal_n range = 70 /*cm*/){
-	this -> sensors = std::vector<node> (sensors);
-	this -> range = range;
-	this -> spread = spread;
-}
-
-bool fire_sensor::update(){
-	/// TODO: update
-	return false;
-}
+class camera
+{
+	decimal_n angle_horizontal = 			properties::camera::angle_horizontal;
+	decimal_n angle_vertical = 				properties::camera::angle_vertical;
+	decimal_n height =						properties::heights::camera;
+	unsigned_n px_recognition_horizontal = 	properties::camera::size_recognition_horizontal;
+	unsigned_n px_recognition_vertical = 	properties::camera::size_recognition_vertical;
+	unsigned_n px_footage_horizontal = 		properties::camera::size_footage_horizontal;
+	unsigned_n px_footage_vertical = 		properties::camera::size_footage_vertical;
 	
-std::vector<node> fire_sensor::get_data(bool update = false){
-	std::vector<node> ret;
-	/// TODO: get data
-	return ret;
-}
+	public:
+		camera();
+			
+	private:
+		/* add your private declarations */
+};
 
+#endif /* CAMERA_HPP */ 

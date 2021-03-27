@@ -1,5 +1,8 @@
 #include "log_maintain.hpp"
 
+#ifndef LOG_MAINTAIN_CPP
+#define LOG_MAINTAIN_CPP
+
 log_writer::log_writer(std::string message, std::string filename){
 			std::ofstream f(filename, std::ios::out | std::ios::app);
 			//~ f.open();
@@ -21,3 +24,5 @@ std::string log_writer::generate_timestamp(){
 	return returnable;
 	
 	}
+
+#endif

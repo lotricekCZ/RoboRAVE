@@ -1,6 +1,10 @@
 #ifndef MAP_
 #define MAP_
 
+#include <string>
+#include <vector>
+#include <array>
+
 #include "../../../elements/line/line.cpp"
 #include "../../../elements/circle/circle.cpp"
 #include "location.cpp"

@@ -26,6 +26,7 @@
 //~ #include "../../data_containers/map/map.cpp"
 #include "../../../elements/circle/circle.cpp"
 #include "../../../elements/line/line.cpp"
+#include "../../data_containers/speeds/speeds.cpp"
 #include <limits>
 #include <variant>
 

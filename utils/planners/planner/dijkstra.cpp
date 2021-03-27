@@ -23,6 +23,10 @@
 
 #ifndef DIJKSTRA_CPP
 #define DIJKSTRA_CPP
+
+#include <vector>
+#include "../../data_containers/coordinates/coordinates.cpp"
+#include "../../data_containers/map/include.hpp"
 #include "dijkstra.hpp"
 
 
