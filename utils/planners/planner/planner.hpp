@@ -51,8 +51,8 @@ class planner
 		std::vector<coordinates> make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m);
 		std::vector<step> plan_calculate(std::vector<step>); 
 		// makes speeds assigned, new coordinates, angle and steps calculated
-		
-		
+		decimal_n evaluate_radius(coordinates previous, coordinates current);
+		decimal_n suiting_angle(std::array<line, 2> cross, coordinates *p_next, coordinates *p_previous = nullptr, coordinates *p_current = nullptr);
 		travel_node search_by_id(unsigned_b id, std::vector<travel_node> &nodes);
 		
 	private:

@@ -63,6 +63,7 @@ target_include_directories(yaml_worker
         ${YAML_CPP_INCLUDEDIR} 
         ${YAML_CPP_INCLUDE_DIRS}
 )
+add_executable(roborave ${SOURCE_FILES})
 
 add_library(log_maintain SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.cpp
 							${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.hpp)
@@ -141,7 +142,6 @@ target_link_libraries(serial -lCppLinuxSerial)
 
 
 set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
-add_executable(roborave ${SOURCE_FILES})
 
 link_directories(${OpenCV_LIB_DIR})
 target_compile_features(roborave PRIVATE cxx_std_17)

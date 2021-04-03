@@ -57,34 +57,78 @@ circle planner::create_perimeter(coordinates c, decimal_n radius){
  */
 
 
-
 std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, decimal_n initial_rotation){
 	// There must be at least two points - start and end
 	std::vector<step> steps; /// steps based on coordinates selected by Dijkstra
-	std::vector<circle> circles; /// TODO: Description
-	
-	line l(initial_rotation, selected[0]);
-	std::vector<std::pair<step*, std::array<line, 2>>> crosses; /// cross that'll be constructed on Dijkstra point
+	std::vector<circle> circles; /// On every selected point derivate except end there must be a turn
+	std::vector<decimal_n> angles; /// Selected angles that local coordinates systems will start with
+	std::vector<coordinates> selected_derivate = selected;
+	std::vector<std::pair<step*, decimal_n>> crosses; /// cross that'll be constructed on selected point
+	std::vector<std::pair<step, step>> paralels; /// paralels to check how close we are to an obstacle
 	//~ if( selected)
 	for(unsigned_b i = 1; i < selected.size(); i++){
 		 steps.push_back(step(selected[i-1], selected[i]));
 		 /// steps that do connect these points, these are definitely lines
 		}
 	
-	for(unsigned_b i = 1; i < selected.size() - 1; i++){ 
-		/// creates all the circles between start and end except start and end
-		circles.push_back(create_perimeter(selected[i]));
+	
+	crosses.push_back(std::make_pair(&steps[0], initial_rotation));
+	line cross;
+	for(unsigned_b i = 0; i < steps.size()-1; i++){ 
+		/// fills all the local angles according to the straight lines between selected
+		cross = line::make_axis(std::get<line>(steps[i].formula), std::get<line>(steps[i+1].formula));
+		crosses.push_back(std::make_pair(&steps[i+1], suiting_angle({cross, cross.make_perpendicular(steps[i].start)},\
+																	&steps[i+1].end, &steps[i].start, &steps[i].end)));
 		}
-	line cross(initial_rotation, steps[0].start);
-	crosses.push_back(std::make_pair(&steps[0], std::array<line, 2>({line(initial_rotation, steps[0].start), cross.make_perpendicular(steps[0].start)})));
-	for(unsigned_b i = 0; i < steps.size()-1; i++){
-		cross = line().make_axis(std::get<line>(steps[i].formula), std::get<line>(steps[i+1].formula));
+	
+	for(std::pair<step*, decimal_n>& pair: crosses){
+		/// alters location of every coordinates that are close to an obstacle
+		}
 		
-		crosses.push_back(std::make_pair(&steps[i+1], std::array<line, 2>({cross, cross.make_perpendicular(steps[i].start)})));
-		//~ steps[i]
-		//~ std::cout << 
-		}
 	return steps;
+	}
+
+
+/**
+ * 
+ * name: planner::suiting_angle
+ * @param cross: those two ange options that are possible to choose
+ * @param p_previous: 
+ * @param p_next: next coordinates
+ * @param p_current: current coordinates, optional
+ * @return out of two lines it selects the angle that has previous and next point on the same side
+ * 
+ */
+
+decimal_n planner::suiting_angle(std::array<line, 2> cross, coordinates *p_next, coordinates *p_previous, coordinates *p_current){
+	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
+	coordinates local = (p_current != nullptr)? (*p_current) : (cross[0].intersection(cross[1]));
+	/// It's literally a cross, tell me one case when it won't have any intersection
+	
+	for(line l: cross){
+		decimal_n angle = l.get_angle();
+		coordinates l_next = local.make_local(*p_next, angle);
+		coordinates l_previous = (p_previous != nullptr) ? (coordinates(-l_next.x, l_next.y)) : (local.make_local(*p_previous, angle));
+		/// cross is turned by -pi/4, making it more valuable to use y axis to compare
+		ret = (l_next.y <= 0 ^ l_previous.y <= 0) ? (ret) : (angle);
+		/// literally first time I've ever used xor
+		}
+		
+	return ret;
+	}
+
+
+decimal_n planner::evaluate_radius(coordinates previous, coordinates current){
+	decimal_n d = previous.get_distance(current);
+	/// this gives us circle radius that is allowed for such distance
+	if((d - limits::minimal::circle) <= -1e-5){
+		return 0; /// a rotation on place must be held
+		}
+		
+	if((d - limits::maximal::circle) > 0){
+		return limits::maximal::circle; /// a maximum is only possible
+		}
+	return d;
 	}
 
 std::vector<step> planner::make_first_move(map& m, coordinates start, coordinates next, decimal_n initial_rotation, speeds v){

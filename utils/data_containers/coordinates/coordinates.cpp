@@ -53,7 +53,7 @@ coordinates::coordinates(decimal_n x, decimal_n y)
  */
 
 coordinates coordinates::make_local(coordinates abs, coordinates rel, decimal_n alpha){
-	coordinates c = make_rotation(abs-rel, alpha - pi_const/2);
+	coordinates c = make_rotation(abs - rel, alpha - pi_const/2);
 	return c;
 	}
 	
@@ -80,7 +80,7 @@ coordinates coordinates::make_local(coordinates abs, decimal_n alpha){
  */
 
 coordinates coordinates::make_local(decimal_n distance, decimal_n ang){
-	return coordinates(distance*cos(ang), distance*sin(ang));
+	return coordinates(distance * cos(ang), distance * sin(ang));
 	}
 
 /*
@@ -103,6 +103,23 @@ coordinates coordinates::make_rotation(coordinates rel, decimal_n alpha){
 	}
 
 coordinates coordinates::get_closest(std::vector<coordinates> &c){
+	if(c.size() == 0){return coordinates(std::numeric_limits<decimal_n>::infinity(), 
+										 std::numeric_limits<decimal_n>::infinity());
+					}
+	decimal_n shortest = std::numeric_limits<decimal_n>::infinity();
+	coordinates* closest;
+	decimal_n curr;
+	for(auto &s: c){
+		curr = this -> get_distance(s);
+		if(shortest > curr){
+			shortest = curr;
+			closest = &s;
+			}
+		}
+	return *closest;
+	}
+	
+coordinates coordinates::get_closest(std::vector<coordinates> c){
 	if(c.size() == 0){return coordinates(std::numeric_limits<decimal_n>::infinity(), 
 										 std::numeric_limits<decimal_n>::infinity());
 					}

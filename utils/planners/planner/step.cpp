@@ -21,6 +21,13 @@
  * 
  */
 
+#include "../../../elements/circle/circle.cpp"
+#include "../../../elements/line/line.cpp"
+#include "../../data_containers/speeds/speeds.cpp"
+#include "../../../defines/constants.h"
+#include <string>
+#include <limits>
+#include <variant>
 
 #include "step.hpp"
 
@@ -69,4 +76,27 @@ std::string step::inkscape_print(){
 			\tsodipodi:open=\"false\" />\n";
 		}
 	return "";
+	}
+
+std::pair<step, step> step::get_perimeters(step s, decimal_n perimeter){
+	switch(s._type){
+		case line_e: {
+			circle c = circle(s.start, perimeter);
+			line trace = line(s.start, s.end);
+			line perp = trace.make_perpendicular(s.start);
+			std::vector<coordinates> starts = circle::intersection(perp, c);
+			perp = perp.make_parallel(s.end);
+			return std::make_pair(step(starts[0], perp.intersection(trace.make_parallel(starts[0]))), 
+								step(starts[1], perp.intersection(trace.make_parallel(starts[1]))));
+			}
+		case equation_type::circle_e: {
+			circle c = std::get<circle>(s.formula);
+			circle bigger = c + perimeter;
+			circle smaller = c - perimeter;
+			line control_start(c.center, s.start);
+			line control_end(c.center, s.end);
+			return std::make_pair(step(s.start.get_closest(bigger.intersection(control_start)), s.end.get_closest(bigger.intersection(control_end)), c.center),
+									step(s.start.get_closest(smaller.intersection(control_start)), s.end.get_closest(smaller.intersection(control_end)), c.center));
+			}
+		}
 	}

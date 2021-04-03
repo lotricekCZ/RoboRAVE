@@ -632,6 +632,26 @@ int main(int argc, char *argv[]) {
 				std::cout << circle(coordinates(2, 0), 2).on_segment(coordinates(0, 0), coordinates(2, 2), coordinates(4, 0), 1) << std::endl;				
 				break;
 				}
+				
+			case 35:{
+				step s(coordinates(1, 1), coordinates(c_f(argv[2]), c_f(argv[3])));
+				std::pair<step, step> steps = step::get_perimeters(s, 2);
+				std::cout << std::get<line>(s.formula).print() << std::endl;
+				std::cout << std::get<line>(std::get<0>(steps).formula).print() << std::endl;
+				std::cout << std::get<line>(std::get<1>(steps).formula).print() << std::endl;
+				break;
+				}
+				
+			case 36:{
+				step s(coordinates(0, 0), coordinates(3, 3), coordinates(c_f(argv[2]), c_f(argv[3])));
+				std::pair<step, step> steps = step::get_perimeters(s, 2);
+				std::cout << std::get<circle>(s.formula).print() << std::endl;
+				std::cout << std::get<circle>(std::get<0>(steps).formula).print() << std::endl;
+				std::cout << std::get<circle>(std::get<1>(steps).formula).print() << std::endl;
+				std::cout << std::get<0>(steps).start.print() << "\t" << std::get<0>(steps).end.print() << std::endl;
+				std::cout << std::get<1>(steps).start.print() << "\t" << std::get<1>(steps).end.print() << std::endl;
+				break;
+				}
 		
 		}
 

@@ -24,11 +24,7 @@
 //~ #include "../../data_containers/speeds/speeds.cpp"
 //~ #include "../../data_containers/coordinates/coordinates.cpp"
 //~ #include "../../data_containers/map/map.cpp"
-#include "../../../elements/circle/circle.cpp"
-#include "../../../elements/line/line.cpp"
-#include "../../data_containers/speeds/speeds.cpp"
-#include <limits>
-#include <variant>
+
 
 #ifndef STEP_HPP
 #define STEP_HPP
@@ -64,6 +60,7 @@ class step
 		step();
 		
 		std::string inkscape_print();
+		static std::pair<step, step> get_perimeters(step, decimal_n perimeter = properties::widths::robot / 2);
 			
 	private:
 		/* add your private declarations */

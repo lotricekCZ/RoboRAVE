@@ -54,6 +54,9 @@ namespace properties {
 		decimal_n fire_sensors = 	175; /// mm
 		
 		};
+	namespace widths{
+		decimal_n robot = 			200; /// mm, maximal width and a diameter
+		}
 	};
 
 namespace limits {

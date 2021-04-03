@@ -119,6 +119,10 @@ coordinates line::intersection(line a, line b){
 	// just believe me, this should be ok
 	return coordinates(x, (a.b != 0? a.get_y(x): b.get_y(x)));
 	}
+	
+coordinates line::intersection(line a){
+	return intersection(a, *this);
+	}
 
 line line::make_perpendicular(coordinates c){
 	return line((std::abs(this -> a) < 1e-3)?(-1):(1)*this -> b, (std::abs(this -> b) < 1e-3)?(1):(-1)*this -> a, (this -> a * c.y - this -> b * c.x));

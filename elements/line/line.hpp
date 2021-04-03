@@ -50,7 +50,7 @@ class line
 		line make_parallel(coordinates);
 		line make_perpendicular(coordinates);
 		line make_perpendicular();
-		line make_axis(line, line);
+		static line make_axis(line, line);
 		std::string print(line);
 		std::string print();
 		
@@ -58,6 +58,7 @@ class line
 		bool on_segment(coordinates, coordinates, coordinates);
 		line operator /(decimal_n);
 		coordinates intersection(line, line);
+		coordinates intersection(line);
 	private:
 		/* add your private declarations */
 };
