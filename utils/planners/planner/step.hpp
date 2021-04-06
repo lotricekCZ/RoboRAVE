@@ -61,7 +61,7 @@ class step
 		
 		std::string inkscape_print();
 		static std::pair<step, step> get_perimeters(step, decimal_n perimeter = properties::widths::robot / 2);
-			
+		std::string print();
 	private:
 		/* add your private declarations */
 };

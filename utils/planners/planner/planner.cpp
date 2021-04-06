@@ -62,17 +62,16 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 	std::vector<step> steps; /// steps based on coordinates selected by Dijkstra
 	std::vector<circle> circles; /// On every selected point derivate except end there must be a turn
 	std::vector<decimal_n> angles; /// Selected angles that local coordinates systems will start with
-	std::vector<coordinates> selected_derivate = selected;
 	std::vector<std::pair<step*, decimal_n>> crosses; /// cross that'll be constructed on selected point
 	std::vector<std::pair<step, step>> paralels; /// paralels to check how close we are to an obstacle
-	//~ if( selected)
+	//~ alter_selected(selected_derivative, m);
 	for(unsigned_b i = 1; i < selected.size(); i++){
 		 steps.push_back(step(selected[i-1], selected[i]));
 		 /// steps that do connect these points, these are definitely lines
 		}
 	
 	
-	crosses.push_back(std::make_pair(&steps[0], initial_rotation));
+	//~ crosses.push_back(std::make_pair(&steps[0], initial_rotation));
 	line cross;
 	for(unsigned_b i = 0; i < steps.size()-1; i++){ 
 		/// fills all the local angles according to the straight lines between selected
@@ -81,10 +80,24 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 																	&steps[i+1].end, &steps[i].start, &steps[i].end)));
 		}
 	
-	for(std::pair<step*, decimal_n>& pair: crosses){
+	for(std::vector<std::pair<step*, decimal_n>>::iterator pair = crosses.begin(); pair < crosses.end(); pair++){
+		
+		//~ while(){}
+		coordinates closest;
+		//~ std::pair<step, step> perimeters = step::get_perimeters(*(std::get<0>(pair)), properties::widths::robot * 0.75);
+		/// 0.75 is given because it is demanded to have 1.5 of a width in total
+		//~ if(collides_nowhere(std::get<0>(perimeters).start, std::get<0>(perimeters).end, m) & \
+			//~ collides_nowhere(std::get<1>(perimeters).start, std::get<1>(perimeters).end, m)){
+				//~ paralels.push_back(perimeters);
+			//~ } else {
+				
+				//~ }
+		
 		/// alters location of every coordinates that are close to an obstacle
 		}
-		
+	
+	//~ for()
+	
 	return steps;
 	}
 
@@ -115,6 +128,33 @@ decimal_n planner::suiting_angle(std::array<line, 2> cross, coordinates *p_next,
 		}
 		
 	return ret;
+	}
+
+
+void planner::alter_selected(std::vector<step>& selected, map& m, decimal_n initial_rotation){
+	std::vector<bool> safe_distance(selected.size(), false);
+	
+	decimal_n first = evaluate_radius(selected[0].start, selected[0].end);
+	decimal_n safe = 0.6;
+	std::pair<step, step> perimeters = step::get_perimeters(selected[0], properties::widths::robot * safe);
+	coordinates local_next = selected[0].start.make_local(selected[0].end, initial_rotation);
+	if(std::abs(local_next.y) >= 1e-1 && local_next.x > 0){
+		coordinates local_center(0, (local_next.y > 0)?-1 : 1 * first);
+		circle turn(selected[0].start.make_global(local_center, initial_rotation), first); /// TODO: WARNING, might be incorrect
+		//~ while(!(collides_nowhere(m, std::get<0>(perimeters).start, std::get<0>(perimeters).end, /** TODO */) & \
+	      //~ collides_nowhere(m, std::get<1>(perimeters).start, std::get<1>(perimeters).end, /** TODO */)){
+			  //~ /// both of them must be true to proceed
+			  //~ }
+	}
+	
+	/// gives us a bitmap of which segments are not close
+	for(unsigned_b i = 0; i < selected.size(); i++){ 
+		perimeters = step::get_perimeters(selected[i], properties::widths::robot * 0.65);
+		/// 0.65 is given because it is demanded to have 1.3 of a width in total
+		safe_distance[i] = (collides_nowhere(m, std::get<0>(perimeters).start, std::get<0>(perimeters).end) & \
+							collides_nowhere(m, std::get<1>(perimeters).start, std::get<1>(perimeters).end));
+		}
+	/// 
 	}
 
 
@@ -172,8 +212,29 @@ bool planner::collides(wall w, coordinates start, coordinates end){
 	return false;
 }
 
+bool planner::collides(wall w, coordinates start, coordinates end, circle c, bool side){
+	std::vector<coordinates> collidors;
+	for(auto l: w.properties.walls){
+		auto n = c.intersection(l);
+		collidors.insert(collidors.end(), n.begin(), n.end());
+		}
+	for(auto co: collidors){
+		if(c.on_segment(start, end, co, side)){
+			return true;
+			}
+		}
+	return false;
+}
+
+bool planner::collides_nowhere(map &m, coordinates start, coordinates end, circle c, bool side){
+	for(auto w: m._map_walls){
+		if(collides(w, start, end, c, side))
+			return false;
+		}
+	return true;
+}
+
 bool planner::collides_nowhere(map &m, coordinates start, coordinates end){
-	line lin(start, end);
 	for(auto w: m._map_walls){
 		if(collides(w, start, end))
 			return false;

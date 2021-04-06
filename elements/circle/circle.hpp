@@ -31,9 +31,12 @@ class circle{
 		coordinates center;
 		circle(coordinates, decimal_n);
 		circle(decimal_n, decimal_n, decimal_n);
+		std::vector<circle> circles(line, line, decimal_n radius = 1);
+		
 		bool inside(coordinates a);
 		bool inside(decimal_n x, decimal_n y);
 		bool is_on(coordinates c);
+		
 		std::vector<coordinates> points();
 		static std::vector<coordinates> intersection(line, circle); // function to decide if sth intersects
 		std::vector<coordinates> intersection(line);		 // function to decide if sth intersects

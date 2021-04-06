@@ -652,6 +652,14 @@ int main(int argc, char *argv[]) {
 				std::cout << std::get<1>(steps).start.print() << "\t" << std::get<1>(steps).end.print() << std::endl;
 				break;
 				}
+				
+			case 37:{
+				for(auto a: circle().circles(line(1, -1, 5), line(2, 3, 0), c_f(argv[2])))
+					std::cout << a.print() << std::endl;
+				std::cout << line(1, -1, 5).print() << std::endl;
+				std::cout << line(2, 3, 0).print() << std::endl;
+				break;
+				}
 		
 		}
 

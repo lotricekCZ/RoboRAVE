@@ -100,3 +100,14 @@ std::pair<step, step> step::get_perimeters(step s, decimal_n perimeter){
 			}
 		}
 	}
+	
+std::string step::print(){
+	switch(_type){
+		case line_e: {
+			return std::get<line>(this -> formula).print();
+			}
+		case equation_type::circle_e: {
+			return std::get<circle>(this -> formula).print();
+			}
+		}
+	}

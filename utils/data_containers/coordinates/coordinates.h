@@ -39,6 +39,7 @@ class coordinates
 		coordinates make_local(coordinates, decimal_n ang);
 		coordinates make_local(decimal_n, decimal_n);
 		coordinates make_global(coordinates, coordinates, decimal_n);
+		coordinates make_global(coordinates, decimal_n);
 		coordinates make_rotation(coordinates rel, decimal_n alpha);
 		coordinates get_closest(std::vector<coordinates>&);
 		coordinates get_closest(std::vector<coordinates>);
@@ -51,7 +52,7 @@ class coordinates
 		uint8_t get_dec(decimal_n rads);
 		decimal_n get_rel_x(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec);
 		decimal_n get_rel_y(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec);
-		
+		bool is_invalid();
 		coordinates operator - (const coordinates& rhs){
 			return coordinates(this -> x - rhs.x, this -> y - rhs.y);
 			}

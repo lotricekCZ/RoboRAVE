@@ -43,11 +43,20 @@ class planner
 		
 		std::vector<step> plan_make(std::vector<coordinates> selected, map &m, decimal_n initial_rotation = 0); 
 		std::vector<coordinates> coincidental_points_generate(std::vector<circle>& circles);
+		
+		/// line segment implementation
 		bool collides(wall w, coordinates start, coordinates end);
 		bool collides_nowhere(map& m, coordinates start, coordinates end);
+		
+		/// circle arc implementation
+		bool collides(wall w, coordinates start, coordinates end, circle c, bool side);
+		bool collides_nowhere(map &m, coordinates start, coordinates end, circle c, bool side);
+		
+		void alter_selected(std::vector<step>& selected, map& m, decimal_n initial_rotation);
 		std::vector<travel_node> expand(std::vector<travel_node> nodes, std::vector<travel_node> prev_nodes, unsigned_b id_curr);
 		std::vector<step> make_first_move(map& m, coordinates start, coordinates next, decimal_n initial_rotation, speeds v);
-		// makes plan geometrically, does not assign speeds or something exact
+		
+		/// makes plan geometrically, does not assign speeds or something exact
 		std::vector<coordinates> make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m);
 		std::vector<step> plan_calculate(std::vector<step>); 
 		// makes speeds assigned, new coordinates, angle and steps calculated

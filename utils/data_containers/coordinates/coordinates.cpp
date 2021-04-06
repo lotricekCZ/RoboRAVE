@@ -98,6 +98,10 @@ coordinates coordinates::make_global(coordinates abs, coordinates rel, decimal_n
 	return abs + c;
 	}
 	
+coordinates coordinates::make_global(coordinates rel, decimal_n alpha){
+	return make_global(*this, rel, alpha);
+	}
+	
 coordinates coordinates::make_rotation(coordinates rel, decimal_n alpha){
 	return coordinates(rel.x * cos(alpha) - (rel.y * sin(alpha)), rel.x * sin(alpha) + (rel.y * cos(alpha)));
 	}
@@ -148,6 +152,10 @@ decimal_n coordinates::get_distance(decimal_n x_rel, decimal_n y_rel){
 	return sqrt(pow(x_rel-this->x, 2) + pow(y_rel-this->y, 2));
 	}
 
+bool coordinates::is_invalid(){
+	return *this == coordinates(std::numeric_limits<decimal_n>::infinity(), 
+								std::numeric_limits<decimal_n>::infinity());
+	}
 decimal_n coordinates::get_distance(coordinates c){
 	return get_distance(c.x, c.y);
 	}
