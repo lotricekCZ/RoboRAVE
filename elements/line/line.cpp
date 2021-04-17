@@ -138,7 +138,7 @@ line line::make_axis(line a, line b){
 	if((a.b * b.a - b.b * a.a) == 0) return line(a.a, b.b, (a.c+b.c)/2);
 	coordinates c = a.intersection(a, b);
 
-	std::cout << c.print() << std::endl;
+	//~ std::cout << c.print() << std::endl;
 	decimal_n angle = (a.get_angle() + b.get_angle()) / 2.0;
 	return line(angle, c);
 	}

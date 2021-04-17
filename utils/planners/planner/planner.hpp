@@ -25,6 +25,7 @@
 //~ #include "./optimization/ant_colony.cpp"
 #include "step.cpp"
 #include <vector>
+#include <stdexcept>
 
 #ifndef PLANNER_HPP
 #define PLANNER_HPP

@@ -60,43 +60,56 @@ circle planner::create_perimeter(coordinates c, decimal_n radius){
 std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, decimal_n initial_rotation){
 	// There must be at least two points - start and end
 	std::vector<step> steps; /// steps based on coordinates selected by Dijkstra
-	std::vector<circle> circles; /// On every selected point derivate except end there must be a turn
-	std::vector<decimal_n> angles; /// Selected angles that local coordinates systems will start with
-	std::vector<std::pair<step*, decimal_n>> crosses; /// cross that'll be constructed on selected point
-	std::vector<std::pair<step, step>> paralels; /// paralels to check how close we are to an obstacle
-	//~ alter_selected(selected_derivative, m);
+	std::vector<step> pre_steps; /// steps based on coordinates selected by Dijkstra
+	/// TODO: First move!
 	for(unsigned_b i = 1; i < selected.size(); i++){
-		 steps.push_back(step(selected[i-1], selected[i]));
-		 /// steps that do connect these points, these are definitely lines
+		pre_steps.push_back(step(selected[i-1], selected[i]));
+		std::cout << step(selected[i-1], selected[i]).print() << std::endl;
+
 		}
 	
-	
-	//~ crosses.push_back(std::make_pair(&steps[0], initial_rotation));
-	line cross;
-	for(unsigned_b i = 0; i < steps.size()-1; i++){ 
-		/// fills all the local angles according to the straight lines between selected
-		cross = line::make_axis(std::get<line>(steps[i].formula), std::get<line>(steps[i+1].formula));
-		crosses.push_back(std::make_pair(&steps[i+1], suiting_angle({cross, cross.make_perpendicular(steps[i].start)},\
-																	&steps[i+1].end, &steps[i].start, &steps[i].end)));
+	// iterating from back to front
+	for(unsigned_b progress = pre_steps.size() - 1; progress > 0; progress--){
+		std::cout << "Iterace " << progress << "\n";
+		coordinates *start = &pre_steps[progress - 1].start;
+		coordinates *midpoint = &pre_steps[progress].start;
+		coordinates *end = &pre_steps[progress].end;
+		decimal_n dist = evaluate_radius((start -> get_distance(*midpoint) < midpoint -> get_distance(*end))? *start: *end, *midpoint);
+		line l_start(*start, *midpoint);
+		line l_end(*end, *midpoint);
+		std::vector<circle> four_circles = circle::circles(l_end, l_start, dist);
+		std::array<line, 2> cross = {line::make_axis(l_end, l_start), line::make_axis(l_end, l_start).make_perpendicular(*midpoint)};
+		decimal_n angle = suiting_angle(cross, end, midpoint, start);
+		//~ std::cout << angle/pi_const*180 << std::endl;
+		circle stepped;
+		for(circle c: four_circles){
+			coordinates local_center = midpoint -> make_local(c.center, pi_const/2 - angle);
+			//~ std::cout << line(angle, *midpoint).print() << std::endl;
+			//~ std::cout << local_center.print() << "\n";
+			if( !((local_center.y < 0) ^ (midpoint -> make_local(*end, pi_const/2 - angle).y < 0)) & std::abs(local_center.x) <= 1e-2){
+				stepped = c;
+				//~ std::cout << local_center.print() << std::endl;
+				//~ std::cout << local_center.print() << "\n";
+				//~ std::cout << midpoint -> make_local(*start, angle - pi_const / 2).print() << std::endl;
+				std::cout << c.print() << std::endl;
+			}
+		//~ std::cout << std::endl;
+		//~ std::cout << step(*start, *end, stepped.center).print() << std::endl;
 		}
-	
-	for(std::vector<std::pair<step*, decimal_n>>::iterator pair = crosses.begin(); pair < crosses.end(); pair++){
+	}
+	try{
+		decimal_n radius_initial = evaluate_radius(pre_steps.at(0).end, pre_steps.at(0).start);
+		bool is_right = (pre_steps.at(0).start.make_local(pre_steps.at(0).end, initial_rotation).y) < 0;
+		coordinates center_local(0, ((is_right)? -1: 1) * radius_initial);
+		circle first_circle(pre_steps.at(0).start.make_global(center_local, initial_rotation-pi_const/2), radius_initial);
+		std::cout << first_circle.print() << std::endl;
+		} 
+		catch (const std::out_of_range& oor){
+			std::cerr << "The f*ck is this sh!t?! It was there 1e-5 seconds ago. " << oor.what() << std::endl;
+			return steps;
+		}
+	std::cout << std::endl;
 		
-		//~ while(){}
-		coordinates closest;
-		//~ std::pair<step, step> perimeters = step::get_perimeters(*(std::get<0>(pair)), properties::widths::robot * 0.75);
-		/// 0.75 is given because it is demanded to have 1.5 of a width in total
-		//~ if(collides_nowhere(std::get<0>(perimeters).start, std::get<0>(perimeters).end, m) & \
-			//~ collides_nowhere(std::get<1>(perimeters).start, std::get<1>(perimeters).end, m)){
-				//~ paralels.push_back(perimeters);
-			//~ } else {
-				
-				//~ }
-		
-		/// alters location of every coordinates that are close to an obstacle
-		}
-	
-	//~ for()
 	
 	return steps;
 	}
@@ -122,7 +135,7 @@ decimal_n planner::suiting_angle(std::array<line, 2> cross, coordinates *p_next,
 		decimal_n angle = l.get_angle();
 		coordinates l_next = local.make_local(*p_next, angle);
 		coordinates l_previous = (p_previous != nullptr) ? (coordinates(-l_next.x, l_next.y)) : (local.make_local(*p_previous, angle));
-		/// cross is turned by -pi/4, making it more valuable to use y axis to compare
+		/// cross is turned by -pi/2, making it more valuable to use y axis to compare
 		ret = (l_next.y <= 0 ^ l_previous.y <= 0) ? (ret) : (angle);
 		/// literally first time I've ever used xor
 		}
@@ -161,14 +174,14 @@ void planner::alter_selected(std::vector<step>& selected, map& m, decimal_n init
 decimal_n planner::evaluate_radius(coordinates previous, coordinates current){
 	decimal_n d = previous.get_distance(current);
 	/// this gives us circle radius that is allowed for such distance
-	if((d - limits::minimal::circle) <= -1e-5){
+	if((d - 2*limits::minimal::circle) <= -1e-5){
 		return 0; /// a rotation on place must be held
 		}
 		
 	if((d - limits::maximal::circle) > 0){
 		return limits::maximal::circle; /// a maximum is only possible
 		}
-	return d;
+	return d/2;
 	}
 
 std::vector<step> planner::make_first_move(map& m, coordinates start, coordinates next, decimal_n initial_rotation, speeds v){

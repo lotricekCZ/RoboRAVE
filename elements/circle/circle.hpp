@@ -31,7 +31,7 @@ class circle{
 		coordinates center;
 		circle(coordinates, decimal_n);
 		circle(decimal_n, decimal_n, decimal_n);
-		std::vector<circle> circles(line, line, decimal_n radius = 1);
+		static std::vector<circle> circles(line, line, decimal_n radius = 1);
 		
 		bool inside(coordinates a);
 		bool inside(decimal_n x, decimal_n y);

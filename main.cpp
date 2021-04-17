@@ -654,12 +654,49 @@ int main(int argc, char *argv[]) {
 				}
 				
 			case 37:{
-				for(auto a: circle().circles(line(1, -1, 5), line(2, 3, 0), c_f(argv[2])))
+				for(auto a: circle().circles(line(1, 8, 5), line(c_f(argv[2]), 3, 0), 2))
 					std::cout << a.print() << std::endl;
-				std::cout << line(1, -1, 5).print() << std::endl;
-				std::cout << line(2, 3, 0).print() << std::endl;
+				std::cout << line(1, 8, 5).print() << std::endl;
+				std::cout << line(c_f(argv[2]), 3, 0).print() << std::endl;
 				break;
 				}
+				
+			case 38:{ 
+			/// this creates map and does math to calculations to make heatmap, therefore selecting the hottest spot and designing trace to it
+			map m;
+	
+			coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 8), coordinates(-6, 7)};
+			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
+			coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
+			
+			//~ m.append(candle(coordinates(4,3)));
+			m.append(wall(c));
+			m.append(wall(x));
+			m.append(wall(y));
+			//~ m.append(wall(z));
+			planner p;
+			//~ angles a = angles().load_virtual(coordinates(-5, 2), m);
+			//~ for(auto i: a)
+			//~ std::cout << a.get_angle(0).position._coordinates.print() << std::endl;
+			//~ std::cout << a.get_angle(0).distance << std::endl;
+			//~ std::cout << a.size() << std::endl;
+			std::vector <circle> plan = p.circle_generate(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m, c_i(argv[4]));
+			//~ std::vector <line> clan = p.plan_trace(plan, coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m);
+			//~ std::cout << m._map_walls[0].is_collision_course(circle(coordinates(-5, 2), 6))[1].print() << std::endl;
+			std::srand(std::time(nullptr)); 
+				
+			//~ for(auto i: plan)
+				//~ std::cout << i.print() << std::endl;
+			
+			//~ for(auto i: p.coincidental_points_generate(plan))
+				//~ std::cout << i.print() << std::endl;
+			std::vector<coordinates> g = p.coincidental_points_generate(plan);
+			std::vector<coordinates> c_plan = p.make_path(g, coordinates(-5, 2), coordinates(c_f(argv[2]), c_f(argv[3])), m);
+			p.plan_make(c_plan, m, pi_const/4);
+			
+			break;
+			}
 		
 		}
 
