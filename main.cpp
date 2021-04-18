@@ -581,8 +581,8 @@ int main(int argc, char *argv[]) {
 			}
 			
 			case 26:{
-				std::cout << line(1, 3, -4).make_perpendicular(coordinates(4, -4)).print() << std::endl;
-				std::cout << line(1, 3, -4).print() << std::endl;
+				std::cout << line(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(4, -4)).make_perpendicular(coordinates(4, -4)).print() << std::endl;
+				std::cout << line(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(4, -4)).print() << std::endl;
 				break;
 				}
 				
@@ -697,6 +697,12 @@ int main(int argc, char *argv[]) {
 			
 			break;
 			}
+			
+			case 39:{
+				std::cout << circle(1, 2, 3).get_distance(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(c_f(argv[4]), c_f(argv[5]))) << std::endl;
+				std::cout << circle(1, 2, 3).print() << std::endl;
+				break;
+				}
 		
 		}
 

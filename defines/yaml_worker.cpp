@@ -9,10 +9,7 @@
 #include <yaml-cpp/yaml.h>
 #include "yaml.h"
 
-struct CharacterType{
-  std::string attribute1;
-  std::string attribute2;
-};
+
 
 //~ namespace YAML{
   //~ template<>
@@ -31,7 +28,10 @@ void load_config(){
 	YAML::Node config = YAML::LoadFile("../defines/config.yaml");
 	//~ YAML::Node config = YAML::Load("{candle: 3.14159, [0, 1]: integers}");
 	//~ YAML::Node node = YAML::Load("{pi: 3.14159, [0, 1]: integers}");
-
+	properties::logs::calculations = 			config["logs"]["calculations"].as<std::string>();
+	properties::logs::actions = 				config["logs"]["actions"].as<std::string>();
+	properties::information = 				config["information"].as<std::string>();
+	
 	tresholds::mAP::candle = 					config["tresholds"]["mAP"]["candle"].as<decimal_n>();
 	tresholds::mAP::barrier = 					config["tresholds"]["mAP"]["barrier"].as<decimal_n>();
 	tresholds::mAP::fire = 						config["tresholds"]["mAP"]["fire"].as<decimal_n>();
@@ -61,7 +61,8 @@ void load_config(){
 	properties::camera::size_recognition_vertical = 	config["properties"]["camera"]["size_recognition_vertical"].as<unsigned_n>();
 	properties::camera::size_footage_horizontal = 		config["properties"]["camera"]["size_footage_horizontal"].as<unsigned_n>();
 	properties::camera::size_footage_vertical = 		config["properties"]["camera"]["size_footage_vertical"].as<unsigned_n>();
-	
+	properties::camera::size_footage_vertical = 		config["properties"]["camera"]["size_footage_vertical"].as<unsigned_n>();
+	std::cout << properties::information << std::endl;
 	
 	//~ std::ofstream fout("../defines/config.yaml");
 	//~ fout << config;	

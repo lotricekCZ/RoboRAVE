@@ -125,7 +125,11 @@ coordinates line::intersection(line a){
 	}
 
 line line::make_perpendicular(coordinates c){
-	return line((std::abs(this -> a) < 1e-3)?(-1):(1)*this -> b, (std::abs(this -> b) < 1e-3)?(1):(-1)*this -> a, (this -> a * c.y - this -> b * c.x));
+	std::cout << print() << std::endl;
+	return line(((std::abs(this -> a) < 1e-3)?(-1):(1)) * this -> b, 
+				((std::abs(this -> b) < 1e-3)?(1):(-1)) * this -> a, 
+				((std::abs(this -> b) < 1e-3)?(-1):(1)) * this -> a * c.y - ((std::abs(this -> a) < 1e-3)?(-1):(1)) * this -> b * c.x);
+					
 	}
 	
 line line::make_perpendicular(){ /// for uses of making distance measurements among two parallel lines

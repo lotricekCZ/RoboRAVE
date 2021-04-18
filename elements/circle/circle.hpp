@@ -42,10 +42,17 @@ class circle{
 		std::vector<coordinates> intersection(line);		 // function to decide if sth intersects
 		static std::vector<coordinates> intersection(circle k, circle c);
 		std::vector<coordinates> intersection(circle);
-		
 		void circle_tangents(coordinates c, decimal_n r1, decimal_n r2, std::vector<line> & ans);
 		std::vector<line> circle_tangents(circle a, circle b);
 		std::string print();
+		
+		static decimal_n get_distance(circle, coordinates);
+		decimal_n get_distance(coordinates);
+		static decimal_n get_distance(circle, line);
+		decimal_n get_distance(line);
+		static decimal_n get_distance(circle, coordinates, coordinates);
+		decimal_n get_distance(coordinates, coordinates);
+		
 		bool on_segment(coordinates, coordinates, coordinates, bool);
 		inline bool operator==(const circle& rhs){ 
 			return this -> center == rhs.center && this -> radius == rhs.radius;

@@ -1,4 +1,9 @@
 # Tresholds to treat detected stuff like if they were there
+# Remember, NO indentation by tabs!!!
+version: &software_version "v0.1.0-a"
+logs:
+    actions:	../logs/actions/actions.txt
+    calculations:	../logs/actions/calculations.md
 
 tresholds:
   # mean Average perception needed to recognise object
@@ -52,9 +57,12 @@ properties:
     size_recognition_vertical: 		320
     size_footage_horizontal: 		360
     size_footage_vertical: 			640
-  
+
   #~ robot:
     #~ wheel:
       #~ radius: 	0.044
       #~ steps: 	200
       
+information: |
+ Roborave robot software, version 0.1.0-a
+ © Jakub Ramašeuski, 2021

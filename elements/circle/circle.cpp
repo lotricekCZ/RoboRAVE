@@ -24,6 +24,7 @@
 #include <cmath> 
 #include <string> 
 #include <vector> 
+#include <array> 
 //~ #include "include.hpp"
 #include <limits>
 #include <string>
@@ -240,7 +241,57 @@ std::vector<circle> circle::circles(line a, line b, decimal_n radius){
 	
 	return ret;
 	}
+
+decimal_n circle::get_distance(circle ci, coordinates co){ // gets the distance from circumference
+	return std::abs(co.get_distance(ci.center) - ci.radius);
+	}
 	
+decimal_n circle::get_distance(coordinates co){ // gets the distance from circumference
+	return get_distance((*this), co);
+	}
+	
+decimal_n circle::get_distance(circle ci, line l){ // gets the distance from circumference
+	line p = l.make_perpendicular(ci.center);
+	decimal_n distance_intersection = ci.center.get_distance(p.intersection(l));
+	decimal_n distance_to_circumference = distance_intersection - ci.radius;
+	
+	return ((distance_to_circumference) < 0)? 0: distance_to_circumference;
+	}
+	
+decimal_n circle::get_distance(line li){ // gets the distance from circumference
+	return get_distance((*this), li);
+	}
+
+
+decimal_n circle::get_distance(circle c, coordinates a, coordinates b){
+	std::array<decimal_n, 2> distances_ab = {c.center.get_distance(a), c.center.get_distance(b)};
+	
+	if((c.radius < distances_ab[0]) ^ (c.radius < distances_ab[1])){
+		/// fact that one of the coordinates is closer and the other further means that it has on_segment intersection
+		return 0; 
+		}
+		
+	line l(a, b);
+	std::vector<coordinates> intersections = c.intersection(l);
+	if(intersections.size() == 0){ 
+		/// means the segment is outside - treat it as a line for some part
+		line p = l.make_perpendicular(c.center);
+		
+		coordinates inter = p.intersection(l);
+		std::cout << c.center.print() << std::endl;
+		std::cout << p.print() << std::endl;
+		std::cout << inter.print() << std::endl;
+		return std::abs(((l.on_segment(inter, a, b))? c.center.get_distance(inter): 
+									((distances_ab[0] < distances_ab[1])? distances_ab[0]: distances_ab[1])) - c.radius);
+		} 
+	
+	return std::abs((distances_ab[0] > distances_ab[1]? distances_ab[0]: distances_ab[1]) - c.radius);
+	}
+
+decimal_n circle::get_distance(coordinates a, coordinates b){
+	return get_distance((*this), a, b);
+	}
+
 #endif
 
 
