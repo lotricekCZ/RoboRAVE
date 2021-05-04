@@ -65,80 +65,80 @@ target_include_directories(yaml_worker
 )
 add_executable(roborave ${SOURCE_FILES})
 
-add_library(log_maintain SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.hpp)
+#~ add_library(log_maintain SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.hpp)
 							
-add_library(coordinates SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/coordinates/coordinates.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/coordinates/coordinates.h)
+#~ add_library(coordinates SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/coordinates/coordinates.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/coordinates/coordinates.h)
 
-add_library(line SHARED ${CMAKE_CURRENT_SOURCE_DIR}/elements/line/line.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/elements/line/line.hpp
-							${CMAKE_CURRENT_SOURCE_DIR}/defines/typedefines.h)
-target_link_libraries(line coordinates)
+#~ add_library(line SHARED ${CMAKE_CURRENT_SOURCE_DIR}/elements/line/line.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/elements/line/line.hpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/defines/typedefines.h)
+#~ target_link_libraries(line coordinates)
 
-add_library(circle SHARED ${CMAKE_CURRENT_SOURCE_DIR}/elements/circle/circle.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/elements/circle/circle.hpp)
-target_link_libraries(circle line coordinates)
+#~ add_library(circle SHARED ${CMAKE_CURRENT_SOURCE_DIR}/elements/circle/circle.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/elements/circle/circle.hpp)
+#~ target_link_libraries(circle line coordinates)
 
-add_library(location SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/location.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/location.hpp
-							)
-target_link_libraries(location coordinates)
+#~ add_library(location SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/location.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/location.hpp
+							#~ )
+#~ target_link_libraries(location coordinates)
 
-add_library(node SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/angles/node/node.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/angles/node/node.hpp
-							)
-target_link_libraries(node location coordinates)
+#~ add_library(node SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/angles/node/node.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/angles/node/node.hpp
+							#~ )
+#~ target_link_libraries(node location coordinates)
 
 
-add_library(speeds SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/speeds/speeds.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/speeds/speeds.hpp
-							)
+#~ add_library(speeds SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/speeds/speeds.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/speeds/speeds.hpp
+							#~ )
 							
-add_library(obstacle SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/obstacle.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/obstacle.cpp
-							)
-target_link_libraries(obstacle location coordinates)
+#~ add_library(obstacle SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/obstacle.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/obstacle.cpp
+							#~ )
+#~ target_link_libraries(obstacle location coordinates)
 
 	
-add_library(wall SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/wall.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/wall.hpp
-							)
-target_link_libraries(wall location coordinates line circle)
+#~ add_library(wall SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/wall.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/wall.hpp
+							#~ )
+#~ target_link_libraries(wall location coordinates line circle)
 
 
-add_library(surround_circle SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/surround_circle.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/surround_circle.hpp
-							)
-target_link_libraries(surround_circle location coordinates line circle)
+#~ add_library(surround_circle SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/surround_circle.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/surround_circle.hpp
+							#~ )
+#~ target_link_libraries(surround_circle location coordinates line circle)
 
 
-add_library(candle SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/candle.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/candle.hpp
-							)
-target_link_libraries(candle location coordinates line circle)
+#~ add_library(candle SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/candle.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/obstacles/candle.hpp
+							#~ )
+#~ target_link_libraries(candle location coordinates line circle)
 
 		
-add_library(map SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/map.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/map.hpp
-							)
-target_link_libraries(map location coordinates line circle wall surround_circle candle)
+#~ add_library(map SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/map.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/map.hpp
+							#~ )
+#~ target_link_libraries(map location coordinates line circle wall surround_circle candle)
 
 
-add_library(dijkstra SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/dijkstra.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/dijkstra.hpp
-							)
-target_link_libraries(dijkstra map coordinates wall)
+#~ add_library(dijkstra SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/dijkstra.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/dijkstra.hpp
+							#~ )
+#~ target_link_libraries(dijkstra map coordinates wall)
 
-add_library(step SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/step.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/step.hpp
-							)
-target_link_libraries(step circle line map coordinates speeds wall)
+#~ add_library(step SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/step.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/step.hpp
+							#~ )
+#~ target_link_libraries(step circle line map coordinates speeds wall)
 
-add_library(serial STATIC ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/serial.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/serial.hpp
-							)
-target_link_libraries(serial -lCppLinuxSerial)
+#~ add_library(serial STATIC ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/serial.cpp
+							#~ ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/serial.hpp
+							#~ )
+#~ target_link_libraries(serial -lCppLinuxSerial)
 
 
 set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
@@ -148,19 +148,5 @@ target_compile_features(roborave PRIVATE cxx_std_17)
 target_link_libraries(roborave Threads::Threads 
 					${OpenCV_LIBRARIES} ${OpenCV_LDFLAGS} 
 					${YAML_CPP_LIBRARIES} ${TORCH_LIBRARIES}
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libyaml_worker.so
-					${CMAKE_CURRENT_SOURCE_DIR}/build/liblog_maintain.so
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libline.so
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libcircle.so 
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libcoordinates.so 
-					${CMAKE_CURRENT_SOURCE_DIR}/build/liblocation.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libmap.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libspeeds.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libobstacle.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libsurround_circle.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libcandle.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libwall.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libdijkstra.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libstep.so
-					serial 
+					-lCppLinuxSerial 
 					)
