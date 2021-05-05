@@ -693,7 +693,7 @@ int main(int argc, char *argv[]) {
 				//~ std::cout << i.print() << std::endl;
 			std::vector<coordinates> g = p.coincidental_points_generate(plan);
 			std::vector<coordinates> c_plan = p.make_path(g, coordinates(-5, 2), coordinates(c_f(argv[2]), c_f(argv[3])), m);
-			p.plan_make(c_plan, m, pi_const/4);
+			p.plan_make(c_plan, m, c_f(argv[5])*pi_const/c_f(argv[6]));
 			
 			break;
 			}

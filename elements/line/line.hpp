@@ -36,9 +36,10 @@ class line
 		decimal_n get_y(decimal_n);
 		decimal_n get_angle();
 		decimal_n get_angle(line);
+		static decimal_n get_angle(line, line);
 		decimal_n get_distance(line, coordinates);
 		decimal_n get_distance(line);
-		decimal_n get_distance(line, line);
+		static decimal_n get_distance(line, line);
 		
 		line();
 		line(coordinates, coordinates);
@@ -57,7 +58,7 @@ class line
 		
 		bool on_segment(coordinates, coordinates, coordinates);
 		line operator /(decimal_n);
-		coordinates intersection(line, line);
+		static coordinates intersection(line, line);
 		coordinates intersection(line);
 	private:
 		/* add your private declarations */

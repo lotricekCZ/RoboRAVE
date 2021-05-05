@@ -148,19 +148,6 @@ target_compile_features(roborave PRIVATE cxx_std_17)
 target_link_libraries(roborave Threads::Threads 
 					${OpenCV_LIBRARIES} ${OpenCV_LDFLAGS} 
 					${YAML_CPP_LIBRARIES} ${TORCH_LIBRARIES}
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libyaml_worker.so
-					${CMAKE_CURRENT_SOURCE_DIR}/build/liblog_maintain.so
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libline.so
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libcircle.so 
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libcoordinates.so 
-					${CMAKE_CURRENT_SOURCE_DIR}/build/liblocation.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libmap.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libspeeds.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libobstacle.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libsurround_circle.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libcandle.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libwall.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libdijkstra.so  
-					${CMAKE_CURRENT_SOURCE_DIR}/build/libstep.so
+
 					serial 
 					)

@@ -61,7 +61,9 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 	// There must be at least two points - start and end
 	std::vector<step> steps; /// steps based on coordinates selected by Dijkstra
 	std::vector<step> pre_steps; /// steps based on coordinates selected by Dijkstra
+	std::vector<circle> pre_circles; /// steps based on coordinates selected by Dijkstra
 	/// TODO: First move!
+	std::cout << "Neco spatne " << "\n";
 	for(unsigned_b i = 1; i < selected.size(); i++){
 		pre_steps.push_back(step(selected[i-1], selected[i]));
 		std::cout << step(selected[i-1], selected[i]).print() << std::endl;
@@ -88,9 +90,7 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 			//~ std::cout << local_center.print() << "\n";
 			if( !((local_center.y < 0) ^ (midpoint -> make_local(*end, pi_const/2 - angle).y < 0)) & std::abs(local_center.x) <= 1e-2){
 				stepped = c;
-				//~ std::cout << local_center.print() << std::endl;
-				//~ std::cout << local_center.print() << "\n";
-				//~ std::cout << midpoint -> make_local(*start, angle - pi_const / 2).print() << std::endl;
+				pre_circles.push_back(c);
 				std::cout << c.print() << std::endl;
 			}
 		//~ std::cout << std::endl;
@@ -99,10 +99,22 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 	}
 	try{
 		decimal_n radius_initial = evaluate_radius(pre_steps.at(0).end, pre_steps.at(0).start);
-		bool is_right = (pre_steps.at(0).start.make_local(pre_steps.at(0).end, initial_rotation).y) < 0;
+		coordinates next_local = pre_steps.at(0).end.make_local(pre_steps.at(0).start, -pi_const/2 - initial_rotation);
+		bool is_right = (next_local.y < 0);
+		
 		coordinates center_local(0, ((is_right)? -1: 1) * radius_initial);
-		circle first_circle(pre_steps.at(0).start.make_global(center_local, initial_rotation-pi_const/2), radius_initial);
+		std::cout << line(initial_rotation, pre_steps.at(0).start).print() << std::endl;
+		std::cout << initial_rotation/pi_const*180 << std::endl;
+		std::cout << next_local.print() << std::endl;
+		//~ std::cout << "Uhel: " << (line::get_angle(line(initial_rotation, pre_steps.at(0).start), line(pre_steps.at(0).start, pre_steps.at(0).end)))/pi_const*180 << std::endl;
+		std::cout << "=Vektor[" <<  pre_steps.at(0).start.print() << ", "<< pre_steps.at(0).start.make_global(coordinates(1, 0), initial_rotation - pi_const/2).print() << "]" << std::endl;
+		//~ std::cout << pre_steps.at(0).start.make_global(coordinates(1, 0), initial_rotation - pi_const/2).print() << std::endl;
+		//~ std::cout << pre_steps.at(0).start.print() << std::endl;
+		//~ std::cout << pre_steps.at(0).end.print() << std::endl;
+		circle first_circle(pre_steps.at(0).start.make_global(center_local, initial_rotation - pi_const/2), radius_initial);
 		std::cout << first_circle.print() << std::endl;
+		for(auto a: circle::circle_tangents(first_circle, pre_circles.back()))
+			std::cout << a.print() << std::endl;
 		} 
 		catch (const std::out_of_range& oor){
 			std::cerr << "The f*ck is this sh!t?! It was there 1e-5 seconds ago. " << oor.what() << std::endl;

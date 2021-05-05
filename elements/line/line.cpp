@@ -73,7 +73,7 @@ line::line(decimal_n angle, decimal_n c){
 	this -> c = c;
 	}	
 
-line::line() {
+line::line(){
 	}
 
 decimal_n line::get_y(decimal_n x){
@@ -157,6 +157,10 @@ decimal_n line::get_angle(){
 	
 decimal_n line::get_angle(line l){
 	return get_angle() - l.get_angle();
+	}
+	
+decimal_n line::get_angle(line l, line m){
+	return m.get_angle() - l.get_angle();
 	}
 	
 decimal_n line::get_distance(line l, coordinates c){
