@@ -63,7 +63,6 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 	std::vector<step> pre_steps; /// steps based on coordinates selected by Dijkstra
 	std::vector<circle> pre_circles; /// steps based on coordinates selected by Dijkstra
 	/// TODO: First move!
-	std::cout << "Neco spatne " << "\n";
 	for(unsigned_b i = 1; i < selected.size(); i++){
 		pre_steps.push_back(step(selected[i-1], selected[i]));
 		std::cout << step(selected[i-1], selected[i]).print() << std::endl;
@@ -72,15 +71,17 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 	
 	// iterating from back to front
 	for(unsigned_b progress = pre_steps.size() - 1; progress > 0; progress--){
-		std::cout << "Iterace " << progress << "\n";
+		//~ std::cout << "Iterace " << progress << "\n";
 		coordinates *start = &pre_steps[progress - 1].start;
 		coordinates *midpoint = &pre_steps[progress].start;
 		coordinates *end = &pre_steps[progress].end;
+
 		decimal_n dist = evaluate_radius((start -> get_distance(*midpoint) < midpoint -> get_distance(*end))? *start: *end, *midpoint);
 		line l_start(*start, *midpoint);
 		line l_end(*end, *midpoint);
 		std::vector<circle> four_circles = circle::circles(l_end, l_start, dist);
-		std::array<line, 2> cross = {line::make_axis(l_end, l_start), line::make_axis(l_end, l_start).make_perpendicular(*midpoint)};
+		line tmp = line::make_axis(l_end, l_start);
+		std::array<line, 2> cross = {tmp, tmp.make_perpendicular(*midpoint)};
 		decimal_n angle = suiting_angle(cross, end, midpoint, start);
 		//~ std::cout << angle/pi_const*180 << std::endl;
 		circle stepped;
@@ -94,7 +95,6 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 				std::cout << c.print() << std::endl;
 			}
 		//~ std::cout << std::endl;
-		//~ std::cout << step(*start, *end, stepped.center).print() << std::endl;
 		}
 	}
 	try{
@@ -113,8 +113,15 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 		//~ std::cout << pre_steps.at(0).end.print() << std::endl;
 		circle first_circle(pre_steps.at(0).start.make_global(center_local, initial_rotation - pi_const/2), radius_initial);
 		std::cout << first_circle.print() << std::endl;
-		for(auto a: circle::circle_tangents(first_circle, pre_circles.back()))
-			std::cout << a.print() << std::endl;
+		std::vector<line> tangents = circle::circle_tangents(first_circle, pre_circles.back());
+		line start_to_next_center(pre_steps.at(0).start, pre_circles.back().center);
+		decimal_n next_center_angle = pre_steps.at(0).start.get_gamma(pre_circles.back().center);
+		//~ std::cout << start_to_next_center.print() << std::endl; 
+		for(auto &a: tangents){
+			if(pre_steps.at(0).start.make_local(a.intersection(start_to_next_center), pi_const/2 - next_center_angle).x <= 0){
+				std::cout << a.print() << std::endl;				
+				}
+			}
 		} 
 		catch (const std::out_of_range& oor){
 			std::cerr << "The f*ck is this sh!t?! It was there 1e-5 seconds ago. " << oor.what() << std::endl;

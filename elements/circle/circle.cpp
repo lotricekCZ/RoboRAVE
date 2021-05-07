@@ -233,7 +233,7 @@ std::vector<circle> circle::circles(line a, line b, decimal_n radius){
 		return ret;
 	}
 	decimal_n angle = a.get_angle(b);
-	std::cout << intersection.print() << std::endl;
+	//~ std::cout << intersection.print() << std::endl;
 	ret.push_back(circle(intersection.make_global(coordinates(0, radius / (sin(angle/2))), ((a.get_angle() + b.get_angle())/2)-pi_const), radius));
 	ret.push_back(circle(intersection.make_global(coordinates(0, -radius / (sin(angle/2))), ((a.get_angle() + b.get_angle())/2)-pi_const), radius));
 	ret.push_back(circle(intersection.make_global(coordinates(radius / (sin(pi_const/2 -angle/2)), 0), ((a.get_angle() + b.get_angle())/2)-pi_const), radius));
