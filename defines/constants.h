@@ -9,6 +9,7 @@
 #define N_wheel 	200.0f
 #define r_wheel 	0.044f // in meters
 #define pi_const 	3.141592653589793238462643383279502884L
+#define sqrt2_const 1.41421356237309504880
 #define dist_wheel 	0.125f // in meters
 #define fric_wheel 	0.5097f // static friction coeficient against wood I measured using kitchen scale
 //~ #define robot_radius 0.10f // in meters

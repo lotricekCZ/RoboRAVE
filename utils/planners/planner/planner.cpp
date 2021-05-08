@@ -101,26 +101,41 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 		decimal_n radius_initial = evaluate_radius(pre_steps.at(0).end, pre_steps.at(0).start);
 		coordinates next_local = pre_steps.at(0).end.make_local(pre_steps.at(0).start, -pi_const/2 - initial_rotation);
 		bool is_right = (next_local.y < 0);
+		bool is_behind = (next_local.x < 0);
 		
 		coordinates center_local(0, ((is_right)? -1: 1) * radius_initial);
-		std::cout << line(initial_rotation, pre_steps.at(0).start).print() << std::endl;
-		std::cout << initial_rotation/pi_const*180 << std::endl;
-		std::cout << next_local.print() << std::endl;
+		circle first_circle(pre_steps.at(0).start.make_global(center_local, initial_rotation - pi_const/2), radius_initial);
+		coordinates center_next_local = pre_circles.back().center.make_local(first_circle.center, -pi_const/2 - initial_rotation);
+		
+		bool is_vertically_close = (std::abs(center_next_local.x) - (pre_circles.back().radius + radius_initial)) <= 0;
+		bool is_horizontally_close = (std::abs(center_next_local.y) - (pre_circles.back().radius + radius_initial)) <= 0;
+		
+		//~ std::cout << line(initial_rotation, pre_steps.at(0).start).print() << std::endl;
+		//~ std::cout << initial_rotation/pi_const*180 << std::endl;
+		//~ std::cout << next_local.print() << std::endl;
 		//~ std::cout << "Uhel: " << (line::get_angle(line(initial_rotation, pre_steps.at(0).start), line(pre_steps.at(0).start, pre_steps.at(0).end)))/pi_const*180 << std::endl;
-		std::cout << "=Vektor[" <<  pre_steps.at(0).start.print() << ", "<< pre_steps.at(0).start.make_global(coordinates(1, 0), initial_rotation - pi_const/2).print() << "]" << std::endl;
+		std::cout << "=Vector[" <<  pre_steps.at(0).start.print() << ", "<< pre_steps.at(0).start.make_global(coordinates(1, 0), initial_rotation - pi_const/2).print() << "]" << std::endl;
 		//~ std::cout << pre_steps.at(0).start.make_global(coordinates(1, 0), initial_rotation - pi_const/2).print() << std::endl;
 		//~ std::cout << pre_steps.at(0).start.print() << std::endl;
 		//~ std::cout << pre_steps.at(0).end.print() << std::endl;
-		circle first_circle(pre_steps.at(0).start.make_global(center_local, initial_rotation - pi_const/2), radius_initial);
 		std::cout << first_circle.print() << std::endl;
 		std::vector<line> tangents = circle::circle_tangents(first_circle, pre_circles.back());
-		line start_to_next_center(pre_steps.at(0).start, pre_circles.back().center);
-		decimal_n next_center_angle = pre_steps.at(0).start.get_gamma(pre_circles.back().center);
-		//~ std::cout << start_to_next_center.print() << std::endl; 
+		//~ line start_to_next_center(pre_steps.at(0).start, pre_circles.back().center);
+		//~ decimal_n next_center_angle = pre_steps.at(0).start.get_gamma(pre_circles.back().center);
+		//~ std::cout << start_to_next_center.print() << std::endl;
 		for(auto &a: tangents){
-			if(pre_steps.at(0).start.make_local(a.intersection(start_to_next_center), pi_const/2 - next_center_angle).x <= 0){
-				std::cout << a.print() << std::endl;				
+			coordinates tang_1 = first_circle.intersection(a).front().make_local(pre_steps.at(0).start, -pi_const/2 - initial_rotation);
+			std::cout << tang_1.print() << std::endl;
+			coordinates tang_3 = pre_circles.back().intersection(std::get<line>(pre_steps.at(1).formula)).front(); /// provizorni, upravit
+			coordinates tang_4 = pre_circles.at(pre_circles.size() - 2).intersection(std::get<line>(pre_steps.at(1).formula)).front(); /// provizorni, upravit
+			/// lokalni souradnice z druhe strany
+			coordinates tang_2 = pre_circles.back().intersection(a).front().make_local(tang_3, -pi_const/2 - tang_3.get_gamma(tang_4));
+			if(((tang_1.x >= 0) == is_behind) && (tang_2. x <= 0)){
+				std::cout << a.print() << std::endl;
+				
 				}
+			//~ if(pre_steps.at(0).start.make_local(a.intersection(start_to_next_center), pi_const/2 - next_center_angle).x <= 0){
+				//~ }
 			}
 		} 
 		catch (const std::out_of_range& oor){
