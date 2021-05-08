@@ -107,12 +107,12 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 		circle first_circle(pre_steps.at(0).start.make_global(center_local, initial_rotation - pi_const/2), radius_initial);
 		coordinates center_next_local = pre_circles.back().center.make_local(first_circle.center, -pi_const/2 - initial_rotation);
 		
-		bool is_vertically_close = (std::abs(center_next_local.x) - (pre_circles.back().radius + radius_initial)) <= 0;
+		bool is_vertically_close = (std::abs(center_next_local.x) + pre_circles.back().radius - (radius_initial)) <= 0;
 		bool is_horizontally_close = (std::abs(center_next_local.y) - (pre_circles.back().radius + radius_initial)) <= 0;
-		
+		/// ATTENTION! is_horizontally_close may be incorrectly USED.s
 		//~ std::cout << line(initial_rotation, pre_steps.at(0).start).print() << std::endl;
 		//~ std::cout << initial_rotation/pi_const*180 << std::endl;
-		//~ std::cout << next_local.print() << std::endl;
+		std::cout << next_local.print() << std::endl;
 		//~ std::cout << "Uhel: " << (line::get_angle(line(initial_rotation, pre_steps.at(0).start), line(pre_steps.at(0).start, pre_steps.at(0).end)))/pi_const*180 << std::endl;
 		std::cout << "=Vector[" <<  pre_steps.at(0).start.print() << ", "<< pre_steps.at(0).start.make_global(coordinates(1, 0), initial_rotation - pi_const/2).print() << "]" << std::endl;
 		//~ std::cout << pre_steps.at(0).start.make_global(coordinates(1, 0), initial_rotation - pi_const/2).print() << std::endl;
@@ -130,10 +130,45 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 			coordinates tang_4 = pre_circles.at(pre_circles.size() - 2).intersection(std::get<line>(pre_steps.at(1).formula)).front(); /// provizorni, upravit
 			/// lokalni souradnice z druhe strany
 			coordinates tang_2 = pre_circles.back().intersection(a).front().make_local(tang_3, -pi_const/2 - tang_3.get_gamma(tang_4));
-			if(((tang_1.x >= 0) == is_behind) && (tang_2. x <= 0)){
-				std::cout << a.print() << std::endl;
+			std::cout << tang_2.print() << std::endl;
+			std::cout << "lokal" << std::endl;
+			if(!is_behind){
+				if(is_vertically_close){
+					if(tang_1.x >= 0 && coordinates(0, 0).get_distance(tang_1) / first_circle.radius >= sqrt2_const){
+						if(tang_2.x <= 0){
+							std::cout << a.print() << std::endl;
+							}
+						std::cout << "Tady" << std::endl;
+						}
+				} else {
+					if(tang_1.x >= 0 && coordinates(0, 0).get_distance(tang_1) / first_circle.radius <= sqrt2_const){
+						if(tang_2.x <= 0){
+							std::cout << a.print() << std::endl;
+							}
+						std::cout << "Tam" << std::endl;
+
+						}
+					}
+			} else {
+				if(is_vertically_close){
+					if(tang_1.x >= 0 && coordinates(0, 0).get_distance(tang_1) / first_circle.radius >= sqrt2_const){
+						if(tang_2.x <= 0){
+							std::cout << a.print() << std::endl;
+							}
+						std::cout << "Tady" << std::endl;
+						}
+				} else {
+					if(tang_1.x >= 0 && coordinates(0, 0).get_distance(tang_1) / first_circle.radius <= sqrt2_const){
+						if(tang_2.x <= 0){
+							std::cout << a.print() << std::endl;
+							}
+						std::cout << "Tam" << std::endl;
+
+						}
+					}
 				
 				}
+
 			//~ if(pre_steps.at(0).start.make_local(a.intersection(start_to_next_center), pi_const/2 - next_center_angle).x <= 0){
 				//~ }
 			}

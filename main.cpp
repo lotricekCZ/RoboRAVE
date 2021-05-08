@@ -22,7 +22,7 @@
 #include "./utils/data_containers/speeds/speeds.cpp"
 #include "./utils/data_containers/coordinates/coordinates.cpp"
 #include "./utils/data_containers/map/include.hpp"
-#include "./utils/log_maintainer/log_maintain.cpp"
+#include "./utils/log_maintainer/log_maintain.hpp"
 #include "./utils/data_containers/angles/angles/angles.cpp"
 #include "./utils/planners/planner/planner.cpp"
 #include "./defines/typedefines.h"

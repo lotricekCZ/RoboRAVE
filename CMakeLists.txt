@@ -65,11 +65,11 @@ target_include_directories(yaml_worker
 )
 add_executable(roborave ${SOURCE_FILES})
 
-#~ add_library(log_maintain SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.cpp
-							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.hpp)
+add_library(log_maintain SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.cpp
+							${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.hpp)
 							
-#~ add_library(coordinates SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/coordinates/coordinates.cpp
-							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/coordinates/coordinates.h)
+add_library(coordinates SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/coordinates/coordinates.cpp
+							${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/coordinates/coordinates.h)
 
 #~ add_library(line SHARED ${CMAKE_CURRENT_SOURCE_DIR}/elements/line/line.cpp
 							#~ ${CMAKE_CURRENT_SOURCE_DIR}/elements/line/line.hpp
@@ -148,6 +148,6 @@ target_compile_features(roborave PRIVATE cxx_std_17)
 target_link_libraries(roborave Threads::Threads 
 					${OpenCV_LIBRARIES} ${OpenCV_LDFLAGS} 
 					${YAML_CPP_LIBRARIES} ${TORCH_LIBRARIES}
-
+					log_maintain
 					serial 
 					)
