@@ -703,12 +703,128 @@ int main(int argc, char *argv[]) {
 				std::cout << circle(1, 2, 3).print() << std::endl;
 				break;
 				}
+				
+			case 40:{
+				circle start1(coordinates(3, 0), 3);
+				circle start2(coordinates(-3, 0), 3);
+				std::array<circle, 9> possible = {
+					circle(coordinates(-3, 3*3), 2.5),
+					circle(coordinates(3, 3*3), 2.5),
+					circle(coordinates(6*2, 3*3), 2.5),
+					circle(coordinates(6*2, 3), 2.5),
+					circle(coordinates(-6*2, -3), 2.5),
+					circle(coordinates(6*2, -3), 2.5),
+					circle(coordinates(6*2, 3*-3), 2.5),
+					circle(coordinates(3, 3*-3), 2.5),
+					circle(coordinates(6, -2.7), 0.5)
+					};
+				
+				std::cout << start1.print() << std::endl;
+				std::cout << start2.print() << std::endl;
+				
+				for(auto &a: possible){
+					bool overlaps_vertical = a.center.y <= (a.radius + start1.radius); 
+					bool overlaps_horizontal = std::abs(a.center.x) - std::abs(start1.center.x) <= (a.radius + start1.radius); 
+					bool is_front = a.center.y >= 0; 
+					bool is_right = a.center.x >= 0; 
+					//~ std::cout << a.print() << std::endl;
+					std::cout << "ov: " << overlaps_vertical << " oh: " << overlaps_horizontal << " fr: " << is_front  << " ri: " << is_right << std::endl;
+					//~ std::cout << a.center.print() << std::endl;
+				}
+				
+				for(auto &a: possible){
+					std::cout << a.print() << std::endl;
+					std::cout << a.center.print() << std::endl;
+				}
+				
+				for(auto &a: possible){
+					bool overlaps_vertical = std::abs(a.center.y) <= (a.radius + start1.radius); 
+					bool overlaps_horizontal = std::abs(a.center.x) - std::abs(start1.center.x) <= (a.radius + start1.radius); 
+					bool is_front = a.center.y >= 0; 
+					bool is_right = a.center.x >= 0; 
+					bool crosses_x = (std::abs(a.center.x) - a.radius) < 0; 
+					bool crosses_y = (std::abs(a.center.y) - a.radius) < 0; 
+					
+					for(auto &b: circle::circle_tangents(start1, a)) {
+						decimal_n vector_angle = start1.intersection(b)[0].get_gamma(a.intersection(b)[0]);
+						if(is_front && !crosses_x){
+							if(is_right){
+								if(overlaps_horizontal && !overlaps_vertical){
+									if(vector_angle >= 0 && vector_angle <= pi_const/2 &&  start1.intersection(b)[0].y >= 0){
+										std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+										}
+									}
+								if(overlaps_vertical && !overlaps_horizontal){
+									if(start1.intersection(b)[0].y > 0){
+										std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+										}
+									}
+								if(!overlaps_vertical && !overlaps_horizontal){
+									if(start1.intersection(b)[0].y > 0){
+										std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+										}
+									}
+								if(overlaps_vertical && overlaps_horizontal){
+										if(start1.intersection(b)[0].y > 0 && cos(vector_angle) >= 0){
+											std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											}
+										}
+								/// THERE MUST BE 4 OPTIONS!!!
+								}
+								
+							} else if(!is_front && !crosses_x){
+								if(is_right){
+									if(overlaps_horizontal && !overlaps_vertical){
+										std::cout << vector_angle << std::endl;
+										if(vector_angle >= pi_const && vector_angle <= (3*pi_const/2)){
+											std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											}
+										}
+									if(overlaps_vertical && !overlaps_horizontal){
+										if(start1.intersection(b)[0].y > 0){
+											std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											}
+										}
+									if(!overlaps_vertical && !overlaps_horizontal){
+										if(start1.intersection(b)[0].y > 0){
+											std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											}
+										}
+									if(overlaps_vertical && overlaps_horizontal){
+										if(((vector_angle >= pi_const/2 && vector_angle <= 3*pi_const/2)) ^ (start1.intersection(b)[0].y >= 0)){
+											std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											}
+										}
+									}
+								}
+						//~ std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+						}
+					//~ for(auto &b: circle::circle_tangents(start2, a)) {
+						//~ std::cout << "=Vector["<< start2.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+						//~ }
+					}
+
+				//~ for(auto &a: possible){
+					
+					//~ for(auto &b: circle::circle_tangents(start1, a)) {
+						//~ std::cout << start1.intersection(b)[0].get_gamma(a.intersection(b)[0])/pi_const*180 << std::endl;
+						//~ }
+					//~ }
+					
+				//~ for(auto &a: possible){
+					
+					//~ for(auto &b: circle::circle_tangents(start1, a)) {
+						//~ std::cout << start1.intersection(b)[0].get_gamma(a.intersection(b)[0])/pi_const*180 << std::endl;
+						//~ }
+					//~ }
+				break;
+				}
 		
 		}
 
 	
-    //~ uint8_t c = std::thread::hardware_concurrency();	
-    //~ std::cout << " number of cores: " << c << std::endl;
+    uint8_t c = std::thread::hardware_concurrency();	
+    std::cout << " number of cores: " << std::to_string(c) << std::endl;
 	auto end = std::chrono::steady_clock::now();
 	std::chrono::duration<double> elapsed_seconds = end - start;
 	
