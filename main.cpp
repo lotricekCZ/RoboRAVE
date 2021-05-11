@@ -704,18 +704,68 @@ int main(int argc, char *argv[]) {
 				break;
 				}
 				
+			case 41:{
+				std::fstream f("outrandom.txt", std::fstream::out);
+				coordinates c(0, 0);
+				coordinates a(-1, -2);
+				for(unsigned_n i = 0; i < 90; i++){
+					c = c.make_global(a, coordinates(0, 0.7+i/16.0), -pi_const/2 + (decimal_n)i*8*(pi_const/180.0));
+					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
+						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
+					
+					
+					c = c.make_global(a, coordinates(0, 1.4+i/16.0), pi_const/2 + (decimal_n)i*8*(pi_const/180.0));
+					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
+						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
+					
+					c = c.make_global(a, coordinates(0, 0.7+i/16.0), pi_const + (decimal_n)i*8*(pi_const/180.0));
+					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
+						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
+					
+					
+					c = c.make_global(a, coordinates(0, 1.4+i/16.0), 0 + (decimal_n)i*8*(pi_const/180.0));
+					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
+						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
+					
+					c = c.make_global(a, coordinates(0, 0.7+i/16.0), 7*pi_const/4 + (decimal_n)i*8*(pi_const/180.0));
+					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
+						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
+					
+					
+					c = c.make_global(a, coordinates(0, 1.4+i/16.0), pi_const/4 + (decimal_n)i*8*(pi_const/180.0));
+					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
+						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
+					
+					c = c.make_global(a, coordinates(0, 0.7+i/16.0), 3*pi_const/4 + (decimal_n)i*8*(pi_const/180.0));
+					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
+						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
+					
+					
+					c = c.make_global(a, coordinates(0, 1.4+i/16.0), 5*pi_const/4 + (decimal_n)i*8*(pi_const/180.0));
+					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
+						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
+					
+					}
+				f.close();
+				break;
+				}
+				
 			case 40:{
 				circle start1(coordinates(3, 0), 3);
 				circle start2(coordinates(-3, 0), 3);
-				std::array<circle, 9> possible = {
+				std::array<circle, 13> possible = {
 					circle(coordinates(-3, 3*3), 2.5),
-					circle(coordinates(3, 3*3), 2.5),
+					circle(coordinates(1, 6), 2.5),
 					circle(coordinates(6*2, 3*3), 2.5),
+					circle(coordinates(-6*2, 3*3), 2.5),
 					circle(coordinates(6*2, 3), 2.5),
-					circle(coordinates(-6*2, -3), 2.5),
+					circle(coordinates(-6*2, 3), 2.5),
 					circle(coordinates(6*2, -3), 2.5),
+					circle(coordinates(-6*2, -3), 2.5),
 					circle(coordinates(6*2, 3*-3), 2.5),
+					circle(coordinates(-6*2, 3*-3), 2.5),
 					circle(coordinates(3, 3*-3), 2.5),
+					circle(coordinates(-3, 3*-3), 2.5),
 					circle(coordinates(6, -2.7), 0.5)
 					};
 				
@@ -747,10 +797,11 @@ int main(int argc, char *argv[]) {
 					
 					for(auto &b: circle::circle_tangents(start1, a)) {
 						decimal_n vector_angle = start1.intersection(b)[0].get_gamma(a.intersection(b)[0]);
-						if(is_front && !crosses_x){
+						if(is_front){
 							if(is_right){
 								if(overlaps_horizontal && !overlaps_vertical){
-									if(vector_angle >= 0 && vector_angle <= pi_const/2 &&  start1.intersection(b)[0].y >= 0){
+									if((vector_angle >= 0 && vector_angle <= pi_const/2 &&  start1.intersection(b)[0].y >= 0) || 
+										(vector_angle >= pi_const/2 && vector_angle <= pi_const &&  start1.intersection(b)[0].y <= 0)){
 										std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
 										}
 									}
@@ -769,10 +820,32 @@ int main(int argc, char *argv[]) {
 											std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
 											}
 										}
-								/// THERE MUST BE 4 OPTIONS!!!
-								}
 								
-							} else if(!is_front && !crosses_x){
+								} else {
+									if(overlaps_horizontal && !overlaps_vertical){
+										if(vector_angle >= 0 && vector_angle <= pi_const/2 &&  start1.intersection(b)[0].y <= 0){
+											std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											}
+										}
+									if(overlaps_vertical && !overlaps_horizontal){
+										if(start1.intersection(b)[0].y < 0){
+											std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											}
+										}
+									if(!overlaps_vertical && !overlaps_horizontal){
+										if(start1.intersection(b)[0].y < 0){
+											std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											}
+										}
+									if(overlaps_vertical && overlaps_horizontal){ /// TODO: Check condition
+											if(start1.intersection(b)[0].y > 0 && cos(vector_angle) >= 0){
+												std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+												}
+										}
+									
+									}
+								
+							} else if(!is_front){
 								if(is_right){
 									if(overlaps_horizontal && !overlaps_vertical){
 										std::cout << vector_angle << std::endl;
@@ -793,6 +866,84 @@ int main(int argc, char *argv[]) {
 									if(overlaps_vertical && overlaps_horizontal){
 										if(((vector_angle >= pi_const/2 && vector_angle <= 3*pi_const/2)) ^ (start1.intersection(b)[0].y >= 0)){
 											std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											}
+										}
+									}
+								}
+						//~ std::cout << "=Vector["<< start1.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+						}
+					
+					for(auto &b: circle::circle_tangents(start2, a)) {
+						decimal_n vector_angle = start2.intersection(b)[0].get_gamma(a.intersection(b)[0]);
+						if(is_front && !crosses_x){
+							if(!is_right){
+								if(overlaps_horizontal && !overlaps_vertical){
+									if((vector_angle >= pi_const/2 && vector_angle <= pi_const &&  start2.intersection(b)[0].y >= 0) || 
+										(vector_angle >= 0 && vector_angle <= pi_const &&  start2.intersection(b)[0].y <= 0)){
+										std::cout << "=Vector["<< start2.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+										}
+									}
+								if(overlaps_vertical && !overlaps_horizontal){
+									if(start2.intersection(b)[0].y > 0){
+										std::cout << "=Vector["<< start2.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+										}
+									}
+								if(!overlaps_vertical && !overlaps_horizontal){
+									if(start2.intersection(b)[0].y > 0){
+										std::cout << "=Vector["<< start2.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+										}
+									}
+								if(overlaps_vertical && overlaps_horizontal){
+										if(start2.intersection(b)[0].y > 0 && cos(vector_angle) >= 0){
+											std::cout << "=Vector["<< start2.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											}
+										}
+								
+								} else {
+									//~ if(overlaps_horizontal && !overlaps_vertical){
+										//~ if(vector_angle >= 0 && vector_angle <= pi_const/2 &&  start2.intersection(b)[0].y >= 0){
+											//~ std::cout << "=Vector["<< start2.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											//~ }
+										//~ }
+									//~ if(overlaps_vertical && !overlaps_horizontal){
+										//~ if(start2.intersection(b)[0].y > 0){
+											//~ std::cout << "=Vector["<< start2.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											//~ }
+										//~ }
+									//~ if(!overlaps_vertical && !overlaps_horizontal){
+										//~ if(start2.intersection(b)[0].y > 0){
+											//~ std::cout << "=Vector["<< start2.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											//~ }
+										//~ }
+									//~ if(overlaps_vertical && overlaps_horizontal){
+											//~ if(start2.intersection(b)[0].y > 0 && cos(vector_angle) >= 0){
+												//~ std::cout << "=Vector["<< start2.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+												//~ }
+										//~ }
+									
+									}
+								
+							} else if(!is_front && !crosses_x){
+								if(!is_right){
+									if(overlaps_horizontal && !overlaps_vertical){
+										std::cout << vector_angle << std::endl;
+										if(vector_angle >= (3*pi_const/2) && vector_angle <= (2*pi_const)){
+											std::cout << "=Vector["<< start2.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											}
+										}
+									if(overlaps_vertical && !overlaps_horizontal){
+										if(start2.intersection(b)[0].y > 0){
+											std::cout << "=Vector["<< start2.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											}
+										}
+									if(!overlaps_vertical && !overlaps_horizontal){
+										if(start2.intersection(b)[0].y > 0){
+											std::cout << "=Vector["<< start2.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
+											}
+										}
+									if(overlaps_vertical && overlaps_horizontal){
+										if(((vector_angle >= pi_const/2 && vector_angle <= 3*pi_const/2)) ^ (start2.intersection(b)[0].y >= 0)){
+											std::cout << "=Vector["<< start2.intersection(b)[0].print() << ", " << a.intersection(b)[0].print() << "]" << std::endl;
 											}
 										}
 									}
