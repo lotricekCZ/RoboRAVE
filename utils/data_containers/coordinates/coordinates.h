@@ -44,6 +44,7 @@ class coordinates
 		coordinates get_closest(std::vector<coordinates>&);
 		coordinates get_closest(std::vector<coordinates>);
 		std::string print();
+		std::string print_geogebra();
 		decimal_n get_gamma(decimal_n x_rel, decimal_n y_rel);
 		decimal_n get_gamma(coordinates c);
 		decimal_n get_distance(decimal_n x_rel, decimal_n y_rel);

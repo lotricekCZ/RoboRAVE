@@ -177,5 +177,10 @@ std::string coordinates::print(){
 	//~ return std::string("["+ std::to_string(x) +"; "+ std::to_string(y) +"]");
 	return std::string("("+ std::to_string(x) +", "+ std::to_string(y) +")");
 	}
+	
+std::string coordinates::print_geogebra(){
+	//~ return std::string("["+ std::to_string(x) +"; "+ std::to_string(y) +"]");
+	return std::string("("+ std::to_string(x) +", "+ std::to_string(y) +")");
+	}
 
 #endif

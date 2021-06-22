@@ -55,7 +55,7 @@ properties:
     angle_horizontal: 				66
     size_recognition_horizontal: 	192
     size_recognition_vertical: 		320
-    size_footage_horizontal: 		360
+    size_footage_horizontal: 		480
     size_footage_vertical: 			640
 
   #~ robot:

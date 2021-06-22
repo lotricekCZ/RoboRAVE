@@ -64,125 +64,56 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 	std::vector<circle> pre_circles; /// steps based on coordinates selected by Dijkstra
 	/// TODO: First move!
 	for(unsigned_b i = 1; i < selected.size(); i++){
-		pre_steps.push_back(step(selected[i-1], selected[i]));
-		std::cout << step(selected[i-1], selected[i]).print() << std::endl;
-
+		if(i >= selected.size())
+			break;
+		pre_circles.push_back(circle(selected.at(i), evaluate_radius(selected.at(i-1), selected.at(i))));
+		std::cout << pre_circles.back().print() << std::endl;
 		}
+	coordinates start = selected.at(0);
+	/// first circle generation block start
+	decimal_n radius_initial = evaluate_radius(selected.at(1), start);
+	coordinates next_local = selected.at(1).make_local(start, -pi_const/2 - initial_rotation);
+	bool is_right = (next_local.y < 0);
+	bool is_behind = (next_local.x < 0);
 	
-	// iterating from back to front
-	for(unsigned_b progress = pre_steps.size() - 1; progress > 0; progress--){
-		//~ std::cout << "Iterace " << progress << "\n";
-		coordinates *start = &pre_steps[progress - 1].start;
-		coordinates *midpoint = &pre_steps[progress].start;
-		coordinates *end = &pre_steps[progress].end;
-
-		decimal_n dist = evaluate_radius((start -> get_distance(*midpoint) < midpoint -> get_distance(*end))? *start: *end, *midpoint);
-		line l_start(*start, *midpoint);
-		line l_end(*end, *midpoint);
-		std::vector<circle> four_circles = circle::circles(l_end, l_start, dist);
-		line tmp = line::make_axis(l_end, l_start);
-		std::array<line, 2> cross = {tmp, tmp.make_perpendicular(*midpoint)};
-		decimal_n angle = suiting_angle(cross, end, midpoint, start);
-		//~ std::cout << angle/pi_const*180 << std::endl;
-		circle stepped;
-		for(circle c: four_circles){
-			coordinates local_center = midpoint -> make_local(c.center, pi_const/2 - angle);
-			//~ std::cout << line(angle, *midpoint).print() << std::endl;
-			//~ std::cout << local_center.print() << "\n";
-			if( !((local_center.y < 0) ^ (midpoint -> make_local(*end, pi_const/2 - angle).y < 0)) & std::abs(local_center.x) <= 1e-2){
-				stepped = c;
-				pre_circles.push_back(c);
-				std::cout << c.print() << std::endl;
-			}
-		//~ std::cout << std::endl;
-		}
-	}
-	try{
-		decimal_n radius_initial = evaluate_radius(pre_steps.at(0).end, pre_steps.at(0).start);
-		coordinates next_local = pre_steps.at(0).end.make_local(pre_steps.at(0).start, -pi_const/2 - initial_rotation);
-		bool is_right = (next_local.y < 0);
-		bool is_behind = (next_local.x < 0);
-		
-		coordinates center_local(0, ((is_right)? -1: 1) * radius_initial);
-		circle first_circle(pre_steps.at(0).start.make_global(center_local, initial_rotation - pi_const/2), radius_initial);
-		coordinates center_next_local = pre_circles.back().center.make_local(first_circle.center, -pi_const/2 - initial_rotation);
-		
-		bool is_vertically_close = (std::abs(center_next_local.x) + pre_circles.back().radius - (radius_initial)) <= 0;
-		bool is_horizontally_close = (std::abs(center_next_local.y) - (pre_circles.back().radius + radius_initial)) <= 0;
-		/// ATTENTION! is_horizontally_close may be incorrectly USED.s
-		//~ std::cout << line(initial_rotation, pre_steps.at(0).start).print() << std::endl;
-		//~ std::cout << initial_rotation/pi_const*180 << std::endl;
-		std::cout << next_local.print() << std::endl;
-		//~ std::cout << "Uhel: " << (line::get_angle(line(initial_rotation, pre_steps.at(0).start), line(pre_steps.at(0).start, pre_steps.at(0).end)))/pi_const*180 << std::endl;
-		std::cout << "=Vector[" <<  pre_steps.at(0).start.print() << ", "<< pre_steps.at(0).start.make_global(coordinates(1, 0), initial_rotation - pi_const/2).print() << "]" << std::endl;
-		//~ std::cout << pre_steps.at(0).start.make_global(coordinates(1, 0), initial_rotation - pi_const/2).print() << std::endl;
-		//~ std::cout << pre_steps.at(0).start.print() << std::endl;
-		//~ std::cout << pre_steps.at(0).end.print() << std::endl;
-		std::cout << first_circle.print() << std::endl;
-		std::vector<line> tangents = circle::circle_tangents(first_circle, pre_circles.back());
-		//~ line start_to_next_center(pre_steps.at(0).start, pre_circles.back().center);
-		//~ decimal_n next_center_angle = pre_steps.at(0).start.get_gamma(pre_circles.back().center);
-		//~ std::cout << start_to_next_center.print() << std::endl;
-		for(auto &a: tangents){
-			coordinates tang_1 = first_circle.intersection(a).front().make_local(pre_steps.at(0).start, -pi_const/2 - initial_rotation);
-			std::cout << tang_1.print() << std::endl;
-			coordinates tang_3 = pre_circles.back().intersection(std::get<line>(pre_steps.at(1).formula)).front(); /// provizorni, upravit
-			coordinates tang_4 = pre_circles.at(pre_circles.size() - 2).intersection(std::get<line>(pre_steps.at(1).formula)).front(); /// provizorni, upravit
-			/// lokalni souradnice z druhe strany
-			coordinates tang_2 = pre_circles.back().intersection(a).front().make_local(tang_3, -pi_const/2 - tang_3.get_gamma(tang_4));
-			std::cout << tang_2.print() << std::endl;
-			std::cout << "lokal" << std::endl;
-			if(!is_behind){
-				if(is_vertically_close){
-					if(tang_1.x >= 0 && coordinates(0, 0).get_distance(tang_1) / first_circle.radius >= sqrt2_const){
-						if(tang_2.x <= 0){
-							std::cout << a.print() << std::endl;
-							}
-						std::cout << "Tady" << std::endl;
-						}
-				} else {
-					if(tang_1.x >= 0 && coordinates(0, 0).get_distance(tang_1) / first_circle.radius <= sqrt2_const){
-						if(tang_2.x <= 0){
-							std::cout << a.print() << std::endl;
-							}
-						std::cout << "Tam" << std::endl;
-
-						}
-					}
-			} else {
-				if(is_vertically_close){
-					if(tang_1.x >= 0 && coordinates(0, 0).get_distance(tang_1) / first_circle.radius >= sqrt2_const){
-						if(tang_2.x <= 0){
-							std::cout << a.print() << std::endl;
-							}
-						std::cout << "Tady" << std::endl;
-						}
-				} else {
-					if(tang_1.x >= 0 && coordinates(0, 0).get_distance(tang_1) / first_circle.radius <= sqrt2_const){
-						if(tang_2.x <= 0){
-							std::cout << a.print() << std::endl;
-							}
-						std::cout << "Tam" << std::endl;
-
-						}
-					}
-				
+	coordinates center_local(0, ((is_right)? -1: 1) * radius_initial);
+	circle first_circle(start.make_global(center_local, initial_rotation - pi_const/2), radius_initial);
+	coordinates center_next_local = pre_circles.back().center.make_local(first_circle.center, -pi_const/2 - initial_rotation);
+	/// first circle generation block end
+	
+	std::cout << next_local.print() << std::endl;
+	std::cout << first_circle.print() << std::endl;
+	std::cout << "\nErrors below are not important right now." << std::endl;
+	
+	/// first tangent selection block start
+	std::vector<line> tangents = circle::circle_tangents(first_circle, pre_circles.back());
+	for(line &b: tangents) {
+		// in_first: bod prvni kruznice, ktera se musi projet
+		coordinates in_first = first_circle.intersection(b)[0];
+		// in_next: bod kruznice, na kterou se musi najet z prvni
+		coordinates in_next = pre_circles.back().intersection(b)[0];
+		// vector_angle: uhel tecny na kterou se musi najet
+		decimal_n vector_angle = in_first.get_gamma(in_next);
+		// tangent_angle: uhel bodu in_first vuci stredu kruznice, na ktere lezi
+		decimal_n tangent_angle = first_circle.center.get_gamma(in_first);
+		// difference_angle: rozdil uhlu tecny a uhlu vuci bodu dotyku
+		decimal_n difference_angle = vector_angle - (tangent_angle + ((center_local.y < 0)?-0.5:0.5) * pi_const);
+		if((std::abs(difference_angle) <= 1e-3 || (std::abs(difference_angle + ((center_local.y < 0)?-2:2) * pi_const) <= 1e-3))){
+			decimal_n next_angle = pre_steps.at(1).start.get_gamma(pre_steps.at(1).end);
+			std::cout << pre_steps.at(1).start.make_local(b.intersection(std::get<line>(pre_steps.at(1).formula)), -next_angle).print() << std::endl;
+			if(pre_steps.at(1).start.make_local(b.intersection(std::get<line>(pre_steps.at(1).formula)), -next_angle).x < 0){
+				pre_steps.at(0) = step(in_first, in_next);
+				std::cout << "=Vector["<< in_first.print() << ", " << in_next.print() << "]" << std::endl;
+				break;
 				}
-
-			//~ if(pre_steps.at(0).start.make_local(a.intersection(start_to_next_center), pi_const/2 - next_center_angle).x <= 0){
-				//~ }
 			}
-		} 
-		catch (const std::out_of_range& oor){
-			std::cerr << "The f*ck is this sh!t?! It was there 1e-5 seconds ago. " << oor.what() << std::endl;
-			return steps;
 		}
+	/// first tangent selection block end
 	std::cout << std::endl;
 		
 	
 	return steps;
 	}
-
 
 /**
  * 

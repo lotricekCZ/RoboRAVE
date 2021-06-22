@@ -37,7 +37,7 @@ map::map(){
 	//~ _map_obstacles.push_back(circle());
 }
 
-std::vector<location> map::grid(int s_height = 0, int s_width = 0, int height = 1000, int width = 1000){
+std::vector<location> map::grid(int s_height = 0, int s_width = 0, int height = 1000, int width = 1000) {
 	
 	int h = (s_height < height)? s_height : height, he = (s_height > height)? s_height : height, \
 		w = (s_width < width)? s_width : width, we = (s_width > width)? s_width : width, \

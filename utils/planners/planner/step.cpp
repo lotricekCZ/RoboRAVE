@@ -38,23 +38,43 @@ step::step()
 }
 
 	
-step::step(coordinates start, coordinates end, coordinates center){
+step::step(coordinates start, coordinates end, coordinates center, bool is_right, bool compute_angle){
 	this -> start = start;
 	this -> end = end;
 	this -> _type = circle_e;
-	this -> formula = circle(center, start.get_distance(center));
+	this -> formula = circle(center, center.get_distance(start));
+	
+	/// block for optional activities
+	if(compute_angle){
+		decimal_n raw_start = start.get_gamma(center);
+		decimal_n raw_end = end.get_gamma(center);
+		this -> angle_start = (raw_start + (is_right? 0.5f: -0.5f) * pi_const);
+		this -> angle_start = angle_start + ((angle_start >= 2*pi_const)? - 2*pi_const: (angle_start < 0)? 2*pi_const: 0);
+		this -> angle_end = (raw_end + (is_right? 0.5f: -0.5f) * pi_const);
+		this -> angle_end = angle_end + ((angle_end >= 2*pi_const)? - 2*pi_const: (angle_end < 0)? 2*pi_const: 0);
+		this -> phi = this -> angle_end - this -> angle_start;
+		std::cout << "zacatek " << start.print_geogebra() + " " << this -> angle_start / pi_const * 180 << std::endl;
+		std::cout << "konec " << end.print_geogebra() + " " << this -> angle_end / pi_const * 180 << std::endl;
+		std::cout << "phi  " << this -> phi / pi_const * 180 << std::endl;
+		}
 	}
 	
 	
-step::step(coordinates start, coordinates end){
+step::step(coordinates start, coordinates end, bool compute_angle){
 	this -> start = start;
 	this -> end = end;	
 	this -> _type = line_e;
 	this -> formula = line(start, end);
+	this -> phi = 0; // does not change
+	this -> omega = 0; // does not change
 	
+	/// block for optional activities
+	if(compute_angle){
+		this -> angle_start = this -> angle_end = start.get_gamma(end);
+		}
 	}
 
-std::string step::inkscape_print(){
+std::string step::print_inkscape(){
 	switch(_type){
 		case line_e:
 			return " <path id=\"path853\" d=\"M "+ std::to_string(start.x)+","+ std::to_string(start.y)+","+ \
@@ -110,4 +130,44 @@ std::string step::print(){
 			return std::get<circle>(this -> formula).print();
 			}
 		}
+	}
+	
+std::string step::print_geogebra(){
+	switch(_type){
+		case line_e: {
+			return "=Segment[" + start.print_geogebra() + "," + end.print_geogebra() + "]";
+			}
+		case equation_type::circle_e: {
+			return "=CircularArc[" + std::get<circle>(this -> formula).center.print_geogebra() + 
+						"," + start.print_geogebra() + "," + end.print_geogebra() + "]";
+			}
+		}
+	}
+
+std::vector<coordinates> step::intersection(step s, circle c){
+	std::vector<coordinates> ret;
+	switch(s._type){
+		case line_e: {
+			ret = c.intersection(std::get<line>(s.formula));
+			for(std::vector<coordinates>::iterator i = ret.begin(); i < ret.end(); i++){
+				if(!line::on_segment(*i, s.start, s.end)){
+					ret.erase(i);
+					}
+				}
+			break;
+			}
+		case circle_e: {
+			ret = c.intersection(std::get<circle>(s.formula));
+			std::cout << "velikost 1: " << ret.size() << std::endl;
+			for(std::vector<coordinates>::iterator i = ret.begin(); i < ret.end(); i++){
+				if(!(std::get<circle>(s.formula).on_segment(*i, s.start, s.end, std::abs(s.phi) > pi_const))){
+					std::cout << (int)(std::get<circle>(s.formula).on_segment(*i, s.start, s.end, std::abs(s.phi) > pi_const)) << std::endl;
+					ret.erase(i);
+					i--;
+					}
+				}
+			return ret;
+			}
+		}
+	return ret;
 	}

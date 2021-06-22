@@ -56,7 +56,7 @@ class line
 		std::string print();
 		
 		
-		bool on_segment(coordinates, coordinates, coordinates);
+		static bool on_segment(coordinates, coordinates, coordinates);
 		line operator /(decimal_n);
 		static coordinates intersection(line, line);
 		coordinates intersection(line);

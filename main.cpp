@@ -431,7 +431,7 @@ int main(int argc, char *argv[]) {
 			}
 			
 		case 20:{
-			std::cout << step(coordinates(-50, 10), coordinates(0, 60), coordinates(0, 10)).inkscape_print() << std::endl;
+			std::cout << step(coordinates(-50, 10), coordinates(0, 60), coordinates(0, 10)).print_inkscape() << std::endl;
 			break;
 			}
 		
@@ -493,41 +493,100 @@ int main(int argc, char *argv[]) {
 			using namespace cv;
 			const decimal_n FPS_SMOOTHING = 0.9;
 			cv::VideoCapture cap(0);//cap.set(cv::CAP_PROP_FRAME_WIDTH, 4);
-		    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 800);
-		    //~ dnn::readNetFromONNX
-		    //~ dnn::DetectionModel d("best.mlmodel");
-		    cap.set(cv::CAP_PROP_FPS, 8);
-		    //~ std::vector<int> classIds;
-		    //~ std::vector<float> confidences;
+			cap.set(cv::CAP_PROP_FRAME_HEIGHT, 800);
+			//~ dnn::readNetFromONNX
+			//~ dnn::DetectionModel d("best.mlmodel");
+			cap.set(cv::CAP_PROP_FPS, 8);
+			//~ std::vector<int> classIds;
+			//~ std::vector<float> confidences;
 			//~ std::vector<cv::Rect> boxes;
 			static const std::string wname = "n";
-		    cv::Mat frame;
-		    cv::namedWindow(wname);
-		    //~ Mat edit;
-		    float fps = 0.0;
-		    double prev = clock(); 
-		    while (true){
-		        double now = (clock()/(double)CLOCKS_PER_SEC);
-		        
-		        fps = (fps*FPS_SMOOTHING + (1/(now - prev))*(1.0 - FPS_SMOOTHING));
-		        prev = now;
+			bool m = true;
+			cv::Mat frame;
+			cv::Mat frame_1;
+			cv::Mat rame;
+			cv::namedWindow(wname);
+			
+			cv::namedWindow("b");
+			//~ Mat edit;
+			float fps = 0.0;
+			double prev = clock(); 
+			while (true){
+			    double now = (clock()/(double)CLOCKS_PER_SEC);
+			    
+			    fps = (fps*FPS_SMOOTHING + (1/(now - prev))*(1.0 - FPS_SMOOTHING));
+			    prev = now;
 				
-		        printf("fps: %.1f\n", fps);
+			    //~ printf("fps: %.1f\n", fps);
 		
-		        if (cap.isOpened()){
-		            cap.read(frame);
-		            //~ d.detect(frame, classIds, confidences, boxes);
-		        }
-		        cvtColor(frame, frame, COLOR_BGR2GRAY);
-				GaussianBlur(frame, frame, Size(5, 5), 1.5);
-				cv::Canny(frame, frame, 50, 200);       
-		        cv::imshow(wname, frame);
-		        //~ cv::imwrite("heck.png", frame);
-		        //~ imshow("edit", edit);
-		        if (cv::waitKey(2) == 27){
-		            break;
-		        }
-		    }
+			    if (cap.isOpened()){
+			        cap.read(frame);
+			        rame = frame;
+			        if(m){
+						frame_1 = frame;
+						m = !m;
+					}
+			        //~ d.detect(frame, classIds, confidences, boxes);
+			    }
+			    //~ cv::cvtColor(frame, frame, COLOR_BGR2GRAY);
+				//~ cv::GaussianBlur(frame, frame, Size(31, 31), 1.5);
+				//~ cv::sqrBoxFilter(frame, frame, 2, cv::Size(5, 5));
+				//~ cv::GaussianBlur(frame, frame, Size(5, 5), 1.5);
+				//~ cv::absdiff(frame, frame_1, rame);
+				//~ std::vector<std::vector<cv::Point>> contours;
+				//~ std::vector<cv::Vec4i> hierarchy;
+				//~ cv::threshold(rame, rame, 0, 255, cv::THRESH_BINARY_INV | cv::THRESH_OTSU);
+				//~ cv::findContours(rame, contours, hierarchy, cv::RETR_LIST, cv::CHAIN_APPROX_SIMPLE);
+				//~ cv::resize(rame, rame, cv::Size(720, 480));
+				//~ cv::resize(frame, frame, cv::Size(288, 192));
+			    //~ std::cout << frame << "\n\n\n\n\n\n\n" << std::endl;
+				//~ cv::resize(frame, frame, cv::Size(720, 480));
+				//~ cv::cvtColor(frame, frame, COLOR_GRAY2BGR);
+				//~ cv::cvtColor(rame, rame, cv::COLOR_GRAY2BGR);
+				//~ for(auto cont: contours)
+				//~ {
+				    //~ cv::Rect box = cv::boundingRect(cont);
+				    //~ cv::rectangle(frame, box, cv::Scalar(rand()%255, rand()%255, rand()%255));
+				//~ }
+				if(!frame.empty()){
+					//~ cv::cvtColor(frame, frame, COLOR_BGR2GRAY);
+					//~ cv::Canny(frame, frame, 40, 150);
+					cv::cvtColor(rame, rame, COLOR_BGR2GRAY);
+					cv::GaussianBlur(rame, rame, cv::Size(25, 25), 6);
+					signed_b x = 0, y = 0;
+					//~ cv::Vec3b max = ;
+					for(signed_b i = 0; i < rame.rows; i++){
+						for(signed_b j = 0; j < rame.cols; j++){
+							if(rame.at<uchar>(x, y) < rame.at<uchar>(i, j)){
+								x = i;
+								y = j;
+								}								
+							}
+						}
+					//~ cv::cvtColor(frame, frame, COLOR_BGR5652BGR);
+					cv::drawMarker(frame, cv::Point(320, 240), rame.at<cv::Vec3b>(240, 320)-cv::Vec3b(60, 60, 60), cv::MARKER_CROSS, 20, 6);
+					cv::putText(frame, std::to_string(fps) +" fps", cv::Point(0, 40), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 3);
+					cv::drawMarker(frame, cv::Point(y, x), cv::Scalar(0, 0, 255), cv::MARKER_CROSS, 20, 6);
+					cv::line(frame, cv::Point(y, 0), cv::Point(y, properties::camera::size_footage_horizontal), cv::Scalar(205, 60, 205), 2);
+					
+					//~ std::cout << "x: " << x << " y: " << y << " l: " << std::to_string(rame.at<uchar>(x, y)) << std::endl;
+					cv::putText(frame, std::to_string(properties::camera::angle_horizontal*((float)y/(float)properties::camera::size_footage_vertical - 1/2.0f))+"*", cv::Point(y, x), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 1);
+					cv::imshow("b", frame);
+
+				    cv::imshow(wname, frame);
+				    //~ cv::imshow("b", rame);
+				    //~ frame_1 = frame;
+				    cv::cvtColor(rame, rame, COLOR_GRAY2BGR);
+			    }
+			    rame.release();
+			    frame.release();
+			    //~ cv::imwrite("heck.png", frame);
+			    //~ imshow("edit", edit);
+			    if (cv::waitKey(2) == 27){
+			        break;
+			    }
+			}
+			break;
 			}
 			
 		case 25:{
@@ -704,67 +763,21 @@ int main(int argc, char *argv[]) {
 				break;
 				}
 				
-			case 41:{
-				std::fstream f("outrandom.txt", std::fstream::out);
-				coordinates c(0, 0);
-				coordinates a(-1, -2);
-				for(unsigned_n i = 0; i < 90; i++){
-					c = c.make_global(a, coordinates(0, 0.7+i/16.0), -pi_const/2 + (decimal_n)i*8*(pi_const/180.0));
-					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
-						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
-					
-					
-					c = c.make_global(a, coordinates(0, 1.4+i/16.0), pi_const/2 + (decimal_n)i*8*(pi_const/180.0));
-					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
-						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
-					
-					c = c.make_global(a, coordinates(0, 0.7+i/16.0), pi_const + (decimal_n)i*8*(pi_const/180.0));
-					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
-						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
-					
-					
-					c = c.make_global(a, coordinates(0, 1.4+i/16.0), 0 + (decimal_n)i*8*(pi_const/180.0));
-					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
-						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
-					
-					c = c.make_global(a, coordinates(0, 0.7+i/16.0), 7*pi_const/4 + (decimal_n)i*8*(pi_const/180.0));
-					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
-						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
-					
-					
-					c = c.make_global(a, coordinates(0, 1.4+i/16.0), pi_const/4 + (decimal_n)i*8*(pi_const/180.0));
-					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
-						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
-					
-					c = c.make_global(a, coordinates(0, 0.7+i/16.0), 3*pi_const/4 + (decimal_n)i*8*(pi_const/180.0));
-					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
-						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
-					
-					
-					c = c.make_global(a, coordinates(0, 1.4+i/16.0), 5*pi_const/4 + (decimal_n)i*8*(pi_const/180.0));
-					f << "<circle r=\"" << std::to_string((i+16)*(1.080836/384))<< "\" cy=\""<< std::to_string(80.240021 + c.y*5) \
-						<<"\" cx=\"" << std::to_string(93.624962 + c.x*5) << "\"style=\"fill:#000000;stroke:none;stroke-width:22.1243;stroke-miterlimit:4;stroke-dasharray:none\"id=\"path4"<< std::to_string(i)<<"\" />" << std::endl;
-					
-					}
-				f.close();
-				break;
-				}
-				
 			case 40:{
 				circle start1(coordinates(3, 0), 3);
 				circle start2(coordinates(-3, 0), 3);
-				std::array<circle, 13> possible = {
+				std::array<circle, 9> possible = {
 					circle(coordinates(-3, 3*3), 2.5),
 					circle(coordinates(1, 6), 2.5),
 					circle(coordinates(6*2, 3*3), 2.5),
-					circle(coordinates(-6*2, 3*3), 2.5),
+					//~ circle(coordinates(-6*2, 3*3), 2.5),
 					circle(coordinates(6*2, 3), 2.5),
-					circle(coordinates(-6*2, 3), 2.5),
+					//~ circle(coordinates(-6*2, 3), 2.5),
 					circle(coordinates(6*2, -3), 2.5),
-					circle(coordinates(-6*2, -3), 2.5),
+					//~ circle(coordinates(-6*2, -3), 2.5),
 					circle(coordinates(6*2, 3*-3), 2.5),
 					circle(coordinates(-6*2, 3*-3), 2.5),
-					circle(coordinates(3, 3*-3), 2.5),
+					//~ circle(coordinates(3, 3*-3), 2.5),
 					circle(coordinates(-3, 3*-3), 2.5),
 					circle(coordinates(6, -2.7), 0.5)
 					};
@@ -778,7 +791,7 @@ int main(int argc, char *argv[]) {
 				}
 				
 				for(auto &a: possible){
-					for(auto c: {start1, start2}){
+					for(auto c: {start1/*, start2*/}){
 						for(auto &b: circle::circle_tangents(c, a)) {
 							decimal_n vector_angle = c.intersection(b)[0].get_gamma(a.intersection(b)[0]);
 							decimal_n tangent_angle = c.center.get_gamma(c.intersection(b)[0]);
@@ -789,6 +802,29 @@ int main(int argc, char *argv[]) {
 							}
 						}
 					}
+				break;
+				}
+
+			case 41:{
+				std::cout << step(coordinates(3, 5), coordinates(-5, 1), coordinates(0, 1)).print_geogebra() << std::endl;
+				break;
+				}
+				
+			case 42:{
+				std::cout << step(coordinates(3, 5), coordinates(-5, 1)).print_geogebra() << std::endl;
+				break;
+				}
+				
+			case 43:{
+				std::vector<coordinates> out = step::intersection(step(coordinates(3, 5), coordinates(-5, 1), coordinates(0, 1), true), circle(coordinates(3, 5), 6));
+				std::cout << "velikost: " << out.size() << std::endl;
+				for(auto a: out)
+					std::cout << a.print_geogebra() << std::endl;
+				break;
+				}
+				
+			case 44:{
+				std::cout << radius::from_3_points(coordinates(-4, 0), coordinates(0, 2), coordinates(4, 0)) << std::endl;
 				break;
 				}
 			}

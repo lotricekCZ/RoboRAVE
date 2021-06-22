@@ -51,17 +51,19 @@ class step
 	decimal_n angle_end; 	// angle when the movement is going to end
 	
 	decimal_n omega;		// angle which is driven in one second
-	decimal_n phi; 			// total angle which is driven
+	decimal_n phi; 			// total angle which is driven, can be also negative
 	
 	public:
 		//~ step(speeds, coordinates, coordinates, coordinates, decimal_n, decimal_n, decimal_n, decimal_n);step(speeds, coordinates, coordinates, coordinates, decimal_n, decimal_n, decimal_n, decimal_n);
-		step(coordinates, coordinates, coordinates);
-		step(coordinates, coordinates);
+		step(coordinates, coordinates, coordinates, bool is_right = true, bool compute_angle = true);
+		step(coordinates, coordinates, bool compute_angle = true);
 		step();
 		
-		std::string inkscape_print();
 		static std::pair<step, step> get_perimeters(step, decimal_n perimeter = properties::widths::robot / 2);
 		std::string print();
+		std::string print_inkscape();
+		std::string print_geogebra();
+		static std::vector<coordinates> intersection(step s, circle c);
 	private:
 		/* add your private declarations */
 };
