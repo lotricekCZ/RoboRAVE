@@ -816,7 +816,8 @@ int main(int argc, char *argv[]) {
 				}
 				
 			case 43:{
-				std::vector<coordinates> out = step::intersection(step(coordinates(3, 5), coordinates(-5, 1), coordinates(0, 1), true), circle(coordinates(3, 5), 6));
+				std::cout << step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2])).print_geogebra() << std::endl;
+				std::vector<coordinates> out = step::intersection(step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2])), circle(coordinates(4, -7), 6));
 				std::cout << "velikost: " << out.size() << std::endl;
 				for(auto a: out)
 					std::cout << a.print_geogebra() << std::endl;

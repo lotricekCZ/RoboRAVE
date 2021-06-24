@@ -33,10 +33,10 @@ class step
 {
 	public:
 	speeds v;
-	
+	enum direction:bool{left = 0, right = 1};
 	coordinates start;
 	coordinates end;
-	
+	bool direction_curve;
 	std::variant<circle, line> formula;
 	enum equation_type: bool{
 		line_e = 0,
@@ -55,7 +55,7 @@ class step
 	
 	public:
 		//~ step(speeds, coordinates, coordinates, coordinates, decimal_n, decimal_n, decimal_n, decimal_n);step(speeds, coordinates, coordinates, coordinates, decimal_n, decimal_n, decimal_n, decimal_n);
-		step(coordinates, coordinates, coordinates, bool is_right = true, bool compute_angle = true);
+		step(coordinates, coordinates, coordinates, bool is_right = direction::right, bool compute_angle = true);
 		step(coordinates, coordinates, bool compute_angle = true);
 		step();
 		
