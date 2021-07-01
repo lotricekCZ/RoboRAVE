@@ -64,6 +64,7 @@ class step
 		std::string print_inkscape();
 		std::string print_geogebra();
 		static std::vector<coordinates> intersection(step s, circle c);
+		static std::vector<coordinates> intersection(step s, line l);
 	private:
 		/* add your private declarations */
 };

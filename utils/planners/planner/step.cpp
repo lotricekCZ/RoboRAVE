@@ -153,8 +153,8 @@ std::string step::print_geogebra(){
 			}
 		case equation_type::circle_e: {
 			return "=CircularArc[" + std::get<circle>(this -> formula).center.print_geogebra() + 
-						"," + ((angle_start > angle_end)? start.print_geogebra(): end.print_geogebra()) +
-						"," + ((angle_start > angle_end)? end.print_geogebra(): start.print_geogebra()) + "]";
+						"," + ((direction_curve)? end.print_geogebra(): start.print_geogebra()) +
+						"," + ((direction_curve)? start.print_geogebra(): end.print_geogebra()) + "]";
 			}
 		}
 	}
@@ -166,7 +166,7 @@ std::vector<coordinates> step::intersection(step s, circle c){
 			ret = c.intersection(std::get<line>(s.formula));
 			for(std::vector<coordinates>::iterator i = ret.begin(); i < ret.end(); i++){
 				if(!line::on_segment(*i, s.start, s.end)){
-					ret.erase(i);
+					ret.erase(i--);
 					}
 				}
 			break;
@@ -179,6 +179,28 @@ std::vector<coordinates> step::intersection(step s, circle c){
 					}
 				}
 			return ret;
+			}
+		}
+	return ret;
+	}
+	
+std::vector<coordinates> step::intersection(step s, line l){
+	std::vector<coordinates> ret;
+	switch(s._type){
+		case line_e: {
+			coordinates intersect = l.intersection(std::get<line>(s.formula));
+			if(!line::on_segment(intersect, s.start, s.end)){
+					ret.push_back(intersect);
+					}
+			break;
+			}
+		case circle_e: {
+			ret = std::get<circle>(s.formula).intersection(l);
+			for(std::vector<coordinates>::iterator i = ret.begin(); i < ret.end(); i++){
+				if(!(std::get<circle>(s.formula).on_segment(s.start, s.end, *i, std::abs(s.phi) > pi_const))){
+					ret.erase(i--);
+					}
+				}
 			}
 		}
 	return ret;
