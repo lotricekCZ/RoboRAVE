@@ -174,9 +174,19 @@ std::vector<coordinates> step::intersection(step s, circle c){
 		case circle_e: {
 			ret = c.intersection(std::get<circle>(s.formula));
 			for(std::vector<coordinates>::iterator i = ret.begin(); i < ret.end(); i++){
-				if(!(std::get<circle>(s.formula).on_segment(s.start, s.end, *i, std::abs(s.phi) > pi_const))){
-					ret.erase(i--);
-					}
+				if(std::abs(std::abs(s.phi) - pi_const) >= 1e-4){ 
+					// means that the angle isn't exactly 180 degrees and so the circle::on_segment method can be used 
+					if(!(std::get<circle>(s.formula).on_segment(s.start, s.end, *i, std::abs(s.phi) > pi_const))){
+						ret.erase(i--);
+						}
+					} else {
+						//~ circle track = std::get<circle>(s.formula);
+						decimal_n sta_end = s.start.get_gamma(s.end);
+						decimal_n sta_point = s.start.get_gamma(*i);
+						if(std::sin(sta_point - sta_end) > 0 ^ s.direction_curve){
+							ret.erase(i--);
+							}
+						}
 				}
 			return ret;
 			}
