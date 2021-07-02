@@ -54,14 +54,14 @@ step::step(coordinates start, coordinates end, coordinates center, bool is_right
 		this -> angle_end = (raw_end + (is_right? 0.5f: -0.5f) * pi_const);
 		this -> angle_end = angle_end + ((angle_end >= 2*pi_const)? - 2*pi_const: (angle_end < 0)? 2*pi_const: 0);
 		if(is_right && (this -> angle_end > this -> angle_start)){ // means that it underflew
-			std::cout << "opt 1" << std::endl;
+			//~ std::cout << "opt 1" << std::endl;
 			this -> phi = (((2*pi_const) - this -> angle_end) + this -> angle_start);
 			}
 		else if(!is_right && (this -> angle_end < this -> angle_start)){ // means that it overflew
-			std::cout << "opt 2" << std::endl;
+			//~ std::cout << "opt 2" << std::endl;
 			this -> phi = (this -> angle_end + ((2*pi_const) - this -> angle_start));
 			} else {
-				std::cout << "opt 3" << std::endl;
+				//~ std::cout << "opt 3" << std::endl;
 				this -> phi = (this -> angle_end - this -> angle_start);
 			}
 		//~ this -> phi = (is_right? (this -> angle_end - this -> angle_start) :(2*pi_const - (this -> angle_end - this -> angle_start)));
@@ -69,7 +69,7 @@ step::step(coordinates start, coordinates end, coordinates center, bool is_right
 		/// diagnostics
 		std::cout << "zacatek " << start.print_geogebra() + "\t" << this -> angle_start / pi_const * 180 << std::endl;
 		std::cout << "konec " << end.print_geogebra() + "\t" << this -> angle_end / pi_const * 180 << std::endl;
-		std::cout << "phi  " << this -> phi / pi_const * 180 << std::endl;
+		//~ std::cout << "phi  " << this -> phi / pi_const * 180 << std::endl;
 		}
 	}
 	
@@ -165,7 +165,7 @@ std::vector<coordinates> step::intersection(step s, circle c){
 		case line_e: {
 			ret = c.intersection(std::get<line>(s.formula));
 			for(std::vector<coordinates>::iterator i = ret.begin(); i < ret.end(); i++){
-				if(!line::on_segment(*i, s.start, s.end)){
+				if(!s.on_segment_linear(*i)){
 					ret.erase(i--);
 					}
 				}
@@ -174,32 +174,48 @@ std::vector<coordinates> step::intersection(step s, circle c){
 		case circle_e: {
 			ret = c.intersection(std::get<circle>(s.formula));
 			for(std::vector<coordinates>::iterator i = ret.begin(); i < ret.end(); i++){
-				if(std::abs(std::abs(s.phi) - pi_const) >= 1e-4){ 
-					// means that the angle isn't exactly 180 degrees and so the circle::on_segment method can be used 
-					if(!(std::get<circle>(s.formula).on_segment(s.start, s.end, *i, std::abs(s.phi) > pi_const))){
-						ret.erase(i--);
-						}
-					} else {
-						//~ circle track = std::get<circle>(s.formula);
-						decimal_n sta_end = s.start.get_gamma(s.end);
-						decimal_n sta_point = s.start.get_gamma(*i);
-						if(std::sin(sta_point - sta_end) > 0 ^ s.direction_curve){
-							ret.erase(i--);
-							}
-						}
+				if(!s.on_segment_circular(*i)){
+					ret.erase(i--);
+					}
 				}
 			return ret;
 			}
 		}
 	return ret;
 	}
-	
+
+
+std::vector<coordinates> step::intersection(step a, step b){
+	std::vector<coordinates> ret;
+	switch(a._type){
+		case line_e: {
+			ret = step::intersection(b, std::get<line>(a.formula));
+			for(std::vector<coordinates>::iterator i = ret.begin(); i < ret.end(); i++){
+				if(!a.on_segment_linear(*i)){
+					ret.erase(i--);
+					}
+				}
+			break;
+			}
+		case circle_e: {
+			ret = step::intersection(b, std::get<circle>(a.formula));
+			for(std::vector<coordinates>::iterator i = ret.begin(); i < ret.end(); i++){
+				if(!a.on_segment_circular(*i)){
+					ret.erase(i--);
+					}
+				}
+			break;
+			}
+		}
+	return ret;
+	}
+
 std::vector<coordinates> step::intersection(step s, line l){
 	std::vector<coordinates> ret;
 	switch(s._type){
 		case line_e: {
 			coordinates intersect = l.intersection(std::get<line>(s.formula));
-			if(!line::on_segment(intersect, s.start, s.end)){
+			if(!s.on_segment_linear(intersect)){
 					ret.push_back(intersect);
 					}
 			break;
@@ -207,11 +223,33 @@ std::vector<coordinates> step::intersection(step s, line l){
 		case circle_e: {
 			ret = std::get<circle>(s.formula).intersection(l);
 			for(std::vector<coordinates>::iterator i = ret.begin(); i < ret.end(); i++){
-				if(!(std::get<circle>(s.formula).on_segment(s.start, s.end, *i, std::abs(s.phi) > pi_const))){
+				if(s.on_segment_circular(*i)){
 					ret.erase(i--);
 					}
 				}
 			}
 		}
 	return ret;
+	}
+
+
+bool step::on_segment_circular(coordinates point){
+	if(std::abs(std::abs(phi) - pi_const) >= 1e-4){ 
+		// means that the angle isn't exactly 180 degrees and so the circle::on_segment method can be used 
+		if(!(std::get<circle>(formula).on_segment(start, end, point, std::abs(phi) > pi_const))){
+			return false;
+			}
+		} else {
+			//~ circle track = std::get<circle>(formula);
+			decimal_n sta_end = start.get_gamma(end);
+			decimal_n sta_point = start.get_gamma(point);
+			if((std::sin(sta_point - sta_end) > 0) ^ direction_curve){
+				return false;
+				}
+			}
+	return true;
+	}
+
+bool step::on_segment_linear(coordinates point){
+	return line::on_segment(point, start, end);
 	}

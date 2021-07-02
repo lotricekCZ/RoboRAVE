@@ -1,6 +1,6 @@
 # Tresholds to treat detected stuff like if they were there
 # Remember, NO indentation by tabs!!!
-version: &software_version "v0.1.1-a"
+version: &software_version "v0.1.2-a"
 logs:
     actions:	../logs/actions/actions.txt
     calculations:	../logs/actions/calculations.md
@@ -64,5 +64,5 @@ properties:
       #~ steps: 	200
       
 information: |
- Roborave robot software, version 0.1.1-a
+ Roborave robot software, version 0.1.2-a
  © Jakub Ramašeuski, 2021

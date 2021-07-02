@@ -825,9 +825,39 @@ int main(int argc, char *argv[]) {
 				}
 				
 			case 44:{
-				std::cout << radius::from_3_points(coordinates(-4, 0), coordinates(0, 2), coordinates(4, 0)) << std::endl;
+				std::cout << step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2])).print_geogebra() << std::endl;
+				std::cout << line(-3, 8, -4).print() << std::endl;
+				std::vector<coordinates> out = step::intersection(step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2])), line(0, 1, 1));
+				std::cout << "velikost: " << out.size() << std::endl;
+				for(auto a: out)
+					std::cout << a.print_geogebra() << std::endl;
 				break;
 				}
+				
+			case 45:{
+				std::cout << step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2])).print_geogebra() << std::endl;
+				std::cout << step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10])), coordinates(4, -7), c_i(argv[11])).print_geogebra() << std::endl;
+				std::vector<coordinates> out = step::intersection(
+												step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2])), 
+												step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10])), coordinates(4, -7), c_i(argv[11])));
+				std::cout << "velikost: " << out.size() << std::endl;
+				for(auto a: out)
+					std::cout << a.print_geogebra() << std::endl;
+				break;
+				}
+				
+			case 46:{
+				std::cout << step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2])).print_geogebra() << std::endl;
+				std::cout << step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10]))).print_geogebra() << std::endl;
+				std::vector<coordinates> out = step::intersection(
+												step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2])), 
+												step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10]))));
+				std::cout << "velikost: " << out.size() << std::endl;
+				for(auto a: out)
+					std::cout << a.print_geogebra() << std::endl;
+				break;
+				}
+				
 			}
 	
     uint8_t c = std::thread::hardware_concurrency();	

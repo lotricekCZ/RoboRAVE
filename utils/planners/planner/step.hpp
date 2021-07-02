@@ -58,11 +58,13 @@ class step
 		step(coordinates, coordinates, coordinates, bool is_right = direction::right, bool compute_angle = true);
 		step(coordinates, coordinates, bool compute_angle = true);
 		step();
-		
+		bool on_segment_circular(coordinates point);
+		bool on_segment_linear(coordinates point);
 		static std::pair<step, step> get_perimeters(step, decimal_n perimeter = properties::widths::robot / 2);
 		std::string print();
 		std::string print_inkscape();
 		std::string print_geogebra();
+		static std::vector<coordinates> intersection(step a, step b);
 		static std::vector<coordinates> intersection(step s, circle c);
 		static std::vector<coordinates> intersection(step s, line l);
 	private:
