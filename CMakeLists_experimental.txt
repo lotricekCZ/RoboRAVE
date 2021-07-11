@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)	
 
 # set the project name and version
-project(roborave VERSION 0.1.1)
+project(roborave VERSION 0.1.2)
 #~ target_link_libraries(roborave libserial pthread)
 
 file(GLOB SOURCE_FILES

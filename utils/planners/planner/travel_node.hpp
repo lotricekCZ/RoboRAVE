@@ -24,7 +24,7 @@
 #ifndef TRAVEL_NODE_HPP
 #define TRAVEL_NODE_HPP
 
-class travel_node{
+class travel_node {
 	public:
 		coordinates coords;
 		unsigned_b id = 0;

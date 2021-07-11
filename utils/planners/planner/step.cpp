@@ -159,6 +159,20 @@ std::string step::print_geogebra(){
 		}
 	}
 
+std::vector<coordinates> step::intersection(circle c){
+	return step::intersection(*this, c);
+	}
+
+
+std::vector<coordinates> step::intersection(step b){
+	return step::intersection(*this, b);
+	}
+
+std::vector<coordinates> step::intersection(line l){
+	return step::intersection(*this, l);
+	}
+
+
 std::vector<coordinates> step::intersection(step s, circle c){
 	std::vector<coordinates> ret;
 	switch(s._type){
@@ -252,4 +266,55 @@ bool step::on_segment_circular(coordinates point){
 
 bool step::on_segment_linear(coordinates point){
 	return line::on_segment(point, start, end);
+	}
+
+
+decimal_n step::get_distance(step s, coordinates c, bool carry_caps){
+	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
+	bool cap = false;
+	switch(s._type){
+		case line_e: {
+			coordinates p = line::intersection(std::get<line>(s.formula), 
+							std::get<line>(s.formula).make_perpendicular(c)); /// always exactly one point
+			if(s.on_segment_linear(p)){
+				ret = p.get_distance(c);
+				} else {
+					/// toggles bool cap
+					cap = true;
+					decimal_n d_start = c.get_distance(s.start);
+					decimal_n d_end = c.get_distance(s.end);
+					ret = (d_end < d_start)? d_end: d_start;
+					}
+			break;
+			}
+		/// TODO: circle_e
+		case circle_e: {
+			bool passed = false;
+			std::vector<coordinates> p = circle::intersection(line(c, std::get<circle>(s.formula).center),
+															std::get<circle>(s.formula)); /// always exactly two points
+			for(auto i: p){
+				if(((c.get_distance(i) < std::get<circle>(s.formula).radius) | 
+						line::on_segment(i, std::get<circle>(s.formula).center, c))){
+					if(s.on_segment_circular(i)){
+						/** 
+						 * 	this means that the point is closer to intersection than center 
+						 * 	or the intersection is between center and point and intersection is on segment 
+						 * 	- by that it is sure that the closest distance to circular segment is from that intersection
+						 **/
+						 passed = true;
+						 decimal_n comp_ret = c.get_distance(i);
+						 ret = (comp_ret < ret)? comp_ret: ret;
+						} else {
+							/// toggles bool cap
+							cap = true ^ passed;
+							decimal_n d_start = c.get_distance(s.start);
+							decimal_n d_end = c.get_distance(s.end);
+							ret = (d_end < d_start)? ((d_end < ret)? d_end: ret): ((d_start < ret)? d_start: ret);
+							}
+						}
+				}
+			break;
+			}
+		}
+	return ((carry_caps | (!carry_caps ^ cap))? ret: std::numeric_limits<decimal_n>::infinity());
 	}

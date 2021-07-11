@@ -64,9 +64,16 @@ class step
 		std::string print();
 		std::string print_inkscape();
 		std::string print_geogebra();
+		
 		static std::vector<coordinates> intersection(step a, step b);
 		static std::vector<coordinates> intersection(step s, circle c);
 		static std::vector<coordinates> intersection(step s, line l);
+		
+		std::vector<coordinates> intersection(step b);
+		std::vector<coordinates> intersection(circle c);
+		std::vector<coordinates> intersection(line l);
+		
+		static decimal_n get_distance(step s, coordinates c, bool carry_caps = true);
 	private:
 		/* add your private declarations */
 };
