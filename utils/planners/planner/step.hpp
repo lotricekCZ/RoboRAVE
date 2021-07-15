@@ -74,6 +74,9 @@ class step
 		std::vector<coordinates> intersection(line l);
 		
 		static decimal_n get_distance(step s, coordinates c, bool carry_caps = true);
+		static decimal_n get_distance(step s, line l, bool carry_caps = true);
+		//~ static decimal_n get_distance(step s, circle c, bool carry_caps = true);
+		//~ static decimal_n get_distance(step a, step b, bool carry_caps = true);
 	private:
 		/* add your private declarations */
 };

@@ -287,7 +287,7 @@ decimal_n step::get_distance(step s, coordinates c, bool carry_caps){
 					}
 			break;
 			}
-		/// TODO: circle_e
+
 		case circle_e: {
 			bool passed = false;
 			std::vector<coordinates> p = circle::intersection(line(c, std::get<circle>(s.formula).center),
@@ -317,4 +317,47 @@ decimal_n step::get_distance(step s, coordinates c, bool carry_caps){
 			}
 		}
 	return ((carry_caps | (!carry_caps ^ cap))? ret: std::numeric_limits<decimal_n>::infinity());
+	}
+
+decimal_n step::get_distance(step s, line l, bool carry_caps){
+	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
+	std::vector<coordinates> inter;
+	switch(s._type){
+		case line_e: {
+			decimal_n d_start = l.get_distance(s.start);
+			decimal_n d_end = l.get_distance(s.end);
+			if(std::abs(d_start + d_end - s.start.get_distance(s.end)) <= 1e-4){
+				return 0; // it is definite that it cuts the segment, no need to calculate
+				}
+			ret = (d_start < d_end)? d_start: d_end; // no caps here, sorry
+			break;
+			}
+		
+		case circle_e: {
+			inter = circle::intersection(l, std::get<circle>(s.formula));
+			if(inter.size() != 0){
+				for(auto i: inter){
+					if(s.on_segment_circular(i)){
+						return 0; /* intersection that lies on segment -> 0 distance to curve, 
+									no need to compute any further */
+						}
+					}
+				}
+			line perp = l.make_perpendicular(std::get<circle>(s.formula).center);
+			inter = step::intersection(s, perp);
+			for(auto i: inter){
+				decimal_n retc = line::get_distance(l, i); // return candidate
+				ret = (ret < retc)? ret: retc;
+				} // this gives us the lowest
+				
+			if (carry_caps){
+				decimal_n d_min = l.get_distance(s.start);
+				decimal_n d_end = l.get_distance(s.end);
+				d_min = (d_min < d_end)? d_min: d_end;
+				ret = (ret < d_min)? ret: d_min;
+			}
+			break;
+			}
+		}
+		return ((carry_caps | (!carry_caps ^ cap))? ret: std::numeric_limits<decimal_n>::infinity());
 	}

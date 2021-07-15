@@ -37,7 +37,7 @@ class line
 		decimal_n get_angle();
 		decimal_n get_angle(line);
 		static decimal_n get_angle(line, line);
-		decimal_n get_distance(line, coordinates);
+		static decimal_n get_distance(line, coordinates);
 		decimal_n get_distance(line);
 		static decimal_n get_distance(line, line);
 		

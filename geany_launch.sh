@@ -1,1 +1,1 @@
-geany `git ls-files | grep CMake` `git ls-files | grep pp` `git ls-files | grep .h`
+geany -i `git ls-files | grep CMake` `git ls-files | fgrep "pp"` `git ls-files | fgrep ".h"`

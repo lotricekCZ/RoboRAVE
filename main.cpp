@@ -875,7 +875,7 @@ int main(int argc, char *argv[]) {
 				coordinates c = coordinates(c_f(argv[7]), c_f(argv[8]));
 				std::cout << s.print_geogebra() << std::endl;
 				std::cout << c.print_geogebra() << std::endl;
-				std::cout << step::get_distance(s, c) << std::endl;
+				std::cout << step::get_distance(s, c, c_i(argv[9])) << std::endl;
 				break;
 				}
 
@@ -884,7 +884,7 @@ int main(int argc, char *argv[]) {
 				coordinates c = coordinates(c_f(argv[7]), c_f(argv[8]));
 				std::cout << s.print_geogebra() << std::endl;
 				std::cout << c.print_geogebra() << std::endl;
-				std::cout << step::get_distance(s, c) << std::endl;
+				std::cout << step::get_distance(s, c, c_i(argv[2])) << std::endl;
 				break;
 				}
 				
