@@ -58,6 +58,7 @@ class step
 		step(coordinates, coordinates, coordinates, bool is_right = direction::right, bool compute_angle = true);
 		step(coordinates, coordinates, bool compute_angle = true);
 		step();
+		bool on_segment(coordinates point);
 		bool on_segment_circular(coordinates point);
 		bool on_segment_linear(coordinates point);
 		static std::pair<step, step> get_perimeters(step, decimal_n perimeter = properties::widths::robot / 2);
@@ -75,8 +76,12 @@ class step
 		
 		static decimal_n get_distance(step s, coordinates c, bool carry_caps = true);
 		static decimal_n get_distance(step s, line l, bool carry_caps = true);
-		//~ static decimal_n get_distance(step s, circle c, bool carry_caps = true);
-		//~ static decimal_n get_distance(step a, step b, bool carry_caps = true);
+		static decimal_n get_distance(step s, circle c);
+		static decimal_n get_distance(step a, step b, bool carry_caps = true);
+		
+		static decimal_n get_distance_linears(step a, step b, bool carry_caps = true);
+		static decimal_n get_distance_circulars(step a, step b, bool carry_caps = true);
+		static decimal_n get_distance_combined(step a, step b, bool carry_caps = true);
 	private:
 		/* add your private declarations */
 };

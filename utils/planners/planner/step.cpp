@@ -69,7 +69,7 @@ step::step(coordinates start, coordinates end, coordinates center, bool is_right
 		/// diagnostics
 		std::cout << "zacatek " << start.print_geogebra() + "\t" << this -> angle_start / pi_const * 180 << std::endl;
 		std::cout << "konec " << end.print_geogebra() + "\t" << this -> angle_end / pi_const * 180 << std::endl;
-		//~ std::cout << "phi  " << this -> phi / pi_const * 180 << std::endl;
+		std::cout << "phi  " << this -> phi / pi_const * 180 << std::endl;
 		}
 	}
 	
@@ -81,6 +81,9 @@ step::step(coordinates start, coordinates end, bool compute_angle){
 	this -> formula = line(start, end);
 	this -> phi = 0; // does not change
 	this -> omega = 0; // does not change
+	
+	std::cout << "zacatek " << start.print_geogebra() + "\t" << this -> angle_start / pi_const * 180 << std::endl;
+	std::cout << "konec " << end.print_geogebra() + "\t" << this -> angle_end / pi_const * 180 << std::endl;
 	
 	/// block for optional activities
 	if(compute_angle){
@@ -237,7 +240,7 @@ std::vector<coordinates> step::intersection(step s, line l){
 		case circle_e: {
 			ret = std::get<circle>(s.formula).intersection(l);
 			for(std::vector<coordinates>::iterator i = ret.begin(); i < ret.end(); i++){
-				if(s.on_segment_circular(*i)){
+				if(!s.on_segment_circular(*i)){
 					ret.erase(i--);
 					}
 				}
@@ -359,5 +362,174 @@ decimal_n step::get_distance(step s, line l, bool carry_caps){
 			break;
 			}
 		}
-		return ((carry_caps | (!carry_caps ^ cap))? ret: std::numeric_limits<decimal_n>::infinity());
+		return ret;
+	}
+
+bool step::on_segment(coordinates point){
+	return (_type == line_e)? (on_segment_linear(point)): (on_segment_circular(point));
+	}
+
+decimal_n step::get_distance(step s, circle c){
+	decimal_n ret = step::get_distance(s, c.center) - c.radius;
+	return (ret > 0)? ret: 0; /* If less than zero to that point, 
+				it means that it has at least one intersection */
+	}
+
+decimal_n step::get_distance(step a, step b, bool carry_caps){
+	switch(a._type) {
+		case line_e: {
+			switch(b._type) {
+				case line_e: { // both are linear segments
+					return get_distance_linears(a, b, carry_caps);
+					}
+					
+				case circle_e: { // combined
+					return get_distance_combined(a, b, carry_caps);
+					}
+				}
+			}
+			
+		case circle_e:{
+			switch(b._type) {
+				case line_e: { // combined
+					return get_distance_combined(a, b, carry_caps);
+					}
+					
+				case circle_e: { // both are circular
+					return get_distance_circulars(a, b, carry_caps);
+					}
+				}
+			break;
+			}
+		}
+	}
+
+decimal_n step::get_distance_linears(step a, step b, bool carry_caps){
+	std::vector<line> intersections;
+	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
+	
+	intersections.push_back(std::get<line>(b.formula).make_perpendicular(a.start));
+	intersections.push_back(std::get<line>(b.formula).make_perpendicular(a.end));
+	intersections.push_back(std::get<line>(a.formula).make_perpendicular(b.start));
+	intersections.push_back(std::get<line>(a.formula).make_perpendicular(b.end));
+	return ret;
+	}
+
+decimal_n step::get_distance_circulars(step a, step b, bool carry_caps){
+	
+	}
+	
+decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
+	if(a._type == b._type){
+		// that's just fucked, this is the combined section
+		/// TODO: exception to match the needs
+		return 666;
+		}
+	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
+	step linear 	= (a._type == line_e)?	a: b;
+	step circular 	= (a._type != line_e)?	a: b;
+	
+	line n_line		= std::get<line>(linear.formula);
+	circle n_circ	= std::get<circle>(circular.formula);
+	
+	line perp_center 	= n_line.make_perpendicular(n_circ.center);
+	line perp_start 	= n_line.make_perpendicular(circular.start);
+	line perp_end 		= n_line.make_perpendicular(circular.end);
+	
+	coordinates e_center= line::intersection(perp_center, n_line);
+	coordinates e_start = line::intersection(perp_start, n_line);
+	coordinates e_end 	= line::intersection(perp_end, n_line);
+	
+	std::vector<coordinates> int_center = step::intersection(circular, perp_center);
+	std::vector<coordinates> int_start 	= step::intersection(circular, perp_start);
+	std::vector<coordinates> int_end 	= step::intersection(circular, perp_end);
+	
+	for(auto a: {int_center, int_start, int_end})
+		for(auto b: a)
+			std::cout << b.print() << std::endl;
+	std::cout << e_center.print() << std::endl;
+	std::cout << e_start.print() << std::endl;
+	std::cout << e_end.print() << std::endl;
+	
+	std::cout << perp_center.print() << std::endl;
+	std::cout << perp_start.print() << std::endl;
+	std::cout << perp_end.print() << std::endl;
+	
+	//~ std::cout << .print_geogebra() << std::endl;
+	
+	
+	if(linear.on_segment(e_center)){
+		for(auto i: int_center){
+			// they already are on circular segment, so no worries I suppose
+			decimal_n retc = i.get_distance(e_center); // return candidate
+			std::cout << i.print_geogebra() << std::endl;
+			ret = (ret < retc)? ret: retc;
+			}
+		}
+		
+	if(linear.on_segment(e_start)){
+		decimal_n retc = circular.start.get_distance(e_center); // return candidate
+		ret = (ret < retc)? ret: retc;
+		for(auto i: int_start){
+			// they already are on circular segment, so no worries I suppose
+			retc = i.get_distance(e_start); // return candidate
+			std::cout << i.print_geogebra() << std::endl;
+			ret = (ret < retc)? ret: retc;
+			}
+			
+		}
+		
+	if(linear.on_segment(e_end)){
+		decimal_n retc = circular.end.get_distance(e_center); // return candidate
+		ret = (ret < retc)? ret: retc;
+		for(auto i: int_end){
+			// they already are on circular segment, so no worries I suppose
+			std::cout << i.print_geogebra() << std::endl;
+			decimal_n retc = i.get_distance(e_end); // return candidate
+			ret = (ret < retc)? ret: retc;
+			}
+		}
+	
+	if(carry_caps){ 
+		// cares about every other possibilities
+		line start_center_variant 	= line(linear.start, n_circ.center);
+		line end_center_variant 	= line(linear.end, n_circ.center);
+		
+		line start_start_variant 	= line(linear.start, circular.start);
+		line end_start_variant 		= line(linear.end, circular.start);
+		line start_end_variant 		= line(linear.start, circular.end);
+		line end_end_variant 		= line(linear.end, circular.end);
+		
+		// all the possible variants of intersection of circular segment with the lines above
+		std::vector<coordinates> start_center_intersections = circular.intersection(start_center_variant);
+		std::vector<coordinates> end_center_intersections 	= circular.intersection(end_center_variant);
+		
+		std::vector<coordinates> start_start_intersections 	= circular.intersection(start_start_variant);
+		std::vector<coordinates> end_start_intersections 	= circular.intersection(end_start_variant);
+		std::vector<coordinates> start_end_intersections 	= circular.intersection(start_end_variant);
+		std::vector<coordinates> end_end_intersections 		= circular.intersection(end_end_variant);
+		std::array<std::vector<coordinates>, 6> it_1 = {start_center_intersections, end_center_intersections, start_start_intersections, 
+					end_start_intersections, start_end_intersections, end_end_intersections};
+		std::array<coordinates, 2> it_2 = {linear.start, linear.end};
+		for(uint8_t i = 0; i < 6; i++){
+			for(auto o: it_1[i]){
+				std::cout << o.print_geogebra() << std::endl;
+				decimal_n retc = o.get_distance(it_2[i%2]);
+				ret = (ret < retc)? ret: retc;
+				}
+			}
+		
+		decimal_n start_start = linear.start.get_distance(circular.start);
+		decimal_n start_end = linear.start.get_distance(circular.end);
+		decimal_n end_start = linear.end.get_distance(circular.start);
+		decimal_n end_end = linear.end.get_distance(circular.end);
+		
+		decimal_n shortest = std::numeric_limits<decimal_n>::infinity();
+		for(auto o: {start_start, start_end, end_start, end_end}){
+			shortest = (shortest < o)? shortest: o;
+			}
+		ret = (ret < shortest)? ret: shortest;
+		}
+		
+	return ret;
 	}

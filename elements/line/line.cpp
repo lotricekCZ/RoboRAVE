@@ -167,6 +167,10 @@ decimal_n line::get_distance(line l, coordinates c){
 	return std::abs(l.a * c.x + l.b * c.y + l.c)/(sqrt(pow(l.a, 2) + pow(l.b, 2)));
 	}
 	
+decimal_n line::get_distance(coordinates c){
+	return get_distance(*this, c);
+	}
+	
 decimal_n line::get_distance(line l){
 	line n = make_perpendicular();
 	return intersection(*this, n).get_distance(intersection(l, n));

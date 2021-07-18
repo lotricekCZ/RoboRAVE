@@ -827,7 +827,7 @@ int main(int argc, char *argv[]) {
 			case 44:{
 				std::cout << step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2])).print_geogebra() << std::endl;
 				std::cout << line(-3, 8, -4).print() << std::endl;
-				std::vector<coordinates> out = step::intersection(step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2])), line(0, 1, 1));
+				std::vector<coordinates> out = step::intersection(step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2])), line(-3, 8, -4));
 				std::cout << "velikost: " << out.size() << std::endl;
 				for(auto a: out)
 					std::cout << a.print_geogebra() << std::endl;
@@ -885,6 +885,24 @@ int main(int argc, char *argv[]) {
 				std::cout << s.print_geogebra() << std::endl;
 				std::cout << c.print_geogebra() << std::endl;
 				std::cout << step::get_distance(s, c, c_i(argv[2])) << std::endl;
+				break;
+				}
+				
+			case 50:{
+				step s = step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2]));
+				step c = step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10])));
+				std::cout << s.print_geogebra() << std::endl;
+				std::cout << c.print_geogebra() << std::endl;
+				std::cout << step::get_distance_combined(s, c, 0) << std::endl;
+				break;
+				}
+				
+			case 51:{
+				step s = step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2]));
+				step c = step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10])));
+				std::cout << s.print_geogebra() << std::endl;
+				std::cout << c.print_geogebra() << std::endl;
+				std::cout << step::get_distance(s, c, c_i(argv[11])) << std::endl;
 				break;
 				}
 				
