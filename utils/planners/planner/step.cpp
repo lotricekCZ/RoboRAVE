@@ -416,9 +416,70 @@ decimal_n step::get_distance_linears(step a, step b, bool carry_caps){
 	}
 
 decimal_n step::get_distance_circulars(step a, step b, bool carry_caps){
+	if(a._type != b._type | !(a._type & b._type)){
+		// that's just fucked, this is the circulars section
+		/// TODO: exception to match the needs
+		return 666;
+		}
+	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
+	circle a_formula = std::get<circle>(a.formula);
+	circle b_formula = std::get<circle>(b.formula);
 	
+	// make line from each center to each start/end/center (estimated count: 5)
+	line start_center	(a.start, b_formula.center);
+	line end_center		(a.end, b_formula.center);
+	line center_center	(a_formula.center, b_formula.center);
+	line center_start	(a_formula.center, b.start);
+	line center_end		(a_formula.center, b.end);
+	
+	std::vector<coordinates> int_start_center 	= step::intersection(b, start_center);
+	std::vector<coordinates> int_end_center	 	= step::intersection(b, end_center);
+	/// TODO: Horrendous glitch that considers ANY point on center_center line on the segment
+	std::vector<coordinates> int_center_center_b= step::intersection(b, center_center); ///THIS ONE DOES THAT
+	std::vector<coordinates> int_center_center_a= step::intersection(a, center_center);
+	std::vector<coordinates> int_center_start	= step::intersection(a, center_start);
+	std::vector<coordinates> int_center_end		= step::intersection(a, center_end);
+	
+	std::array<std::vector<coordinates>, 4> it_1 = {int_start_center, int_end_center, 
+													int_center_start, int_center_end};
+	std::array<coordinates, 4> it_2 = {a.start, a.end, b.start, b.end};
+	for(uint8_t i = 0; i < 4; i++){
+		for(auto o: it_1[i]){
+			std::cout << o.print_geogebra() << std::endl;
+			decimal_n retc = o.get_distance(it_2[i]);
+			ret = (ret < retc)? ret: retc;
+			}
+		}
+	for(uint8_t i = 0; i < int_center_center_b.size(); i++){
+		//~ if(b.on_segment(int_center_center_b[i])){
+			std::cout << int_center_center_b[i].print_geogebra() << std::endl;
+			for(uint8_t o = 0; o < int_center_center_a.size(); o++){
+				//~ if(a.on_segment(int_center_center_a[o])){
+					std::cout << int_center_center_a[o].print_geogebra() << std::endl;
+					//~ std::cout << "Tam" << std::endl;
+					decimal_n retc = int_center_center_b[i].get_distance(int_center_center_a[o]);
+					ret = (ret < retc)? ret: retc;
+					//~ }
+				}
+			//~ }
+		}
+		
+	if(carry_caps){
+		// get distances between starts and ends
+		decimal_n start_start = a.start.get_distance(b.start);
+		decimal_n start_end	  = a.start.get_distance(b.end);
+		decimal_n end_start	  = a.end.get_distance(b.start);
+		decimal_n end_end	  = a.end.get_distance(b.end);
+		decimal_n shortest = std::numeric_limits<decimal_n>::infinity();
+			for(auto o: {start_start, start_end, end_start, end_end}){
+				shortest = (shortest < o)? shortest: o;
+				}
+		ret = (ret < shortest)? ret: shortest;	
+		}
+	return ret;
 	}
-	
+
+
 decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
 	if(a._type == b._type){
 		// that's just fucked, this is the combined section
@@ -468,7 +529,7 @@ decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
 		}
 		
 	if(linear.on_segment(e_start)){
-		decimal_n retc = circular.start.get_distance(e_center); // return candidate
+		decimal_n retc = circular.start.get_distance(e_start); // return candidate
 		ret = (ret < retc)? ret: retc;
 		for(auto i: int_start){
 			// they already are on circular segment, so no worries I suppose
@@ -480,7 +541,7 @@ decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
 		}
 		
 	if(linear.on_segment(e_end)){
-		decimal_n retc = circular.end.get_distance(e_center); // return candidate
+		decimal_n retc = circular.end.get_distance(e_end); // return candidate
 		ret = (ret < retc)? ret: retc;
 		for(auto i: int_end){
 			// they already are on circular segment, so no worries I suppose
