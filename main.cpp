@@ -915,6 +915,24 @@ int main(int argc, char *argv[]) {
 				break;
 				}
 				
+			case 53:{
+				step s = step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2]));
+				step c = step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10])), coordinates(c_f(argv[11]), c_f(argv[12])), c_i(argv[13]));
+				std::cout << s.print_geogebra() << std::endl;
+				std::cout << c.print_geogebra() << std::endl;
+				std::cout << step::get_distance_combined(s, c, c_i(argv[14])) << std::endl;
+				break;
+				}
+				
+			case 54:{
+				step s = step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])));
+				step c = step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10])));
+				std::cout << s.print_geogebra() << std::endl;
+				std::cout << c.print_geogebra() << std::endl;
+				std::cout << step::get_distance(s, c, c_i(argv[11])) << std::endl;
+				break;
+				}
+				
 			}
 	
     uint8_t c = std::thread::hardware_concurrency();	

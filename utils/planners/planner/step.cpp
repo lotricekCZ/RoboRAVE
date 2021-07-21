@@ -232,7 +232,7 @@ std::vector<coordinates> step::intersection(step s, line l){
 	switch(s._type){
 		case line_e: {
 			coordinates intersect = l.intersection(std::get<line>(s.formula));
-			if(!s.on_segment_linear(intersect)){
+			if(s.on_segment_linear(intersect)){
 					ret.push_back(intersect);
 					}
 			break;
@@ -405,20 +405,66 @@ decimal_n step::get_distance(step a, step b, bool carry_caps){
 	}
 
 decimal_n step::get_distance_linears(step a, step b, bool carry_caps){
+	if(a._type != b._type | (a._type & b._type)){
+		// that's just fucked, this is the linears section
+		std::cerr << "You garbage tried to put in there some circular steps\nPROOF:\t" << a.print_geogebra() 
+			<< "\t" << b.print_geogebra() << std::endl;
+		if((a._type == circle_e) && (b._type == circle_e)){
+			return step::get_distance_linears(a, b, carry_caps);
+			} else {
+				return step::get_distance_combined(a, b, carry_caps);
+				}
+		return 666;
+		}
 	std::vector<line> intersections;
 	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
 	
-	intersections.push_back(std::get<line>(b.formula).make_perpendicular(a.start));
-	intersections.push_back(std::get<line>(b.formula).make_perpendicular(a.end));
-	intersections.push_back(std::get<line>(a.formula).make_perpendicular(b.start));
-	intersections.push_back(std::get<line>(a.formula).make_perpendicular(b.end));
+	line a_start 	= std::get<line>(b.formula).make_perpendicular(a.start);
+	line a_end 		= std::get<line>(b.formula).make_perpendicular(a.end);
+	line b_start 	= std::get<line>(a.formula).make_perpendicular(b.start);
+	line b_end 		= std::get<line>(a.formula).make_perpendicular(b.end);
+	
+	std::vector<coordinates> int_a_start_b 	= step::intersection(b, a_start);
+	std::vector<coordinates> int_a_end_b 	= step::intersection(b, a_end);
+	std::vector<coordinates> int_b_start_a 	= step::intersection(a, b_start);
+	std::vector<coordinates> int_b_end_a 	= step::intersection(a, b_end);
+	
+	std::array<std::vector<coordinates>, 4> inters = {int_a_start_b, int_a_end_b, int_b_start_a, int_b_end_a};
+	std::vector<coordinates> origins = {a.start, a.end, b.start, b.end};
+	
+	for(uint8_t i = 0; i < inters.size(); i++)
+		if(inters[i].size() != 0){
+			std::cout << inters[i][0].print_geogebra() << std::endl;
+			decimal_n retc = origins[i].get_distance(inters[i][0]);
+			ret = (ret < retc)? ret: retc;
+			}
+	decimal_n start_start = a.start.get_distance(b.start);
+	decimal_n start_end = a.start.get_distance(b.end);
+	decimal_n end_start = a.end.get_distance(b.start);
+	decimal_n end_end = a.end.get_distance(b.end);
+	
+	decimal_n shortest = std::numeric_limits<decimal_n>::infinity();
+	for(auto o: {start_start, start_end, end_start, end_end}){
+		shortest = (shortest < o)? shortest: o;
+		}
+	ret = (ret < shortest)? ret: shortest;
+	
 	return ret;
 	}
+
+
 
 decimal_n step::get_distance_circulars(step a, step b, bool carry_caps){
 	if(a._type != b._type | !(a._type & b._type)){
 		// that's just fucked, this is the circulars section
-		/// TODO: exception to match the needs
+		std::cerr << "You garbage tried to put in there some linear steps\nPROOF:\t" << a.print_geogebra() 
+			<< "\t" << b.print_geogebra() << std::endl;
+		// that's just fucked, this is the combined section
+		if((a._type == line_e) && (b._type == line_e)){
+			return step::get_distance_linears(a, b, carry_caps);
+			} else {
+				return step::get_distance_combined(a, b, carry_caps);
+				}
 		return 666;
 		}
 	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
@@ -480,9 +526,17 @@ decimal_n step::get_distance_circulars(step a, step b, bool carry_caps){
 	}
 
 
+
 decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
 	if(a._type == b._type){
+		std::cerr << "You garbage tried to put in two same steps\nPROOF:\t" << a.print_geogebra() 
+			<< "\t" << b.print_geogebra() << std::endl;
 		// that's just fucked, this is the combined section
+		if((a._type == circle_e) && (b._type == circle_e)){
+			return step::get_distance_circulars(a, b, carry_caps);
+			} else {
+				return step::get_distance_linears(a, b, carry_caps);
+				}
 		/// TODO: exception to match the needs
 		return 666;
 		}

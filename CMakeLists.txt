@@ -141,7 +141,7 @@ add_library(serial STATIC ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial
 target_link_libraries(serial -lCppLinuxSerial)
 
 
-set(CMAKE_CXX_FLAGS "-std=c++17 -fdump-tree-optimized ${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
 
 link_directories(${OpenCV_LIB_DIR})
 target_compile_features(roborave PRIVATE cxx_std_17)
