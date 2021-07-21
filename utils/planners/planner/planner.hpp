@@ -46,10 +46,12 @@ class planner
 		std::vector<coordinates> coincidental_points_generate(std::vector<circle>& circles);
 		
 		/// line segment implementation
+		// deprecated, see step::on_segment, step::intersection etc.
 		bool collides(wall w, coordinates start, coordinates end);
 		bool collides_nowhere(map& m, coordinates start, coordinates end);
 		
 		/// circle arc implementation
+		// deprecated, see step::on_segment, step::intersection etc.
 		bool collides(wall w, coordinates start, coordinates end, circle c, bool side);
 		bool collides_nowhere(map &m, coordinates start, coordinates end, circle c, bool side);
 		

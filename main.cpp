@@ -893,7 +893,7 @@ int main(int argc, char *argv[]) {
 				step c = step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10])));
 				std::cout << s.print_geogebra() << std::endl;
 				std::cout << c.print_geogebra() << std::endl;
-				std::cout << step::get_distance_combined(s, c, 0) << std::endl;
+				std::cout << step::get_distance(s, c, 0) << std::endl;
 				break;
 				}
 				
@@ -916,20 +916,18 @@ int main(int argc, char *argv[]) {
 				}
 				
 			case 53:{
-				step s = step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2]));
-				step c = step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10])), coordinates(c_f(argv[11]), c_f(argv[12])), c_i(argv[13]));
+				coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+				step s(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(c_f(argv[4]), c_f(argv[5])));
 				std::cout << s.print_geogebra() << std::endl;
-				std::cout << c.print_geogebra() << std::endl;
-				std::cout << step::get_distance_combined(s, c, c_i(argv[14])) << std::endl;
+				std::cout << step::get_distance(s, wall(x)) << std::endl;
 				break;
 				}
 				
 			case 54:{
-				step s = step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])));
-				step c = step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10])));
+				coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+				step s(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(c_f(argv[4]), c_f(argv[5])), coordinates(c_f(argv[6]), c_f(argv[7])), c_i(argv[8]));
 				std::cout << s.print_geogebra() << std::endl;
-				std::cout << c.print_geogebra() << std::endl;
-				std::cout << step::get_distance(s, c, c_i(argv[11])) << std::endl;
+				std::cout << step::get_distance(s, wall(x)) << std::endl;
 				break;
 				}
 				

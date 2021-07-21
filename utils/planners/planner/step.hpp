@@ -78,12 +78,18 @@ class step
 		static decimal_n get_distance(step s, line l, bool carry_caps = true);
 		static decimal_n get_distance(step s, circle c);
 		static decimal_n get_distance(step a, step b, bool carry_caps = true);
+		static decimal_n get_distance(step s, candle c);
+		static decimal_n get_distance(step s, wall w);
 		
+		decimal_n get_distance(coordinates c, bool carry_caps = true);
+		decimal_n get_distance(line l, bool carry_caps = true);
+		decimal_n get_distance(circle c);
+		decimal_n get_distance(step b, bool carry_caps = true);
+	
+	private:
 		static decimal_n get_distance_linears(step a, step b, bool carry_caps = true);
 		static decimal_n get_distance_circulars(step a, step b, bool carry_caps = true);
 		static decimal_n get_distance_combined(step a, step b, bool carry_caps = true);
-	private:
-		/* add your private declarations */
 };
 
 #endif /* STEP_HPP */ 

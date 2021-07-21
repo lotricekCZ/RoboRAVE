@@ -39,7 +39,7 @@ wall::wall(coordinates edges[4])
 {
 	for(uint8_t i = 0; i < 4; i++){
 		properties.edges[i] = edges[i];
-		properties.walls[i] = line(edges[i], edges[(i != 3)? i+1: 0]);
+		properties.walls[i] = line(edges[i], edges[(i+1)%4]);
 		}	
 }
 

@@ -83,9 +83,9 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 	
 	std::cout << next_local.print() << std::endl;
 	std::cout << first_circle.print() << std::endl;
-	std::cout << "\nErrors below are not important right now." << std::endl;
 	
 	/// first tangent selection block start
+	/// TODO: THIS SECTION
 	std::vector<line> tangents = circle::circle_tangents(first_circle, pre_circles.back());
 	for(line &b: tangents) {
 		// in_first: bod prvni kruznice, ktera se musi projet

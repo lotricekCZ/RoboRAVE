@@ -25,6 +25,7 @@
 #include "../../../elements/line/line.cpp"
 #include "../../data_containers/speeds/speeds.cpp"
 #include "../../../defines/constants.h"
+#include "../../data_containers/map/obstacles/wall.hpp"
 #include <string>
 #include <limits>
 #include <variant>
@@ -648,3 +649,37 @@ decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
 		
 	return ret;
 	}
+
+
+decimal_n step::get_distance(coordinates c, bool carry_caps){
+	return step::get_distance(*this, c, carry_caps);
+	}
+	
+	
+decimal_n step::get_distance(line l, bool carry_caps){
+	return step::get_distance(*this, l, carry_caps);
+	}
+	
+decimal_n step::get_distance(circle c){
+	return step::get_distance(*this, c);
+	}
+	
+decimal_n step::get_distance(step b, bool carry_caps){
+	return step::get_distance(*this, b, carry_caps);
+	}
+	
+decimal_n step::get_distance(step s, candle c){
+	// just a redirection to step::get_distance(step, circle)
+	return step::get_distance(s, c.tube);
+	}
+
+decimal_n step::get_distance(step s, wall w){
+	// converts a wall into independent steps
+	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
+	for(uint8_t i = 0; i < 4; i++){
+		decimal_n retc = s.get_distance(s, step(w.properties.edges[i], w.properties.edges[(i + 1) % 4], false));
+		ret = (ret < retc)? ret: retc;
+		}
+	return ret;
+	}
+
