@@ -156,11 +156,11 @@ std::vector<coordinates> circle::intersection(circle k, circle c) {
 	ret.push_back(coordinates(px + h * dy, py - h * dx));
 	if (h != 0) ret.push_back(coordinates(px - h * dy, py + h * dx));
 	return ret;
-};
+}
 
 std::vector<coordinates> circle::intersection(circle c) {
 	return intersection(c, *this);
-};
+}
 
 void circle::circle_tangents (coordinates c, decimal_n r1, decimal_n r2, std::vector<line> & ans) {
     decimal_n r = r2 - r1;
@@ -184,6 +184,40 @@ std::vector<line> circle::circle_tangents(circle a, circle b) {
 		ans[i].c -= ans[i].a * a.center.x + ans[i].b * a.center.y;
 	return ans;
 }
+
+
+std::vector<coordinates> circle::tangent_points(circle c, coordinates point){
+	decimal_n diff_x = point.x - c.center.x;
+	decimal_n diff_y = point.y - c.center.y;
+	decimal_n dxr = -diff_y; 
+	decimal_n dyr = diff_x;
+	decimal_n distance = c.center.get_distance(point);
+	std::vector<coordinates> ret;
+	if (distance >= c.radius){
+		decimal_n rho = c.radius / distance;
+		decimal_n ad = pow(rho, 2);
+		decimal_n bd = rho * sqrt(1-pow(rho, 2));
+		ret.push_back(coordinates(c.center.x + ad * diff_x + bd * dxr, c.center.y + ad * diff_y + bd * dyr));
+		ret.push_back(coordinates(c.center.x + ad * diff_x - bd * dxr, c.center.y + ad * diff_y - bd * dyr));
+		}
+	return ret;
+}
+
+std::vector<coordinates> circle::tangent_points(coordinates point){
+	return circle::tangent_points(*this, point);
+}
+
+std::vector<line> circle::tangents(circle c, coordinates point){
+	std::vector<line> ret;
+	for(auto i: circle::tangent_points(c, point))
+		ret.push_back(line(point, i));
+	return ret;
+}
+
+std::vector<line> circle::tangents(coordinates point){
+	return circle::tangents(*this, point);
+}
+
 
 std::string circle::print(){
 	std::string ret = "(x";

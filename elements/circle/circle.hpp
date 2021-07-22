@@ -43,6 +43,10 @@ class circle{
 		static std::vector<coordinates> intersection(circle k, circle c);
 		std::vector<coordinates> intersection(circle);
 		static void circle_tangents(coordinates c, decimal_n r1, decimal_n r2, std::vector<line> & ans);
+		static std::vector<coordinates> tangent_points(circle c, coordinates point);
+		std::vector<coordinates> tangent_points(coordinates point);
+		static std::vector<line> tangents(circle c, coordinates point);
+		std::vector<line> tangents(coordinates point);
 		static std::vector<line> circle_tangents(circle a, circle b);
 		std::string print();
 		
