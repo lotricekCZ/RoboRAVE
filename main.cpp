@@ -276,9 +276,11 @@ int main(int argc, char *argv[]) {
 			}
 		
 		case 10:{
-			std::vector<coordinates> c = radius::tangent_points(coordinates(c_f(argv[2]), c_f(argv[3])), c_f(argv[3]), coordinates(c_f(argv[4]), c_f(argv[5])));
+			std::vector<coordinates> c = radius::tangent_points(coordinates(c_f(argv[2]), c_f(argv[3])), c_f(argv[4]), coordinates(c_f(argv[5]), c_f(argv[6])));
 			if(c.size() == 2)
-				std::cout <<  c[0].x << "; "<< c[0].y << "\n" << c[1].x << "; "<< c[1].y <<  std::endl;
+				std::cout << circle(coordinates(c_f(argv[2]), c_f(argv[3])), c_f(argv[4])).print() <<  std::endl;
+				std::cout << coordinates(c_f(argv[5]), c_f(argv[6])).print_geogebra() <<  std::endl;
+				std::cout <<  c[0].print_geogebra() << "\n" << c[1].print_geogebra() <<  std::endl;
 			}
 			
 		case 11:{
@@ -898,11 +900,11 @@ int main(int argc, char *argv[]) {
 				}
 				
 			case 51:{
-				step s = step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2]));
-				step c = step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10])));
+				step s = step(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(c_f(argv[4]), c_f(argv[5])));
+				step c = step(coordinates(c_f(argv[6]), c_f(argv[7])), coordinates(c_f(argv[8]), c_f(argv[9])));
 				std::cout << s.print_geogebra() << std::endl;
 				std::cout << c.print_geogebra() << std::endl;
-				std::cout << step::get_distance(s, c, c_i(argv[11])) << std::endl;
+				std::cout << step::get_distance(s, c) << std::endl;
 				break;
 				}
 				

@@ -417,9 +417,13 @@ decimal_n step::get_distance_linears(step a, step b, bool carry_caps){
 				}
 		return 666;
 		}
+
+	if(step::intersection(a, b).size() != 0){
+		return 0;
+	}
+		
 	std::vector<line> intersections;
 	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
-	
 	line a_start 	= std::get<line>(b.formula).make_perpendicular(a.start);
 	line a_end 		= std::get<line>(b.formula).make_perpendicular(a.end);
 	line b_start 	= std::get<line>(a.formula).make_perpendicular(b.start);
@@ -468,6 +472,9 @@ decimal_n step::get_distance_circulars(step a, step b, bool carry_caps){
 				}
 		return 666;
 		}
+	if(step::intersection(a, b).size() != 0){
+		return 0;
+	}
 	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
 	circle a_formula = std::get<circle>(a.formula);
 	circle b_formula = std::get<circle>(b.formula);
@@ -541,6 +548,11 @@ decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
 		/// TODO: exception to match the needs
 		return 666;
 		}
+		
+	if(step::intersection(a, b).size() != 0){
+		return 0;
+	}
+	
 	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
 	step linear 	= (a._type == line_e)?	a: b;
 	step circular 	= (a._type != line_e)?	a: b;
