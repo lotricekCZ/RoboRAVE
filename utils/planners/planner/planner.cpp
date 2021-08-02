@@ -60,10 +60,11 @@ circle planner::create_perimeter(coordinates c, decimal_n radius){
 std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, decimal_n initial_rotation){
 	// There must be at least two points - start and end
 	std::vector<step> steps; /// steps based on coordinates selected by Dijkstra
-	std::vector<step> pre_steps; /// steps based on coordinates selected by Dijkstra
-	std::vector<circle> pre_circles; /// steps based on coordinates selected by Dijkstra
+	std::vector<std::vector<step>> pre_steps; /// steps based on coordinates selected by Dijkstra
+	std::vector<circle> pre_circles; /// circles based on coordinates selected by Dijkstra
+	std::vector<std::vector<line>> pre_lines; /// lines tangent to any of pre_circles
 	/// TODO: First move!
-	for(unsigned_b i = 1; i < selected.size(); i++){
+	for(unsigned_b i = 1; i < selected.size()-1; i++){
 		if(i >= selected.size())
 			break;
 		pre_circles.push_back(circle(selected.at(i), evaluate_radius(selected.at(i-1), selected.at(i))));
@@ -80,35 +81,40 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 	circle first_circle(start.make_global(center_local, initial_rotation - pi_const/2), radius_initial);
 	coordinates center_next_local = pre_circles.back().center.make_local(first_circle.center, -pi_const/2 - initial_rotation);
 	/// first circle generation block end
-	
-	std::cout << next_local.print() << std::endl;
+	pre_circles.insert(pre_circles.begin(), first_circle);
 	std::cout << first_circle.print() << std::endl;
-	
-	/// first tangent selection block start
-	/// TODO: THIS SECTION
-	std::vector<line> tangents = circle::circle_tangents(first_circle, pre_circles.back());
-	for(line &b: tangents) {
-		// in_first: bod prvni kruznice, ktera se musi projet
-		coordinates in_first = first_circle.intersection(b)[0];
-		// in_next: bod kruznice, na kterou se musi najet z prvni
-		coordinates in_next = pre_circles.back().intersection(b)[0];
-		// vector_angle: uhel tecny na kterou se musi najet
-		decimal_n vector_angle = in_first.get_gamma(in_next);
-		// tangent_angle: uhel bodu in_first vuci stredu kruznice, na ktere lezi
-		decimal_n tangent_angle = first_circle.center.get_gamma(in_first);
-		// difference_angle: rozdil uhlu tecny a uhlu vuci bodu dotyku
-		decimal_n difference_angle = vector_angle - (tangent_angle + ((center_local.y < 0)?-0.5:0.5) * pi_const);
-		if((std::abs(difference_angle) <= 1e-3 || (std::abs(difference_angle + ((center_local.y < 0)?-2:2) * pi_const) <= 1e-3))){
-			decimal_n next_angle = pre_steps.at(1).start.get_gamma(pre_steps.at(1).end);
-			std::cout << pre_steps.at(1).start.make_local(b.intersection(std::get<line>(pre_steps.at(1).formula)), -next_angle).print() << std::endl;
-			if(pre_steps.at(1).start.make_local(b.intersection(std::get<line>(pre_steps.at(1).formula)), -next_angle).x < 0){
-				pre_steps.at(0) = step(in_first, in_next);
-				std::cout << "=Vector["<< in_first.print() << ", " << in_next.print() << "]" << std::endl;
-				break;
+	for(unsigned_b i = 0; i < pre_circles.size() - 1; i++){
+		std::cout << std::to_string(i) << std::endl;
+		std::vector<line> temp_lines = circle::circle_tangents(pre_circles.at(i+1), pre_circles.at(i));
+		pre_steps.push_back(std::vector<step>());
+		for(line l: temp_lines){
+			step t_step(pre_circles.at(i).intersection(l)[0], pre_circles.at(i+1).intersection(l)[0]);
+			decimal_n step_distance = get_distance_to_walls(t_step, m);
+			if(step_distance > (robot_radius * 0.5)){
+				pre_steps.back().push_back(t_step);
 				}
 			}
 		}
-	/// first tangent selection block end
+	std::cout << "Bordel se deje" << std::endl;
+	std::vector<coordinates> temp_points = circle::tangent_points(pre_circles.back(), selected.back());
+	pre_steps.push_back(std::vector<step>());
+	for(coordinates l: temp_points){
+		std::cout << l.print() << std::endl;
+		step t_step(l, selected.back());
+		decimal_n step_distance = get_distance_to_walls(t_step, m);
+		if(step_distance > (robot_radius * 0.5)){
+			pre_steps.back().push_back(t_step);
+			}
+		}
+	for(auto vs: pre_steps){
+		for(auto s: vs)
+			std::cout << s.print_geogebra() << std::endl;
+		}
+	//~ std::cout << next_local.print() << std::endl;
+	//~ std::cout << first_circle.print() << std::endl;
+	
+	/// TODO: THIS SECTION
+	
 	std::cout << std::endl;
 		
 	
@@ -390,4 +396,13 @@ std::vector<coordinates> planner::make_path(std::vector<coordinates> &c, coordin
 		std::cout << o.print() << std::endl;
 		}
 	return out;
+	}
+
+decimal_n planner::get_distance_to_walls(step s, map &m){
+	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
+	for(auto w: m._map_walls){
+		decimal_n retc = step::get_distance(s, w);
+		ret = (ret < retc)? ret: retc;
+		}
+	return ret;
 	}

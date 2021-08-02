@@ -14,6 +14,7 @@
 #define fric_wheel 	0.5097f // static friction coeficient against wood I measured using kitchen scale
 //~ #define robot_radius 0.10f // in meters
 #define robot_radius 0.75 // in meters
+#define safe_constant 1.1 // odchylka kolik musi byt pocitano robot_radiusu, aby se nebouralo
 
 #define map_raster 	15 // in milimeters, x and y difference of unknown points
 #define map_unit 	30 // distance to be multiplied by influence
@@ -70,7 +71,7 @@ namespace properties {
 namespace limits {
 	namespace maximal {
 		decimal_n wheel_velocity = 0.46; 	/// m*s^-1 maximal wheel velocity that is allowed and proably safe (3ms:3ms)
-		decimal_n circle = 3;
+		decimal_n circle = 3/2; /// REMOVE AFTER plan_make tests
 		//~ decimal_n circle = 0.4; 			/// m maximal allowed circle, speed is key.
 		unsigned_n period = 16383; 			/// us, maximal time between pulses 
 		};

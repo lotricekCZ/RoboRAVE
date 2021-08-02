@@ -730,30 +730,40 @@ int main(int argc, char *argv[]) {
 			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
 			coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
 			coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
+			coordinates a[] = {coordinates(3, -3), coordinates(6, 0), coordinates(7, -1), coordinates(4, -4)};
 			
 			//~ m.append(candle(coordinates(4,3)));
 			m.append(wall(c));
 			m.append(wall(x));
 			m.append(wall(y));
-			//~ m.append(wall(z));
+			m.append(wall(z));
+			m.append(wall(a));
 			planner p;
 			//~ angles a = angles().load_virtual(coordinates(-5, 2), m);
 			//~ for(auto i: a)
 			//~ std::cout << a.get_angle(0).position._coordinates.print() << std::endl;
 			//~ std::cout << a.get_angle(0).distance << std::endl;
 			//~ std::cout << a.size() << std::endl;
-			std::vector <circle> plan = p.circle_generate(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m, c_i(argv[4]));
+			
+			
+			
+			
 			//~ std::vector <line> clan = p.plan_trace(plan, coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m);
 			//~ std::cout << m._map_walls[0].is_collision_course(circle(coordinates(-5, 2), 6))[1].print() << std::endl;
 			std::srand(std::time(nullptr)); 
-				
+			//~ for(auto i: plan)
+				//~ std::cout << i.print() << std::endl;	
 			//~ for(auto i: plan)
 				//~ std::cout << i.print() << std::endl;
 			
 			//~ for(auto i: p.coincidental_points_generate(plan))
 				//~ std::cout << i.print() << std::endl;
+			
+			
+			std::vector <circle> plan = p.circle_generate(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m, c_i(argv[4]));
 			std::vector<coordinates> g = p.coincidental_points_generate(plan);
-			std::vector<coordinates> c_plan = p.make_path(g, coordinates(-5, 2), coordinates(c_f(argv[2]), c_f(argv[3])), m);
+			//~ std::vector<coordinates> c_plan = p.make_path(g, coordinates(-5, 2), coordinates(c_f(argv[2]), c_f(argv[3])), m);
+			std::vector<coordinates> c_plan({coordinates(-5, 2), coordinates(4, -5), coordinates(8, -1), coordinates(4, 3)});
 			p.plan_make(c_plan, m, c_f(argv[5])*pi_const/c_f(argv[6]));
 			
 			break;

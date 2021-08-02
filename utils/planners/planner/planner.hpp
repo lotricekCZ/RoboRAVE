@@ -65,6 +65,7 @@ class planner
 		// makes speeds assigned, new coordinates, angle and steps calculated
 		decimal_n evaluate_radius(coordinates previous, coordinates current);
 		decimal_n suiting_angle(std::array<line, 2> cross, coordinates *p_next, coordinates *p_previous = nullptr, coordinates *p_current = nullptr);
+		decimal_n get_distance_to_walls(step s, map &m);
 		travel_node search_by_id(unsigned_b id, std::vector<travel_node> &nodes);
 		
 	private:

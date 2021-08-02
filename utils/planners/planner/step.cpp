@@ -68,9 +68,9 @@ step::step(coordinates start, coordinates end, coordinates center, bool is_right
 		//~ this -> phi = (is_right? (this -> angle_end - this -> angle_start) :(2*pi_const - (this -> angle_end - this -> angle_start)));
 
 		/// diagnostics
-		std::cout << "zacatek " << start.print_geogebra() + "\t" << this -> angle_start / pi_const * 180 << std::endl;
-		std::cout << "konec " << end.print_geogebra() + "\t" << this -> angle_end / pi_const * 180 << std::endl;
-		std::cout << "phi  " << this -> phi / pi_const * 180 << std::endl;
+		//~ std::cout << "zacatek " << start.print_geogebra() + "\t" << this -> angle_start / pi_const * 180 << std::endl;
+		//~ std::cout << "konec " << end.print_geogebra() + "\t" << this -> angle_end / pi_const * 180 << std::endl;
+		//~ std::cout << "phi  " << this -> phi / pi_const * 180 << std::endl;
 		}
 	}
 	
@@ -83,8 +83,8 @@ step::step(coordinates start, coordinates end, bool compute_angle){
 	this -> phi = 0; // does not change
 	this -> omega = 0; // does not change
 	
-	std::cout << "zacatek " << start.print_geogebra() + "\t" << this -> angle_start / pi_const * 180 << std::endl;
-	std::cout << "konec " << end.print_geogebra() + "\t" << this -> angle_end / pi_const * 180 << std::endl;
+	//~ std::cout << "zacatek " << start.print_geogebra() + "\t" << this -> angle_start / pi_const * 180 << std::endl;
+	//~ std::cout << "konec " << end.print_geogebra() + "\t" << this -> angle_end / pi_const * 180 << std::endl;
 	
 	/// block for optional activities
 	if(compute_angle){
@@ -439,7 +439,7 @@ decimal_n step::get_distance_linears(step a, step b, bool carry_caps){
 	
 	for(uint8_t i = 0; i < inters.size(); i++)
 		if(inters[i].size() != 0){
-			std::cout << inters[i][0].print_geogebra() << std::endl;
+			//~ std::cout << inters[i][0].print_geogebra() << std::endl;
 			decimal_n retc = origins[i].get_distance(inters[i][0]);
 			ret = (ret < retc)? ret: retc;
 			}
@@ -499,17 +499,17 @@ decimal_n step::get_distance_circulars(step a, step b, bool carry_caps){
 	std::array<coordinates, 4> it_2 = {a.start, a.end, b.start, b.end};
 	for(uint8_t i = 0; i < 4; i++){
 		for(auto o: it_1[i]){
-			std::cout << o.print_geogebra() << std::endl;
+			//~ std::cout << o.print_geogebra() << std::endl;
 			decimal_n retc = o.get_distance(it_2[i]);
 			ret = (ret < retc)? ret: retc;
 			}
 		}
 	for(uint8_t i = 0; i < int_center_center_b.size(); i++){
 		//~ if(b.on_segment(int_center_center_b[i])){
-			std::cout << int_center_center_b[i].print_geogebra() << std::endl;
+			//~ std::cout << int_center_center_b[i].print_geogebra() << std::endl;
 			for(uint8_t o = 0; o < int_center_center_a.size(); o++){
 				//~ if(a.on_segment(int_center_center_a[o])){
-					std::cout << int_center_center_a[o].print_geogebra() << std::endl;
+					//~ std::cout << int_center_center_a[o].print_geogebra() << std::endl;
 					//~ std::cout << "Tam" << std::endl;
 					decimal_n retc = int_center_center_b[i].get_distance(int_center_center_a[o]);
 					ret = (ret < retc)? ret: retc;
@@ -572,16 +572,16 @@ decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
 	std::vector<coordinates> int_start 	= step::intersection(circular, perp_start);
 	std::vector<coordinates> int_end 	= step::intersection(circular, perp_end);
 	
-	for(auto a: {int_center, int_start, int_end})
-		for(auto b: a)
-			std::cout << b.print() << std::endl;
-	std::cout << e_center.print() << std::endl;
-	std::cout << e_start.print() << std::endl;
-	std::cout << e_end.print() << std::endl;
+	//~ for(auto a: {int_center, int_start, int_end})
+		//~ for(auto b: a)
+			//~ std::cout << b.print() << std::endl;
+	//~ std::cout << e_center.print() << std::endl;
+	//~ std::cout << e_start.print() << std::endl;
+	//~ std::cout << e_end.print() << std::endl;
 	
-	std::cout << perp_center.print() << std::endl;
-	std::cout << perp_start.print() << std::endl;
-	std::cout << perp_end.print() << std::endl;
+	//~ std::cout << perp_center.print() << std::endl;
+	//~ std::cout << perp_start.print() << std::endl;
+	//~ std::cout << perp_end.print() << std::endl;
 	
 	//~ std::cout << .print_geogebra() << std::endl;
 	
@@ -590,7 +590,7 @@ decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
 		for(auto i: int_center){
 			// they already are on circular segment, so no worries I suppose
 			decimal_n retc = i.get_distance(e_center); // return candidate
-			std::cout << i.print_geogebra() << std::endl;
+			//~ std::cout << i.print_geogebra() << std::endl;
 			ret = (ret < retc)? ret: retc;
 			}
 		}
@@ -601,7 +601,7 @@ decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
 		for(auto i: int_start){
 			// they already are on circular segment, so no worries I suppose
 			retc = i.get_distance(e_start); // return candidate
-			std::cout << i.print_geogebra() << std::endl;
+			//~ std::cout << i.print_geogebra() << std::endl;
 			ret = (ret < retc)? ret: retc;
 			}
 			
@@ -612,7 +612,7 @@ decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
 		ret = (ret < retc)? ret: retc;
 		for(auto i: int_end){
 			// they already are on circular segment, so no worries I suppose
-			std::cout << i.print_geogebra() << std::endl;
+			//~ std::cout << i.print_geogebra() << std::endl;
 			decimal_n retc = i.get_distance(e_end); // return candidate
 			ret = (ret < retc)? ret: retc;
 			}
@@ -641,7 +641,7 @@ decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
 		std::array<coordinates, 2> it_2 = {linear.start, linear.end};
 		for(uint8_t i = 0; i < 6; i++){
 			for(auto o: it_1[i]){
-				std::cout << o.print_geogebra() << std::endl;
+				//~ std::cout << o.print_geogebra() << std::endl;
 				decimal_n retc = o.get_distance(it_2[i%2]);
 				ret = (ret < retc)? ret: retc;
 				}
