@@ -27,41 +27,46 @@
 void load_config(){
 	YAML::Node config = YAML::LoadFile("../defines/config.yaml");
 	//~ YAML::Node config = YAML::Load("{candle: 3.14159, [0, 1]: integers}");
-	//~ YAML::Node node = YAML::Load("{pi: 3.14159, [0, 1]: integers}");
+	YAML::Node node_mAP			 = node_mAP;
+	YAML::Node node_priority	 = config["priority"];
+	YAML::Node node_influence	 = node_priority["influence"];
+	YAML::Node node_exploration	 = node_priority["exploration"];
+	YAML::Node node_camera		 = node_priority["camera"];
+	
 	properties::logs::calculations = 			config["logs"]["calculations"].as<std::string>();
 	properties::logs::actions = 				config["logs"]["actions"].as<std::string>();
-	properties::information = 				config["information"].as<std::string>();
+	properties::information = 					config["information"].as<std::string>();
 	
-	tresholds::mAP::candle = 					config["tresholds"]["mAP"]["candle"].as<decimal_n>();
-	tresholds::mAP::barrier = 					config["tresholds"]["mAP"]["barrier"].as<decimal_n>();
-	tresholds::mAP::fire = 						config["tresholds"]["mAP"]["fire"].as<decimal_n>();
-	tresholds::mAP::line_surround = 			config["tresholds"]["mAP"]["line_surround"].as<decimal_n>();
-	tresholds::mAP::line_border = 				config["tresholds"]["mAP"]["line_border"].as<decimal_n>();
-	tresholds::mAP::Maker_Jakub_Ramaseuski = 	config["tresholds"]["mAP"]["Maker_Jakub_Ramaseuski"].as<decimal_n>();
+	thresholds::mAP::candle = 					node_mAP["candle"].as<decimal_n>();
+	thresholds::mAP::barrier = 					node_mAP["barrier"].as<decimal_n>();
+	thresholds::mAP::fire = 					node_mAP["fire"].as<decimal_n>();
+	thresholds::mAP::line_surround = 			node_mAP["line_surround"].as<decimal_n>();
+	thresholds::mAP::line_border = 				node_mAP["line_border"].as<decimal_n>();
+	thresholds::mAP::Maker_Jakub_Ramaseuski = 	node_mAP["Maker_Jakub_Ramaseuski"].as<decimal_n>();
 	
-	tresholds::explo::objects::barrier = 		config["priority"]["exploration"]["barrier"].as<decimal_n>();
-	tresholds::explo::objects::candle = 		config["priority"]["exploration"]["candle"].as<decimal_n>();
-	tresholds::explo::objects::unknown = 		config["priority"]["exploration"]["unknown"].as<decimal_n>();
-	tresholds::explo::objects::candle_blown = 	config["priority"]["exploration"]["candle_blown"].as<decimal_n>();
-	tresholds::explo::objects::discovered = 	config["priority"]["exploration"]["discovered"].as<decimal_n>();
-	tresholds::explo::objects::interesting = 	config["priority"]["exploration"]["interesting"].as<decimal_n>();
-	tresholds::explo::objects::boring = 		config["priority"]["exploration"]["boring"].as<decimal_n>();
+	thresholds::explo::objects::barrier = 		node_exploration["barrier"].as<decimal_n>();
+	thresholds::explo::objects::candle = 		node_exploration["candle"].as<decimal_n>();
+	thresholds::explo::objects::unknown = 		node_exploration["unknown"].as<decimal_n>();
+	thresholds::explo::objects::candle_blown = 	node_exploration["candle_blown"].as<decimal_n>();
+	thresholds::explo::objects::discovered = 	node_exploration["discovered"].as<decimal_n>();
+	thresholds::explo::objects::interesting = 	node_exploration["interesting"].as<decimal_n>();
+	thresholds::explo::objects::boring = 		node_exploration["boring"].as<decimal_n>();
 	
-	tresholds::explo::influence::barrier = 		config["priority"]["influence"]["barrier"].as<decimal_n>();
-	tresholds::explo::influence::candle = 		config["priority"]["influence"]["candle"].as<decimal_n>();
-	tresholds::explo::influence::unknown = 		config["priority"]["influence"]["unknown"].as<decimal_n>();
-	tresholds::explo::influence::candle_blown = config["priority"]["influence"]["candle_blown"].as<decimal_n>();
-	tresholds::explo::influence::discovered = 	config["priority"]["influence"]["discovered"].as<decimal_n>();
-	tresholds::explo::influence::interesting = 	config["priority"]["influence"]["interesting"].as<decimal_n>();
-	tresholds::explo::influence::boring = 		config["priority"]["influence"]["boring"].as<decimal_n>();
+	thresholds::explo::influence::barrier = 		node_influence["barrier"].as<decimal_n>();
+	thresholds::explo::influence::candle = 			node_influence["candle"].as<decimal_n>();
+	thresholds::explo::influence::unknown = 		node_influence["unknown"].as<decimal_n>();
+	thresholds::explo::influence::candle_blown = 	node_influence["candle_blown"].as<decimal_n>();
+	thresholds::explo::influence::discovered = 		node_influence["discovered"].as<decimal_n>();
+	thresholds::explo::influence::interesting = 	node_influence["interesting"].as<decimal_n>();
+	thresholds::explo::influence::boring = 			node_influence["boring"].as<decimal_n>();
 	
-	properties::camera::angle_horizontal = 				config["properties"]["camera"]["angle_horizontal"].as<decimal_n>();
-	properties::camera::angle_vertical = 				config["properties"]["camera"]["angle_vertical"].as<decimal_n>();
-	properties::camera::size_recognition_horizontal = 	config["properties"]["camera"]["size_recognition_horizontal"].as<unsigned_n>();
-	properties::camera::size_recognition_vertical = 	config["properties"]["camera"]["size_recognition_vertical"].as<unsigned_n>();
-	properties::camera::size_footage_horizontal = 		config["properties"]["camera"]["size_footage_horizontal"].as<unsigned_n>();
-	properties::camera::size_footage_vertical = 		config["properties"]["camera"]["size_footage_vertical"].as<unsigned_n>();
-	properties::camera::size_footage_vertical = 		config["properties"]["camera"]["size_footage_vertical"].as<unsigned_n>();
+	properties::camera::angle_horizontal = 				node_camera["angle_horizontal"].as<decimal_n>();
+	properties::camera::angle_vertical = 				node_camera["angle_vertical"].as<decimal_n>();
+	properties::camera::size_recognition_horizontal = 	node_camera["size_recognition_horizontal"].as<unsigned_n>();
+	properties::camera::size_recognition_vertical = 	node_camera["size_recognition_vertical"].as<unsigned_n>();
+	properties::camera::size_footage_horizontal = 		node_camera["size_footage_horizontal"].as<unsigned_n>();
+	properties::camera::size_footage_vertical = 		node_camera["size_footage_vertical"].as<unsigned_n>();
+	properties::camera::size_footage_vertical = 		node_camera["size_footage_vertical"].as<unsigned_n>();
 	std::cout << properties::information << std::endl;
 	
 	//~ std::ofstream fout("../defines/config.yaml");

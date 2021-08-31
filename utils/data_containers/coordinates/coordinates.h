@@ -74,7 +74,7 @@ class coordinates
 			return coordinates(this -> x * rhs, this -> y * rhs);
 			}
 		inline bool operator==(const coordinates& rhs){ 
-			const decimal_n thres = 0.15; // 10mm
+			const decimal_n thres = 0.15; // 0.15 units // 10mm
 			/* do actual comparison */ 
 			return this -> get_distance(rhs) <= thres;
 			}

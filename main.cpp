@@ -495,6 +495,7 @@ int main(int argc, char *argv[]) {
 			using namespace cv;
 			const decimal_n FPS_SMOOTHING = 0.9;
 			cv::VideoCapture cap(0);//cap.set(cv::CAP_PROP_FRAME_WIDTH, 4);
+			cv::VideoCapture cap_1(1);//cap.set(cv::CAP_PROP_FRAME_WIDTH, 4);
 			cap.set(cv::CAP_PROP_FRAME_HEIGHT, 800);
 			//~ dnn::readNetFromONNX
 			//~ dnn::DetectionModel d("best.mlmodel");
@@ -530,6 +531,10 @@ int main(int argc, char *argv[]) {
 					}
 			        //~ d.detect(frame, classIds, confidences, boxes);
 			    }
+			    if (cap_1.isOpened()){
+			        cap_1.read(frame_1);
+			        //~ d.detect(frame, classIds, confidences, boxes);
+			    }
 			    //~ cv::cvtColor(frame, frame, COLOR_BGR2GRAY);
 				//~ cv::GaussianBlur(frame, frame, Size(31, 31), 1.5);
 				//~ cv::sqrBoxFilter(frame, frame, 2, cv::Size(5, 5));
@@ -559,12 +564,13 @@ int main(int argc, char *argv[]) {
 					//~ cv::Vec3b max = ;
 					for(signed_b i = 0; i < rame.rows; i++){
 						for(signed_b j = 0; j < rame.cols; j++){
-							if(rame.at<uchar>(x, y) < rame.at<uchar>(i, j)){
+							if(rame.at<uchar>(x, y) > rame.at<uchar>(i, j)){
 								x = i;
 								y = j;
 								}								
 							}
 						}
+					cv::Canny(rame, rame, 40, 50);
 					//~ cv::cvtColor(frame, frame, COLOR_BGR5652BGR);
 					cv::drawMarker(frame, cv::Point(320, 240), rame.at<cv::Vec3b>(240, 320)-cv::Vec3b(60, 60, 60), cv::MARKER_CROSS, 20, 6);
 					cv::putText(frame, std::to_string(fps) +" fps", cv::Point(0, 40), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 3);
@@ -574,8 +580,9 @@ int main(int argc, char *argv[]) {
 					//~ std::cout << "x: " << x << " y: " << y << " l: " << std::to_string(rame.at<uchar>(x, y)) << std::endl;
 					cv::putText(frame, std::to_string(properties::camera::angle_horizontal*((float)y/(float)properties::camera::size_footage_vertical - 1/2.0f))+"*", cv::Point(y, x), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 1);
 					cv::imshow("b", frame);
+					cv::imshow("c", frame_1);
 
-				    cv::imshow(wname, frame);
+				    cv::imshow(wname, rame);
 				    //~ cv::imshow("b", rame);
 				    //~ frame_1 = frame;
 				    cv::cvtColor(rame, rame, COLOR_GRAY2BGR);
@@ -940,6 +947,36 @@ int main(int argc, char *argv[]) {
 				step s(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(c_f(argv[4]), c_f(argv[5])), coordinates(c_f(argv[6]), c_f(argv[7])), c_i(argv[8]));
 				std::cout << s.print_geogebra() << std::endl;
 				std::cout << step::get_distance(s, wall(x)) << std::endl;
+				break;
+				}
+				
+			case 55:{ // show map as opencv mat
+				map m;
+				uint8_t c = 4;
+				std::vector<std::future < std::vector<location> > > o;
+				for (uint8_t t = 0; t < c; t ++){
+					o.push_back(std::move(std::async(&map::grid, m, t * map_h / c, 0, ((t+1) * map_h / c), map_l)));
+					
+					}
+				for (auto &i: o){
+					std::vector<location> out = i.get();
+					
+					m._map.insert(m._map.begin(), out.begin(), out.end());
+					
+				}
+				m.edit_map(candle(coordinates(300,450)));
+				m.edit_map(candle(coordinates(600,600)));
+				//~ m.edit_map(candle(coordinates(310,450)));
+				//~ m.edit_map(candle(coordinates(320,450)));
+				//~ m.edit_map(candle(coordinates(321,450)));
+				location loo = m.interest_calculate();
+				m.show_map();
+				break;
+				}
+			
+			case 56:{
+				//~ cv::Mat_<int32_t> m(const Vec<typename DataType<_Tp>::channel_type, n>& vec, bool copyData=true);
+				//~ std::cout << step::get_distance(s, wall(x)) << std::endl;
 				break;
 				}
 				

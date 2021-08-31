@@ -26,6 +26,8 @@
 #include <vector>
 #include <array>
 #include <iostream>
+#include <stdexcept>
+#include <opencv2/opencv.hpp>
 
 #include "include.hpp"
 #include "map.hpp"
@@ -61,7 +63,7 @@ location map::interest_calculate(){
 	//~ _map_priority.assign(_map.begin(), _map.end());
 	//~ int points = 0;
 	for (auto& point: _map){
-		point.classification.interest_level = calculate_location(point);
+		point.set_interest(calculate_location(point));
 		}
 	//~ _map.assign(_map_priority.begin(), _map_priority.end());
 	return interest_maximal(_map)._coordinates;
@@ -72,47 +74,72 @@ decimal_n map::calculate_location(location lo){
 	coordinates c = lo._coordinates;
 	decimal_n x = c.x, y = c.y, distance = 0, interest = 0;
 	
-	using namespace tresholds::explo;
+	using namespace thresholds::explo;
 	// scaled down part of map based on maximal range
 	//~ std::cout << "\ncoords:\nx: " << c.x << "\ty: " << c.y << std::endl;
 	for (auto o: _map){
-		if(abs(o._coordinates.x - x) < (influence::interesting * map_unit) || \
-			abs(o._coordinates.y - y) < (influence::interesting * map_unit)){
-			distance = lo.get_distance(o);
+		distance = lo.get_distance(o);
+		if(distance <= (influence::interesting * map_unit)){
 			switch(o.get_point()){
 				case location::_unknown:
-					interest += (distance < (influence::unknown * map_unit)? \
-									(1.0f - distance / (influence::unknown * map_unit)) * objects::unknown : 0);
+					interest += (distance <= (influence::unknown * map_unit)? \
+									(1.0f - (distance / (influence::unknown * map_unit))) * objects::unknown : 0);
 					break;
 					
 				case location::_candle:
-					interest += (distance < (influence::candle * map_unit)? \
+					interest += (distance <= (influence::candle * map_unit)? \
 									(1.0f - distance / (influence::candle * map_unit)) * objects::candle : 0);
 					break;
 					
 				case location::_interesting:
-					interest += (distance < (influence::interesting * map_unit)? \
+					interest += (distance <= (influence::interesting * map_unit)? \
 									(1.0f - distance / (influence::interesting * map_unit)) * objects::interesting : 0);
 					break;
 					
 				case location::_barrier:
-					interest += (distance < (influence::barrier * map_unit)? \
+					interest += (distance <= (influence::barrier * map_unit)? \
 									(1.0f - distance / (influence::barrier * map_unit)) * objects::barrier : 0);
 					break;
 					
 				case location::_discovered:
-					interest += (distance < (influence::discovered * map_unit)? \
+					interest += (distance <= (influence::discovered * map_unit)? \
 									(1.0f - distance / (influence::discovered * map_unit)) * objects::discovered : 0);
 					break;
 					
 				case location::_boring:
-					interest += (distance < (influence::boring * map_unit)? \
+					interest += (distance <= (influence::boring * map_unit)? \
 									(1.0f - distance / (influence::boring * map_unit)) * objects::boring : 0);
 					break;
 				}
 				//~ interest += 			
 			}
+		switch(lo.get_point()){
+				case location::_unknown:
+					interest += objects::unknown;
+					break;
+					
+				case location::_candle:
+					interest += objects::candle;
+					break;
+					
+				case location::_interesting:
+					interest += objects::interesting;
+					break;
+					
+				case location::_barrier:
+					interest +=  objects::barrier;
+					break;
+					
+				case location::_discovered:
+					interest += objects::discovered;
+					break;
+					
+				case location::_boring:
+					interest += objects::boring;
+					break;
+				}
 		}
+		//~ interest ;
 		return interest;
 	}
 
@@ -120,7 +147,7 @@ location map::interest_maximal(std::vector<location> inmap){
 	
 	location max;
 	
-	max.set_interest( -1*(1<<22));
+	max.set_interest( -1*(1<<21));
 	for (auto o: inmap){
 		//~ std::cout << "interest: " << o.get_interest() << std::endl;
 		//~ std::cout << "x: " << o._coordinates.x << "  y: " << o._coordinates.y << std::endl;
@@ -133,7 +160,25 @@ location map::interest_maximal(std::vector<location> inmap){
 	return max;
 	}
 	
+location map::interest_minimal(std::vector<location> inmap){
 	
+	location min;
+	
+	min.set_interest((1 << 22) - 1);
+	for (auto o: inmap){
+		//~ std::cout << "interest: " << o.get_interest() << std::endl;
+		//~ std::cout << "x: " << o._coordinates.x << "  y: " << o._coordinates.y << std::endl;
+		if(o.get_interest() < min.get_interest()){
+			min = o;
+			}
+		}
+	
+	std::cout << "interest min: " << min.get_interest() << std::endl;
+	return min;
+	}
+	
+// function to show a map of interest
+
 void map::interest_map(){
 	
 	std::sort(_map.begin(), _map.end(), [](location a, location b){return (a._coordinates.y < b._coordinates.y);});
@@ -367,6 +412,29 @@ std::array<std::vector<location*>, 4> map::subdivide(coordinates c, decimal_n an
 			}
 		}
 	return ret;	
+	}
+
+void map::show_map(){
+	std::sort(_map.begin(), _map.end(), [](location a, location b){return (a._coordinates.y < b._coordinates.y);});
+	cv::namedWindow("map preview", cv::WINDOW_NORMAL | cv::WINDOW_KEEPRATIO | cv::WINDOW_GUI_EXPANDED);
+	cv::Mat map_view(map_h/15+1, map_l/15+1, CV_8UC3, cv::Scalar(40, 40, 0));
+	std::cout << "posledni:\t" << _map.back()._coordinates.print() << std::endl;
+	signed_b maximum = interest_maximal(_map).get_interest();
+	signed_b minimum = interest_minimal(_map).get_interest();
+	std::cout << "passed" << std::endl;
+	for(auto element: _map){
+		try{
+			//~ std::cout << 255.0f - (((decimal_n)element.get_interest())/((decimal_n)(maximum - minimum))) << std::endl;
+			signed_b interest = element.get_interest();
+			signed_b color = (255 * (1 -(((decimal_n)interest)/((decimal_n)(maximum - minimum)))));
+			map_view.at<cv::Vec3b>(cvRound(element._coordinates.y/15), cvRound(element._coordinates.x/15)) = cv::Vec3b((interest < 0? color: 0), 0, (interest >= 0? color: 0));
+			//~ cv::putText(map_view, "[" + std::to_string(cvRound(element._coordinates.y)) + "; " + std::to_string(cvRound(element._coordinates.x))+"]", cv::Point(element._coordinates.y*5 + 1, element._coordinates.x*5 + 1), cv::FONT_HERSHEY_PLAIN, 0.75, cv::Scalar(0, 0, color, 40));
+			} catch(std::exception e) {
+				std::cout << "uh oh..." << std::endl;
+				}
+		}
+	cv::imshow("map preview", map_view);
+	while(cv::waitKey() != 27){};
 	}
 
 #endif

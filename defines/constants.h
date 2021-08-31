@@ -37,7 +37,7 @@
 const decimal_n omega_wheel_const = (pi_const * r_wheel) / (N_wheel * dist_wheel);
 const decimal_n wheel_step_lenght_const = (2 * pi_const * r_wheel) / (N_wheel);
 
-/// tresholds
+/// thresholds
 /// TODO: config file, do it through config file using YAML, since it's human readable
 
 namespace properties {
@@ -85,7 +85,7 @@ namespace limits {
 	
 	};
 
-namespace tresholds {
+namespace thresholds {
 	namespace mAP { 
 		// ammount of confidence image recognition needs to have
 		decimal_n candle = 			0.2f;

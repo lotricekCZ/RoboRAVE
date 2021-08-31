@@ -31,8 +31,7 @@
 #ifndef LOCATION_CPP
 #define LOCATION_CPP
 
-location::location()
-{
+location::location(){
 	
 }
 
@@ -87,7 +86,7 @@ decimal_n location::get_distance(coordinates _coo){
  */
 
 decimal_n location::get_distance(decimal_n x, decimal_n y){
-	return sqrt(pow(x - _coordinates.x, 2) + pow(y - _coordinates.y, 2));
+	return std::hypot(x - _coordinates.x, y - _coordinates.y);
 	}
 
 

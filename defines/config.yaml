@@ -5,7 +5,7 @@ logs:
     actions:	../logs/actions/actions.txt
     calculations:	../logs/actions/calculations.md
 
-tresholds:
+thresholds:
   # mean Average perception needed to recognise object
   mAP:
     candle: 				0.2
