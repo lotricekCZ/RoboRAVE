@@ -49,7 +49,9 @@ class map
 		std::vector<location *> strip(std::array<coordinates, 2>);
 		location interest_calculate();
 		location interest_maximal(std::vector<location> inmap);
+		location interest_minimal(std::vector<location> inmap);
 		void interest_map();
+		void show_map();
 		map();
 		void append(location);
 		
