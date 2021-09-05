@@ -21,12 +21,16 @@
  * 
  */
 
+#include <vector>
+#include <algorithm>
+#include "../node/node.hpp"
+#include "../../../../defines/constants.h"
+#include "../../coordinates/coordinates.hpp"
+#include "../../map/map.hpp"
 
 #ifndef ANGLES_ANGLES_HPP
 #define ANGLES_ANGLES_HPP
 
-#include <vector>
-#include "../node/node.cpp"
 
 class angles: public std::vector<node>
 {

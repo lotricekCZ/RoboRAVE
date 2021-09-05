@@ -22,8 +22,6 @@
  */
 
 
-#include "../include.hpp"
-#include "obstacle.cpp"
 #include "surround_circle.hpp"
 
 #ifndef SURROUND_CIRCLE_CPP

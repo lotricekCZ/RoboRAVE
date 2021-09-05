@@ -21,52 +21,44 @@
  * 
  */
 
-#include <cmath> 
-#include <string> 
-#include <vector> 
-#include <array> 
-//~ #include "include.hpp"
-#include <limits>
-#include <string>
-#include <iostream>
-#include <inttypes.h>
-
-#include "../../defines/constants.h"
-#include "../../utils/data_containers/coordinates/coordinates.cpp"
-
-#include "../line/line.cpp"
 #include "circle.hpp"
 
 #ifndef CIRCLE_CPP
 #define CIRCLE_CPP
 
 
-circle::circle(decimal_n x = 0, decimal_n y = 0, decimal_n r = 0){
+circle::circle(decimal_n x, decimal_n y, decimal_n r){
 	this -> center.x = x;
 	this -> center.y = y;
 	this -> radius = r;
 	}
-	
-circle::circle(coordinates c, decimal_n r = 0){
+
+
+circle::circle(coordinates c, decimal_n r){
 	this -> center = c;
 	this -> radius = r;
 	}
 
+
 bool circle::inside(coordinates a){
 	return inside(a.x, a.y);
 	}
+
 	
 bool circle::inside(decimal_n x, decimal_n y){
 	return pow(x - center.x, 2) + pow(y - center.y, 2) <= pow(radius, 2);
 	}
+
 	
 bool circle::is_on(coordinates c){
 	return std::abs(pow(c.x - center.x, 2) + pow(c.y - center.y, 2) - pow(radius, 2)) <= 1e-3;
 	}
+
 	
 std::vector<coordinates> circle::points(){
 	return std::vector<coordinates>();
 	}
+
 
 std::vector<coordinates> circle::intersection(line l, circle c) {
 	// Set ax + by = c equal to (x - X)^2 + (y - Y)^2 = r^2 and expand:
@@ -158,9 +150,11 @@ std::vector<coordinates> circle::intersection(circle k, circle c) {
 	return ret;
 }
 
+
 std::vector<coordinates> circle::intersection(circle c) {
 	return intersection(c, *this);
 }
+
 
 void circle::circle_tangents (coordinates c, decimal_n r1, decimal_n r2, std::vector<line> & ans) {
     decimal_n r = r2 - r1;
@@ -174,6 +168,7 @@ void circle::circle_tangents (coordinates c, decimal_n r1, decimal_n r2, std::ve
     l.c = r1;
     ans.push_back(line((c.x * r + c.y * d) / z, (c.y * r - c.x * d) / z, r1));
 }
+
 
 std::vector<line> circle::circle_tangents(circle a, circle b) {
     std::vector<line> ans;
@@ -203,9 +198,11 @@ std::vector<coordinates> circle::tangent_points(circle c, coordinates point){
 	return ret;
 }
 
+
 std::vector<coordinates> circle::tangent_points(coordinates point){
 	return circle::tangent_points(*this, point);
 }
+
 
 std::vector<line> circle::tangents(circle c, coordinates point){
 	std::vector<line> ret;
@@ -213,6 +210,7 @@ std::vector<line> circle::tangents(circle c, coordinates point){
 		ret.push_back(line(point, i));
 	return ret;
 }
+
 
 std::vector<line> circle::tangents(coordinates point){
 	return circle::tangents(*this, point);
@@ -231,7 +229,8 @@ std::string circle::print(){
 	
 	return ret;
 	}
-	
+
+
 bool circle::on_segment(coordinates start, coordinates end, coordinates point, bool angle){
 	if(!is_on(point)){
 		return false;
@@ -276,13 +275,16 @@ std::vector<circle> circle::circles(line a, line b, decimal_n radius){
 	return ret;
 	}
 
+
 decimal_n circle::get_distance(circle ci, coordinates co){ // gets the distance from circumference
 	return std::abs(co.get_distance(ci.center) - ci.radius);
 	}
+
 	
 decimal_n circle::get_distance(coordinates co){ // gets the distance from circumference
 	return get_distance((*this), co);
 	}
+
 	
 decimal_n circle::get_distance(circle ci, line l){ // gets the distance from circumference
 	line p = l.make_perpendicular(ci.center);
@@ -291,6 +293,7 @@ decimal_n circle::get_distance(circle ci, line l){ // gets the distance from cir
 	
 	return ((distance_to_circumference) < 0)? 0: distance_to_circumference;
 	}
+
 	
 decimal_n circle::get_distance(line li){ // gets the distance from circumference
 	return get_distance((*this), li);
@@ -322,9 +325,11 @@ decimal_n circle::get_distance(circle c, coordinates a, coordinates b){
 	return std::abs((distances_ab[0] > distances_ab[1]? distances_ab[0]: distances_ab[1]) - c.radius);
 	}
 
+
 decimal_n circle::get_distance(coordinates a, coordinates b){
 	return get_distance((*this), a, b);
 	}
+
 
 #endif
 

@@ -22,7 +22,7 @@
  */
 
 
-#include "../include.hpp"
+
 #include "wall.hpp"
 
 #ifndef WALL_CPP

@@ -21,11 +21,11 @@
  * 
  */
 
+#include "../../../defines/constants.h"
+#include "../setters/setters.tpp"
 
 #ifndef UTILS_DATA_CONTAINERS_SPEEDS_SPEEDS_HPP
 #define UTILS_DATA_CONTAINERS_SPEEDS_SPEEDS_HPP
-
-#include "../setters/setters.tpp"
 
 
 class speeds: public setters<decimal_n>

@@ -23,7 +23,7 @@
 
 
 #include "../serial/chat.cpp"
-#include "../../utils/data_containers/angles/node/node.cpp"
+#include "../../utils/data_containers/angles/node/node.hpp"
 #include "fire_sensor.hpp"
 #include <vector>
 

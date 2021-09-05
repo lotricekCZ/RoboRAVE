@@ -21,6 +21,15 @@
  * 
  */
 
+#include <limits>
+#include <string>
+#include <cmath>
+#include <vector>
+#include <iostream>
+#include <inttypes.h>
+
+#include "../../defines/constants.h"
+#include "../../utils/data_containers/coordinates/coordinates.hpp"
 
 #ifndef LINE_HPP
 #define LINE_HPP

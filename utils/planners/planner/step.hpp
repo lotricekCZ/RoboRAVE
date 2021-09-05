@@ -21,10 +21,17 @@
  * 
  */
 
-//~ #include "../../data_containers/speeds/speeds.cpp"
-//~ #include "../../data_containers/coordinates/coordinates.cpp"
-//~ #include "../../data_containers/map/map.cpp"
-
+//~ #include "../../data_containers/speeds/speeds.hpp"
+//~ #include "../../data_containers/coordinates/coordinates.hpp"
+//~ #include "../../data_containers/map/map.hpp"
+#include "../../../elements/circle/circle.hpp"
+#include "../../../elements/line/line.hpp"
+#include "../../data_containers/speeds/speeds.hpp"
+#include "../../../defines/constants.h"
+#include "../../data_containers/map/obstacles/wall.hpp"
+#include <string>
+#include <limits>
+#include <variant>
 
 #ifndef STEP_HPP
 #define STEP_HPP

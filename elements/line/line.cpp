@@ -21,15 +21,6 @@
  * 
  */
 
-#include <limits>
-#include <string>
-#include <cmath>
-#include <vector>
-#include <iostream>
-#include <inttypes.h>
-
-#include "../../defines/constants.h"
-#include "../../utils/data_containers/coordinates/coordinates.cpp"
 #include "line.hpp"
 
 

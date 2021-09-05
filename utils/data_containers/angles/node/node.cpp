@@ -22,10 +22,8 @@
  */
 
 
-#include "../../../../defines/constants.h"
-#include "../../coordinates/coordinates.cpp"
-#include "../../map/location.cpp"
 #include "node.hpp"
+
 #ifndef DATA_CONTAINERS_ANGLES_NODE_CPP
 #define DATA_CONTAINERS_ANGLES_NODE_CPP
 
@@ -51,16 +49,16 @@ node::node(decimal_n distance, decimal_n angle)
 	this -> angle = angle;
 }
 
-node::node(decimal_n angle, location p, unsigned_n intensity = 0)
+node::node(decimal_n angle, location p, unsigned_n intensity)
 {
 	this -> position = p;
 	this -> angle = angle;
 	this -> intensity = intensity;
 }
 
-node::node(decimal_n angle, coordinates p, unsigned_n intensity = 0)
+node::node(decimal_n angle, coordinates c, unsigned_n intensity)
 {
-	this -> position._coordinates = p;
+	this -> position._coordinates = c;
 	this -> angle = angle;
 	this -> intensity = intensity;
 }

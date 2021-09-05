@@ -22,9 +22,6 @@
  */
 
 
-#include "dijkstra.cpp"
-#include "travel_node.cpp"
-#include "movement_utils.cpp"
 #include "planner.hpp"
 
 
@@ -65,8 +62,9 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 	std::vector<std::vector<line>> pre_lines; /// lines tangent to any of pre_circles
 	/// TODO: First move!
 	for(unsigned_b i = 1; i < selected.size()-1; i++){
-		if(i >= selected.size())
+		if(i >= selected.size()){
 			break;
+		}
 		pre_circles.push_back(circle(selected.at(i), evaluate_radius(selected.at(i-1), selected.at(i))));
 		std::cout << pre_circles.back().print() << std::endl;
 		}

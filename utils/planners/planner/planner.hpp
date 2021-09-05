@@ -20,10 +20,18 @@
  * 
  * 
  */
-#include "../../data_containers/map/map.cpp"
+
+#include "../../data_containers/angles/angles/angles.hpp"
+#include "../../data_containers/speeds/speeds.hpp"
+#include "../../data_containers/coordinates/coordinates.hpp"
+#include "../../data_containers/map/map.hpp"
 #include "../../../elements/radius/radius.h"
+#include "dijkstra.hpp"
+#include "travel_node.cpp"
 //~ #include "./optimization/ant_colony.cpp"
-#include "step.cpp"
+#include "step.hpp"
+#include "step.hpp"
+#include "movement_utils.cpp"
 #include <vector>
 #include <stdexcept>
 

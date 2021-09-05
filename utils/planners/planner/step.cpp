@@ -21,15 +21,6 @@
  * 
  */
 
-#include "../../../elements/circle/circle.cpp"
-#include "../../../elements/line/line.cpp"
-#include "../../data_containers/speeds/speeds.cpp"
-#include "../../../defines/constants.h"
-#include "../../data_containers/map/obstacles/wall.hpp"
-#include <string>
-#include <limits>
-#include <variant>
-
 #include "step.hpp"
 
 

@@ -22,10 +22,11 @@
  */
 
 
+#include "../include.hpp"
+#include "obstacle.hpp"
+
 #ifndef SURROUND_CIRCLE_HPP
 #define SURROUND_CIRCLE_HPP
-
-#include "obstacle.cpp"
 
 class surround_circle: public obstacle
 {

@@ -21,6 +21,20 @@
  * 
  */
 
+#include <cmath> 
+#include <string> 
+#include <vector> 
+#include <array> 
+//~ #include "include.hpp"
+#include <limits>
+#include <string>
+#include <iostream>
+#include <inttypes.h>
+
+#include "../../defines/constants.h"
+#include "../../utils/data_containers/coordinates/coordinates.hpp"
+
+#include "../line/line.hpp"
 
 #ifndef CIRCLE_HPP
 #define CIRCLE_HPP
@@ -29,21 +43,24 @@ class circle{
 	public:
 		decimal_n radius = 1;
 		coordinates center;
-		circle(coordinates, decimal_n);
-		circle(decimal_n, decimal_n, decimal_n);
+		circle(coordinates c, decimal_n r = 0);
+		circle(decimal_n x = 0, decimal_n y = 0, decimal_n r = 0);
 		static std::vector<circle> circles(line, line, decimal_n radius = 1);
 		
 		bool inside(coordinates a);
 		bool inside(decimal_n x, decimal_n y);
 		bool is_on(coordinates c);
 		
-		std::vector<coordinates> points();
-		static std::vector<coordinates> intersection(line, circle); // function to decide if sth intersects
-		std::vector<coordinates> intersection(line);		 // function to decide if sth intersects
-		static std::vector<coordinates> intersection(circle k, circle c);
-		std::vector<coordinates> intersection(circle);
 		static void circle_tangents(coordinates c, decimal_n r1, decimal_n r2, std::vector<line> & ans);
 		static std::vector<coordinates> tangent_points(circle c, coordinates point);
+		std::vector<coordinates> points();
+		
+		static std::vector<coordinates> intersection(line, circle); // function to decide if sth intersects
+		static std::vector<coordinates> intersection(circle k, circle c);
+		
+		std::vector<coordinates> intersection(line);		 // function to decide if sth intersects
+		std::vector<coordinates> intersection(circle);
+		
 		std::vector<coordinates> tangent_points(coordinates point);
 		static std::vector<line> tangents(circle c, coordinates point);
 		std::vector<line> tangents(coordinates point);
@@ -51,10 +68,11 @@ class circle{
 		std::string print();
 		
 		static decimal_n get_distance(circle, coordinates);
-		decimal_n get_distance(coordinates);
 		static decimal_n get_distance(circle, line);
-		decimal_n get_distance(line);
 		static decimal_n get_distance(circle, coordinates, coordinates);
+		
+		decimal_n get_distance(coordinates);
+		decimal_n get_distance(line);
 		decimal_n get_distance(coordinates, coordinates);
 		
 		bool on_segment(coordinates, coordinates, coordinates, bool);

@@ -20,12 +20,12 @@
 
 #include "./defines/variables.hpp"
 #include "./utils/data_containers/setters/setters.tpp"
-#include "./utils/data_containers/speeds/speeds.cpp"
-#include "./utils/data_containers/coordinates/coordinates.cpp"
+#include "./utils/data_containers/speeds/speeds.hpp"
+#include "./utils/data_containers/coordinates/coordinates.hpp"
 #include "./utils/data_containers/map/include.hpp"
 #include "./utils/log_maintainer/log_maintain.hpp"
-#include "./utils/data_containers/angles/angles/angles.cpp"
-#include "./utils/planners/planner/planner.cpp"
+#include "./utils/data_containers/angles/angles/angles.hpp"
+#include "./utils/planners/planner/planner.hpp"
 #include "./defines/typedefines.h"
 
 #define my_max(a, b) ((a>b)?a:b)
@@ -33,8 +33,7 @@
 #include "./defines/constants.h"
 #include "./defines/yaml_worker.hpp"
 
-//~ const decimal_n omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
-//~ const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);9
+
 
 #include "./tank/tank.h"
 #include "./elements/radius/radius.h"

@@ -22,14 +22,7 @@
  */
 
 
-#include <algorithm>
-#include <vector>
-#include <array>
-#include <iostream>
-#include <stdexcept>
-#include <opencv2/opencv.hpp>
 
-#include "include.hpp"
 #include "map.hpp"
 
 #ifndef MAP_CPP

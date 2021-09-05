@@ -21,11 +21,12 @@
  * 
  */
 
+#include "obstacle.hpp"
+#include "../include.hpp"
 
 #ifndef WALL_HPP
 #define WALL_HPP
 
-#include "obstacle.cpp"
 
 class wall: public obstacle
 {

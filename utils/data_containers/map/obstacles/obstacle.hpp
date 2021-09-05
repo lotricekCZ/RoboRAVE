@@ -21,6 +21,7 @@
  * 
  */
 
+#include "../include.hpp"
 
 #ifndef OBSTACLE_HPP
 #define OBSTACLE_HPP

@@ -21,13 +21,11 @@
  * 
  */
 
+#include "dijkstra.hpp"
+
 #ifndef DIJKSTRA_CPP
 #define DIJKSTRA_CPP
 
-#include <vector>
-#include "../../data_containers/coordinates/coordinates.cpp"
-#include "../../data_containers/map/include.hpp"
-#include "dijkstra.hpp"
 
 
 std::vector<dijk_node> dijkstra::dijkstras(std::vector<dijk_node*>& p_nodes, std::vector<edge*>& p_edges) {

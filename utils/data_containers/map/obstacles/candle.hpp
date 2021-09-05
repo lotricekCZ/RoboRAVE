@@ -22,10 +22,12 @@
  */
 
 
+#include "obstacle.hpp"
+#include "../include.hpp"
+
 #ifndef CANDLE_HPP
 #define CANDLE_HPP
 
-#include "obstacle.cpp"
 
 class candle: public obstacle
 {

@@ -21,14 +21,21 @@
  * 
  */
 
+#include <vector>
+#include <variant>
+#include "location.hpp"
+#include "../../../defines/constants.h"
+#include <algorithm>
+#include <vector>
+#include <array>
+#include <iostream>
+#include <stdexcept>
+#include <opencv2/opencv.hpp>
+#include "include.hpp"
 
 #ifndef MAP_HPP
 #define MAP_HPP
 
-#include <vector>
-#include <variant>
-#include "location.cpp"
-#include "../../../defines/constants.h"
 
 class map
 {

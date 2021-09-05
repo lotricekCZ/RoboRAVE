@@ -22,7 +22,6 @@
  */
 
 
-#include "../include.hpp"
 #include "obstacle.hpp"
 
 #ifndef OBSTACLE_CPP

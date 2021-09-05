@@ -21,6 +21,9 @@
  * 
  */
 
+#include "../../../../defines/constants.h"
+#include "../../coordinates/coordinates.hpp"
+#include "../../map/location.hpp"
 
 #ifndef DATA_CONTAINERS_ANGLES_NODE_HPP
 #define DATA_CONTAINERS_ANGLES_NODE_HPP
@@ -37,8 +40,8 @@ class node
 		node(decimal_n);
 		node(decimal_n, decimal_n);
 		node(decimal_n, unsigned_n);
-		node(decimal_n, location, unsigned_n);
-		node(decimal_n, coordinates, unsigned_n);
+		node(decimal_n angle, coordinates c, unsigned_n intensity = 0);
+		node(decimal_n angle, location p, unsigned_n intensity = 0);
 		virtual ~node();
 		void set_distance(decimal_n);
 		void set_intensity(unsigned_n);
