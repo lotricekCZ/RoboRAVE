@@ -27,13 +27,13 @@
 
 class camera
 {
-	decimal_n angle_horizontal = 			properties::camera::angle_horizontal;
-	decimal_n angle_vertical = 				properties::camera::angle_vertical;
-	decimal_n height =						properties::heights::camera;
-	unsigned_n px_recognition_horizontal = 	properties::camera::size_recognition_horizontal;
-	unsigned_n px_recognition_vertical = 	properties::camera::size_recognition_vertical;
-	unsigned_n px_footage_horizontal = 		properties::camera::size_footage_horizontal;
-	unsigned_n px_footage_vertical = 		properties::camera::size_footage_vertical;
+	decimal_n angle_horizontal = 			variables::properties::camera::angle_horizontal;
+	decimal_n angle_vertical = 				variables::properties::camera::angle_vertical;
+	decimal_n height =						variables::properties::heights::camera;
+	unsigned_n px_recognition_horizontal = 	variables::properties::camera::size_recognition_horizontal;
+	unsigned_n px_recognition_vertical = 	variables::properties::camera::size_recognition_vertical;
+	unsigned_n px_footage_horizontal = 		variables::properties::camera::size_footage_horizontal;
+	unsigned_n px_footage_vertical = 		variables::properties::camera::size_footage_vertical;
 	
 	public:
 		camera();

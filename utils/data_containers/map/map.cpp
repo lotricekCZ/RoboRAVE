@@ -74,68 +74,68 @@ decimal_n map::calculate_location(location lo){
 	coordinates c = lo._coordinates;
 	decimal_n x = c.x, y = c.y, distance = 0, interest = 0;
 	
-	using namespace thresholds::explo;
+	//~ using variables::thresholds::explo;
 	// scaled down part of map based on maximal range
 	//~ std::cout << "\ncoords:\nx: " << c.x << "\ty: " << c.y << std::endl;
 	for (auto o: _map){
 		distance = lo.get_distance(o);
-		if(distance <= (influence::interesting * map_unit)){
+		if(distance <= (variables::thresholds::explo::influence::interesting * map_unit)){
 			switch(o.get_point()){
 				case location::_unknown:
-					interest += (distance <= (influence::unknown * map_unit)? \
-									(1.0f - (distance / (influence::unknown * map_unit))) * objects::unknown : 0);
+					interest += (distance <= (variables::thresholds::explo::influence::unknown * map_unit)? \
+									(1.0f - (distance / (variables::thresholds::explo::influence::unknown * map_unit))) * variables::thresholds::explo::objects::unknown : 0);
 					break;
 					
 				case location::_candle:
-					interest += (distance <= (influence::candle * map_unit)? \
-									(1.0f - distance / (influence::candle * map_unit)) * objects::candle : 0);
+					interest += (distance <= (variables::thresholds::explo::influence::candle * map_unit)? \
+									(1.0f - distance / (variables::thresholds::explo::influence::candle * map_unit)) * variables::thresholds::explo::objects::candle : 0);
 					break;
 					
 				case location::_interesting:
-					interest += (distance <= (influence::interesting * map_unit)? \
-									(1.0f - distance / (influence::interesting * map_unit)) * objects::interesting : 0);
+					interest += (distance <= (variables::thresholds::explo::influence::interesting * map_unit)? \
+									(1.0f - distance / (variables::thresholds::explo::influence::interesting * map_unit)) * variables::thresholds::explo::objects::interesting : 0);
 					break;
 					
 				case location::_barrier:
-					interest += (distance <= (influence::barrier * map_unit)? \
-									(1.0f - distance / (influence::barrier * map_unit)) * objects::barrier : 0);
+					interest += (distance <= (variables::thresholds::explo::influence::barrier * map_unit)? \
+									(1.0f - distance / (variables::thresholds::explo::influence::barrier * map_unit)) * variables::thresholds::explo::objects::barrier : 0);
 					break;
 					
 				case location::_discovered:
-					interest += (distance <= (influence::discovered * map_unit)? \
-									(1.0f - distance / (influence::discovered * map_unit)) * objects::discovered : 0);
+					interest += (distance <= (variables::thresholds::explo::influence::discovered * map_unit)? \
+									(1.0f - distance / (variables::thresholds::explo::influence::discovered * map_unit)) * variables::thresholds::explo::objects::discovered : 0);
 					break;
 					
 				case location::_boring:
-					interest += (distance <= (influence::boring * map_unit)? \
-									(1.0f - distance / (influence::boring * map_unit)) * objects::boring : 0);
+					interest += (distance <= (variables::thresholds::explo::influence::boring * map_unit)? \
+									(1.0f - distance / (variables::thresholds::explo::influence::boring * map_unit)) * variables::thresholds::explo::objects::boring : 0);
 					break;
 				}
 				//~ interest += 			
 			}
 		switch(lo.get_point()){
 				case location::_unknown:
-					interest += objects::unknown;
+					interest += variables::thresholds::explo::objects::unknown;
 					break;
 					
 				case location::_candle:
-					interest += objects::candle;
+					interest += variables::thresholds::explo::objects::candle;
 					break;
 					
 				case location::_interesting:
-					interest += objects::interesting;
+					interest += variables::thresholds::explo::objects::interesting;
 					break;
 					
 				case location::_barrier:
-					interest +=  objects::barrier;
+					interest +=  variables::thresholds::explo::objects::barrier;
 					break;
 					
 				case location::_discovered:
-					interest += objects::discovered;
+					interest += variables::thresholds::explo::objects::discovered;
 					break;
 					
 				case location::_boring:
-					interest += objects::boring;
+					interest += variables::thresholds::explo::objects::boring;
 					break;
 				}
 		}

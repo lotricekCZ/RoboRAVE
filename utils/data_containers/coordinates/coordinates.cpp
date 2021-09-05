@@ -25,7 +25,7 @@
 #include <vector>
 #include <cmath>
 #include <string>
-#include "coordinates.h"
+#include "coordinates.hpp"
 
 #ifndef COORDINATES_CPP
 #define COORDINATES_CPP

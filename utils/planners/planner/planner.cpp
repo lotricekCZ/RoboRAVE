@@ -155,7 +155,7 @@ void planner::alter_selected(std::vector<step>& selected, map& m, decimal_n init
 	
 	decimal_n first = evaluate_radius(selected[0].start, selected[0].end);
 	decimal_n safe = 0.6;
-	std::pair<step, step> perimeters = step::get_perimeters(selected[0], properties::widths::robot * safe);
+	std::pair<step, step> perimeters = step::get_perimeters(selected[0], variables::properties::widths::robot * safe);
 	coordinates local_next = selected[0].start.make_local(selected[0].end, initial_rotation);
 	if(std::abs(local_next.y) >= 1e-1 && local_next.x > 0){
 		coordinates local_center(0, (local_next.y > 0)?-1 : 1 * first);
@@ -168,7 +168,7 @@ void planner::alter_selected(std::vector<step>& selected, map& m, decimal_n init
 	
 	/// gives us a bitmap of which segments are not close
 	for(unsigned_b i = 0; i < selected.size(); i++){ 
-		perimeters = step::get_perimeters(selected[i], properties::widths::robot * 0.65);
+		perimeters = step::get_perimeters(selected[i], variables::properties::widths::robot * 0.65);
 		/// 0.65 is given because it is demanded to have 1.3 of a width in total
 		safe_distance[i] = (collides_nowhere(m, std::get<0>(perimeters).start, std::get<0>(perimeters).end) & \
 							collides_nowhere(m, std::get<1>(perimeters).start, std::get<1>(perimeters).end));
@@ -180,12 +180,12 @@ void planner::alter_selected(std::vector<step>& selected, map& m, decimal_n init
 decimal_n planner::evaluate_radius(coordinates previous, coordinates current){
 	decimal_n d = previous.get_distance(current);
 	/// this gives us circle radius that is allowed for such distance
-	if((d - 2*limits::minimal::circle) <= -1e-5){
+	if((d - 2*variables::limits::minimal::circle) <= -1e-5){
 		return 0; /// a rotation on place must be held
 		}
 		
-	if((d - limits::maximal::circle) > 0){
-		return limits::maximal::circle; /// a maximum is only possible
+	if((d - variables::limits::maximal::circle) > 0){
+		return variables::limits::maximal::circle; /// a maximum is only possible
 		}
 	return d/2;
 	}
@@ -205,7 +205,7 @@ std::vector<step> planner::make_first_move(map& m, coordinates start, coordinate
 		/// if that's on the other side... You got the point
 		std::array<std::vector<location *>, 4> interestings = m.subdivide(start, initial_rotation);	
 	}
-	if(distance > limits::maximal::circle){ 
+	if(distance > variables::limits::maximal::circle){ 
 		/// distance is bigger than the radius of maximal circle, thus making it inefficient to drive on circular path.
 		/// radius is given by halving the one that's on the correct side of coordinates
 		wall closest_w = m.closest_wall(start);
@@ -214,7 +214,7 @@ std::vector<step> planner::make_first_move(map& m, coordinates start, coordinate
 		/// checks if the trace doesn't collide with any object
 		}
 		
-	if(distance < limits::maximal::circle){ 
+	if(distance < variables::limits::maximal::circle){ 
 		/// distance is bigger than the radius of maximal circle, thus making it inefficient to drive on circular path.
 		}
 	return ret;

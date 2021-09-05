@@ -61,7 +61,7 @@ class step
 		bool on_segment(coordinates point);
 		bool on_segment_circular(coordinates point);
 		bool on_segment_linear(coordinates point);
-		static std::pair<step, step> get_perimeters(step, decimal_n perimeter = properties::widths::robot / 2);
+		static std::pair<step, step> get_perimeters(step, decimal_n perimeter = variables::properties::widths::robot / 2);
 		std::string print();
 		std::string print_inkscape();
 		std::string print_geogebra();

@@ -18,6 +18,7 @@
 #include <ctime>
 #include <iostream>
 
+#include "./defines/variables.hpp"
 #include "./utils/data_containers/setters/setters.tpp"
 #include "./utils/data_containers/speeds/speeds.cpp"
 #include "./utils/data_containers/coordinates/coordinates.cpp"
@@ -30,7 +31,7 @@
 #define my_max(a, b) ((a>b)?a:b)
 
 #include "./defines/constants.h"
-#include "./defines/yaml_worker.cpp"
+#include "./defines/yaml_worker.hpp"
 
 //~ const decimal_n omega_wheel_const = (pi * r_wheel) / (N_wheel * dist_wheel);
 //~ const decimal_n wheel_step_lenght_const = (2 * pi * r_wheel) / (N_wheel);9
@@ -44,7 +45,7 @@
 
 decimal_n calculate_omega(decimal_n T_avg = 0){
 	//~ printf("omega con %f\nTavg %f\n %.20Lf\n", omega_wheel_const, T_avg, pi);
-	return (omega_wheel_const * T_avg);
+	return (variables::omega_wheel_const * T_avg);
 	}
 
 decimal_n calculate_T_avg(decimal_n T_left = 0, decimal_n T_right = 0){
@@ -52,7 +53,7 @@ decimal_n calculate_T_avg(decimal_n T_left = 0, decimal_n T_right = 0){
 	}
 
 decimal_n calculate_distance_wheel(decimal_n period, decimal_n time){
-	return abs((time * wheel_step_lenght_const)/(decimal_n)period);
+	return abs((time * variables::wheel_step_lenght_const)/(decimal_n)period);
 	}
 
 decimal_n c_f(char * input){
@@ -575,10 +576,10 @@ int main(int argc, char *argv[]) {
 					cv::drawMarker(frame, cv::Point(320, 240), rame.at<cv::Vec3b>(240, 320)-cv::Vec3b(60, 60, 60), cv::MARKER_CROSS, 20, 6);
 					cv::putText(frame, std::to_string(fps) +" fps", cv::Point(0, 40), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 3);
 					cv::drawMarker(frame, cv::Point(y, x), cv::Scalar(0, 0, 255), cv::MARKER_CROSS, 20, 6);
-					cv::line(frame, cv::Point(y, 0), cv::Point(y, properties::camera::size_footage_horizontal), cv::Scalar(205, 60, 205), 2);
+					cv::line(frame, cv::Point(y, 0), cv::Point(y, variables::properties::camera::size_footage_horizontal), cv::Scalar(205, 60, 205), 2);
 					
 					//~ std::cout << "x: " << x << " y: " << y << " l: " << std::to_string(rame.at<uchar>(x, y)) << std::endl;
-					cv::putText(frame, std::to_string(properties::camera::angle_horizontal*((float)y/(float)properties::camera::size_footage_vertical - 1/2.0f))+"*", cv::Point(y, x), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 1);
+					cv::putText(frame, std::to_string(variables::properties::camera::angle_horizontal*((float)y/(float)variables::properties::camera::size_footage_vertical - 1/2.0f))+"*", cv::Point(y, x), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 1);
 					cv::imshow("b", frame);
 					cv::imshow("c", frame_1);
 

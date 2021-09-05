@@ -27,14 +27,14 @@
 #define MOVEMENT_UTILS_CPP
 
 bool movement_utils::is_in_range(speeds s){
-	return (std::abs(s.left) >= limits::minimal::wheel_velocity && 
-		std::abs(s.right) >= limits::minimal::wheel_velocity && 
-		std::abs(s.left) <= limits::maximal::wheel_velocity &&
-		std::abs(s.right) <= limits::maximal::wheel_velocity);
+	return (std::abs(s.left) >= variables::limits::minimal::wheel_velocity && 
+		std::abs(s.right) >= variables::limits::minimal::wheel_velocity && 
+		std::abs(s.left) <= variables::limits::maximal::wheel_velocity &&
+		std::abs(s.right) <= variables::limits::maximal::wheel_velocity);
 	}
 	
 bool movement_utils::is_in_range(circle c){
-	return (c.radius > limits::minimal::circle && c.radius < limits::maximal::circle);
+	return (c.radius > variables::limits::minimal::circle && c.radius < variables::limits::maximal::circle);
 	}
 
 

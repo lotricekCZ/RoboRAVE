@@ -68,8 +68,10 @@ add_executable(roborave ${SOURCE_FILES})
 add_library(log_maintain SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.cpp
 							${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.hpp)
 							
-#~ add_library(coordinates SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/coordinates/coordinates.cpp
-							#~ ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/coordinates/coordinates.h)
+add_library(variables SHARED ${CMAKE_CURRENT_SOURCE_DIR}/defines/variables.cpp)
+							
+add_library(coordinates SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/coordinates/coordinates.cpp
+							${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/coordinates/coordinates.h)
 
 #~ add_library(line SHARED ${CMAKE_CURRENT_SOURCE_DIR}/elements/line/line.cpp
 							#~ ${CMAKE_CURRENT_SOURCE_DIR}/elements/line/line.hpp
@@ -139,6 +141,7 @@ add_library(serial STATIC ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial
 							${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/serial.hpp
 							)
 target_link_libraries(serial -lCppLinuxSerial)
+target_link_libraries(yaml_worker variables ${YAML_CPP_LIBRARIES})
 
 
 set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
@@ -148,6 +151,6 @@ target_compile_features(roborave PRIVATE cxx_std_17)
 target_link_libraries(roborave Threads::Threads 
 					${OpenCV_LIBRARIES} ${OpenCV_LDFLAGS} 
 					${YAML_CPP_LIBRARIES} ${TORCH_LIBRARIES}
-					log_maintain
-					serial 
+					log_maintain yaml_worker
+					serial variables
 					)
