@@ -69,7 +69,7 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 		std::cout << pre_circles.back().print() << std::endl;
 		}
 	coordinates start = selected.at(0);
-	/// first circle generation block start
+	/// first circle generation block start; this is where the first circle is generated
 	decimal_n radius_initial = evaluate_radius(selected.at(1), start);
 	coordinates next_local = selected.at(1).make_local(start, -pi_const/2 - initial_rotation);
 	bool is_right = (next_local.y < 0);
@@ -79,6 +79,7 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 	circle first_circle(start.make_global(center_local, initial_rotation - pi_const/2), radius_initial);
 	coordinates center_next_local = pre_circles.back().center.make_local(first_circle.center, -pi_const/2 - initial_rotation);
 	/// first circle generation block end
+	
 	pre_circles.insert(pre_circles.begin(), first_circle);
 	std::cout << first_circle.print() << std::endl;
 	for(unsigned_b i = 0; i < pre_circles.size() - 1; i++){
@@ -403,4 +404,24 @@ decimal_n planner::get_distance_to_walls(step s, map &m){
 		ret = (ret < retc)? ret: retc;
 		}
 	return ret;
+	}
+
+wall planner::get_closest_wall(step s, map &m){
+	wall wret;
+	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
+	for(auto w: m._map_walls){
+		decimal_n retc = step::get_distance(s, w);
+		if(ret > retc){
+			ret = retc;
+			wret = w;
+			}
+		}
+	return wret;
+	}
+
+std::vector<step> planner::extend(std::vector<step>& future_steps, std::vector<step>& branch, circle future, map& m){
+	wall closest = get_closest_wall(future_steps.back(), m);
+	std::cout << closest.print_geogebra() << std::endl;
+	
+	return future_steps;
 	}

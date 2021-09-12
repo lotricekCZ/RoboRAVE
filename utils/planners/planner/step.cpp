@@ -686,3 +686,26 @@ decimal_n step::get_distance(step s, wall w){
 	return ret;
 	}
 
+std::vector<decimal_n> step::get_distances(step s, std::vector<coordinates> points){
+	std::vector<decimal_n> ret;
+	for(auto o: points){
+		ret.push_back(step::get_distance(s, o));
+		}
+	return ret;
+	}
+
+std::vector<decimal_n> step::get_distances(step s, wall w){
+	std::vector<decimal_n> ret;
+	for(uint8_t i = 0; i < 4; i++){
+		ret.push_back(step::get_distance(s, w.properties.edges[i]));
+		}
+	return ret;
+	}
+
+std::vector<decimal_n> step::get_distances(std::vector<coordinates> points){
+	return get_distances(*this, points);
+	}
+
+std::vector<decimal_n> step::get_distances(wall w){
+	return get_distances(*this, w);
+	}

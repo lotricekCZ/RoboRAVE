@@ -495,7 +495,7 @@ int main(int argc, char *argv[]) {
 			using namespace cv;
 			const decimal_n FPS_SMOOTHING = 0.9;
 			cv::VideoCapture cap(0);//cap.set(cv::CAP_PROP_FRAME_WIDTH, 4);
-			cv::VideoCapture cap_1(1);//cap.set(cv::CAP_PROP_FRAME_WIDTH, 4);
+			//~ cv::VideoCapture cap_1(1);//cap.set(cv::CAP_PROP_FRAME_WIDTH, 4);
 			cap.set(cv::CAP_PROP_FRAME_HEIGHT, 800);
 			//~ dnn::readNetFromONNX
 			//~ dnn::DetectionModel d("best.mlmodel");
@@ -531,10 +531,10 @@ int main(int argc, char *argv[]) {
 					}
 			        //~ d.detect(frame, classIds, confidences, boxes);
 			    }
-			    if (cap_1.isOpened()){
-			        cap_1.read(frame_1);
+			    //~ if (cap_1.isOpened()){
+			        //~ cap_1.read(frame_1);
 			        //~ d.detect(frame, classIds, confidences, boxes);
-			    }
+			    //~ }
 			    //~ cv::cvtColor(frame, frame, COLOR_BGR2GRAY);
 				//~ cv::GaussianBlur(frame, frame, Size(31, 31), 1.5);
 				//~ cv::sqrBoxFilter(frame, frame, 2, cv::Size(5, 5));
@@ -975,8 +975,65 @@ int main(int argc, char *argv[]) {
 				}
 			
 			case 56:{
-				//~ cv::Mat_<int32_t> m(const Vec<typename DataType<_Tp>::channel_type, n>& vec, bool copyData=true);
-				//~ std::cout << step::get_distance(s, wall(x)) << std::endl;
+				map m;
+				coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+				//~ m.append(candle(coordinates(4,3)));
+				m.append(wall(x));
+				//~ for(wall w: m._map_walls)
+					//~ std::cout << w.print_geogebra() << std::endl;
+				
+				planner p;
+				step s(coordinates(-5, 2), coordinates(c_f(argv[2]), c_f(argv[3])));
+				step circular_first(s.start.make_global(coordinates(0, 0), s.start.get_gamma(s.end) - pi_const/2), 
+									s.start.make_global(coordinates(-3, -3), s.start.get_gamma(s.end) - pi_const/2),
+									s.start.make_global(coordinates(0, -3), s.start.get_gamma(s.end) - pi_const/2), 0);
+									
+				step circular_second(s.end.make_global(coordinates(0, 0), s.start.get_gamma(s.end) - pi_const/2), 
+									s.end.make_global(coordinates(3, 3), s.start.get_gamma(s.end) - pi_const/2),
+									s.end.make_global(coordinates(0, 3), s.start.get_gamma(s.end) - pi_const/2), 0);
+
+				std::cout << circular_first.print_geogebra() << std::endl;
+				std::cout << circular_second.print_geogebra() << std::endl;
+				
+				std::vector<step> previous({circular_first, s, circular_second});
+				std::vector<step> next({s});
+				
+				for (auto a: p.extend(next, previous, std::get<circle>(circular_second.formula), m))
+					std::cout << a.print_geogebra() << std::endl;
+				
+				break;
+				}
+				
+			case 57:{
+				map m;
+	
+				coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 8), coordinates(-6, 7)};
+				coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+				coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
+				coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
+				//~ m.append(candle(coordinates(4,3)));
+				m.append(wall(c));
+				m.append(wall(x));
+				m.append(wall(y));
+				for(wall w: m._map_walls)
+					std::cout << w.print_geogebra() << std::endl;
+				break;
+				}
+				
+			case 58:{
+				map m;
+	
+				//~ coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 8), coordinates(-6, 7)};
+				coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+				//~ coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
+				//~ coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
+				//~ m.append(candle(coordinates(4,3)));
+				//~ m.append(wall(c));
+				step s(coordinates(-5, 2), coordinates(c_f(argv[2]), c_f(argv[3])));
+				m.append(wall(x));
+				//~ m.append(wall(y));
+				for(auto w: step::get_distances(s, m._map_walls.at(0)))
+					std::cout << w << std::endl;
 				break;
 				}
 				

@@ -92,6 +92,12 @@ class step
 		decimal_n get_distance(line l, bool carry_caps = true);
 		decimal_n get_distance(circle c);
 		decimal_n get_distance(step b, bool carry_caps = true);
+		
+		static std::vector<decimal_n> get_distances(step s, std::vector<coordinates> points);
+		static std::vector<decimal_n> get_distances(step s, wall w);
+		
+		std::vector<decimal_n> get_distances(std::vector<coordinates> points);
+		std::vector<decimal_n> get_distances(wall w);
 	
 	private:
 		static decimal_n get_distance_linears(step a, step b, bool carry_caps = true);

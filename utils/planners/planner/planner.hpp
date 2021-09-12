@@ -66,10 +66,12 @@ class planner
 		void alter_selected(std::vector<step>& selected, map& m, decimal_n initial_rotation);
 		std::vector<travel_node> expand(std::vector<travel_node> nodes, std::vector<travel_node> prev_nodes, unsigned_b id_curr);
 		std::vector<step> make_first_move(map& m, coordinates start, coordinates next, decimal_n initial_rotation, speeds v);
+		wall get_closest_wall(step s, map &m);
 		
 		/// makes plan geometrically, does not assign speeds or something exact
 		std::vector<coordinates> make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m);
-		std::vector<step> plan_calculate(std::vector<step>); 
+		std::vector<step> plan_calculate(std::vector<step> s); 
+		std::vector<step> extend(std::vector<step>& future_steps, std::vector<step>& branch, circle future, map& m); 
 		// makes speeds assigned, new coordinates, angle and steps calculated
 		decimal_n evaluate_radius(coordinates previous, coordinates current);
 		decimal_n suiting_angle(std::array<line, 2> cross, coordinates *p_next, coordinates *p_previous = nullptr, coordinates *p_current = nullptr);

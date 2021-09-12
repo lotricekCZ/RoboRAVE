@@ -73,17 +73,17 @@ static class variables { // I hate myself for this!!!
 			static class maximal {
 				public:
 				static decimal_n wheel_velocity;		/// m*s^-1 maximal wheel velocity that is allowed and proably safe (3ms:3ms)
-				static decimal_n circle;		/// REMOVE AFTER plan_make tests
+				static decimal_n circle;				/// REMOVE AFTER plan_make tests
 				//~ static decimal_n circle 		= 0.4; /// m maximal allowed circle, speed is key.
-				static unsigned_n period;	/// us, maximal time between pulses 
+				static unsigned_n period;				/// us, maximal time between pulses 
 				} maximal;
 		
 			static class minimal {
 				public:
-				static decimal_n wheel_velocity;	/// m*s^-1 maximal wheel velocity that is allowed and proably safe
+				static decimal_n wheel_velocity;		/// m*s^-1 maximal wheel velocity that is allowed and proably safe
 				//~ static decimal_n circle 		= 0.1;		/// m minimal allowed circle, speed is key. (it's ratio is 14ms:3ms )
 				static decimal_n circle; 
-				static unsigned_n period;		/// us, minimal time between pulses, lower values might will make mess with motor
+				static unsigned_n period;			/// us, minimal time between pulses, lower values might will make mess with motor
 				} minimal;
 	
 			} limits;
