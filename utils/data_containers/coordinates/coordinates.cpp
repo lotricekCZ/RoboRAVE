@@ -79,8 +79,8 @@ coordinates coordinates::make_local(coordinates abs, decimal_n alpha){
  * 
  */
 
-coordinates coordinates::make_local(decimal_n distance, decimal_n ang){
-	return coordinates(distance * cos(ang), distance * sin(ang));
+coordinates coordinates::make_local(decimal_n distance, decimal_n ang, coordinates abs){
+	return abs + coordinates(distance * cos(ang), distance * sin(ang));
 	}
 
 /*
@@ -101,10 +101,17 @@ coordinates coordinates::make_global(coordinates abs, coordinates rel, decimal_n
 coordinates coordinates::make_global(coordinates rel, decimal_n alpha){
 	return make_global(*this, rel, alpha);
 	}
+
 	
 coordinates coordinates::make_rotation(coordinates rel, decimal_n alpha){
 	return coordinates(rel.x * cos(alpha) - (rel.y * sin(alpha)), rel.x * sin(alpha) + (rel.y * cos(alpha)));
 	}
+
+
+//~ coordinates coordinates::make_rotation(coordinates rel, decimal_n alpha){
+	//~ return coordinates(rel.x * cos(alpha) - (rel.y * sin(alpha)), rel.x * sin(alpha) + (rel.y * cos(alpha)));
+	//~ }
+
 
 coordinates coordinates::get_closest(std::vector<coordinates> &c){
 	if(c.size() == 0){return coordinates(std::numeric_limits<decimal_n>::infinity(), 
@@ -140,22 +147,28 @@ coordinates coordinates::get_closest(std::vector<coordinates> c){
 	return *closest;
 	}
 
+
 decimal_n coordinates::get_gamma(decimal_n x_rel, decimal_n y_rel){
 	return ((y_rel < 0)? 2 * pi_const : 0 ) + atan2((decimal_n)y_rel, (decimal_n)x_rel);
 	}
+
 	
 decimal_n coordinates::get_gamma(coordinates c){
 	return get_gamma(c.x - x, c.y - y);
 	}
+
 	
 decimal_n coordinates::get_distance(decimal_n x_rel, decimal_n y_rel){
-	return sqrt(pow(x_rel-this->x, 2) + pow(y_rel-this->y, 2));
+	return sqrt(pow(x_rel - this -> x, 2) + pow(y_rel - this -> y, 2));
 	}
+
 
 bool coordinates::is_invalid(){
 	return *this == coordinates(std::numeric_limits<decimal_n>::infinity(), 
 								std::numeric_limits<decimal_n>::infinity());
 	}
+
+
 decimal_n coordinates::get_distance(coordinates c){
 	return get_distance(c.x, c.y);
 	}
@@ -165,22 +178,27 @@ decimal_n coordinates::get_rel_x(decimal_n alpha, decimal_n gamma, decimal_n rad
 	return -1*(((dec >> 1) & 1? 1 : -1))*cos((alpha) + ((dec & 1)? (1) : (-1))* gamma)*radius;
 	}
 
+
 decimal_n coordinates::get_rel_y(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec){
 	return -1*(((dec >> 1) & 1? 1 : -1))*sin((alpha) + ((dec & 1)? (1) : (-1))* gamma)*radius;
 	}
+
 	
 uint8_t coordinates::get_dec(decimal_n x_rel, decimal_n y_rel){
 	return (uint8_t) ((x_rel > 0) | (((x_rel < 0) & (y_rel > 0)) | ((x_rel > 0) && (y_rel < 0))) );
 	}
+
 	
 std::string coordinates::print(){
 	//~ return std::string("["+ std::to_string(x) +"; "+ std::to_string(y) +"]");
 	return std::string("("+ std::to_string(x) +", "+ std::to_string(y) +")");
 	}
-	
+
+
 std::string coordinates::print_geogebra(){
 	//~ return std::string("["+ std::to_string(x) +"; "+ std::to_string(y) +"]");
 	return std::string("("+ std::to_string(x) +", "+ std::to_string(y) +")");
 	}
+
 
 #endif

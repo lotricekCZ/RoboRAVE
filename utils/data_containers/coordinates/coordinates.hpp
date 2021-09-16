@@ -38,12 +38,14 @@ class coordinates
 		coordinates(decimal_n, decimal_n);
 		decimal_n x;
 		decimal_n y;
-		coordinates make_local(coordinates, coordinates, decimal_n ang);
 		coordinates make_local(coordinates, decimal_n ang);
-		coordinates make_local(decimal_n, decimal_n);
-		coordinates make_global(coordinates, coordinates, decimal_n);
 		coordinates make_global(coordinates, decimal_n);
-		coordinates make_rotation(coordinates rel, decimal_n alpha);
+		
+		static coordinates make_local(decimal_n, decimal_n, coordinates abs = coordinates(0, 0));
+		static coordinates make_local(coordinates, coordinates, decimal_n ang);
+		static coordinates make_global(coordinates, coordinates, decimal_n);
+		static coordinates make_rotation(coordinates rel, decimal_n alpha);
+		
 		coordinates get_closest(std::vector<coordinates>&);
 		coordinates get_closest(std::vector<coordinates>);
 		std::string print();
@@ -76,6 +78,11 @@ class coordinates
 		coordinates operator *= (const decimal_n& rhs){
 			return coordinates(this -> x * rhs, this -> y * rhs);
 			}
+			
+		coordinates operator -= (const coordinates& rhs){
+			return coordinates(this -> x - rhs.x, this -> y - rhs.y);
+			}
+			
 		inline bool operator==(const coordinates& rhs){ 
 			const decimal_n thres = 0.15; // 0.15 units // 10mm
 			/* do actual comparison */ 

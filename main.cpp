@@ -18,6 +18,7 @@
 #include <ctime>
 #include <iostream>
 
+#include "./elements/vector/vector.hpp"
 #include "./defines/variables.hpp"
 #include "./utils/data_containers/setters/setters.tpp"
 #include "./utils/data_containers/speeds/speeds.hpp"
@@ -1034,6 +1035,11 @@ int main(int argc, char *argv[]) {
 				//~ m.append(wall(y));
 				for(auto w: step::get_distances(s, m._map_walls.at(0)))
 					std::cout << w << std::endl;
+				break;
+				}
+				
+			case 59:{
+				std::cout << vector(coordinates(4, 0), coordinates(12, 5), c_i(argv[2]), c_i(argv[3])).print() << std::endl;
 				break;
 				}
 				
