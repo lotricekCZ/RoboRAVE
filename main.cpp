@@ -1039,7 +1039,23 @@ int main(int argc, char *argv[]) {
 				}
 				
 			case 59:{
-				std::cout << vector(coordinates(4, 0), coordinates(12, 5), c_i(argv[2]), c_i(argv[3])).print() << std::endl;
+				//~ std::cout << vector(coordinates(4, 0), coordinates(12, 5), c_i(argv[2]), c_i(argv[3])).print() << std::endl;
+				//~ std::cout << vector(coordinates(4, 0), 9.433981, 0.558599, c_i(argv[2])).print() << std::endl;
+				//~ std::cout << vector(9.43398113, -0.558599315, c_i(argv[2])).print() << std::endl;
+				std::cout << vector(coordinates(4, 0), coordinates(12, 5)).print() << std::endl;
+				std::cout << vector(coordinates(6, 4), coordinates(9, -5)).print() << std::endl;
+				std::cout << (vector(coordinates(4, 0), coordinates(12, 5)) << vector(coordinates(6, 4), coordinates(9, -5))).print() << std::endl;
+				break;
+				}
+				
+			case 60:{
+				//~ std::cout << vector(coordinates(4, 0), coordinates(12, 5)).print() << std::endl;
+				//~ std::cout << vector(coordinates(6, 4), coordinates(9, -5)).print() << std::endl;
+				//~ std::cout << (vector(coordinates(4, 0), coordinates(12, 5)) + vector(coordinates(6, 4), coordinates(9, -5))).print() << std::endl;
+				std::cout << (vector(coordinates(-4, 0), coordinates(12, 5)) * 2.0f).print() << std::endl;
+				std::cout << vector(coordinates(4, 0), coordinates(12, 5)).print() << std::endl;
+				std::cout << vector(coordinates(4, 0), coordinates(-4, 5)).print() << std::endl;
+				std::cout << (vector(coordinates(4, 0), coordinates(12, 5)) + vector(coordinates(4, 0), coordinates(-4, 5))).print() << std::endl;
 				break;
 				}
 				

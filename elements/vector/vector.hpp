@@ -42,6 +42,13 @@ class vector {
 				bool first = true);
 		
 		std::string print();
+		vector operator +	(const vector& rhs);
+		vector operator -	(const vector& rhs);
+		vector operator *	(const decimal_n& rhs);
+		//~ vector operator -	(const vector& rhs);
+		vector operator /	(const vector& rhs);
+		
+		vector operator <<	(const vector& rhs); // move rhs origin to lhs
 		
 	private:
 		coordinates first; 
@@ -58,5 +65,7 @@ class vector {
 		 * */
 		/* add your private declarations */
 };
+
+
 
 #endif /* VECTOR_HPP */ 
