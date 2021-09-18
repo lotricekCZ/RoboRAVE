@@ -59,29 +59,12 @@ class coordinates
 		decimal_n get_rel_x(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec);
 		decimal_n get_rel_y(decimal_n alpha, decimal_n gamma, decimal_n radius, uint8_t dec);
 		bool is_invalid();
-		coordinates operator - (const coordinates& rhs){
-			return coordinates(this -> x - rhs.x, this -> y - rhs.y);
-			}
-			
-		coordinates operator + (const coordinates& rhs){
-			return coordinates(this -> x + rhs.x, this -> y + rhs.y);
-			}
-			
-		coordinates operator / (const decimal_n& rhs){
-			return coordinates(this -> x / rhs, this -> y / rhs);
-			}
-			
-		coordinates operator * (const decimal_n& rhs){
-			return coordinates(this -> x * rhs, this -> y * rhs);
-			}
-			
-		coordinates operator *= (const decimal_n& rhs){
-			return coordinates(this -> x * rhs, this -> y * rhs);
-			}
-			
-		coordinates operator -= (const coordinates& rhs){
-			return coordinates(this -> x - rhs.x, this -> y - rhs.y);
-			}
+		coordinates operator - (const coordinates& rhs);
+		coordinates operator + (const coordinates& rhs);
+		coordinates operator / (const decimal_n& rhs);			
+		coordinates operator * (const decimal_n& rhs);
+		coordinates operator *= (const decimal_n& rhs);
+		coordinates operator -= (const coordinates& rhs);
 			
 		inline bool operator==(const coordinates& rhs){ 
 			const decimal_n thres = 0.15; // 0.15 units // 10mm

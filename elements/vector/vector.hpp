@@ -31,7 +31,8 @@
 
 class vector {
 	public:
-		vector();
+		// constructors
+		vector(); // defaultly zero-length
 		vector(decimal_n length, decimal_n theta, bool to_coords = false);
 		
 		vector(coordinates start, decimal_n length, decimal_n theta, 
@@ -40,15 +41,19 @@ class vector {
 		vector(coordinates start, coordinates end, 
 				bool to_coords = true, 
 				bool first = true);
-		
+		// functions
+		decimal_n length();
 		std::string print();
+		
+		
 		vector operator +	(const vector& rhs);
 		vector operator -	(const vector& rhs);
-		vector operator *	(const decimal_n& rhs);
-		//~ vector operator -	(const vector& rhs);
 		vector operator /	(const vector& rhs);
 		
 		vector operator <<	(const vector& rhs); // move rhs origin to lhs
+		
+		vector operator -	(const decimal_n& rhs); // subtracts the value from vector length
+		vector operator *	(const decimal_n& rhs);
 		
 	private:
 		coordinates first; 
@@ -61,7 +66,7 @@ class vector {
 		 * bit 0 - first coordinates:	matters(1)
 		 *								doesn't(0)
 		 * bit 1 - second coordinates:	is coordinate	 (1)
-		 *								is theta + length(0)
+		 *								is length + theta(0)
 		 * */
 		/* add your private declarations */
 };

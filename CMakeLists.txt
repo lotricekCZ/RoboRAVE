@@ -102,7 +102,7 @@ target_link_libraries(candle location coordinates line circle obstacle)
 target_link_libraries(dijkstra map coordinates wall)
 
 target_link_libraries(circle line coordinates)
-target_link_libraries(step circle line coordinates)
+target_link_libraries(step circle line coordinates vector)
 target_link_libraries(map location coordinates line circle wall surround_circle candle ${OpenCV_LIBRARIES} ${OpenCV_LDFLAGS})
 target_link_libraries(angles map location coordinates wall surround_circle candle)
 target_link_libraries(planner location coordinates line circle wall surround_circle candle angles)

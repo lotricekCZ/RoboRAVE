@@ -31,7 +31,7 @@
 static class variables { // I hate myself for this!!!
 	public:
 		static const decimal_n omega_wheel_const;
-		static const decimal_n wheel_step_lenght_const;
+		static const decimal_n wheel_step_length_const;
 		static class properties {
 			public:
 			static std::string information;

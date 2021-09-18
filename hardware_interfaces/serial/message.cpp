@@ -36,7 +36,7 @@ bool message::decode(uint8_t in[22], content &in){
 	
 	// check if it has characters defined in message standard
 	
-	if(in[0] == msg_std::start && in[msg_std::lenght - 1] == msg_std::end){
+	if(in[0] == msg_std::start && in[msg_std::length - 1] == msg_std::end){
 		
 		in.receiver			= (in[msg_std::head] & 0b111 << 5) >> 5;
 		in.sender			= (in[msg_std::head] & 0b111 << 2) >> 2;
@@ -60,7 +60,7 @@ void message::encode(content in, uint8_t &buffer[22]){
 	
 	memcpy(buffer[msg_std::message_space], in.message_space, msg_std::message_space_size);
 	
-	buffer[msg_std::lenght - 1] = ';';
+	buffer[msg_std::length - 1] = ';';
 }
 
 #endif

@@ -53,7 +53,7 @@ decimal_n calculate_T_avg(decimal_n T_left = 0, decimal_n T_right = 0){
 	}
 
 decimal_n calculate_distance_wheel(decimal_n period, decimal_n time){
-	return abs((time * variables::wheel_step_lenght_const)/(decimal_n)period);
+	return abs((time * variables::wheel_step_length_const)/(decimal_n)period);
 	}
 
 decimal_n c_f(char * input){
@@ -1056,6 +1056,47 @@ int main(int argc, char *argv[]) {
 				std::cout << vector(coordinates(4, 0), coordinates(12, 5)).print() << std::endl;
 				std::cout << vector(coordinates(4, 0), coordinates(-4, 5)).print() << std::endl;
 				std::cout << (vector(coordinates(4, 0), coordinates(12, 5)) + vector(coordinates(4, 0), coordinates(-4, 5))).print() << std::endl;
+				break;
+				}
+				
+			case 61:{
+				//~ std::cout << (vector(coordinates(4, 0), coordinates(12, 5)) + vector(coordinates(4, 0), coordinates(-4, 5))).print() << std::endl;
+				std::cout << sizeof(vector(coordinates(4, 0), coordinates(12, 5))) << std::endl;
+				std::cout << sizeof(coordinates(4, 0)) << std::endl;
+				std::cout << (vector(coordinates(0, 0), coordinates(3, 3)) - sqrt(2)).print() << std::endl;
+				break;
+				}
+				
+			case 62:{
+				std::cout << (vector(coordinates(0, 0), coordinates(3, 3)) - sqrt(2)).print() << std::endl;
+				break;
+				}
+				
+							
+			case 63:{
+				step s = step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2]));
+				step c = step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10])));
+				std::cout << s.print_geogebra() << std::endl;
+				std::cout << c.print_geogebra() << std::endl;
+				std::cout << step::get_vector(s, c).print() << std::endl;
+				break;
+				}
+				
+			case 64:{
+				step s = step(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(c_f(argv[4]), c_f(argv[5])));
+				step c = step(coordinates(c_f(argv[6]), c_f(argv[7])), coordinates(c_f(argv[8]), c_f(argv[9])));
+				std::cout << s.print_geogebra() << std::endl;
+				std::cout << c.print_geogebra() << std::endl;
+				std::cout << step::get_vector(s, c).print() << std::endl;
+				break;
+				}
+				
+			case 65:{
+				step s = step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2]));
+				step c = step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10])), coordinates(c_f(argv[11]), c_f(argv[12])), c_i(argv[13]));
+				std::cout << s.print_geogebra() << std::endl;
+				std::cout << c.print_geogebra() << std::endl;
+				std::cout << step::get_vector(s, c).print() << std::endl;
 				break;
 				}
 				

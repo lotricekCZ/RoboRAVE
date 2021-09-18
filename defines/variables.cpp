@@ -70,7 +70,7 @@ unsigned_n variables::properties::camera::size_footage_horizontal;
 unsigned_n variables::properties::camera::size_footage_vertical;
 
 const decimal_n variables::omega_wheel_const = (pi_const * r_wheel) / (N_wheel * dist_wheel);
-const decimal_n variables::wheel_step_lenght_const  = (2 * pi_const * r_wheel) / (N_wheel);
+const decimal_n variables::wheel_step_length_const  = (2 * pi_const * r_wheel) / (N_wheel);
 
 variables::variables(){
 	

@@ -24,6 +24,7 @@
 //~ #include "../../data_containers/speeds/speeds.hpp"
 //~ #include "../../data_containers/coordinates/coordinates.hpp"
 //~ #include "../../data_containers/map/map.hpp"
+#include "../../../elements/vector/vector.hpp"
 #include "../../../elements/circle/circle.hpp"
 #include "../../../elements/line/line.hpp"
 #include "../../data_containers/speeds/speeds.hpp"
@@ -93,6 +94,18 @@ class step
 		decimal_n get_distance(circle c);
 		decimal_n get_distance(step b, bool carry_caps = true);
 		
+		static vector get_vector(step s, coordinates c, bool carry_caps = true);
+		static vector get_vector(step s, line l, bool carry_caps = true);
+		static vector get_vector(step s, circle c);
+		static vector get_vector(step a, step b, bool carry_caps = true);
+		static vector get_vector(step s, candle c);
+		static vector get_vector(step s, wall w);
+		
+		vector get_vector(coordinates c, bool carry_caps = true);
+		vector get_vector(line l, bool carry_caps = true);
+		vector get_vector(circle c);
+		vector get_vector(step b, bool carry_caps = true);
+		
 		static std::vector<decimal_n> get_distances(step s, std::vector<coordinates> points);
 		static std::vector<decimal_n> get_distances(step s, wall w);
 		
@@ -103,6 +116,10 @@ class step
 		static decimal_n get_distance_linears(step a, step b, bool carry_caps = true);
 		static decimal_n get_distance_circulars(step a, step b, bool carry_caps = true);
 		static decimal_n get_distance_combined(step a, step b, bool carry_caps = true);
+		
+		static vector get_vector_linears(step a, step b, bool carry_caps = true);
+		static vector get_vector_circulars(step a, step b, bool carry_caps = true);
+		static vector get_vector_combined(step a, step b, bool carry_caps = true);
 };
 
 #endif /* STEP_HPP */ 

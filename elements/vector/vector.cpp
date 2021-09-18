@@ -26,7 +26,8 @@
 
 
 vector::vector(){
-	
+	type = 2;
+	first = second = coordinates(0, 0);
 	}
 
 vector::vector(decimal_n length, decimal_n theta, bool to_coords){
@@ -98,14 +99,15 @@ vector vector::operator * (const decimal_n& rhs){
 	}
 
 
-//~ vector vector::operator - (const vector& rhs){
-	
-	//~ }
-
-
-vector vector::operator / (const vector& rhs){
-	
+vector vector::operator - (const decimal_n& rhs){
+	return vector(this -> first, this -> length() - 1, this -> first.get_gamma(this -> second));
 	}
 
 
-	
+vector vector::operator / (const vector& rhs){
+	return vector(this -> first, this -> second / rhs - this -> first);
+	}
+
+decimal_n vector::length(){
+	return (type >> 1)? first.get_distance(second): second.x;
+	}

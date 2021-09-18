@@ -200,5 +200,30 @@ std::string coordinates::print_geogebra(){
 	return std::string("("+ std::to_string(x) +", "+ std::to_string(y) +")");
 	}
 
+coordinates coordinates::operator - (const coordinates& rhs){
+	return coordinates(this -> x - rhs.x, this -> y - rhs.y);
+	}
+	
+coordinates coordinates::operator + (const coordinates& rhs){
+	return coordinates(this -> x + rhs.x, this -> y + rhs.y);
+	}
+	
+coordinates coordinates::operator / (const decimal_n& rhs){
+	return coordinates(this -> x / rhs, this -> y / rhs);
+	}
+	
+coordinates coordinates::operator * (const decimal_n& rhs){
+	return coordinates(this -> x * rhs, this -> y * rhs);
+	}
+	
+coordinates coordinates::operator *= (const decimal_n& rhs){
+	*this = *this * rhs;
+	return coordinates(this -> x * rhs, this -> y * rhs);
+	}
+	
+coordinates coordinates::operator -= (const coordinates& rhs){
+	*this = *this - rhs;
+	return coordinates(this -> x - rhs.x, this -> y - rhs.y);
+	}
 
 #endif
