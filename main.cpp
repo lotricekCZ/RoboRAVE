@@ -731,49 +731,49 @@ int main(int argc, char *argv[]) {
 				}
 				
 			case 38:{ 
-			/// this creates map and does math to calculations to make heatmap, therefore selecting the hottest spot and designing trace to it
-			map m;
-	
-			coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 8), coordinates(-6, 7)};
-			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
-			coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
-			coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
-			coordinates a[] = {coordinates(3, -3), coordinates(6, 0), coordinates(7, -1), coordinates(4, -4)};
-			
-			//~ m.append(candle(coordinates(4,3)));
-			m.append(wall(c));
-			m.append(wall(x));
-			m.append(wall(y));
-			m.append(wall(z));
-			m.append(wall(a));
-			planner p;
-			//~ angles a = angles().load_virtual(coordinates(-5, 2), m);
-			//~ for(auto i: a)
-			//~ std::cout << a.get_angle(0).position._coordinates.print() << std::endl;
-			//~ std::cout << a.get_angle(0).distance << std::endl;
-			//~ std::cout << a.size() << std::endl;
-			
-			
-			
-			
-			//~ std::vector <line> clan = p.plan_trace(plan, coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m);
-			//~ std::cout << m._map_walls[0].is_collision_course(circle(coordinates(-5, 2), 6))[1].print() << std::endl;
-			std::srand(std::time(nullptr)); 
-			//~ for(auto i: plan)
-				//~ std::cout << i.print() << std::endl;	
-			//~ for(auto i: plan)
-				//~ std::cout << i.print() << std::endl;
-			
-			//~ for(auto i: p.coincidental_points_generate(plan))
-				//~ std::cout << i.print() << std::endl;
-			
-			
-			std::vector <circle> plan = p.circle_generate(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m, c_i(argv[4]));
-			std::vector<coordinates> g = p.coincidental_points_generate(plan);
-			//~ std::vector<coordinates> c_plan = p.make_path(g, coordinates(-5, 2), coordinates(c_f(argv[2]), c_f(argv[3])), m);
-			std::vector<coordinates> c_plan({coordinates(-5, 2), coordinates(4, -5), coordinates(8, -1), coordinates(4, 3)});
-			p.plan_make(c_plan, m, c_f(argv[5])*pi_const/c_f(argv[6]));
-			
+				/// this creates map and does math to calculations to make heatmap, therefore selecting the hottest spot and designing trace to it
+				map m;
+		
+				coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 8), coordinates(-6, 7)};
+				coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+				coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
+				coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
+				coordinates a[] = {coordinates(3, -3), coordinates(6, 0), coordinates(7, -1), coordinates(4, -4)};
+				
+				//~ m.append(candle(coordinates(4,3)));
+				m.append(wall(c));
+				m.append(wall(x));
+				m.append(wall(y));
+				m.append(wall(z));
+				m.append(wall(a));
+				planner p;
+				//~ angles a = angles().load_virtual(coordinates(-5, 2), m);
+				//~ for(auto i: a)
+				//~ std::cout << a.get_angle(0).position._coordinates.print() << std::endl;
+				//~ std::cout << a.get_angle(0).distance << std::endl;
+				//~ std::cout << a.size() << std::endl;
+				
+				
+				
+				
+				//~ std::vector <line> clan = p.plan_trace(plan, coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m);
+				//~ std::cout << m._map_walls[0].is_collision_course(circle(coordinates(-5, 2), 6))[1].print() << std::endl;
+				std::srand(std::time(nullptr)); 
+				//~ for(auto i: plan)
+					//~ std::cout << i.print() << std::endl;	
+				//~ for(auto i: plan)
+					//~ std::cout << i.print() << std::endl;
+				
+				//~ for(auto i: p.coincidental_points_generate(plan))
+					//~ std::cout << i.print() << std::endl;
+				
+				
+				std::vector <circle> plan = p.circle_generate(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m, c_i(argv[4]));
+				std::vector<coordinates> g = p.coincidental_points_generate(plan);
+				//~ std::vector<coordinates> c_plan = p.make_path(g, coordinates(-5, 2), coordinates(c_f(argv[2]), c_f(argv[3])), m);
+				std::vector<coordinates> c_plan({coordinates(-5, 2), coordinates(4, -5), coordinates(8, -1), coordinates(4, 3)});
+				p.plan_make(c_plan, m, c_f(argv[5])*pi_const/c_f(argv[6]));
+				
 			break;
 			}
 			
@@ -908,29 +908,38 @@ int main(int argc, char *argv[]) {
 				break;
 				}
 				
-			case 50:{
+			case 50:{ // distance of two linear steps ./roborave 50  0   0 3 2 1  6 5 2 -5 1
 				step s = step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2]));
 				step c = step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10])));
 				std::cout << s.print_geogebra() << std::endl;
 				std::cout << c.print_geogebra() << std::endl;
+				for(uint16_t i = 0; i < 65000; i++){
+					step::get_distance(s, c);
+					}
 				std::cout << step::get_distance(s, c, 0) << std::endl;
 				break;
 				}
 				
-			case 51:{
+			case 51:{ // distance of two linear steps ./roborave 51  0   0 3 2 1  6 5 2 -5 1
 				step s = step(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(c_f(argv[4]), c_f(argv[5])));
 				step c = step(coordinates(c_f(argv[6]), c_f(argv[7])), coordinates(c_f(argv[8]), c_f(argv[9])));
 				std::cout << s.print_geogebra() << std::endl;
 				std::cout << c.print_geogebra() << std::endl;
+				for(uint16_t i = 0; i < 65000; i++){
+					step::get_distance(s, c);
+					}
 				std::cout << step::get_distance(s, c) << std::endl;
 				break;
 				}
 				
-			case 52:{
+			case 52:{ // distance of two circular steps ./roborave 52  0   -2 1 2 1  0 1 4 1 2 1 1 1
 				step s = step(coordinates(c_f(argv[3]), c_f(argv[4])), coordinates(c_f(argv[5]), c_f(argv[6])), coordinates(0, 1), c_i(argv[2]));
 				step c = step(coordinates(c_f(argv[7]), c_f(argv[8])), coordinates(c_f(argv[9]), c_f(argv[10])), coordinates(c_f(argv[11]), c_f(argv[12])), c_i(argv[13]));
 				std::cout << s.print_geogebra() << std::endl;
 				std::cout << c.print_geogebra() << std::endl;
+				for(uint16_t i = 0; i < 65000; i++){
+					step::get_distance(s, c);
+					}
 				std::cout << step::get_distance(s, c, c_i(argv[14])) << std::endl;
 				break;
 				}
@@ -1099,6 +1108,56 @@ int main(int argc, char *argv[]) {
 				std::cout << step::get_vector(s, c).print() << std::endl;
 				break;
 				}
+				
+			case 66:{
+				std::cout << (vector(coordinates(0, 0), coordinates(3, 3)) >> coordinates(c_f(argv[2]), c_f(argv[3]))).print() << std::endl;
+				std::cout << (coordinates(c_f(argv[2]), c_f(argv[3]))).print() << std::endl;
+				std::cout << (vector(coordinates(0, 0), coordinates(3, 3))).print() << std::endl;
+				break;
+				}
+				
+			case 67:{
+				std::cout << (vector(coordinates(0, 0), coordinates(3, 3))).print() << std::endl;
+				std::cout << (vector(coordinates(0, 0), coordinates(3, 3)) << coordinates(c_f(argv[2]), c_f(argv[3]))).print() << std::endl;
+				std::cout << (coordinates(c_f(argv[2]), c_f(argv[3]))).print() << std::endl;
+				break;
+				}
+			
+			case 68:{ 
+				/// this creates map and does math to calculations to make heatmap, therefore selecting the hottest spot and designing trace to it
+				map m;
+		
+				coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 8), coordinates(-6, 7)};
+				coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+				coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
+				coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
+				coordinates a[] = {coordinates(3, -3), coordinates(6, 0), coordinates(7, -1), coordinates(4, -4)};
+				
+				//~ m.append(candle(coordinates(4,3)));
+				m.append(wall(c));
+				m.append(wall(x));
+				m.append(wall(y));
+				m.append(wall(z));
+				m.append(wall(a));
+				planner p;
+
+				//~ std::vector <circle> plan = p.circle_generate(coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m, c_i(argv[4]));
+				//~ std::vector<coordinates> g = p.coincidental_points_generate(plan);
+				//~ std::vector<coordinates> c_plan = p.make_path(g, coordinates(-5, 2), coordinates(c_f(argv[2]), c_f(argv[3])), m);
+				std::vector<coordinates> c_plan({coordinates(-5, 2), coordinates(4, -5), coordinates(8, -1), coordinates(4, 3)});
+				for(auto i: m._map_walls)
+					std::cout << i.print_geogebra() << std::endl;
+					
+				for(uint8_t i = 1; i < c_plan.size(); i++){
+					std::cout << step(c_plan.at(i-1), c_plan.at(i)).print_geogebra() << std::endl;
+					for(auto o: step::get_vectors(step(c_plan.at(i-1), c_plan.at(i)), planner::get_closest_wall(step(c_plan.at(i-1), c_plan.at(i)), m))){
+						std::cout << o.print() << std::endl;
+						}
+					}
+				//~ p.plan_make(c_plan, m, c_f(argv[5])*pi_const/c_f(argv[6]));
+				
+			break;
+			}
 				
 			}
 	

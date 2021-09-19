@@ -30,6 +30,8 @@ step::step()
 }
 
 	
+
+
 step::step(coordinates start, coordinates end, coordinates center, bool is_right, bool compute_angle){
 	this -> start = start;
 	this -> end = end;
@@ -66,6 +68,8 @@ step::step(coordinates start, coordinates end, coordinates center, bool is_right
 	}
 	
 	
+
+
 step::step(coordinates start, coordinates end, bool compute_angle){
 	this -> start = start;
 	this -> end = end;	
@@ -82,6 +86,8 @@ step::step(coordinates start, coordinates end, bool compute_angle){
 		this -> angle_start = this -> angle_end = start.get_gamma(end);
 		}
 	}
+
+
 
 std::string step::print_inkscape(){
 	switch(_type){
@@ -107,6 +113,8 @@ std::string step::print_inkscape(){
 	return "";
 	}
 
+
+
 std::pair<step, step> step::get_perimeters(step s, decimal_n perimeter){
 	switch(s._type){
 		case line_e: {
@@ -130,6 +138,8 @@ std::pair<step, step> step::get_perimeters(step s, decimal_n perimeter){
 		}
 	}
 	
+
+
 std::string step::print(){
 	switch(_type){
 		case line_e: {
@@ -141,6 +151,8 @@ std::string step::print(){
 		}
 	}
 	
+
+
 std::string step::print_geogebra(){
 	switch(_type){
 		case line_e: {
@@ -154,18 +166,24 @@ std::string step::print_geogebra(){
 		}
 	}
 
+
+
 std::vector<coordinates> step::intersection(circle c){
 	return step::intersection(*this, c);
 	}
+
 
 
 std::vector<coordinates> step::intersection(step b){
 	return step::intersection(*this, b);
 	}
 
+
+
 std::vector<coordinates> step::intersection(line l){
 	return step::intersection(*this, l);
 	}
+
 
 
 std::vector<coordinates> step::intersection(step s, circle c){
@@ -194,6 +212,7 @@ std::vector<coordinates> step::intersection(step s, circle c){
 	}
 
 
+
 std::vector<coordinates> step::intersection(step a, step b){
 	std::vector<coordinates> ret;
 	switch(a._type){
@@ -219,6 +238,8 @@ std::vector<coordinates> step::intersection(step a, step b){
 	return ret;
 	}
 
+
+
 std::vector<coordinates> step::intersection(step s, line l){
 	std::vector<coordinates> ret;
 	switch(s._type){
@@ -242,6 +263,7 @@ std::vector<coordinates> step::intersection(step s, line l){
 	}
 
 
+
 bool step::on_segment_circular(coordinates point){
 	if(std::abs(std::abs(phi) - pi_const) >= 1e-4){ 
 		// means that the angle isn't exactly 180 degrees and so the circle::on_segment method can be used 
@@ -259,9 +281,12 @@ bool step::on_segment_circular(coordinates point){
 	return true;
 	}
 
+
+
 bool step::on_segment_linear(coordinates point){
 	return line::on_segment(point, start, end);
 	}
+
 
 
 decimal_n step::get_distance(step s, coordinates c, bool carry_caps){
@@ -314,6 +339,8 @@ decimal_n step::get_distance(step s, coordinates c, bool carry_caps){
 	return ((carry_caps | (!carry_caps ^ cap))? ret: std::numeric_limits<decimal_n>::infinity());
 	}
 
+
+
 decimal_n step::get_distance(step s, line l, bool carry_caps){
 	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
 	std::vector<coordinates> inter;
@@ -357,15 +384,21 @@ decimal_n step::get_distance(step s, line l, bool carry_caps){
 		return ret;
 	}
 
+
+
 bool step::on_segment(coordinates point){
 	return (_type == line_e)? (on_segment_linear(point)): (on_segment_circular(point));
 	}
+
+
 
 decimal_n step::get_distance(step s, circle c){
 	decimal_n ret = step::get_distance(s, c.center) - c.radius;
 	return (ret > 0)? ret: 0; /* If less than zero to that point, 
 				it means that it has at least one intersection */
 	}
+
+
 
 decimal_n step::get_distance(step a, step b, bool carry_caps){
 	switch(a._type) {
@@ -396,6 +429,8 @@ decimal_n step::get_distance(step a, step b, bool carry_caps){
 		}
 	}
 
+
+
 decimal_n step::get_distance_linears(step a, step b, bool carry_caps){
 	if(a._type != b._type | (a._type & b._type)){
 		// that's just fucked, this is the linears section
@@ -408,6 +443,8 @@ decimal_n step::get_distance_linears(step a, step b, bool carry_caps){
 				}
 		return 666;
 		}
+
+
 
 	if(step::intersection(a, b).size() != 0){
 		return 0;
@@ -450,6 +487,7 @@ decimal_n step::get_distance_linears(step a, step b, bool carry_caps){
 
 
 
+
 decimal_n step::get_distance_circulars(step a, step b, bool carry_caps){
 	if(a._type != b._type | !(a._type & b._type)){
 		// that's just fucked, this is the circulars section
@@ -463,6 +501,8 @@ decimal_n step::get_distance_circulars(step a, step b, bool carry_caps){
 				}
 		return 666;
 		}
+
+
 	if(step::intersection(a, b).size() != 0){
 		return 0;
 	}
@@ -526,6 +566,7 @@ decimal_n step::get_distance_circulars(step a, step b, bool carry_caps){
 
 
 
+
 decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
 	if(a._type == b._type){
 		std::cerr << "You garbage tried to put in two same steps\nPROOF:\t" << a.print_geogebra() 
@@ -540,6 +581,8 @@ decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
 		return 666;
 		}
 		
+
+
 	if(step::intersection(a, b).size() != 0){
 		return 0;
 	}
@@ -654,27 +697,38 @@ decimal_n step::get_distance_combined(step a, step b, bool carry_caps){
 	}
 
 
+
 decimal_n step::get_distance(coordinates c, bool carry_caps){
 	return step::get_distance(*this, c, carry_caps);
 	}
 	
 	
+
+
 decimal_n step::get_distance(line l, bool carry_caps){
 	return step::get_distance(*this, l, carry_caps);
 	}
 	
+
+
 decimal_n step::get_distance(circle c){
 	return step::get_distance(*this, c);
 	}
 	
+
+
 decimal_n step::get_distance(step b, bool carry_caps){
 	return step::get_distance(*this, b, carry_caps);
 	}
 	
+
+
 decimal_n step::get_distance(step s, candle c){
 	// just a redirection to step::get_distance(step, circle)
 	return step::get_distance(s, c.tube);
 	}
+
+
 
 decimal_n step::get_distance(step s, wall w){
 	// converts a wall into independent steps
@@ -686,6 +740,8 @@ decimal_n step::get_distance(step s, wall w){
 	return ret;
 	}
 	
+
+
 
 vector step::get_vector(step s, coordinates c, bool carry_caps){
 	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
@@ -701,7 +757,7 @@ vector step::get_vector(step s, coordinates c, bool carry_caps){
 				} else {
 					decimal_n d_start = c.get_distance(s.start);
 					decimal_n d_end = c.get_distance(s.end);
-					vret = vector(c, (d_end < d_start)? s.end: s.start);
+					vret = vector((d_end < d_start)? s.end: s.start, c);
 					}
 			break;
 			}
@@ -736,6 +792,7 @@ vector step::get_vector(step s, coordinates c, bool carry_caps){
 		}
 	return vret;
 	}
+
 
 
 
@@ -785,11 +842,13 @@ vector step::get_vector(step s, line l, bool carry_caps){
 
 
 
+
 vector step::get_vector(step s, circle c){
 	//~ vector ret = step::get_vector(s, c.center) - c.radius;
 	return step::get_vector(s, c.center) - c.radius; /* If less than zero to that point, 
 				it means that it has at least one intersection */
 	}
+
 
 
 
@@ -824,6 +883,7 @@ vector step::get_vector(step a, step b, bool carry_caps){
 
 
 
+
 vector step::get_vector_linears(step a, step b, bool carry_caps){
 	if(a._type != b._type | (a._type & b._type)){
 		// that's just fucked, this is the linears section
@@ -836,6 +896,8 @@ vector step::get_vector_linears(step a, step b, bool carry_caps){
 				}
 		return vector();
 		}
+
+
 
 	if(step::intersection(a, b).size() != 0){
 		return vector();
@@ -858,9 +920,9 @@ vector step::get_vector_linears(step a, step b, bool carry_caps){
 	
 	for(uint8_t i = 0; i < inters.size(); i++)
 		if(inters[i].size() != 0){
-			std::cout << inters[i][0].print_geogebra() << std::endl;
+			//~ std::cout << inters[i][0].print_geogebra() << std::endl;
 			decimal_n retc = origins[i].get_distance(inters[i][0]);
-			std::cout << ret.length() << "\t" << retc << ((ret.length() < retc)? "candidate refuse": "candidate use") << std::endl;
+			//~ std::cout << ret.length() << "\t" << retc << ((ret.length() < retc)? "candidate refuse": "candidate use") << std::endl;
 			ret = (ret.length() < retc)? ret: vector(origins[i], inters[i][0]);
 			}
 	vector start_start(a.start, b.start);
@@ -879,6 +941,7 @@ vector step::get_vector_linears(step a, step b, bool carry_caps){
 
 
 
+
 vector step::get_vector_circulars(step a, step b, bool carry_caps){
 	if(a._type != b._type | !(a._type & b._type)){
 		// that's just fucked, this is the circulars section
@@ -892,6 +955,8 @@ vector step::get_vector_circulars(step a, step b, bool carry_caps){
 				}
 		return vector(std::numeric_limits<decimal_n>::infinity(), 0);
 		}
+
+
 	if(step::intersection(a, b).size() != 0){
 		return vector();
 	}
@@ -955,6 +1020,7 @@ vector step::get_vector_circulars(step a, step b, bool carry_caps){
 
 
 
+
 vector step::get_vector_combined(step a, step b, bool carry_caps){
 	if(a._type == b._type){
 		std::cerr << "You garbage tried to put in two same steps\nPROOF:\t" << a.print_geogebra() 
@@ -969,6 +1035,8 @@ vector step::get_vector_combined(step a, step b, bool carry_caps){
 		return vector(std::numeric_limits<decimal_n>::infinity(), 0);
 		}
 		
+
+
 	if(step::intersection(a, b).size() != 0){
 		return vector();
 	}
@@ -1085,34 +1153,44 @@ vector step::get_vector_combined(step a, step b, bool carry_caps){
 
 
 
+
 vector step::get_vector(coordinates c, bool carry_caps){
 	return step::get_vector(*this, c, carry_caps);
 	}
 	
 
 	
+
+
 vector step::get_vector(line l, bool carry_caps){
 	return step::get_vector(*this, l, carry_caps);
 	}
 
 
 	
+
+
 vector step::get_vector(circle c){
 	return step::get_vector(*this, c);
 	}
 
 
 	
+
+
 vector step::get_vector(step b, bool carry_caps){
 	return step::get_vector(*this, b, carry_caps);
 	}
 
 
 	
+
+
 vector step::get_vector(step s, candle c){
 	// just a redirection to step::get_distance(step, circle)
 	return step::get_vector(s, c.tube);
 	}
+
 
 
 
@@ -1128,6 +1206,7 @@ vector step::get_vector(step s, wall w){
 
 
 
+
 std::vector<decimal_n> step::get_distances(step s, std::vector<coordinates> points){
 	std::vector<decimal_n> ret;
 	for(auto o: points){
@@ -1135,6 +1214,8 @@ std::vector<decimal_n> step::get_distances(step s, std::vector<coordinates> poin
 		}
 	return ret;
 	}
+
+
 
 std::vector<decimal_n> step::get_distances(step s, wall w){
 	std::vector<decimal_n> ret;
@@ -1144,10 +1225,47 @@ std::vector<decimal_n> step::get_distances(step s, wall w){
 	return ret;
 	}
 
+
+
 std::vector<decimal_n> step::get_distances(std::vector<coordinates> points){
 	return get_distances(*this, points);
 	}
 
+
+
 std::vector<decimal_n> step::get_distances(wall w){
 	return get_distances(*this, w);
 	}
+
+
+
+std::vector<vector> step::get_vectors(step s, std::vector<coordinates> points){
+	std::vector<vector> ret;
+	for(auto o: points){
+		ret.push_back(step::get_vector(s, o));
+		}
+	return ret;
+	}
+
+
+
+std::vector<vector> step::get_vectors(step s, wall w){
+	std::vector<vector> ret;
+	for(uint8_t i = 0; i < 4; i++){
+		ret.push_back(step::get_vector(s, step(w.properties.edges[i], w.properties.edges[(i + 1) % 4])));
+		}
+	return ret;
+	}
+
+
+
+std::vector<vector> step::get_vectors(std::vector<coordinates> points){
+	return get_vectors(*this, points);
+	}
+
+
+
+std::vector<vector> step::get_vectors(wall w){
+	return get_vectors(*this, w);
+	}
+

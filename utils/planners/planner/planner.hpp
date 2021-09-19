@@ -66,7 +66,7 @@ class planner
 		void alter_selected(std::vector<step>& selected, map& m, decimal_n initial_rotation);
 		std::vector<travel_node> expand(std::vector<travel_node> nodes, std::vector<travel_node> prev_nodes, unsigned_b id_curr);
 		std::vector<step> make_first_move(map& m, coordinates start, coordinates next, decimal_n initial_rotation, speeds v);
-		wall get_closest_wall(step s, map &m);
+		static wall get_closest_wall(step s, map &m);
 		
 		/// makes plan geometrically, does not assign speeds or something exact
 		std::vector<coordinates> make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m);

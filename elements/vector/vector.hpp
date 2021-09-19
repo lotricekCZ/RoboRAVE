@@ -44,17 +44,19 @@ class vector {
 		// functions
 		decimal_n length();
 		std::string print();
-		
+		static coordinates move(vector, coordinates);
 		
 		vector operator +	(const vector& rhs);
 		vector operator -	(const vector& rhs);
-		vector operator /	(const vector& rhs);
 		
 		vector operator <<	(const vector& rhs); // move rhs origin to lhs
+		vector operator >>	(const coordinates& rhs); // move rhs origin to lhs
 		
+		vector operator /	(const decimal_n& rhs);
 		vector operator -	(const decimal_n& rhs); // subtracts the value from vector length
 		vector operator *	(const decimal_n& rhs);
 		
+		coordinates operator <<	(const coordinates& rhs); // shifts the coordinate according to the vector
 	private:
 		coordinates first; 
 		/* first parameter, can be [x; y] when the location of point matters type(0-1), 

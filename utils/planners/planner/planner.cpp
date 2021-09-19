@@ -31,6 +31,8 @@ planner::planner()
 	
 }
 
+
+
 circle planner::create_perimeter(coordinates c, decimal_n radius){
 	//~ std::cout << c.print() << std::endl;
 	return circle(c, radius);
@@ -52,6 +54,8 @@ circle planner::create_perimeter(coordinates c, decimal_n radius){
  * @return
  * 
  */
+
+
 
 
 std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, decimal_n initial_rotation){
@@ -131,6 +135,8 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
  * 
  */
 
+
+
 decimal_n planner::suiting_angle(std::array<line, 2> cross, coordinates *p_next, coordinates *p_previous, coordinates *p_current){
 	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
 	coordinates local = (p_current != nullptr)? (*p_current) : (cross[0].intersection(cross[1]));
@@ -147,6 +153,8 @@ decimal_n planner::suiting_angle(std::array<line, 2> cross, coordinates *p_next,
 		
 	return ret;
 	}
+
+
 
 
 void planner::alter_selected(std::vector<step>& selected, map& m, decimal_n initial_rotation){
@@ -176,6 +184,8 @@ void planner::alter_selected(std::vector<step>& selected, map& m, decimal_n init
 	}
 
 
+
+
 decimal_n planner::evaluate_radius(coordinates previous, coordinates current){
 	decimal_n d = previous.get_distance(current);
 	/// this gives us circle radius that is allowed for such distance
@@ -188,6 +198,8 @@ decimal_n planner::evaluate_radius(coordinates previous, coordinates current){
 		}
 	return d/2;
 	}
+
+
 
 std::vector<step> planner::make_first_move(map& m, coordinates start, coordinates next, decimal_n initial_rotation, speeds v){
 	std::vector<step> ret;
@@ -219,6 +231,8 @@ std::vector<step> planner::make_first_move(map& m, coordinates start, coordinate
 	return ret;
 	}
 
+
+
 bool planner::collides(wall w, coordinates start, coordinates end){
 	line lin(start, end);
 	for(auto l: w.properties.walls){
@@ -229,6 +243,8 @@ bool planner::collides(wall w, coordinates start, coordinates end){
 	}
 	return false;
 }
+
+
 
 bool planner::collides(wall w, coordinates start, coordinates end, circle c, bool side){
 	std::vector<coordinates> collidors;
@@ -244,6 +260,8 @@ bool planner::collides(wall w, coordinates start, coordinates end, circle c, boo
 	return false;
 }
 
+
+
 bool planner::collides_nowhere(map &m, coordinates start, coordinates end, circle c, bool side){
 	for(auto w: m._map_walls){
 		if(collides(w, start, end, c, side))
@@ -252,6 +270,8 @@ bool planner::collides_nowhere(map &m, coordinates start, coordinates end, circl
 	return true;
 }
 
+
+
 bool planner::collides_nowhere(map &m, coordinates start, coordinates end){
 	for(auto w: m._map_walls){
 		if(collides(w, start, end))
@@ -259,6 +279,8 @@ bool planner::collides_nowhere(map &m, coordinates start, coordinates end){
 		}
 	return true;
 }	
+
+
 
 std::vector<circle> planner::circle_generate(coordinates goal, coordinates start, map &m, uint8_t it, decimal_n multiplier){
 	std::vector<circle> out;
@@ -288,6 +310,8 @@ std::vector<circle> planner::circle_generate(coordinates goal, coordinates start
 	return out;	
 }
 
+
+
 std::vector<circle> planner::perimeter_generate(map &m){
 	std::vector<circle> out;
 	
@@ -296,6 +320,8 @@ std::vector<circle> planner::perimeter_generate(map &m){
 			out.push_back(create_perimeter(c));
 	return out;	
 }
+
+
 
 std::vector<coordinates> planner::coincidental_points_generate(std::vector<circle>& circles){
 	std::vector<coordinates> out;
@@ -325,12 +351,16 @@ std::vector<coordinates> planner::coincidental_points_generate(std::vector<circl
 	}
 
 	
+
+
 std::vector<step> planner::plan_calculate(std::vector<step> in){
 	std::vector<step> out = in;
 	
 	return out;
 	}
 	
+
+
 
 std::vector<travel_node> planner::expand(std::vector<travel_node> nodes, std::vector<travel_node> prev_nodes,  unsigned_b id_curr){
 	std::vector<travel_node> curr_nodes;
@@ -351,6 +381,8 @@ std::vector<travel_node> planner::expand(std::vector<travel_node> nodes, std::ve
 	}
 
 
+
+
 travel_node planner::search_by_id(unsigned_b id, std::vector<travel_node> &nodes){
 	for(auto i: nodes){
 		if(i.id == id)
@@ -358,6 +390,8 @@ travel_node planner::search_by_id(unsigned_b id, std::vector<travel_node> &nodes
 		}
 	return travel_node(-1, coordinates());
 	}
+
+
 
 
 std::vector<coordinates> planner::make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m){
@@ -397,6 +431,8 @@ std::vector<coordinates> planner::make_path(std::vector<coordinates> &c, coordin
 	return out;
 	}
 
+
+
 decimal_n planner::get_distance_to_walls(step s, map &m){
 	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
 	for(auto w: m._map_walls){
@@ -405,6 +441,8 @@ decimal_n planner::get_distance_to_walls(step s, map &m){
 		}
 	return ret;
 	}
+
+
 
 wall planner::get_closest_wall(step s, map &m){
 	wall wret;
@@ -419,9 +457,13 @@ wall planner::get_closest_wall(step s, map &m){
 	return wret;
 	}
 
+
+
 std::vector<step> planner::extend(std::vector<step>& future_steps, std::vector<step>& branch, circle future, map& m){
 	wall closest = get_closest_wall(future_steps.back(), m);
 	std::cout << closest.print_geogebra() << std::endl;
 	
 	return future_steps;
 	}
+
+

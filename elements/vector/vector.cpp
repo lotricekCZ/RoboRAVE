@@ -25,10 +25,13 @@
 #include "vector.hpp"
 
 
+
 vector::vector(){
 	type = 2;
 	first = second = coordinates(0, 0);
 	}
+
+
 
 vector::vector(decimal_n length, decimal_n theta, bool to_coords){
 	first = coordinates(0, 0);
@@ -42,6 +45,7 @@ vector::vector(decimal_n length, decimal_n theta, bool to_coords){
 	}
 
 
+
 vector::vector(coordinates start, decimal_n length, decimal_n theta, bool to_coords){
 	if(to_coords){
 		second = coordinates::make_local(length, theta, start);
@@ -53,6 +57,7 @@ vector::vector(coordinates start, decimal_n length, decimal_n theta, bool to_coo
 	first = start;
 	type |= (to_coords << 1) | 1; // you've just entered the start. How dare you not use it
 	}
+
 
 
 vector::vector(coordinates start, coordinates end, bool to_coords, bool first){
@@ -72,11 +77,15 @@ vector::vector(coordinates start, coordinates end, bool to_coords, bool first){
 	type = (to_coords << 1) | first;
 	}
 
+
+
 std::string vector::print(){
 	return "=Vector[" + first.print_geogebra() + ", " + (((type >> 1) & 1)? second.print_geogebra(): coordinates::make_local(second.x, second.y, first).print()) + "]";
 	// attention: adding first to second is hardcoded when there is just theta and length.
 	// MAY CAUSE PROBLEMS IN THE FUTURE!
 	}
+
+
 
 vector vector::operator << (const vector& rhs){
 	coordinates difference = this -> first - rhs.first; // difference of two origins
@@ -84,19 +93,33 @@ vector vector::operator << (const vector& rhs){
 	return vector(diff.first + difference, diff.second + difference);
 	}
 
+
+
+vector vector::operator >> (const coordinates& rhs){
+	coordinates difference = (coordinates)rhs - (this -> first); // difference of two origins
+	return vector(this -> first + difference, this -> second + difference);
+	}
+
+
+
 vector vector::operator + (const vector& rhs){
 	vector add = (*this << rhs);
 	return (*this << vector(this -> first + add.first, this -> second + add.second));
 	}
+
+
 
 vector vector::operator - (const vector& rhs){
 	vector add = (*this << rhs);
 	return (*this << vector(this -> first - add.first, this -> second - add.second));
 	}
 
+
+
 vector vector::operator * (const decimal_n& rhs){
 	return vector(this -> first, this -> second * rhs - this -> first);
 	}
+
 
 
 vector vector::operator - (const decimal_n& rhs){
@@ -104,10 +127,21 @@ vector vector::operator - (const decimal_n& rhs){
 	}
 
 
-vector vector::operator / (const vector& rhs){
-	return vector(this -> first, this -> second / rhs - this -> first);
+
+vector vector::operator / (const decimal_n& rhs){
+	return vector(this -> first, coordinates(second.x / rhs, second.y / rhs) - this -> first);
 	}
+
+
 
 decimal_n vector::length(){
 	return (type >> 1)? first.get_distance(second): second.x;
+	}
+
+
+
+coordinates vector::operator <<	(const coordinates& rhs){
+	coordinates difference = this -> second - this -> first; // difference of two origins
+	coordinates orig = rhs; // difference of two origins
+	return orig + difference;
 	}
