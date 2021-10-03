@@ -753,11 +753,11 @@ vector step::get_vector(step s, coordinates c, bool carry_caps){
 							std::get<line>(s.formula).make_perpendicular(c)); /// always exactly one point
 			if(s.on_segment_linear(p)){
 				ret = p.get_distance(c);
-				vret = vector(p, c);
+				vret = vector(c, p);
 				} else {
 					decimal_n d_start = c.get_distance(s.start);
 					decimal_n d_end = c.get_distance(s.end);
-					vret = vector((d_end < d_start)? s.end: s.start, c);
+					vret = vector(c, (d_end < d_start)? s.end: s.start);
 					}
 			break;
 			}
@@ -1259,6 +1259,16 @@ std::vector<vector> step::get_vectors(step s, wall w){
 
 
 
+std::vector<vector> step::get_point_vectors(step s, wall w){
+	std::vector<vector> ret;
+	for(uint8_t i = 0; i < 4; i++){
+		ret.push_back(step::get_vector(s, w.properties.edges[i]));
+		}
+	return ret;
+	}
+
+
+
 std::vector<vector> step::get_vectors(std::vector<coordinates> points){
 	return get_vectors(*this, points);
 	}
@@ -1269,3 +1279,21 @@ std::vector<vector> step::get_vectors(wall w){
 	return get_vectors(*this, w);
 	}
 
+
+
+std::vector<vector> step::get_point_vectors(wall w){
+	return get_point_vectors(*this, w);
+	}
+
+
+
+line step::perpendicular_bisector(step s){
+	return line(s.start, s.end).make_perpendicular((s.start + s.end) / 2);
+	}
+
+
+
+line step::perpendicular_bisector(){
+	return perpendicular_bisector(*this);
+	}
+		

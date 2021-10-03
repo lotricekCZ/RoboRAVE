@@ -34,6 +34,7 @@ void load_config(){
 	YAML::Node node_influence	 = node_priority["influence"];
 	YAML::Node node_exploration	 = node_priority["exploration"];
 	YAML::Node node_properties	 = config["properties"];
+	YAML::Node node_robot		 = node_properties["robot"];
 	YAML::Node node_camera		 = node_properties["camera"];
 	
 	variables::properties::logs::calculations = 			config["logs"]["calculations"].as<std::string>();
@@ -69,6 +70,8 @@ void load_config(){
 	variables::properties::camera::size_recognition_vertical = 		node_camera["size_recognition_vertical"].as<unsigned_n>();
 	variables::properties::camera::size_footage_horizontal = 		node_camera["size_footage_horizontal"].as<unsigned_n>();
 	variables::properties::camera::size_footage_vertical = 			node_camera["size_footage_vertical"].as<unsigned_n>();
+	variables::limits::minimal::circle = 							node_robot["minimal"]["circle"].as<decimal_n>();
+	variables::limits::maximal::circle = 							node_robot["maximal"]["circle"].as<decimal_n>();
 	//~ variables::properties::camera::size_footage_vertical = 		node_camera["size_footage_vertical"].as<unsigned_n>();
 	std::cout << variables::properties::information << std::endl;
 	

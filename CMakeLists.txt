@@ -64,10 +64,11 @@ target_include_directories(yaml_worker
         ${YAML_CPP_INCLUDE_DIRS}
 )
 add_executable(roborave ${SOURCE_FILES})
-
+include(${CMAKE_CURRENT_SOURCE_DIR}/tests/main_functions/main_functions.txt)
 add_library(log_maintain SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.cpp
 							${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.hpp)
 							
+add_library(obsolete 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/obsolete/obsolete.cpp)
 add_library(variables 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/defines/variables.cpp)
 add_library(coordinates 	SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/coordinates/coordinates.cpp)
 add_library(line 			SHARED ${CMAKE_CURRENT_SOURCE_DIR}/elements/line/line.cpp)
@@ -84,12 +85,15 @@ add_library(map 			SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/map/
 add_library(dijkstra 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/dijkstra.cpp)
 add_library(step 			SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/step.cpp)
 add_library(angles 			SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/angles/angles/angles.cpp)
+add_library(avoider 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/avoidance_planner/avoider.cpp)
 add_library(planner 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/planner.cpp)
+add_library(path	 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/path.cpp)
 
 add_library(serial STATIC ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/serial.cpp
 							${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/serial.hpp
 							)
 
+target_link_libraries(obsolete variables coordinates)
 target_link_libraries(line coordinates)
 target_link_libraries(location coordinates)
 target_link_libraries(node location coordinates)
@@ -103,9 +107,11 @@ target_link_libraries(dijkstra map coordinates wall)
 
 target_link_libraries(circle line coordinates)
 target_link_libraries(step circle line coordinates vector)
+target_link_libraries(path step circle line coordinates vector)
 target_link_libraries(map location coordinates line circle wall surround_circle candle ${OpenCV_LIBRARIES} ${OpenCV_LDFLAGS})
 target_link_libraries(angles map location coordinates wall surround_circle candle)
-target_link_libraries(planner location coordinates line circle wall surround_circle candle angles)
+target_link_libraries(avoider location coordinates line circle wall surround_circle candle angles)
+target_link_libraries(planner location coordinates line circle wall surround_circle candle angles path avoider)
 
 target_link_libraries(serial -lCppLinuxSerial)
 target_link_libraries(yaml_worker variables ${YAML_CPP_LIBRARIES})
@@ -125,4 +131,5 @@ target_link_libraries(roborave Threads::Threads
 					wall	obstacle	surround_circle
 					candle	map			dijkstra
 					angles	planner		vector
+					avoider obsolete	path
 					)

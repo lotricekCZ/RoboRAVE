@@ -43,7 +43,12 @@ class vector {
 				bool first = true);
 		// functions
 		decimal_n length();
+		decimal_n angle();
 		std::string print();
+		
+		static vector extend(vector v, decimal_n length);
+		vector extend(decimal_n length);
+		
 		static coordinates move(vector, coordinates);
 		
 		vector operator +	(const vector& rhs);
@@ -55,8 +60,11 @@ class vector {
 		vector operator /	(const decimal_n& rhs);
 		vector operator -	(const decimal_n& rhs); // subtracts the value from vector length
 		vector operator *	(const decimal_n& rhs);
+		vector operator +	(const decimal_n& rhs);
 		
 		coordinates operator <<	(const coordinates& rhs); // shifts the coordinate according to the vector
+		coordinates get_origin();
+		coordinates get_point();
 	private:
 		coordinates first; 
 		/* first parameter, can be [x; y] when the location of point matters type(0-1), 

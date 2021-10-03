@@ -117,13 +117,19 @@ vector vector::operator - (const vector& rhs){
 
 
 vector vector::operator * (const decimal_n& rhs){
-	return vector(this -> first, this -> second * rhs - this -> first);
+	return vector(this -> first, this -> second * rhs - this -> first, true);
 	}
 
 
 
 vector vector::operator - (const decimal_n& rhs){
-	return vector(this -> first, this -> length() - 1, this -> first.get_gamma(this -> second));
+	return this -> extend(this -> length() - rhs);
+	}
+
+
+
+vector vector::operator + (const decimal_n& rhs){
+	return this -> extend(this -> length() + rhs);
 	}
 
 
@@ -134,14 +140,46 @@ vector vector::operator / (const decimal_n& rhs){
 
 
 
+coordinates vector::operator <<	(const coordinates& rhs){
+	coordinates difference = this -> second - this -> first; // difference of two origins
+	coordinates orig = rhs; // difference of two origins
+	return orig + difference;
+	}
+
+
+
 decimal_n vector::length(){
 	return (type >> 1)? first.get_distance(second): second.x;
 	}
 
 
 
-coordinates vector::operator <<	(const coordinates& rhs){
-	coordinates difference = this -> second - this -> first; // difference of two origins
-	coordinates orig = rhs; // difference of two origins
-	return orig + difference;
+coordinates vector::get_origin(){
+	return first;
+	}
+
+
+
+
+
+coordinates vector::get_point(){
+	return (((type >> 1) & 1)? second: coordinates::make_local(second.x, second.y, first));
+	}
+
+
+
+decimal_n vector::angle(){
+	return (type >> 1)? first.get_gamma(second): second.y;
+	}
+
+
+
+vector vector::extend(vector v, decimal_n length){
+	return vector(v.first, length, v.angle(), true); // to_coords = true
+	}
+
+
+
+vector vector::extend(decimal_n length){
+	return extend(*this, length);
 	}

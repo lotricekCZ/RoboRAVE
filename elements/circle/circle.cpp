@@ -192,8 +192,8 @@ std::vector<coordinates> circle::tangent_points(circle c, coordinates point){
 		decimal_n rho = c.radius / distance;
 		decimal_n ad = pow(rho, 2);
 		decimal_n bd = rho * sqrt(1-pow(rho, 2));
-		ret.push_back(coordinates(c.center.x + ad * diff_x + bd * dxr, c.center.y + ad * diff_y + bd * dyr));
-		ret.push_back(coordinates(c.center.x + ad * diff_x - bd * dxr, c.center.y + ad * diff_y - bd * dyr));
+		ret.assign({coordinates(c.center.x + ad * diff_x + bd * dxr, c.center.y + ad * diff_y + bd * dyr),
+					coordinates(c.center.x + ad * diff_x - bd * dxr, c.center.y + ad * diff_y - bd * dyr)});
 		}
 	return ret;
 }
@@ -206,6 +206,10 @@ std::vector<coordinates> circle::tangent_points(coordinates point){
 
 std::vector<line> circle::tangents(circle c, coordinates point){
 	std::vector<line> ret;
+	if(c.is_on(point)){
+		ret.push_back(line(c.center, point).make_perpendicular(point));
+		return ret;
+		}
 	for(auto i: circle::tangent_points(c, point))
 		ret.push_back(line(point, i));
 	return ret;

@@ -62,6 +62,7 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 	// There must be at least two points - start and end
 	std::vector<step> steps; /// steps based on coordinates selected by Dijkstra
 	std::vector<std::vector<step>> pre_steps; /// steps based on coordinates selected by Dijkstra
+	std::vector<std::vector<step>> post_steps; /// driveable steps built based on the avoider functions, those that build the entire path
 	std::vector<circle> pre_circles; /// circles based on coordinates selected by Dijkstra
 	std::vector<std::vector<line>> pre_lines; /// lines tangent to any of pre_circles
 	/// TODO: First move!
@@ -72,6 +73,8 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 		pre_circles.push_back(circle(selected.at(i), evaluate_radius(selected.at(i-1), selected.at(i))));
 		std::cout << pre_circles.back().print() << std::endl;
 		}
+	
+	pre_circles.push_back(circle(selected.back(), 0));
 	coordinates start = selected.at(0);
 	/// first circle generation block start; this is where the first circle is generated
 	decimal_n radius_initial = evaluate_radius(selected.at(1), start);
@@ -83,32 +86,34 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 	circle first_circle(start.make_global(center_local, initial_rotation - pi_const/2), radius_initial);
 	coordinates center_next_local = pre_circles.back().center.make_local(first_circle.center, -pi_const/2 - initial_rotation);
 	/// first circle generation block end
-	
+	//~ pre_steps.push_back(avoider::to_steps(circle::tangents(pre_circles.back(), selected.back()), circle(selected.back(), 0), pre_circles.back()));
 	pre_circles.insert(pre_circles.begin(), first_circle);
 	std::cout << first_circle.print() << std::endl;
 	for(unsigned_b i = 0; i < pre_circles.size() - 1; i++){
 		std::cout << std::to_string(i) << std::endl;
 		std::vector<line> temp_lines = circle::circle_tangents(pre_circles.at(i+1), pre_circles.at(i));
-		pre_steps.push_back(std::vector<step>());
-		for(line l: temp_lines){
-			step t_step(pre_circles.at(i).intersection(l)[0], pre_circles.at(i+1).intersection(l)[0]);
-			decimal_n step_distance = get_distance_to_walls(t_step, m);
-			if(step_distance > (robot_radius * 0.5)){
-				pre_steps.back().push_back(t_step);
-				}
-			}
+		std::vector<step> temp_steps = avoider::to_steps(temp_lines, pre_circles.at(i), pre_circles.at(i+1));
+		pre_steps.push_back(temp_steps);
+
+		//~ for(step &s: pre_steps){ /// TODO: Rework, extend the selected path to avoid the obstacle 
+			//~ auto step_distance = get_distance_to_walls(t_step, m);
+			//~ if(step_distance > (robot_radius * 0.5)){
+				//~ pre_steps.back().push_back(t_step);
+				//~ }
+			//~ }
 		}
+	//~ avoider::get_raw_options(pre_steps, pre_circles, post_steps);
 	std::cout << "Bordel se deje" << std::endl;
-	std::vector<coordinates> temp_points = circle::tangent_points(pre_circles.back(), selected.back());
+	//~ std::vector<coordinates> temp_points = circle::tangent_points(pre_circles.back(), selected.back());
 	pre_steps.push_back(std::vector<step>());
-	for(coordinates l: temp_points){
-		std::cout << l.print() << std::endl;
-		step t_step(l, selected.back());
-		decimal_n step_distance = get_distance_to_walls(t_step, m);
-		if(step_distance > (robot_radius * 0.5)){
-			pre_steps.back().push_back(t_step);
-			}
-		}
+	//~ for(coordinates l: temp_points){
+		//~ std::cout << l.print() << std::endl;
+		//~ step t_step(l, selected.back());
+		//~ decimal_n step_distance = get_distance_to_walls(t_step, m);
+		//~ if(step_distance > (robot_radius * 0.5)){
+			//~ pre_steps.back().push_back(t_step);
+			//~ }
+		//~ }
 	for(auto vs: pre_steps){
 		for(auto s: vs)
 			std::cout << s.print_geogebra() << std::endl;
@@ -466,4 +471,60 @@ std::vector<step> planner::extend(std::vector<step>& future_steps, std::vector<s
 	return future_steps;
 	}
 
+
+std::vector<step> planner::avoid(std::vector<step> altered, map& m){
+	wall closest = get_closest_wall(altered.at(1), m);
+	std::cout << closest.print_geogebra() << std::endl;
+	avoider l;
+	return l.avoid(altered, closest);
+	}
+
+
+
+std::vector<path> planner::list_options(std::vector<circle> selected, coordinates end, coordinates start, decimal_n initial_rotation){
+	assert(selected.front().is_on(start));
+	
+	std::vector<path> ret;
+	for(auto coord: selected.back().tangent_points(end)) // all the variants of connecting to an end
+		ret.emplace_back(step(coord, end));
+	for(unsigned_b circ = 1; circ < selected.size(); circ++){ // every circle...
+		for(unsigned_b pth = ret.size(); pth-- > 0;){ // every current option
+			for(line tr: circle::circle_tangents(selected.at(selected.size() - (circ)), selected.at(selected.size() - (circ + 1)))){
+				coordinates end = tr.intersection(tr.make_perpendicular(selected.at(selected.size() - (circ)).center));
+				coordinates start = tr.intersection(tr.make_perpendicular(selected.at(selected.size() - (circ + 1)).center));
+				coordinates center_local = coordinates::make_local(selected.at(selected.size() - (circ)).center, 
+																	ret.at(pth).back().start, 
+																	-ret.at(pth).back().angle_start);
+				// local center by start of the step before and angle of that step
+				decimal_n vector_angle = end.get_gamma(start);
+				decimal_n tangent_angle = selected.at(selected.size() - (circ)).center.get_gamma(end);
+				decimal_n difference_angle = vector_angle - (tangent_angle + ((center_local.x < 0)?1:-1) * pi_const/2);
+
+				if((std::abs(difference_angle) <= 1e-3 || (std::abs(difference_angle + ((center_local.x < 0)?2:-2)*pi_const) <= 1e-3))){
+					ret.push_back(ret.at(pth));
+					ret.back().emplace_back(end, ret.at(pth).back().start, 
+											selected.at(selected.size() - (circ)).center, 
+											center_local.x < 0);
+					ret.back().emplace_back(start, end);
+					}
+				}
+			ret.erase(ret.begin() + pth);
+			}
+		}
+		
+	// part to finish the last, circular, step.
+	for(path &p: ret){
+		coordinates end_c = p.back().start;
+		coordinates center_local = coordinates::make_local(selected.front().center,
+															end_c, -p.back().angle_start);
+		p.emplace_back(start, end_c, selected.front().center, center_local.x < 0);
+		}
+	/*
+	for(auto paths: ret)
+		std::cout << "trasa" << std::endl << paths.print() << std::endl;
+	std::cout << ret.size() << std::endl;
+	*/
+	//~ std::cout << "trasa" << std::endl << ret.at(0).print() << std::endl;
+	return ret;
+	}
 

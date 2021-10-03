@@ -110,12 +110,18 @@ class step
 		static std::vector<decimal_n> get_distances(step s, wall w);
 		static std::vector<vector> get_vectors(step s, std::vector<coordinates> points);
 		static std::vector<vector> get_vectors(step s, wall w);
+		static std::vector<vector> get_point_vectors(step s, wall w);
 		
 		std::vector<decimal_n> get_distances(std::vector<coordinates> points);
 		std::vector<decimal_n> get_distances(wall w);
 		std::vector<vector> get_vectors(std::vector<coordinates> points);
 		std::vector<vector> get_vectors(wall w);
-	
+		std::vector<vector> get_point_vectors(wall w);
+		
+		static line perpendicular_bisector(step s);
+		
+		line perpendicular_bisector();
+		
 	private:
 		static decimal_n get_distance_linears(step a, step b, bool carry_caps = true);
 		static decimal_n get_distance_circulars(step a, step b, bool carry_caps = true);

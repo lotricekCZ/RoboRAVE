@@ -1,0 +1,36 @@
+cmake_minimum_required(VERSION 3.0)
+set(CMAKE_CXX_COMPILER "/usr/bin/g++")
+set(CMAKE_C_COMPILER "/usr/bin/gcc")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)	
+
+
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+find_package(PkgConfig REQUIRED)
+
+
+add_library(mf0 SHARED ${CMAKE_CURRENT_SOURCE_DIR}/tests/main_functions/main_functions1-20.cpp)
+add_library(mf1 SHARED ${CMAKE_CURRENT_SOURCE_DIR}/tests/main_functions/main_functions21-40.cpp)
+add_library(mf2 SHARED ${CMAKE_CURRENT_SOURCE_DIR}/tests/main_functions/main_functions41-60.cpp)
+
+target_link_libraries(mf0 
+	Threads::Threads coordinates log_maintain 
+	map obsolete angles circle line wall location step
+	)
+
+target_link_libraries(mf1
+	Threads::Threads coordinates log_maintain planner
+	map obsolete angles circle line wall location step
+	${OpenCV_LIBRARIES} ${OpenCV_LDFLAGS} 
+	)
+
+target_link_libraries(mf2
+	Threads::Threads coordinates log_maintain planner
+	map obsolete angles circle line wall location step
+	${OpenCV_LIBRARIES} ${OpenCV_LDFLAGS} 
+	)
+
+set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
+
+target_link_libraries(roborave mf0 mf1 mf2)

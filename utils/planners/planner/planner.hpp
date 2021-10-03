@@ -21,16 +21,21 @@
  * 
  */
 
+
 #include "../../data_containers/angles/angles/angles.hpp"
 #include "../../data_containers/speeds/speeds.hpp"
 #include "../../data_containers/coordinates/coordinates.hpp"
 #include "../../data_containers/map/map.hpp"
+
 #include "../../../elements/radius/radius.h"
+#include "../avoidance_planner/avoider.hpp"
+
 #include "dijkstra.hpp"
 #include "travel_node.cpp"
 //~ #include "./optimization/ant_colony.cpp"
+//~ #include "step.hpp"
 #include "step.hpp"
-#include "step.hpp"
+#include "path.hpp"
 #include "movement_utils.cpp"
 #include <vector>
 #include <stdexcept>
@@ -38,8 +43,7 @@
 #ifndef PLANNER_HPP
 #define PLANNER_HPP
 
-class planner
-{
+class planner {
 	public:
 		angles * sight;
 		planner();
@@ -52,7 +56,7 @@ class planner
 		
 		std::vector<step> plan_make(std::vector<coordinates> selected, map &m, decimal_n initial_rotation = 0); 
 		std::vector<coordinates> coincidental_points_generate(std::vector<circle>& circles);
-		
+		static std::vector<path> list_options(std::vector<circle> selected, coordinates end, coordinates start, decimal_n initial_rotation = 0);
 		/// line segment implementation
 		// deprecated, see step::on_segment, step::intersection etc.
 		bool collides(wall w, coordinates start, coordinates end);
@@ -64,6 +68,7 @@ class planner
 		bool collides_nowhere(map &m, coordinates start, coordinates end, circle c, bool side);
 		
 		void alter_selected(std::vector<step>& selected, map& m, decimal_n initial_rotation);
+		static std::vector<step> avoid(std::vector<step> altered, map& m);
 		std::vector<travel_node> expand(std::vector<travel_node> nodes, std::vector<travel_node> prev_nodes, unsigned_b id_curr);
 		std::vector<step> make_first_move(map& m, coordinates start, coordinates next, decimal_n initial_rotation, speeds v);
 		static wall get_closest_wall(step s, map &m);

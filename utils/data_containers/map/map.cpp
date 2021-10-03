@@ -70,20 +70,34 @@ decimal_n map::calculate_location(location lo){
 	//~ using variables::thresholds::explo;
 	// scaled down part of map based on maximal range
 	//~ std::cout << "\ncoords:\nx: " << c.x << "\ty: " << c.y << std::endl;
+	
+	//~ for (auto o: _map){
+		//~ if(o.get_point() == location::_unknown){
+			//~ distance = lo.get_distance(o);
+			//~ interest += (distance <= (variables::thresholds::explo::influence::unknown * map_unit)? \
+									//~ (1.0f - (distance / (variables::thresholds::explo::influence::unknown * map_unit))) * variables::thresholds::explo::objects::unknown : 0);
+			//~ }
+		
+		//~ }
+	//~ unsigned_b l = 0;
 	for (auto o: _map){
+		//~ l = 0;
 		distance = lo.get_distance(o);
 		if(distance <= (variables::thresholds::explo::influence::interesting * map_unit)){
 			switch(o.get_point()){
-				case location::_unknown:
+				case location::_unknown:{
 					interest += (distance <= (variables::thresholds::explo::influence::unknown * map_unit)? \
-									(1.0f - (distance / (variables::thresholds::explo::influence::unknown * map_unit))) * variables::thresholds::explo::objects::unknown : 0);
+									(1.0f - (decimal_n)((decimal_n)distance / ((decimal_n)variables::thresholds::explo::influence::unknown * (decimal_n)map_unit))) * (decimal_n)variables::thresholds::explo::objects::unknown : 0);
+					//~ std::cout << "l je " << std::to_string(l) << std::endl;
+					//~ l++;
 					break;
-					
-				case location::_candle:
+					}
+				case location::_candle: {
 					interest += (distance <= (variables::thresholds::explo::influence::candle * map_unit)? \
 									(1.0f - distance / (variables::thresholds::explo::influence::candle * map_unit)) * variables::thresholds::explo::objects::candle : 0);
+					std::cout << "vzdalenost tam je " << distance << std::endl;
 					break;
-					
+					}
 				case location::_interesting:
 					interest += (distance <= (variables::thresholds::explo::influence::interesting * map_unit)? \
 									(1.0f - distance / (variables::thresholds::explo::influence::interesting * map_unit)) * variables::thresholds::explo::objects::interesting : 0);
@@ -106,32 +120,43 @@ decimal_n map::calculate_location(location lo){
 				}
 				//~ interest += 			
 			}
-		switch(lo.get_point()){
-				case location::_unknown:
-					interest += variables::thresholds::explo::objects::unknown;
-					break;
+			
+			
+		//~ switch(lo.get_point()){
+				//~ case location::_unknown:
+					//~ interest += variables::thresholds::explo::objects::unknown;
+					//~ break;
 					
-				case location::_candle:
-					interest += variables::thresholds::explo::objects::candle;
-					break;
+				//~ case location::_candle:
+					//~ interest += variables::thresholds::explo::objects::candle;
+					//~ break;
 					
-				case location::_interesting:
-					interest += variables::thresholds::explo::objects::interesting;
-					break;
+				//~ case location::_interesting:
+					//~ interest += variables::thresholds::explo::objects::interesting;
+					//~ break;
 					
-				case location::_barrier:
-					interest +=  variables::thresholds::explo::objects::barrier;
-					break;
+				//~ case location::_barrier:
+					//~ interest +=  variables::thresholds::explo::objects::barrier;
+					//~ break;
 					
-				case location::_discovered:
-					interest += variables::thresholds::explo::objects::discovered;
-					break;
+				//~ case location::_discovered:
+					//~ interest += variables::thresholds::explo::objects::discovered;
+					//~ break;
 					
-				case location::_boring:
-					interest += variables::thresholds::explo::objects::boring;
-					break;
-				}
+				//~ case location::_boring:
+					//~ interest += variables::thresholds::explo::objects::boring;
+					//~ break;
+				//~ }
 		}
+		
+		for(auto c: _map_candles){
+				distance = lo.get_distance(c.tube.center);
+				interest += (distance <= (variables::thresholds::explo::influence::candle * map_unit)? \
+									(1.0f - (decimal_n)distance / (decimal_n)(variables::thresholds::explo::influence::candle * map_unit)) * (decimal_n)variables::thresholds::explo::objects::candle : 0);
+				if(distance <= (variables::thresholds::explo::influence::candle * map_unit)){
+					std::cout << "byl v dosahu " << lo._coordinates.print() << std::endl;
+					}
+				}
 		//~ interest ;
 		return interest;
 	}
@@ -410,7 +435,7 @@ std::array<std::vector<location*>, 4> map::subdivide(coordinates c, decimal_n an
 void map::show_map(){
 	std::sort(_map.begin(), _map.end(), [](location a, location b){return (a._coordinates.y < b._coordinates.y);});
 	cv::namedWindow("map preview", cv::WINDOW_NORMAL | cv::WINDOW_KEEPRATIO | cv::WINDOW_GUI_EXPANDED);
-	cv::Mat map_view(map_h/15+1, map_l/15+1, CV_8UC3, cv::Scalar(40, 40, 0));
+	cv::Mat map_view(900/15+1, 900/15+1, CV_8UC3, cv::Scalar(40, 40, 0));
 	std::cout << "posledni:\t" << _map.back()._coordinates.print() << std::endl;
 	signed_b maximum = interest_maximal(_map).get_interest();
 	signed_b minimum = interest_minimal(_map).get_interest();
@@ -419,7 +444,7 @@ void map::show_map(){
 		try{
 			//~ std::cout << 255.0f - (((decimal_n)element.get_interest())/((decimal_n)(maximum - minimum))) << std::endl;
 			signed_b interest = element.get_interest();
-			signed_b color = (255 * (1 -(((decimal_n)interest)/((decimal_n)(maximum - minimum)))));
+			signed_l color = (255 * (1.0 -(((decimal_n)interest)/((decimal_n)(maximum - minimum)))));
 			map_view.at<cv::Vec3b>(cvRound(element._coordinates.y/15), cvRound(element._coordinates.x/15)) = cv::Vec3b((interest < 0? color: 0), 0, (interest >= 0? color: 0));
 			//~ cv::putText(map_view, "[" + std::to_string(cvRound(element._coordinates.y)) + "; " + std::to_string(cvRound(element._coordinates.x))+"]", cv::Point(element._coordinates.y*5 + 1, element._coordinates.x*5 + 1), cv::FONT_HERSHEY_PLAIN, 0.75, cv::Scalar(0, 0, color, 40));
 			} catch(std::exception e) {
