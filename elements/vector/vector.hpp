@@ -48,6 +48,8 @@ class vector {
 		
 		static vector extend(vector v, decimal_n length);
 		vector extend(decimal_n length);
+		static vector swap(vector v);
+		vector swap();
 		
 		static coordinates move(vector, coordinates);
 		

@@ -29,7 +29,7 @@ angles::angles()
 	: vector<node>()
 {
 	for(unsigned_n i = 0; i < 360; i ++){
-		push_back(node(0.0f, (decimal_n)i));
+		emplace_back(0.0f, (decimal_n)i);
 		}
 	std::sort(this -> begin(), this -> end(), [](node a, node b){return (a.angle < b.angle);});
 }

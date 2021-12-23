@@ -25,10 +25,6 @@
 #ifndef PATH_HPP
 #define PATH_HPP
 
-#include <vector>
-#include <string>
-#include <sstream>
-#include "step.hpp"
 
 class path: public std::vector<step> {
 	public:
@@ -50,6 +46,8 @@ class path: public std::vector<step> {
 		using std::vector<step>::end;
 		using std::vector<step>::cbegin;
 		using std::vector<step>::cend;
+		using std::vector<step>::rbegin;
+		using std::vector<step>::rend;
 		using std::vector<step>::assign;
 		using std::vector<step>::get_allocator;
 		using std::vector<step>::at;
@@ -61,12 +59,16 @@ class path: public std::vector<step> {
 		using std::vector<step>::shrink_to_fit;
 		using std::vector<step>::clear;
 		using std::vector<step>::data;
+		using std::vector<step>::insert;
 		
 		path(std::vector<step> copy, bool start = true, bool end = true);
 		path(const path& copy);
 		path(step copy, bool start = true, bool end = false, bool complete = false);
 		
 		std::string print();
+		//~ void insert(std::vector<step>::iterator, path inserted);
+		void reorder();
+		void assemble();
 		
 		void set_variable_start(bool state);
 		void set_variable_end(bool state);
@@ -80,6 +82,11 @@ class path: public std::vector<step> {
 		bool get_definite_end();
 		bool get_completness();
 		
+		static std::vector<coordinates> get_intersections_all(path p, map m);
+		static std::vector<std::vector<coordinates>> get_intersections(path p, map m);
+		
+		std::vector<coordinates> get_intersections_all(map m);
+		std::vector<std::vector<coordinates>> get_intersections(map m);
 		
 	private:
 		/* add your private declarations */

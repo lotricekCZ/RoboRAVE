@@ -70,11 +70,11 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 		if(i >= selected.size()){
 			break;
 		}
-		pre_circles.push_back(circle(selected.at(i), evaluate_radius(selected.at(i-1), selected.at(i))));
-		std::cout << pre_circles.back().print() << std::endl;
+		pre_circles.emplace_back(selected.at(i), evaluate_radius(selected.at(i-1), selected.at(i)));
+		//~ std::cout << pre_circles.back().print() << std::endl;
 		}
 	
-	pre_circles.push_back(circle(selected.back(), 0));
+	//~ pre_circles.push_back(circle(selected.back(), 0));
 	coordinates start = selected.at(0);
 	/// first circle generation block start; this is where the first circle is generated
 	decimal_n radius_initial = evaluate_radius(selected.at(1), start);
@@ -84,46 +84,18 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 	
 	coordinates center_local(0, ((is_right)? -1: 1) * radius_initial);
 	circle first_circle(start.make_global(center_local, initial_rotation - pi_const/2), radius_initial);
-	coordinates center_next_local = pre_circles.back().center.make_local(first_circle.center, -pi_const/2 - initial_rotation);
+	//~ coordinates center_next_local = pre_circles.back().center.make_local(first_circle.center, -pi_const/2 - initial_rotation);
+	pre_circles.insert(pre_circles.begin(), first_circle);
 	/// first circle generation block end
 	//~ pre_steps.push_back(avoider::to_steps(circle::tangents(pre_circles.back(), selected.back()), circle(selected.back(), 0), pre_circles.back()));
-	pre_circles.insert(pre_circles.begin(), first_circle);
-	std::cout << first_circle.print() << std::endl;
-	for(unsigned_b i = 0; i < pre_circles.size() - 1; i++){
-		std::cout << std::to_string(i) << std::endl;
-		std::vector<line> temp_lines = circle::circle_tangents(pre_circles.at(i+1), pre_circles.at(i));
-		std::vector<step> temp_steps = avoider::to_steps(temp_lines, pre_circles.at(i), pre_circles.at(i+1));
-		pre_steps.push_back(temp_steps);
-
-		//~ for(step &s: pre_steps){ /// TODO: Rework, extend the selected path to avoid the obstacle 
-			//~ auto step_distance = get_distance_to_walls(t_step, m);
-			//~ if(step_distance > (robot_radius * 0.5)){
-				//~ pre_steps.back().push_back(t_step);
-				//~ }
-			//~ }
-		}
-	//~ avoider::get_raw_options(pre_steps, pre_circles, post_steps);
-	std::cout << "Bordel se deje" << std::endl;
-	//~ std::vector<coordinates> temp_points = circle::tangent_points(pre_circles.back(), selected.back());
-	pre_steps.push_back(std::vector<step>());
-	//~ for(coordinates l: temp_points){
-		//~ std::cout << l.print() << std::endl;
-		//~ step t_step(l, selected.back());
-		//~ decimal_n step_distance = get_distance_to_walls(t_step, m);
-		//~ if(step_distance > (robot_radius * 0.5)){
-			//~ pre_steps.back().push_back(t_step);
-			//~ }
-		//~ }
-	for(auto vs: pre_steps){
-		for(auto s: vs)
-			std::cout << s.print_geogebra() << std::endl;
-		}
-	//~ std::cout << next_local.print() << std::endl;
-	//~ std::cout << first_circle.print() << std::endl;
+	std::vector<path> options = list_options(pre_circles, selected.back(), start);
+	for(auto o: options)
+		std::cout << o.print() << std::endl;
 	
 	/// TODO: THIS SECTION
 	
 	std::cout << std::endl;
+	std::cout << options.size() << std::endl;
 		
 	
 	return steps;
@@ -212,7 +184,7 @@ std::vector<step> planner::make_first_move(map& m, coordinates start, coordinate
 	decimal_n distance = start.get_distance(next);
 	next_local.x = 0;
 	if(std::abs(next_local.y) <= 1e-1 && next_local.x > 0){ /// means next is right in front of us -> don't create any circle
-		ret.push_back(step(start, next));
+		ret.emplace_back(start, next);
 		return ret;
 	}
 	
@@ -283,22 +255,22 @@ bool planner::collides_nowhere(map &m, coordinates start, coordinates end){
 			return false;
 		}
 	return true;
-}	
+}
 
 
 
 std::vector<circle> planner::circle_generate(coordinates goal, coordinates start, map &m, uint8_t it, decimal_n multiplier){
 	std::vector<circle> out;
-	out.push_back(circle(start, start.get_distance(goal)));
+	out.emplace_back(start, start.get_distance(goal));
 	decimal_n goal_start_distance = goal.get_distance(start);
 	for(wall w: m._map_walls) /// generation of circles between the walls and goal
 		for(coordinates c: w.properties.edges)
-			out.push_back(circle(c, c.get_distance(goal)));
+			out.emplace_back(c, c.get_distance(goal));
 			
 	for(wall w: m._map_walls) /// generation of circles between the walls and start
 		for(coordinates c: w.properties.edges)
 			if(c.get_distance(goal) < goal_start_distance)
-				out.push_back(circle(c, c.get_distance(start)));
+				out.emplace_back(c, c.get_distance(start));
 			
 			
 	for(wall w: m._map_walls) /// generation of perimeter circles between of the wall edges
@@ -308,8 +280,8 @@ std::vector<circle> planner::circle_generate(coordinates goal, coordinates start
 	
 	
 	for(uint8_t i = 1; i < it; i++){ /// generation of circles between start and end
-		out.push_back(circle(start, (goal_start_distance * multiplier * (decimal_n)i) /  (decimal_n)it));
-		out.push_back(circle(goal, (goal_start_distance * multiplier * (decimal_n)i) /  (decimal_n)it));
+		out.emplace_back(start, (goal_start_distance * multiplier * (decimal_n)i) /  (decimal_n)it);
+		out.emplace_back(goal, (goal_start_distance * multiplier * (decimal_n)i) /  (decimal_n)it);
 		}
 	
 	return out;	
@@ -347,7 +319,7 @@ std::vector<coordinates> planner::coincidental_points_generate(std::vector<circl
 				if(*a == *b){
 					out.erase(b);
 					--b;
-					}				
+					}		
 				}
 					
 			}
@@ -464,6 +436,23 @@ wall planner::get_closest_wall(step s, map &m){
 
 
 
+wall planner::get_closest_wall(coordinates c, map &m){
+	wall wret;
+	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
+	for(auto w: m._map_walls){
+		for(uint8_t i = 0; i < 4; i++){
+			decimal_n retc = step::get_distance(step(w.properties.edges[i], w.properties.edges[(i+1)%4]), c);
+			if(ret > retc){
+				ret = retc;
+				wret = w;
+				}
+			}
+		}
+	return wret;
+	}
+
+
+
 std::vector<step> planner::extend(std::vector<step>& future_steps, std::vector<step>& branch, circle future, map& m){
 	wall closest = get_closest_wall(future_steps.back(), m);
 	std::cout << closest.print_geogebra() << std::endl;
@@ -518,6 +507,8 @@ std::vector<path> planner::list_options(std::vector<circle> selected, coordinate
 		coordinates center_local = coordinates::make_local(selected.front().center,
 															end_c, -p.back().angle_start);
 		p.emplace_back(start, end_c, selected.front().center, center_local.x < 0);
+		p.reorder(); // reorder them properly
+		p.assemble(); // reorder them properly
 		}
 	/*
 	for(auto paths: ret)
@@ -528,3 +519,273 @@ std::vector<path> planner::list_options(std::vector<circle> selected, coordinate
 	return ret;
 	}
 
+
+
+std::vector<path> planner::suppress_by_sensibility(std::vector<path> selected){
+	std::vector<path> ret = selected;
+	for(unsigned_b p = 0; p < ret.size(); p++){
+		for(unsigned_b i = 2; i < ret.at(p).size(); i++){
+			for(unsigned_b j = i - 2; j < ret.at(p).size(); j++){
+				if((std::abs(((signed_b)i - (signed_b)j))) >= (unsigned_b)2){
+					if(ret.at(p).at(i).get_distance(ret.at(p).at(j)) == 0){
+						// by this this path is useless - deletion of this path occurs 
+						// and all the parameters are resetted.
+						i = 2; j = 0;
+						ret.erase(ret.begin() + p);
+						p = ((!p)? 0: p - 1);
+						}
+					}
+				}
+			}
+		}
+	return ret;
+	}
+
+
+
+
+path planner::avoid(path p, map &m){
+	assert(p.size() <= 2 && p.back()._type == step::line_e); 
+	constexpr decimal_n safe_dist = robot_radius * safe_constant;
+	// there must be only one step in order to give the 
+	// idea which step should be modified with which parameters
+	/// 0(): acknowledge if there are any close_points available
+	
+	std::vector<planner::wall_container> 
+	close_points = planner::avoid_linear_phase_0(p, m);
+	
+	/// selected all where it either collides or comes close
+	// selects the closest wall
+	
+	auto closest = planner::avoid_linear_wall_select(close_points.at(0));
+	if(!closest.second.size()) return p;
+	wall closest_wall = *std::get<wall *>(closest.second.at(0));
+	//~ wall closest_wall;
+	
+	/// 1(): lead point vectors from edges to line
+	std::array<std::deque<vector>, 2> sides({std::deque<vector>({vector(), vector()}), 
+											std::deque<vector>({vector(), vector()})}); // and here we'll try a little bit of insert_sort
+	std::cout << closest_wall.print_geogebra() << std::endl;
+	line original = std::get<line>(p.back().formula);
+	// we have the closest relevant wall, time to generate point vectors.
+	{
+		auto point_vectors = step::get_point_vectors(original, closest_wall);
+		for(auto &o: point_vectors){
+			bool index = (std::sin(o.angle() - (closest.first -> angle_start)) >= 0);
+			for(uint8_t i = 0; i < 2; i++){
+				if(sides.at(index).at(i).length() < o.length()){
+					sides.at(index).insert(sides.at(index).begin() + i, o);
+					break;
+					}
+				}
+			if(sides.at(index).size() > 2) sides.at(index).pop_back();
+			}
+	}
+	
+	decimal_n decision = ((std::accumulate(sides.at(0).begin(), sides.at(0).end(), vector(0, 0))/(2)).length() - (std::accumulate(sides.at(1).begin(), sides.at(1).end(), vector(0, 0))/(2)).length());
+	
+	/// 2():
+	std::vector<coordinates> *tmp = new std::vector<coordinates>(planner::avoid_linear_phase_2(closest_wall, sides.at(decision > 0), p.back()));
+	if(tmp -> size() != 1){
+		delete tmp;
+		return p;
+		}
+	
+	/// 3():
+	std::vector<circle> curve({circle(p.back().start, 0), circle(tmp -> at(0), safe_dist)});
+	
+	std::cout << "selected\n" << curve.at(0).print() << std::endl;
+	for(auto i: sides.at(decision > 0)){
+		std::cout << i.print() << std::endl;
+		}
+	delete tmp;
+	/// 4():
+	std::vector<path> replacement = planner::list_options(curve, p.back().end, p.back().start, p.back().angle_start);
+	for(auto r: replacement){
+		if(!r.back().intersection(closest_wall).size())
+		std::cout << "cesta\n" << r.print() << std::endl;
+		}
+		
+	for(auto [stp, w]: close_points){
+		std::cout << "step\n"  << stp -> print_geogebra() << "\nvelikost " << w.size() << std::endl;
+		for(unsigned_b i = 0; i < w.size(); i++){
+			for(auto c: std::get<1>(w.at(i))){
+				std::cout << c.print() << std::endl;
+				}
+			
+			for(auto v: std::get<2>(w.at(i))){
+				std::cout << v.print() << std::endl;
+				}
+			}
+		
+		}
+	return p;
+	}
+
+
+
+
+std::vector<std::pair<std::vector<coordinates>, wall>> planner::intersecting_walls(step s, map &m){
+	std::vector<std::pair<std::vector<coordinates>, wall>> ret;
+	std::vector<coordinates> ret_c;
+	for(auto w: m._map_walls){
+		ret_c = s.intersection(w);
+		if(ret_c.size())
+			ret.emplace_back(ret_c, w);
+		}
+	std::cout << "this runned " << ret.size() << std::endl;
+	return ret;
+	}
+
+
+
+
+std::vector<planner::wall_container> 
+	planner::avoid_linear_phase_0(path &p, map &m){
+	constexpr decimal_n safe_dist = robot_radius * safe_constant;
+	std::vector<planner::wall_container> close_points;
+	for(auto &s: p){
+		close_points.emplace_back(&s, std::vector<std::tuple<wall *,
+												std::vector<coordinates>, 
+												std::vector<vector>>>());
+		for(auto &w: m._map_walls){
+			close_points.back().second.emplace_back(&w, 
+								close_points.back().first -> intersection(w),
+								close_points.back().first -> get_vectors(w));
+			}
+		}
+		
+	for(auto &[stp, w]: close_points){
+		std::cout << "step\n"  << stp -> print_geogebra() << "\nvelikost " << w.size() << std::endl;
+		for(unsigned_b i = 0; i < w.size(); i++){
+			bool toggled = false;
+			for(std::vector<vector>::iterator v = std::get<2>(w.at(i)).begin();
+				v != std::get<2>(w.at(i)).end(); v++){
+					toggled = toggled | v -> length() < (safe_dist);
+					if(toggled) break;
+				}
+			
+			if(toggled | (std::get<1>(w.at(i)).size() != 0)) continue;
+			w.erase(w.begin() + i--);
+			}
+		}
+	return close_points;
+	}
+	
+	
+	
+planner::wall_container planner::avoid_linear_wall_select(planner::wall_container a){
+	planner::wall_container w;
+	/* this system should act followingly:
+	 * 		1) pick all vectors where the rule violation occurs
+	 * 		2) compare distances of them with intersection points
+	 * */
+	constexpr decimal_n safe_dist = robot_radius * safe_constant;
+	decimal_n dist = std::numeric_limits<decimal_n>::infinity();
+	
+	for(auto o: a.second){
+		for(auto v: std::get<std::vector<vector>>(o))
+			if(v.length() > 0 && v.length() <= safe_dist){
+				decimal_n dist_c = a.first -> end.get_distance(v.get_point()) - std::sqrt(std::pow(safe_dist, 2) - std::pow(v.length(), 2));
+				if(dist_c < dist){
+					dist = dist_c;
+					w = wall_container(a.first, {o});
+					}
+				}
+				
+		for(auto c: std::get<std::vector<coordinates>>(o)){
+			line p = a.first -> perpendicular_bisector();
+			line l(a.first -> end, a.first -> start); // same for std::get<line>(step::formula), but even for circle formulas
+			std::cout << l.intersection(p.make_parallel(c)).print() << std::endl;
+			decimal_n dist_c = a.first -> end.get_distance(l.intersection(p.make_parallel(c))) - safe_dist;
+			if(dist_c < dist){
+				dist = dist_c;
+				w = wall_container(a.first, {o});
+				}
+			}
+		}
+	return w;
+	}
+	
+	
+		
+auto planner::avoid_linear_phase_1(wall w){
+	constexpr decimal_n safe_dist = robot_radius * safe_constant;
+	
+	return 1.0f;
+	}
+	
+	
+	
+std::vector<coordinates> planner::avoid_linear_phase_2(wall &w, std::deque<vector> v, step s){
+	std::vector<coordinates> ret;
+	decimal_n min = std::numeric_limits<decimal_n>::infinity();
+	unsigned_b min_i = std::numeric_limits<unsigned_b>::infinity();
+	for(auto o: v){
+		std::cout << step(o.get_origin(), s.end).intersection(w).size() << std::endl;
+		for(auto i: step(o.get_origin(), s.end).intersection(w)){
+			std::cout << i.print() << std::endl;
+			}
+		auto cand = [&](std::vector<coordinates> inter, coordinates c){
+			decimal_n ret = 0;
+			std::vector<coordinates> st = inter;
+			st.push_back(c);
+			
+			for(uint8_t i = 0; i < st.size(); i++){
+				std::cout << st.at(i).print() << std::endl;
+				ret += st.at(i).get_distance(st.at((i + 1) % st.size()));
+				}
+			return ret;
+			};
+		auto l = step(o.get_origin(), s.end).intersection(w);
+		unsigned_b ass_ic = l.size();
+		decimal_n ass_c = cand(l, o.get_origin());
+		if(ass_c <= min && ass_c < 1e-2 && ass_ic <= 2 && ass_ic > 0){
+			min = ass_c;
+			min_i = ass_ic;
+			ret.assign({o.get_origin()}); // only like 1-2 intersections as this is the corner are possible
+			}
+		}
+	return ret;
+	}
+	
+	
+	
+auto planner::avoid_linear_phase_3(){
+	constexpr decimal_n safe_dist = robot_radius * safe_constant;
+	
+	return 1.0f;
+	}
+	
+	
+	
+auto planner::avoid_linear_phase_4(){
+	constexpr decimal_n safe_dist = robot_radius * safe_constant;
+	
+	return 1.0f;
+	}
+	
+	
+	
+auto planner::avoid_linear_phase_5(){
+	constexpr decimal_n safe_dist = robot_radius * safe_constant;
+	
+	return 1.0f;
+	}
+	
+	
+/*
+auto planner::avoid_circular_phase_0(){
+	constexpr decimal_n safe_dist = robot_radius * safe_constant;
+	
+	return 1.0f;
+	}
+	
+	
+	
+auto planner::avoid_circular_phase_1(){
+	constexpr decimal_n safe_dist = robot_radius * safe_constant;
+	
+	return 1.0f;
+	}
+*/

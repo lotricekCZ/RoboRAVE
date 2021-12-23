@@ -41,7 +41,7 @@ std::vector<location> map::grid(int s_height = 0, int s_width = 0, int height = 
 	
 	while(ht <= he){
 		while(wt <= we){
-			b.push_back(location(ht, wt, location::_unknown));
+			b.emplace_back(ht, wt, location::_unknown);
 			wt += map_raster;
 			}
 		wt = w;

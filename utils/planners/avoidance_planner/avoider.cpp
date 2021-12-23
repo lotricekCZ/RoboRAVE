@@ -81,6 +81,15 @@ std::vector<step> avoider::avoid(std::vector<step> steps, wall w){
 
 
 
+path avoider::avoid(path p, std::vector<wall> w){
+	assert(p.size() <= 4);
+	path ret = p;
+	//~ std::vector<vector> vectors_b = steps.at(1).get_vector(w);
+	return std::vector<step> ();
+	}
+
+
+
 
 void avoider::eliminate_tangents(std::vector<step>& steps, std::vector<circle> circles, std::vector<coordinates> selected, decimal_n escape_angle){
 	assert(circles.size() == 2); // only two there are - first and second

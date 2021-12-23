@@ -481,13 +481,154 @@ int main(int argc, char *argv[]) {
 					
 			std::cout << s.print_geogebra() << std::endl;
 			std::cout << s.perpendicular_bisector().print() << std::endl;
+			break;
 			}
 		
-		case 72:{ // listing possible options ./roborave 71  0  0 1 4 1 2 1
+		case 72:{ // listing suppressed possible options ./roborave 72  4 3  -3 2 2  -5 2  7
 			coordinates end(c_f(argv[2]), c_f(argv[3]));
 			coordinates start(c_f(argv[7]), c_f(argv[8]));
 			std::vector<circle> circles({circle(c_f(argv[4]), c_f(argv[5]), c_f(argv[6])), circle(2, -4, 1), circle(c_f(argv[9]), 1, 1.5)}); 
-			planner::list_options(circles, end, start);
+			for(path p: planner::suppress_by_sensibility(planner::list_options(circles, end, start)))
+				std::cout << p.print() << std::endl;
+			break;
+			}
+		
+		case 73:{ // listing possible options ./roborave 73  4 3  -3 2 2  -5 2  7
+			coordinates end(c_f(argv[2]), c_f(argv[3]));
+			coordinates start(c_f(argv[7]), c_f(argv[8]));
+			std::vector<circle> circles({circle(c_f(argv[4]), c_f(argv[5]), c_f(argv[6])), circle(2, -4, 1), circle(c_f(argv[9]), 1, 1.5)}); 
+			for(path p: planner::list_options(circles, end, start))
+				std::cout << p.print() << std::endl;
+			break;
+			}
+		
+		case 74:{ // listing possible options ./roborave 74  4 3  -3 2
+			map m;
+	
+			coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 8), coordinates(-6, 7)};
+			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
+			coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
+			coordinates a[] = {coordinates(3, -3), coordinates(6, 0), coordinates(7, -1), coordinates(4, -4)};
+			
+			//~ m.append(candle(coordinates(4,3)));
+			m.append(wall(c));
+			m.append(wall(x));
+			m.append(wall(y));
+			m.append(wall(z));
+			m.append(wall(a));
+			planner p;
+			
+			coordinates end(c_f(argv[2]), c_f(argv[3]));
+			coordinates start(c_f(argv[4]), c_f(argv[5]));
+			step s(start, end);
+			std::cout << s.print_geogebra() << std::endl;
+			for(auto w: m._map_walls)
+				std::cout << w.print_geogebra() << '\n' << wall::estimate_center(w).print() << std::endl;
+			for(auto w: planner::intersecting_walls(s, m))
+				for(auto c: w.first)
+					std::cout << c.print() << '\n' << w.second.print_geogebra() << std::endl;
+			planner::avoid(s, m);
+			break;
+			}
+		
+		case 75:{ // shows intersection with linears ./roborave 75  4 3  -3 2
+			map m;
+	
+			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			
+			//~ m.append(candle(coordinates(4,3)));
+
+			m.append(wall(x));
+			planner p;
+			
+			coordinates end(c_f(argv[2]), c_f(argv[3]));
+			coordinates start(c_f(argv[4]), c_f(argv[5]));
+			step s(start, end);
+			std::cout << s.print_geogebra() << std::endl;
+			for(auto w: m._map_walls)
+				std::cout << w.print_geogebra() << std::endl;
+			for(auto c: step::intersection(s, m._map_walls.at(0)))
+				std::cout << c.print() << std::endl;
+			//~ step::intersection(s, m);
+			break;
+			}
+		
+		case 76:{ // shows intersection with circulars ./roborave 76  4 3  -3 1 1.066037736 0.0188679245 1
+			map m;
+	
+			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			
+			//~ m.append(candle(coordinates(4,3)));
+
+			m.append(wall(x));
+			planner p;
+			
+			coordinates end(c_f(argv[2]), c_f(argv[3]));
+			coordinates start(c_f(argv[4]), c_f(argv[5]));
+			coordinates center(c_f(argv[6]), c_f(argv[7]));
+			step s(start, end, center, c_i(argv[8]) % 2);
+			std::cout << s.print_geogebra() << std::endl;
+			for(auto w: m._map_walls)
+				std::cout << w.print_geogebra() << std::endl;
+			for(auto c: step::intersection(s, m._map_walls.at(0)))
+				std::cout << c.print() << std::endl;
+			//~ step::intersection(s, m);
+			break;
+			}
+			
+		case 77:{ // shows intersection with circulars ./roborave 77  4 3  -3 1 1.066037736 0.0188679245 1
+			map m;
+	
+			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			
+			//~ m.append(candle(coordinates(4,3)));
+
+			m.append(wall(x));
+			planner p;
+			
+			coordinates end(c_f(argv[2]), c_f(argv[3]));
+			coordinates start(c_f(argv[4]), c_f(argv[5]));
+			step s(start, end);
+			std::cout << s.print_geogebra() << std::endl;
+			for(auto w: m._map_walls)
+				std::cout << w.print_geogebra() << std::endl;
+			for(auto c: step::intersection(s, m._map_walls.at(0)))
+				std::cout << c.print() << std::endl;
+			//~ step::intersection(s, m);
+			break;
+			}
+			
+		case 78:{ // shows intersection with circulars ./roborave 77  4 3  -3 1 1.066037736 0.0188679245 1
+			map m;
+	
+			coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 8), coordinates(-6, 7)};
+			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
+			coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
+			coordinates a[] = {coordinates(3, -3), coordinates(6, 0), coordinates(7, -1), coordinates(4, -4)};
+			
+			//~ m.append(candle(coordinates(4,3)));
+			m.append(wall(c));
+			m.append(wall(x));
+			m.append(wall(y));
+			m.append(wall(z));
+			m.append(wall(a));
+			planner p;
+			
+			
+			
+			coordinates end(c_f(argv[2]), c_f(argv[3]));
+			coordinates start(c_f(argv[4]), c_f(argv[5]));
+			path pth(step(start, end));
+			
+			std::cout << pth.at(0).print_geogebra() << std::endl;
+			for(auto w: m._map_walls)
+				std::cout << w.print_geogebra() << std::endl;
+				
+			planner::avoid(pth, m);
+			//~ step::intersection(s, m);
+			break;
 			}
 		}
 	

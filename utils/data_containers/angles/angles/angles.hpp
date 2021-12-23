@@ -36,6 +36,7 @@ class angles: public std::vector<node>
 {
 	public:
 		using std::vector<node>::push_back;
+		using std::vector<node>::emplace_back;
 		using std::vector<node>::pop_back;
 	    using std::vector<node>::operator[];
 	    using std::vector<node>::begin;

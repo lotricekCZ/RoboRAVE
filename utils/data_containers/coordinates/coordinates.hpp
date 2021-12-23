@@ -46,7 +46,7 @@ class coordinates
 		static coordinates make_global(coordinates, coordinates, decimal_n);
 		static coordinates make_rotation(coordinates rel, decimal_n alpha);
 		
-		coordinates get_closest(std::vector<coordinates>&);
+		// coordinates get_closest(std::vector<coordinates>&);
 		coordinates get_closest(std::vector<coordinates>);
 		std::string print();
 		std::string print_geogebra();

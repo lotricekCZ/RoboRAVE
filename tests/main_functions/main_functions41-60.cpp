@@ -283,7 +283,7 @@ namespace mf {
 		step s(coordinates(-5, 2), coordinates(c_f(argv[2]), c_f(argv[3])));
 		m.append(wall(x));
 		//~ m.append(wall(y));
-		for(auto w: step::get_distances(s, m._map_walls.at(0)))
+		for(auto w: step::get_point_distances(s, m._map_walls.at(0)))
 			std::cout << w << std::endl;
 		return;
 		#endif 

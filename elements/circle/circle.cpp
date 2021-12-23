@@ -87,15 +87,15 @@ std::vector<coordinates> circle::intersection(line l, circle c) {
 
 		// Vertical line is tangent to circle
 		if (std::abs((vx - c.radius) - c.center.x) < tolerance || std::abs((vx + c.radius) - c.center.x) < tolerance){
-			ret.push_back(coordinates(vx, c.center.y));
+			ret.emplace_back(vx, c.center.y);
 			return ret;
 		}
 	
 		decimal_n dx = std::abs(vx - c.center.x);
 		decimal_n dy = sqrt(pow(c.radius, 2) - pow(dx, 2));
 	
-		ret.push_back(coordinates(vx, c.center.y + dy));
-		ret.push_back(coordinates(vx, c.center.y - dy));
+		ret.emplace_back(vx, c.center.y + dy);
+		ret.emplace_back(vx, c.center.y - dy);
 	
 		return ret;
 
@@ -104,7 +104,7 @@ std::vector<coordinates> circle::intersection(line l, circle c) {
 
 		x1 = -B / (2 * A);
 		y1 = (-l.c - l.a * x1) / l.b;
-		ret.push_back(coordinates(x1, y1));
+		ret.emplace_back(x1, y1);
 
 		// No intersection point
 	} else if (D < 0) {
@@ -116,8 +116,8 @@ std::vector<coordinates> circle::intersection(line l, circle c) {
 		y1 = (-l.c - l.a * x1) / l.b;
 		x2 = (-B - D) / (2 * A);
 		y2 = (-l.c - l.a * x2) / l.b;
-		ret.push_back(coordinates(x1, y1));
-		ret.push_back(coordinates(x2, y2));
+		ret.emplace_back(x1, y1);
+		ret.emplace_back(x2, y2);
 		return ret;
 	}
 	return ret;
@@ -145,8 +145,8 @@ std::vector<coordinates> circle::intersection(circle k, circle c) {
 	decimal_n px = k.center.x + a * dx;
 	decimal_n py = k.center.y + a * dy;
 	decimal_n h = sqrt(pow(k.radius, 2) - pow(a, 2));
-	ret.push_back(coordinates(px + h * dy, py - h * dx));
-	if (h != 0) ret.push_back(coordinates(px - h * dy, py + h * dx));
+	ret.emplace_back(px + h * dy, py - h * dx);
+	if (h != 0) ret.emplace_back(px - h * dy, py + h * dx);
 	return ret;
 }
 
@@ -166,7 +166,7 @@ void circle::circle_tangents (coordinates c, decimal_n r1, decimal_n r2, std::ve
     l.a = (c.x * r + c.y * d) / z;
     l.b = (c.y * r - c.x * d) / z;
     l.c = r1;
-    ans.push_back(line((c.x * r + c.y * d) / z, (c.y * r - c.x * d) / z, r1));
+    ans.emplace_back((c.x * r + c.y * d) / z, (c.y * r - c.x * d) / z, r1);
 }
 
 
@@ -211,7 +211,7 @@ std::vector<line> circle::tangents(circle c, coordinates point){
 		return ret;
 		}
 	for(auto i: circle::tangent_points(c, point))
-		ret.push_back(line(point, i));
+		ret.emplace_back(point, i);
 	return ret;
 }
 
@@ -271,10 +271,10 @@ std::vector<circle> circle::circles(line a, line b, decimal_n radius){
 	}
 	decimal_n angle = a.get_angle(b);
 	//~ std::cout << intersection.print() << std::endl;
-	ret.push_back(circle(intersection.make_global(coordinates(0, radius / (sin(angle/2))), ((a.get_angle() + b.get_angle())/2)-pi_const), radius));
-	ret.push_back(circle(intersection.make_global(coordinates(0, -radius / (sin(angle/2))), ((a.get_angle() + b.get_angle())/2)-pi_const), radius));
-	ret.push_back(circle(intersection.make_global(coordinates(radius / (sin(pi_const/2 -angle/2)), 0), ((a.get_angle() + b.get_angle())/2)-pi_const), radius));
-	ret.push_back(circle(intersection.make_global(coordinates(-radius / (sin(pi_const/2 -angle/2)), 0), ((a.get_angle() + b.get_angle())/2)-pi_const), radius));
+	ret.emplace_back(intersection.make_global(coordinates(0, radius / (sin(angle/2))), ((a.get_angle() + b.get_angle())/2)-pi_const), radius);
+	ret.emplace_back(intersection.make_global(coordinates(0, -radius / (sin(angle/2))), ((a.get_angle() + b.get_angle())/2)-pi_const), radius);
+	ret.emplace_back(intersection.make_global(coordinates(radius / (sin(pi_const/2 -angle/2)), 0), ((a.get_angle() + b.get_angle())/2)-pi_const), radius);
+	ret.emplace_back(intersection.make_global(coordinates(-radius / (sin(pi_const/2 -angle/2)), 0), ((a.get_angle() + b.get_angle())/2)-pi_const), radius);
 	
 	return ret;
 	}

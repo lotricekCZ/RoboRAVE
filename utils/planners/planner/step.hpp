@@ -70,6 +70,7 @@ class step
 		bool on_segment_circular(coordinates point);
 		bool on_segment_linear(coordinates point);
 		static std::pair<step, step> get_perimeters(step, decimal_n perimeter = variables::properties::widths::robot / 2);
+		static std::vector<coordinates> get_perimeter_intersection(step, map &m);
 		std::string print();
 		std::string print_inkscape();
 		std::string print_geogebra();
@@ -77,10 +78,12 @@ class step
 		static std::vector<coordinates> intersection(step a, step b);
 		static std::vector<coordinates> intersection(step s, circle c);
 		static std::vector<coordinates> intersection(step s, line l);
+		static std::vector<coordinates> intersection(step s, wall w);
 		
 		std::vector<coordinates> intersection(step b);
 		std::vector<coordinates> intersection(circle c);
 		std::vector<coordinates> intersection(line l);
+		std::vector<coordinates> intersection(wall w);
 		
 		static decimal_n get_distance(step s, coordinates c, bool carry_caps = true);
 		static decimal_n get_distance(step s, line l, bool carry_caps = true);
@@ -88,6 +91,7 @@ class step
 		static decimal_n get_distance(step a, step b, bool carry_caps = true);
 		static decimal_n get_distance(step s, candle c);
 		static decimal_n get_distance(step s, wall w);
+		static decimal_n get_distance(coordinates c, wall w);
 		
 		decimal_n get_distance(coordinates c, bool carry_caps = true);
 		decimal_n get_distance(line l, bool carry_caps = true);
@@ -108,12 +112,15 @@ class step
 		
 		static std::vector<decimal_n> get_distances(step s, std::vector<coordinates> points);
 		static std::vector<decimal_n> get_distances(step s, wall w);
+		static std::vector<decimal_n> get_point_distances(step s, wall w);
 		static std::vector<vector> get_vectors(step s, std::vector<coordinates> points);
 		static std::vector<vector> get_vectors(step s, wall w);
 		static std::vector<vector> get_point_vectors(step s, wall w);
+		static std::vector<vector> get_point_vectors(line l, wall w);
 		
 		std::vector<decimal_n> get_distances(std::vector<coordinates> points);
 		std::vector<decimal_n> get_distances(wall w);
+		std::vector<decimal_n> get_point_distances(wall w);
 		std::vector<vector> get_vectors(std::vector<coordinates> points);
 		std::vector<vector> get_vectors(wall w);
 		std::vector<vector> get_point_vectors(wall w);

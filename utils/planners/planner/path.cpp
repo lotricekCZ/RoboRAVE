@@ -21,6 +21,10 @@
  * 
  */
 
+#include <vector>
+#include <string>
+#include <sstream>
+#include "step.hpp"
 
 #include "path.hpp"
 
@@ -116,12 +120,68 @@ bool path::get_completness(){
 	return this -> is_complete;
 	}
 
+
+
+void path::reorder(){
+	std::reverse(this -> begin(), this -> end());
+	}
+
+
+
+void path::assemble(){
+	for(unsigned_b i = 1; i < this -> size(); i++)
+		at(i).start = at(i - 1).end;
+	}
+
+
+
 std::string path::print(){
 	std::stringstream ret;
 	for(auto o: *this)
 		ret << o.print_geogebra() << std::endl;
 		//~ ret << o.print_geogebra() << "\n";
 	return ret.str();
+	}
+
+
+
+std::vector<coordinates> path::get_intersections_all(path p, map m){
+	std::vector<coordinates> ret;
+	for(auto s: p){
+		for(auto w: m._map_walls){
+				std::vector<coordinates> ret_c = s.intersection(w);
+				ret.insert(ret.end(), ret_c.begin(), ret_c.end());
+			}
+		}
+	return ret;
+	}
+
+
+
+std::vector<std::vector<coordinates>> path::get_intersections(path p, map m){
+	std::vector<std::vector<coordinates>> ret;
+	for(auto s: p){
+		std::vector<coordinates> ret_c;
+		for(auto w: m._map_walls){
+				std::vector<coordinates> ret_cc = s.intersection(w);
+				ret_cc.insert(ret_c.end(), ret_cc.begin(), ret_cc.end());
+			}
+		ret.push_back(ret_c);
+		}
+	return ret;
+	}
+
+
+
+
+std::vector<coordinates> path::get_intersections_all(map m){
+	return path::get_intersections_all(*this, m);
+	}
+
+
+
+std::vector<std::vector<coordinates>> path::get_intersections(map m){
+	return path::get_intersections(*this, m);
 	}
 
 

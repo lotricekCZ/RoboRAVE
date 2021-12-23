@@ -742,6 +742,19 @@ decimal_n step::get_distance(step s, wall w){
 	
 
 
+decimal_n step::get_distance(coordinates c, wall w){
+	// converts a wall into independent steps
+	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
+	for(uint8_t i = 0; i < 4; i++){
+		decimal_n retc = step::get_distance(step(w.properties.edges[i], w.properties.edges[(i + 1) % 4], false), c);
+		ret = (ret < retc)? ret: retc;
+		}
+	return ret;
+	}
+	
+
+
+
 
 vector step::get_vector(step s, coordinates c, bool carry_caps){
 	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
@@ -923,7 +936,7 @@ vector step::get_vector_linears(step a, step b, bool carry_caps){
 			//~ std::cout << inters[i][0].print_geogebra() << std::endl;
 			decimal_n retc = origins[i].get_distance(inters[i][0]);
 			//~ std::cout << ret.length() << "\t" << retc << ((ret.length() < retc)? "candidate refuse": "candidate use") << std::endl;
-			ret = (ret.length() < retc)? ret: vector(origins[i], inters[i][0]);
+			ret = (ret.length() < retc)? ret: (i / 2 ? vector(inters[i][0], origins[i]): vector(origins[i], inters[i][0]));
 			}
 	vector start_start(a.start, b.start);
 	vector start_end(a.start, b.end);
@@ -936,7 +949,7 @@ vector step::get_vector_linears(step a, step b, bool carry_caps){
 		}
 	ret = (ret.length() < shortest.length())? ret: shortest;
 	
-	return ret;
+	return ret.swap();
 	}
 
 
@@ -1011,7 +1024,7 @@ vector step::get_vector_circulars(step a, step b, bool carry_caps){
 		vector end_end(a.end, b.end);
 		vector shortest = start_start;
 			for(auto o: {start_start, start_end, end_start, end_end}){
-				shortest = (shortest.length() < o.length())? shortest: o;
+				shortest = (shortest.length() < o.length())? shortest: o.swap();
 				}
 		ret = (ret.length() < shortest.length())? ret: shortest;	
 		}
@@ -1217,10 +1230,20 @@ std::vector<decimal_n> step::get_distances(step s, std::vector<coordinates> poin
 
 
 
-std::vector<decimal_n> step::get_distances(step s, wall w){
+std::vector<decimal_n> step::get_point_distances(step s, wall w){
 	std::vector<decimal_n> ret;
 	for(uint8_t i = 0; i < 4; i++){
 		ret.push_back(step::get_distance(s, w.properties.edges[i]));
+		}
+	return ret;
+	}
+
+
+
+std::vector<decimal_n> step::get_distances(step s, wall w){
+	std::vector<decimal_n> ret;
+	for(uint8_t i = 0; i < 4; i++){
+		ret.push_back(step::get_distance(s, step(w.properties.edges[i], w.properties.edges[(i + 1) % 4])));
 		}
 	return ret;
 	}
@@ -1235,6 +1258,12 @@ std::vector<decimal_n> step::get_distances(std::vector<coordinates> points){
 
 std::vector<decimal_n> step::get_distances(wall w){
 	return get_distances(*this, w);
+	}
+
+
+
+std::vector<decimal_n> step::get_point_distances(wall w){
+	return get_point_distances(*this, w);
 	}
 
 
@@ -1294,6 +1323,48 @@ line step::perpendicular_bisector(step s){
 
 
 line step::perpendicular_bisector(){
-	return perpendicular_bisector(*this);
+	return step::perpendicular_bisector(*this);
 	}
-		
+
+
+
+std::vector<coordinates> step::intersection(wall w){
+	return step::intersection(*this, w);
+	}
+
+
+
+
+std::vector<coordinates> step::intersection(step s, wall w){
+	std::vector<coordinates> ret;
+	for(uint8_t i = 0; i < 4; i++){
+		auto o = step::intersection(s, step(w.properties.edges[i], w.properties.edges[(i + 1) % 4]));
+		ret.insert(ret.end(), o.begin(), o.end());
+		}
+	return ret;
+	}
+
+
+
+
+std::vector<coordinates> step::get_perimeter_intersection(step s, map &m){
+	auto per = step::get_perimeters(s);
+	std::vector<coordinates> ret;
+	for(auto p: {per.first, per.second}){
+		for(auto w: m._map_walls){
+			auto i = s.intersection(w);
+			ret.insert(ret.end(), i.begin(), i.end());
+			}
+		}
+	return ret;
+	}
+
+
+
+
+std::vector<vector> step::get_point_vectors(line l, wall w){
+	std::vector<vector> ret;
+	for(auto c: w.properties.edges)
+		ret.emplace_back(c, l.intersection(l.make_perpendicular(c)));
+	return ret;
+	}

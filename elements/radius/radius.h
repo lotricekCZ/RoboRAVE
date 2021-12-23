@@ -116,8 +116,8 @@ class radius{
 				decimal_n rho = radius_c / distance;
 				decimal_n ad = pow(rho, 2);
 				decimal_n bd = rho * sqrt(1-pow(rho, 2));
-				ret.push_back(coordinates(center.x + ad * diff_x + bd*dxr, center.y + ad*diff_y + bd*dyr));
-				ret.push_back(coordinates(center.x + ad * diff_x - bd*dxr, center.y + ad*diff_y - bd*dyr));
+				ret.emplace_back(center.x + ad * diff_x + bd*dxr, center.y + ad*diff_y + bd*dyr);
+				ret.emplace_back(center.x + ad * diff_x - bd*dxr, center.y + ad*diff_y - bd*dyr);
 				}
 			return ret;
 			}

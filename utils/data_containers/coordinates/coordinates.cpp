@@ -112,7 +112,7 @@ coordinates coordinates::make_rotation(coordinates rel, decimal_n alpha){
 	//~ return coordinates(rel.x * cos(alpha) - (rel.y * sin(alpha)), rel.x * sin(alpha) + (rel.y * cos(alpha)));
 	//~ }
 
-
+/*
 coordinates coordinates::get_closest(std::vector<coordinates> &c){
 	if(c.size() == 0){return coordinates(std::numeric_limits<decimal_n>::infinity(), 
 										 std::numeric_limits<decimal_n>::infinity());
@@ -129,7 +129,7 @@ coordinates coordinates::get_closest(std::vector<coordinates> &c){
 		}
 	return *closest;
 	}
-	
+*/
 coordinates coordinates::get_closest(std::vector<coordinates> c){
 	if(c.size() == 0){return coordinates(std::numeric_limits<decimal_n>::infinity(), 
 										 std::numeric_limits<decimal_n>::infinity());

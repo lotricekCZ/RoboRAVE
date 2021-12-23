@@ -69,6 +69,7 @@ std::vector<coordinates> wall::is_collision_course(line l){
 	}
 
 
+
 std::vector<coordinates>  wall::is_collision_course(circle c){
 	std::vector<coordinates> inter;
 	for(uint8_t i = 0; i < 4; i++){
@@ -81,6 +82,9 @@ std::vector<coordinates>  wall::is_collision_course(circle c){
 	return inter;
 	
 	}
+
+
+
 
 std::array<coordinates, 2> wall::get_box(){
 	decimal_n min_x = properties.edges[0].x, min_y = properties.edges[0].y, 
@@ -95,6 +99,9 @@ std::array<coordinates, 2> wall::get_box(){
 	return {coordinates(min_x, min_y), coordinates(max_x, max_y)};
 	}
 
+
+
+
 std::string wall::print_inkscape(){
 	return "<rect \n\
 	inkscape:transform-center-y=\"-20\"\
@@ -107,13 +114,19 @@ std::string wall::print_inkscape(){
 	id=\"rect2551\"\n\
 	style=\"fill:#000000;stroke:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers\" />\n";		
 	}
-	
+
+
+
+
 std::string wall::print_geogebra(){
 	return "=Polygon["+ properties.edges[0].print_geogebra() + ", " 
 		+ properties.edges[1].print_geogebra() + ", " 
 		+ properties.edges[2].print_geogebra() + ", " 
 		+ properties.edges[3].print_geogebra() + "]";		
 	}
+
+
+
 
 coordinates wall::closest_point(coordinates c){
 	decimal_n minimal_distance = std::numeric_limits<decimal_n>::infinity();
@@ -127,5 +140,19 @@ coordinates wall::closest_point(coordinates c){
 		}
 	return *ret;
 	};
+
+
+
+coordinates wall::estimate_center(wall w){
+	return (std::accumulate(&w.properties.edges[0], &w.properties.edges[4], coordinates(0, 0))) / 4;
+	}
+
+
+
+coordinates wall::estimate_center(){
+	return wall::estimate_center(*this);
+	}
+
+
 
 #endif

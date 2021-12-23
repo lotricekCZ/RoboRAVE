@@ -8,6 +8,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 project(roborave VERSION 0.1.2)
 #~ target_link_libraries(roborave libserial pthread)
 
+option(HasOpenCV "HasOpenCV" ON)
+option(HasTorch "HasTorch" ON)
+
 file(GLOB SOURCE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 	)
@@ -18,18 +21,19 @@ find_package(PkgConfig REQUIRED)
 pkg_search_module(OpenCV REQUIRED opencv4)
 pkg_search_module(YAML_CPP REQUIRED yaml-cpp)
 #~ find_package(yaml-cpp)
-
-if (OpenCV_FOUND)
-    # If the package has been found, several variables will
-    # be set, you can find the full list with descriptions
-    # in the OpenCVConfig.cmake file.
-    # Print some message showing some of them
-    message(STATUS "OpenCV library status:")
-    message(STATUS "    version: ${OpenCV_VERSION}")
-    message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}" \n)
-
-else ()
-    message(FATAL_ERROR "Could not locate OpenCV" \n)
+if(HasOpenCV)
+	if (OpenCV_FOUND)
+	    # If the package has been found, several variables will
+	    # be set, you can find the full list with descriptions
+	    # in the OpenCVConfig.cmake file.
+	    # Print some message showing some of them
+	    message(STATUS "OpenCV library status:")
+	    message(STATUS "    version: ${OpenCV_VERSION}")
+	    message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}" \n)
+	
+	else ()
+	    message(FATAL_ERROR "Could not locate OpenCV" \n)
+	endif()
 endif()
 
 if (YAML_CPP_FOUND)
@@ -86,6 +90,7 @@ add_library(dijkstra 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner
 add_library(step 			SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/step.cpp)
 add_library(angles 			SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/data_containers/angles/angles/angles.cpp)
 add_library(avoider 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/avoidance_planner/avoider.cpp)
+add_library(plan_utils 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/planner_utils.cpp)
 add_library(planner 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/planner.cpp)
 add_library(path	 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/path.cpp)
 
@@ -110,8 +115,9 @@ target_link_libraries(step circle line coordinates vector)
 target_link_libraries(path step circle line coordinates vector)
 target_link_libraries(map location coordinates line circle wall surround_circle candle ${OpenCV_LIBRARIES} ${OpenCV_LDFLAGS})
 target_link_libraries(angles map location coordinates wall surround_circle candle)
-target_link_libraries(avoider location coordinates line circle wall surround_circle candle angles)
-target_link_libraries(planner location coordinates line circle wall surround_circle candle angles path avoider)
+target_link_libraries(avoider location coordinates line circle wall surround_circle candle angles path)
+target_link_libraries(plan_utils location coordinates line circle wall surround_circle candle angles path avoider)
+target_link_libraries(planner location coordinates line circle wall surround_circle candle angles path avoider plan_utils)
 
 target_link_libraries(serial -lCppLinuxSerial)
 target_link_libraries(yaml_worker variables ${YAML_CPP_LIBRARIES})
@@ -121,8 +127,10 @@ set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
 
 link_directories(${OpenCV_LIB_DIR})
 target_compile_features(roborave PRIVATE cxx_std_17)
+if(HasOpenCV)
+	target_link_libraries(roborave ${OpenCV_LIBRARIES} ${OpenCV_LDFLAGS}) 
+endif()
 target_link_libraries(roborave Threads::Threads 
-					${OpenCV_LIBRARIES} ${OpenCV_LDFLAGS} 
 					${YAML_CPP_LIBRARIES} ${TORCH_LIBRARIES}
 					log_maintain yaml_worker
 					serial 	variables	coordinates 
@@ -132,4 +140,5 @@ target_link_libraries(roborave Threads::Threads
 					candle	map			dijkstra
 					angles	planner		vector
 					avoider obsolete	path
+					plan_utils
 					)

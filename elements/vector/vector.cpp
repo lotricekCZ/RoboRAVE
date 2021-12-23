@@ -135,7 +135,7 @@ vector vector::operator + (const decimal_n& rhs){
 
 
 vector vector::operator / (const decimal_n& rhs){
-	return vector(this -> first, coordinates(second.x / rhs, second.y / rhs) - this -> first);
+	return vector(this -> first, this -> length()/rhs, this -> angle(), true);
 	}
 
 
@@ -182,4 +182,12 @@ vector vector::extend(vector v, decimal_n length){
 
 vector vector::extend(decimal_n length){
 	return extend(*this, length);
+	}
+
+vector vector::swap(vector v){
+	return vector(v.get_point(), v.get_origin());
+	}
+
+vector vector::swap(){
+	return vector::swap(*this);
 	}

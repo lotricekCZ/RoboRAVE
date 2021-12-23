@@ -29,6 +29,7 @@
 #include "../../../elements/circle/circle.hpp"
 #include "../../../elements/vector/vector.hpp"
 #include "../planner/step.hpp"
+#include "../planner/path.hpp"
 //~ #include "movement_utils.cpp"
 #include <vector>
 #include <stdexcept>
@@ -41,6 +42,7 @@ class avoider {
 	public:
 		avoider();
 		static std::vector<step> avoid(std::vector<step> steps, wall w);
+		static path avoid(path steps, std::vector<wall> w);
 		static void eliminate_tangents(std::vector<step>& steps, std::vector<step> circular_steps);
 		static void eliminate_tangents(std::vector<step>& steps, std::vector<circle> circles, std::vector<coordinates> selected, decimal_n escape_angle);
 		static std::vector<step> to_steps(std::vector<line> tangents, circle future, circle current);

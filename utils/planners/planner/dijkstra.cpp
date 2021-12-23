@@ -63,7 +63,7 @@ std::vector<dijk_node> dijkstra::generate_nodes(std::vector<coordinates>& coords
 	unsigned_b size = coords.size();
 	std::vector<dijk_node> nodes;
 	for(unsigned_b i = 0; i < size; i++){
-		nodes.push_back(dijk_node(i, coords[i]));
+		nodes.emplace_back(i, coords[i]);
 		if(coords[i] == start){
 			//~ std::cout << "start " << nodes[i].id << nodes[i].coords -> print() << std::endl;
 			nodes[i].distance_start = 0;
@@ -88,7 +88,7 @@ std::vector<edge> dijkstra::generate_edges(std::vector<dijk_node>& nodes, map& m
 		for(unsigned_b o = i ; o < size; o++){
 			if(collides_nowhere(m, *nodes[i].coords, *nodes[o].coords) && (nodes[o].id != nodes[i].id) ){
 				//~ std::cout << "Edge z " << nodes[i].coords -> print() << " do " << nodes[o].coords -> print() << "\tVZNIKA, delka\t" << nodes[o].coords -> get_distance(*nodes[i].coords) << std::endl;
-				edges.push_back(edge(&nodes[i], &nodes[o], nodes[i].coords -> get_distance(*nodes[o].coords)));
+				edges.emplace_back(&nodes[i], &nodes[o], nodes[i].coords -> get_distance(*nodes[o].coords));
 				}
 				//~ else{
 					//~ std::cout << "Edge z " << nodes[i].coords -> print() << " do " << nodes[o].coords -> print() << "\tNEVZNIKA" << std::endl;					

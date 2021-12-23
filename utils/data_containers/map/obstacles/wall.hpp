@@ -52,6 +52,8 @@ class wall: public obstacle
 		std::array<coordinates, 2> get_box();
 		std::string print_geogebra();
 		std::string print_inkscape();
+		static coordinates estimate_center(wall w);
+		coordinates estimate_center();
 	private:
 		/* add your private declarations */
 };

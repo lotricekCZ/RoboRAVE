@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <numeric>
 
 #include "../../../elements/line/line.hpp"
 #include "../../../elements/circle/circle.hpp"
