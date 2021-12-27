@@ -69,7 +69,7 @@ class planner {
 		std::vector<coordinates> coincidental_points_generate(std::vector<circle>& circles);
 		static std::vector<path> list_options(std::vector<circle> selected, coordinates end, coordinates start, decimal_n initial_rotation = 0);
 		static std::vector<path> suppress_by_sensibility(std::vector<path> selected);
-		static path avoid(path p, map &m);
+		static path avoid(path p, map &m, unsigned_b pit = -1);
 		/// line segment implementation
 		// deprecated, see step::on_segment, step::intersection etc.
 		bool collides(wall w, coordinates start, coordinates end);
@@ -88,17 +88,19 @@ class planner {
 		static wall get_closest_wall(coordinates c, map &m);
 		static std::vector<std::pair<std::vector<coordinates>, wall>> intersecting_walls(step s, map &m);
 		
-		static std::vector<planner::wall_container> avoid_linear_phase_0(path &p, map &m);
+		static std::vector<planner::wall_container> avoid_phase_0(path &p, map &m);
 		
 		static planner::wall_container avoid_linear_wall_select(planner::wall_container a);
+		static unsigned_b avoid_violation_number(planner::wall_container w);
+		static auto avoid_linear(wall w);
 		static auto avoid_linear_phase_1(wall w);
 		static std::vector<coordinates> avoid_linear_phase_2(wall &w, std::deque<vector> v, step s);
 		static auto avoid_linear_phase_3();
 		static auto avoid_linear_phase_4();
 		static auto avoid_linear_phase_5();
 		
-		//~ static auto avoid_circular_phase_0();
-		//~ static auto avoid_curcular_phase_1();
+		static std::vector<coordinates>  avoid_circular_phase_0(step s, map &m);
+		static auto avoid_circular_phase_1();
 		//~ static auto avoid_phase_2(path p, map &m);
 		/// makes plan geometrically, does not assign speeds or something exact
 		std::vector<coordinates> make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m);

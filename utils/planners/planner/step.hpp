@@ -129,6 +129,10 @@ class step
 		
 		line perpendicular_bisector();
 		
+		static decimal_n length(step s);
+		
+		decimal_n length();
+		
 	private:
 		static decimal_n get_distance_linears(step a, step b, bool carry_caps = true);
 		static decimal_n get_distance_circulars(step a, step b, bool carry_caps = true);

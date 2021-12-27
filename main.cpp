@@ -599,7 +599,7 @@ int main(int argc, char *argv[]) {
 			break;
 			}
 			
-		case 78:{ // shows intersection with circulars ./roborave 77  4 3  -3 1 1.066037736 0.0188679245 1
+		case 78:{ // shows intersection with circulars ./roborave 78  4 3  -3 1 1.066037736 0.0188679245 1
 			map m;
 	
 			coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 8), coordinates(-6, 7)};
@@ -628,6 +628,27 @@ int main(int argc, char *argv[]) {
 				
 			planner::avoid(pth, m);
 			//~ step::intersection(s, m);
+			break;
+			}
+			
+		case 79:{ // shows length for circular ./roborave 79  4 3  -3 1 1.066037736 0.0188679245 1
+			coordinates end(c_f(argv[2]), c_f(argv[3]));
+			coordinates start(c_f(argv[4]), c_f(argv[5]));
+			coordinates center(c_f(argv[6]), c_f(argv[7]));
+			step s(start, end, center, c_i(argv[8]) % 2);
+			
+			std::cout << s.print_geogebra() << std::endl;
+			std::cout << s.length() << std::endl;
+			break;
+			}
+		
+		case 80:{ // shows length for linear ./roborave 80  4 3  -3 1
+			coordinates end(c_f(argv[2]), c_f(argv[3]));
+			coordinates start(c_f(argv[4]), c_f(argv[5]));
+			step s(start, end);
+			
+			std::cout << s.print_geogebra() << std::endl;
+			std::cout << s.length() << std::endl;
 			break;
 			}
 		}

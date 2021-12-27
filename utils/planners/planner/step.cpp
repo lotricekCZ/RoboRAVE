@@ -401,6 +401,14 @@ decimal_n step::get_distance(step s, circle c){
 
 
 decimal_n step::get_distance(step a, step b, bool carry_caps){
+	decimal_n len_a = step::length(a), len_b = step::length(b);
+	if((len_a * len_b) <= 1e-4){
+		// act one of them as point
+		if(step::length(a) + step::length(b) <= 1e-4)
+			return a.start.get_distance(b.start); // both of them are points. Hysteria
+		return ((len_a <= 1e-4)?(step::get_distance(b, a.start)): (step::get_distance(a, b.start)));
+			
+		}
 	switch(a._type) {
 		case line_e: {
 			switch(b._type) {
@@ -448,8 +456,8 @@ decimal_n step::get_distance_linears(step a, step b, bool carry_caps){
 
 	if(step::intersection(a, b).size() != 0){
 		return 0;
-	}
-		
+		}
+	
 	std::vector<line> intersections;
 	decimal_n ret = std::numeric_limits<decimal_n>::infinity();
 	line a_start 	= std::get<line>(b.formula).make_perpendicular(a.start);
@@ -1367,4 +1375,26 @@ std::vector<vector> step::get_point_vectors(line l, wall w){
 	for(auto c: w.properties.edges)
 		ret.emplace_back(c, l.intersection(l.make_perpendicular(c)));
 	return ret;
+	}
+
+
+
+
+decimal_n step::length(step s){
+	switch(s._type){
+		case step::line_e:
+			return s.start.get_distance(s.end);
+		
+		case step::circle_e:
+			return std::get<circle>(s.formula).radius * (std::abs(s.phi) - 
+				std::floor((unsigned_b)(std::abs(s.phi)) / (const decimal_n)(2 * pi_const)) * (const decimal_n)(2 * pi_const));
+		}
+	return std::numeric_limits<decimal_n>::infinity();
+	}
+
+
+
+
+decimal_n step::length(){
+	return step::length(*this);
 	}

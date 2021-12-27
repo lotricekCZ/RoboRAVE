@@ -185,3 +185,8 @@ std::vector<std::vector<coordinates>> path::get_intersections(map m){
 	}
 
 
+void path::delete_zero_length(){
+	for(path::iterator i = this -> begin(); i != this -> end(); i++)
+		if(i -> length() <= 1e-4)
+			this -> erase(i--);
+	}

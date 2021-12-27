@@ -60,6 +60,8 @@ class path: public std::vector<step> {
 		using std::vector<step>::clear;
 		using std::vector<step>::data;
 		using std::vector<step>::insert;
+		using std::vector<step>::iterator;
+		using std::vector<step>::erase;
 		
 		path(std::vector<step> copy, bool start = true, bool end = true);
 		path(const path& copy);
@@ -69,6 +71,7 @@ class path: public std::vector<step> {
 		//~ void insert(std::vector<step>::iterator, path inserted);
 		void reorder();
 		void assemble();
+		void delete_zero_length();
 		
 		void set_variable_start(bool state);
 		void set_variable_end(bool state);
