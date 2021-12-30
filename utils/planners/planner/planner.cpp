@@ -665,8 +665,30 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 				std::vector<coordinates> candidates = planner::avoid_circular_phase_0(ret_pth.at(index), m);
 				for(auto c: candidates)
 					std::cout << c.print() << std::endl;
-				index = 0; // for now
-				return ret_pth;
+				std::vector<circle> curve = {(((index - 1)) ? std::get<circle>(ret_pth.at(index - 2).formula): circle(ret_pth.at(index).start, 0)), circle(candidates.at(0), safe_dist)};
+				std::vector<path> replacement = planner::list_options(curve, ret_pth.at(index).end, ret_pth.at(index).start, ret_pth.at(index).angle_start);
+				
+				for(auto r: replacement){
+					auto r_zero = r;
+					r_zero.delete_zero_length();
+						std::cout << "cesta\n" << r_zero.print() << std::endl;
+						close_points = planner::avoid_phase_0(r_zero, m);
+						std::cout << "VIOLATORI CIRKULE\n" << planner::avoid_violation_number(close_points.at(close_points.size() - (1 + index))) << std::endl;
+						//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+						if(!planner::avoid_violation_number(close_points.at(close_points.size() - (1 + index)))){ // if the size at the index is equal zero
+							//~ replacement.assign({r_zero});
+							ret_pth.erase(ret_pth.begin() + index, ret_pth.end());
+							ret_pth.insert(ret_pth.end(), r_zero.begin(), r_zero.end());
+							index = ret_pth.size() - (2 + index);
+							std::cout << "cesta\n" << r_zero.print() << "\nr_zero " << r_zero.size() << "\nret_pth " << ret_pth.size() << "\nindex " << r_zero.size() - (2 + index) << std::endl;
+							std::cout << "This " << __FILE__ << " " << __LINE__ << "\n\n\n\n\n\n\n\n\n\n\n\n" << std::endl;
+							std::cout << "EVEN This " << __FILE__ << " " << __LINE__ << std::endl;
+							//~ condition = false;
+							//~ index = r_zero.size() - (2 + index);
+							//~ break;
+							break;
+							}
+						}
 				break;
 				}
 			}
@@ -853,10 +875,24 @@ auto planner::avoid_linear_phase_5(){
 
 std::vector<coordinates> planner::avoid_circular_phase_0(step s, map &m){ // the acknowledging phase: to know if any points may be used on the current side
 	constexpr decimal_n safe_dist = robot_radius * safe_constant;
+	decimal_n length = std::numeric_limits<decimal_n>::infinity();
+	unsigned_b ret_c = std::numeric_limits<unsigned_b>::infinity();
 	std::vector<coordinates> ret; 
+	std::vector<coordinates> ret_h; 
 	circle form = std::get<circle>(s.formula);
+	circle form_mirror((vector(form.center, s.end) >> s.end).get_point(), form.radius);
+	step s_mirrored((vector(s.start, form.center) >> form_mirror.center).get_point(),
+					s.end, form_mirror.center, !s.direction_curve);
+	/* line::intersection(line((s.angle_end - pi_const/2), s.end), line((s.angle_end), s.end))) >> s.end).get_point()
+	 * - this made an exactly mirrored copy of step s, but it was rather unusable as it
+	 * 		was prone to select the exact point where the step from which it is 
+	 * 		derived from has the rotation center.
+	 * 
+	 * */
+	//~ std::cout << form_mirror.print() << std::endl;
+	std::cout << s_mirrored.print_geogebra() << std::endl;
 	for(auto w: m._map_walls)
-		for(auto e: w.properties.edges)
+		for(auto e: w.properties.edges){
 			for(auto c: circle::tangent_points(form, e)){
 				//~ std::cout << c.get_gamma(e)* 180/pi_const << "° and " << (form.center.get_gamma(c) + (const decimal_n)(pi_const / 2) *
 						//~ (1 + s.direction_curve * -2)) << "°" << std::endl;
@@ -864,13 +900,43 @@ std::vector<coordinates> planner::avoid_circular_phase_0(step s, map &m){ // the
 					std::abs(std::sin(c.get_gamma(e)) - std::sin(form.center.get_gamma(c) + (const decimal_n)(pi_const / 2) *
 						(1 + !s.direction_curve * -2))) <= 1e-3){
 					std::cout << "BOD CIRKULARU" << std::endl;
-					std::cout << c.print() << std::endl;
-					std::cout << e.print() << std::endl;
+					//~ std::cout << c.print() << std::endl;
+					//~ std::cout << e.print() << std::endl;
 					ret.push_back(e);
+					ret_h.push_back(c);
 					break;
 					}
 				}
-			
+			/*
+			 * for(auto c: circle::tangent_points(form_mirror, e)){
+				//~ std::cout << c.get_gamma(e)* 180/pi_const << "° and " << (form.center.get_gamma(c) + (const decimal_n)(pi_const / 2) *
+						//~ (1 + s.direction_curve * -2)) << "°" << std::endl;
+				if(s_mirrored.on_segment(c) && std::abs(std::sin(c.get_gamma(e)) - std::sin(form_mirror.center.get_gamma(c) + (const decimal_n)(pi_const / 2) *
+						(1 + s.direction_curve * -2))) <= 1e-3){
+					std::cout << "BOD CIRKULARU 2" << std::endl;
+					std::cout << c.print() << std::endl;
+					std::cout << e.print() << std::endl;
+					ret.push_back(e);
+					ret_h.push_back(c);
+					break;
+					}
+				}
+				* 
+				*/
+			}
+	for(unsigned_b i = 0; i < ret.size(); i++){
+		bool segment_sel = s.on_segment(ret_h.at(i));
+		decimal_n len_c = step(s.end, ret_h.at(i), 
+								(segment_sel)? form.center: form_mirror.center, 
+								segment_sel ^ s.direction_curve).length();
+		if(len_c < length){
+			length = len_c;
+			ret_c = i;
+			}
+		}
+	ret.assign({ret.at(ret_c)});
+	std::cout << "BOD\n" << ret.back().print() << std::endl;
+	
 	return ret;
 	}
 	
