@@ -92,10 +92,11 @@ namespace mf {
 		const decimal_n FPS_SMOOTHING = 0.9;
 		cv::VideoCapture cap(0);//cap.set(cv::CAP_PROP_FRAME_WIDTH, 4);
 		//~ cv::VideoCapture cap_1(1);//cap.set(cv::CAP_PROP_FRAME_WIDTH, 4);
-		cap.set(cv::CAP_PROP_FRAME_HEIGHT, 800);
+		cap.set(cv::CAP_PROP_FRAME_WIDTH, 320);
+		cap.set(cv::CAP_PROP_FRAME_HEIGHT, 160);
 		//~ dnn::readNetFromONNX
 		//~ dnn::DetectionModel d("best.mlmodel");
-		cap.set(cv::CAP_PROP_FPS, 8);
+		cap.set(cv::CAP_PROP_FPS, 2);
 		//~ std::vector<int> classIds;
 		//~ std::vector<float> confidences;
 		//~ std::vector<cv::Rect> boxes;

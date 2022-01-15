@@ -607,6 +607,7 @@ int main(int argc, char *argv[]) {
 			coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
 			coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
 			coordinates a[] = {coordinates(3, -3), coordinates(6, 0), coordinates(7, -1), coordinates(4, -4)};
+			coordinates b[] = {coordinates(9, 2), coordinates(9, 3), coordinates(13, 3), coordinates(13, 2)};
 			
 			//~ m.append(candle(coordinates(4,3)));
 			m.append(wall(c));
@@ -614,6 +615,7 @@ int main(int argc, char *argv[]) {
 			m.append(wall(y));
 			m.append(wall(z));
 			m.append(wall(a));
+			m.append(wall(b));
 			planner p;
 			
 			
@@ -649,6 +651,43 @@ int main(int argc, char *argv[]) {
 			
 			std::cout << s.print_geogebra() << std::endl;
 			std::cout << s.length() << std::endl;
+			break;
+			}
+			
+		case 81:{ // tests same thing as 38, but a lot closer circles ./roborave 81  4 3  -3 1
+			map m;
+		
+			coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 8), coordinates(-6, 7)};
+			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
+			coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
+			coordinates a[] = {coordinates(3, -3), coordinates(6, 0), coordinates(7, -1), coordinates(4, -4)};
+			
+			//~ m.append(candle(coordinates(4,3)));
+			m.append(wall(c));
+			m.append(wall(x));
+			m.append(wall(y));
+			m.append(wall(z));
+			m.append(wall(a));
+			for(auto w: m._map_walls)
+				std::cout << w.print_geogebra() << std::endl;
+			planner p;
+			//~ angles a = angles().load_virtual(coordinates(-5, 2), m);
+			//~ for(auto i: a)
+			//~ std::cout << a.get_angle(0).position._coordinates.print() << std::endl;
+			//~ std::cout << a.get_angle(0).distance << std::endl;
+			//~ std::cout << a.size() << std::endl;
+			
+			
+			
+			
+			//~ std::vector <line> clan = p.plan_trace(plan, coordinates(c_f(argv[2]), c_f(argv[3])), coordinates(-5, 2), m);
+			//~ std::cout << m._map_walls[0].is_collision_course(circle(coordinates(-5, 2), 6))[1].print() << std::endl;
+			std::srand(std::time(nullptr)); 
+
+			std::vector<coordinates> c_plan({coordinates(-5, 2), coordinates(4, -5), coordinates(8, -1), coordinates(4, 3)});
+			for(auto o: planner::list_options(std::vector<circle>({circle(coordinates(-5, 4), 2), circle(coordinates(4, -1), 2), circle(coordinates(5, -1), 2)}), 
+				coordinates(4, 3), coordinates(-5, 2), 0)) std::cout << o.print() << std::endl;
 			break;
 			}
 		}

@@ -50,8 +50,8 @@ bool circle::inside(decimal_n x, decimal_n y){
 	}
 
 	
-bool circle::is_on(coordinates c){
-	return std::abs(pow(c.x - center.x, 2) + pow(c.y - center.y, 2) - pow(radius, 2)) <= 1e-3;
+bool circle::is_on(coordinates c, decimal_n thresh){
+	return std::abs(pow(c.x - center.x, 2) + pow(c.y - center.y, 2) - pow(radius, 2)) <= thresh;
 	}
 
 	
@@ -158,10 +158,10 @@ std::vector<coordinates> circle::intersection(circle c) {
 
 void circle::circle_tangents (coordinates c, decimal_n r1, decimal_n r2, std::vector<line> & ans) {
     decimal_n r = r2 - r1;
-    decimal_n z = pow(c.x, 2) + pow(c.y, 2);
-    decimal_n d = z - pow(r, 2);
+    decimal_n z = std::pow(c.x, 2) + std::pow(c.y, 2);
+    decimal_n d = z - std::pow(r, 2);
     if (d < -(1e-4))  return;
-    d = sqrt (abs (d));
+    d = std::sqrt(std::abs(d));
     line l;
     l.a = (c.x * r + c.y * d) / z;
     l.b = (c.y * r - c.x * d) / z;
@@ -190,8 +190,8 @@ std::vector<coordinates> circle::tangent_points(circle c, coordinates point){
 	std::vector<coordinates> ret;
 	if (distance >= c.radius){
 		decimal_n rho = c.radius / distance;
-		decimal_n ad = pow(rho, 2);
-		decimal_n bd = rho * sqrt(1-pow(rho, 2));
+		decimal_n ad = std::pow(rho, 2);
+		decimal_n bd = rho * std::sqrt(1-std::pow(rho, 2));
 		ret.assign({coordinates(c.center.x + ad * diff_x + bd * dxr, c.center.y + ad * diff_y + bd * dyr),
 					coordinates(c.center.x + ad * diff_x - bd * dxr, c.center.y + ad * diff_y - bd * dyr)});
 		}

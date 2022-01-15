@@ -67,7 +67,10 @@ class planner {
 		
 		std::vector<step> plan_make(std::vector<coordinates> selected, map &m, decimal_n initial_rotation = 0); 
 		std::vector<coordinates> coincidental_points_generate(std::vector<circle>& circles);
-		static std::vector<path> list_options(std::vector<circle> selected, coordinates end, coordinates start, decimal_n initial_rotation = 0);
+		static std::vector<path> list_options(std::vector<circle> selected, coordinates end, 
+			coordinates start, 
+			decimal_n initial_rotation = 0, 
+			decimal_n terminal_rotation = std::numeric_limits<decimal_n>::infinity());
 		static std::vector<path> suppress_by_sensibility(std::vector<path> selected);
 		static path avoid(path p, map &m, unsigned_b pit = -1);
 		/// line segment implementation
@@ -99,8 +102,8 @@ class planner {
 		static auto avoid_linear_phase_4();
 		static auto avoid_linear_phase_5();
 		
-		static std::vector<coordinates>  avoid_circular_phase_0(step s, map &m);
-		static auto avoid_circular_phase_1();
+		static std::vector<wall> avoid_circular_phase_0(planner::wall_container w);
+		static std::vector<coordinates> avoid_circular_phase_1(step s, wall w);
 		//~ static auto avoid_phase_2(path p, map &m);
 		/// makes plan geometrically, does not assign speeds or something exact
 		std::vector<coordinates> make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m);

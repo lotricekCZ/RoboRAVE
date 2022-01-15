@@ -49,7 +49,7 @@ class circle{
 		
 		bool inside(coordinates a);
 		bool inside(decimal_n x, decimal_n y);
-		bool is_on(coordinates c);
+		bool is_on(coordinates c, decimal_n thresh = 1e-3);
 		
 		static void circle_tangents(coordinates c, decimal_n r1, decimal_n r2, std::vector<line> & ans);
 		static std::vector<coordinates> tangent_points(circle c, coordinates point);

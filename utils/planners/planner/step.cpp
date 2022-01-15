@@ -1398,3 +1398,15 @@ decimal_n step::length(step s){
 decimal_n step::length(){
 	return step::length(*this);
 	}
+
+
+
+coordinates step::get_center(step s){
+	return ((s._type)? std::get<circle>(s.formula).center: ((s.start + s.end) / 2));
+	}
+	
+	
+	
+coordinates step::get_center(){
+	return step::get_center(*this);
+	}

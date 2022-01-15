@@ -133,6 +133,8 @@ class step
 		
 		decimal_n length();
 		
+		static coordinates get_center(step s);
+		coordinates get_center();
 	private:
 		static decimal_n get_distance_linears(step a, step b, bool carry_caps = true);
 		static decimal_n get_distance_circulars(step a, step b, bool carry_caps = true);
