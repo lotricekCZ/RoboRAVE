@@ -608,6 +608,7 @@ int main(int argc, char *argv[]) {
 			coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
 			coordinates a[] = {coordinates(3, -3), coordinates(6, 0), coordinates(7, -1), coordinates(4, -4)};
 			coordinates b[] = {coordinates(9, 2), coordinates(9, 3), coordinates(13, 3), coordinates(13, 2)};
+			coordinates d[] = {coordinates(1, 5), coordinates(2, 6), coordinates(0, 8), coordinates(-1, 7)};
 			
 			//~ m.append(candle(coordinates(4,3)));
 			m.append(wall(c));
@@ -616,6 +617,7 @@ int main(int argc, char *argv[]) {
 			m.append(wall(z));
 			m.append(wall(a));
 			m.append(wall(b));
+			m.append(wall(d));
 			planner p;
 			
 			

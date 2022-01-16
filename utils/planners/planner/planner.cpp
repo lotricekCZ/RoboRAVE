@@ -576,8 +576,9 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 	/// 0(): acknowledge if there are any close_points available
 	path ret_pth = p;
 	unsigned_b index = (p.size() <= pit)? p.size() - 1: pit;
-	
+	bool is_last = true;
 	do {
+		is_last = (index == 0);
 		std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 		std::vector<planner::wall_container> 
 		close_points = planner::avoid_phase_0(ret_pth, m);
@@ -701,6 +702,7 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 								std::cout << "cesta\n" << r_zero.print() << "\nr_zero " << r_zero.size() << "\nret_pth " << ret_pth.size() << "\nindex " << std::to_string(index) << std::endl;
 								std::cout << "This " << __FILE__ << " " << __LINE__ << "\n\n\n\n\n\n\n\n\n\n\n\n" << std::endl;
 								std::cout << "EVEN This " << __FILE__ << " " << __LINE__ << std::endl;
+								is_last = (index == 0);
 								condition = false;
 								//~ break;
 								}
@@ -736,17 +738,48 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 					//~ std::cout << "index odecten: " << (index) << "\t" << ret_pth.size() << std::endl;
 					std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 					std::vector<wall> candidate_wall = planner::avoid_circular_phase_0(close_points.at(index));
+					if(index != 0)
+						if(ret_pth.at(index - 1)._type == step::line_e)
+							for(wall w: m._map_walls){
+								std::cout << "THIS OCCURRED" << std::endl;
+								std::cout << w.print_geogebra() << std::endl;
+								line l = std::get<line>(ret_pth.at(index - 1).formula);
+								auto c = w.is_collision_course(l);
+								step s = ret_pth.at(index - 1);
+								std::cout << l.print() << std::endl;
+								for(auto a: c){
+									std::cout << a.print() << std::endl;
+									if(s.on_segment(a) | s.end.get_distance(a) > s.start.get_distance(a)){
+										// push_back if that wall is somewhere before end
+										candidate_wall.push_back(w);
+										break;
+										}
+									}
+								}
 					//~ for(auto c: candidate_wall)
 						//~ std::cout << c.print_geogebra() << std::endl;
 					//~ return p;
-					if(!candidate_wall.size()){system("figlet \"ESCAPE VIA CONTINUE 700\""); condition = false; continue;}
+					if(!candidate_wall.size()){index--; system("figlet \"ESCAPE VIA CONTINUE 700\""); condition = false; continue;}
 					std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
-					std::cout << "CANDIDATE\n" << candidate_wall.front().print_geogebra() << std::endl;
+					for(auto o: candidate_wall)
+						std::cout << "CANDIDATE\n" << o.print_geogebra() << std::endl;
+					std::vector<std::vector<coordinates>> temporary;
 					std::vector<coordinates> candidates;
+					std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+					
+					//~ std::cout << "circle candidate\n" << std::endl;
+					//~ for(auto t: temporary)
+						//~ for(auto c: t)
+							//~ std::cout << c.print() << std::endl;
+					
+					
 					for(auto cw: candidate_wall){
-						candidates = planner::avoid_circular_phase_1(*close_points.at(index).first, cw);
+						candidates = planner::avoid_circular_phase_1(*close_points.at(index).first, candidate_wall);
+						temporary.clear();
+						//~ std::unique();
+						std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 						for(auto c: candidates)
-							std::cout << c.print() << std::endl;
+							std::cout << "circle candidate\n" << c.print() << std::endl;
 						std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 						if(!candidates.size()){system("figlet \"ESCAPE VIA CONTINUE 707\""); continue;}
 						//~ std::cout << 
@@ -768,12 +801,11 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 							(((index - 1)) ? (ret_pth.at(index - 2)).angle_start: (ret_pth.front().angle_start)));
 						for(auto o: replacement) std::cout << o.print() << std::endl;
 						std::cout << "pocet cest" << replacement.size() << std::endl;
-						uint8_t id = 0;
 						for(auto r: replacement){
 							auto r_zero = r;
 							r_zero.delete_zero_length();
 							close_points = planner::avoid_phase_0(r_zero, m);
-							if(close_points.at(r_zero.size() - ret_pth.size() + index + 1).first -> direction_curve == ret_pth.at(index).direction_curve){
+							if(close_points.at(r_zero.size() - 1).first -> direction_curve == ret_pth.at(index).direction_curve){
 								if(!(close_points.at(r_zero.size() - 1).first -> intersection(candidate_wall.front()).size() 
 									+ planner::avoid_violation_number(close_points.at(r_zero.size() - 2)))){ // if the size at the index is equal zero
 									//~ replacement.assign({r_zero});
@@ -790,6 +822,7 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 									std::cout << "cesta_cela\n" << ret_pth.print() << std::endl << std::endl;
 									//~ std::this_thread::sleep_for(std::chrono::seconds(1));
 									std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+									is_last = (index == 0);
 									break;
 									}
 								}
@@ -820,7 +853,7 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 				//~ }
 			
 			//~ }
-		} while((index - 1) < index);
+		} while(((index - 1) < index ^ is_last) | !is_last);
 	
 	std::cout << ret_pth.print() << std::endl;
 	
@@ -1027,7 +1060,7 @@ std::vector<wall> planner::avoid_circular_phase_0(planner::wall_container w){ //
 
 
 
-std::vector<coordinates> planner::avoid_circular_phase_1(step s, wall w){ // the acknowledging phase: to know if any points may be used on the current side
+std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wall> w){ // the acknowledging phase: to know if any points may be used on the current side
 	std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	constexpr decimal_n safe_dist = robot_radius * safe_constant;
 	decimal_n length = std::numeric_limits<decimal_n>::infinity();
@@ -1037,9 +1070,73 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, wall w){ // the
 	std::vector<coordinates> ret_h; 
 	circle form = std::get<circle>(s.formula);
 	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+	// generating temporary point vector which contains all non-duplicate condition-matching points
+	std::vector<std::vector<coordinates>> temporary;
+	std::vector<wall> w_temp = w;
+	auto is_duplicate = [&](auto a, auto b){
+		unsigned_n coincidences = 0;
+		for(uint8_t i = 0; i < 4; i++){
+			for(uint8_t j = 0; j < 4; j++){
+				coincidences += (a.properties.edges[i] == b.properties.edges[j]);
+				}
+			}
+		return (a.estimate_center() == b.estimate_center()) && coincidences >= 2;
+		};
+	std::cout << "WALL SIZE\t" << w.size() << std::endl;
+	for(unsigned_b i = 0; i < w_temp.size(); i++)
+		for(unsigned_b j = i + 1; j < w_temp.size(); j++)
+			if(is_duplicate(w_temp.at(i), w_temp.at(j)))
+				w_temp.erase(w_temp.begin() + j--);
+	
+	std::cout << "WALL_TEMP SIZE\t" << w_temp.size() << std::endl;
+	for(auto o: w_temp){
+		temporary.emplace_back();
+		for(uint8_t i = 0; i < 4; i++)
+			temporary.back().push_back(o.properties.edges[i]);
+			}
+	
+	//~ for(auto o: temporary){
+		//~ for(auto r: o)
+			//~ std::cout << r.print() << std::endl;
+		//~ }
+	
+	for(unsigned_b i = 0; i < temporary.size(); i++){
+		for(unsigned_b j = 0; j < temporary.at(i).size(); j++){
+			bool erase = false;
+			for(unsigned_b k = i + 1; k < temporary.size(); k++){
+				for(unsigned_b l = 0; l < temporary.at(k).size(); l++){
+					if(temporary.at(i).at(j).get_distance(temporary.at(k).at(l)) < (5e-2)){
+						std::cout << "ERASING - DISTANCE\n" << temporary.at(i).at(j).print() << std::endl;
+						temporary.at(k).erase(temporary.at(k).begin() + l--);
+						erase = true;
+						}
+					}
+				}
+			if(erase) temporary.at(i).erase(temporary.at(i).begin() + j--);
+			}
+		}
+		
+	for(unsigned_b i = 0; i < temporary.size(); i++){
+		for(unsigned_b j = 0; j < temporary.size(); j++){
+			if(i != j){
+				for(unsigned_b k = 0; k < temporary.at(j).size(); k++){
+					if(step::get_distance(temporary.at(j).at(k), w_temp.at(i)) < (2.5e-1)){
+						std::cout << "ERASING - WALL\n" << temporary.at(j).at(k).print() << std::endl;
+						temporary.at(j).erase(temporary.at(j).begin() + k--);
+						}
+					}
+				}
+			}
+		}
+	
+	for(auto s: temporary)
+		ret.insert(ret.end(), s.begin(), s.end());
+	
 	circle form_mirror((vector(form.center, s.end) >> s.end).get_point(), form.radius);
 	step s_mirrored((vector(s.start, form.center) >> form_mirror.center).get_point(),
 					s.end, form_mirror.center, !s.direction_curve);
+	step s_extended((vector(s.end, form.center) >> form.center).get_point(),
+					s.end, form.center, s.direction_curve);
 	/* line::intersection(line((s.angle_end - pi_const/2), s.end), line((s.angle_end), s.end))) >> s.end).get_point()
 	 * - this made an exactly mirrored copy of step s, but it was rather unusable as it
 	 * 		was prone to select the exact point where the step from which it is 
@@ -1049,26 +1146,29 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, wall w){ // the
 	//~ std::cout << form_mirror.print() << std::endl;
 	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	std::cout << s_mirrored.print_geogebra() << std::endl;
+	std::cout << s_extended.print_geogebra() << std::endl;
 	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	//~ for(auto w: m._map_walls)
 	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	std::cout << s.print_geogebra() << std::endl;
-	for(auto e: w.properties.edges){
-		std::cout << e.print() << std::endl;
-		for(auto c: circle::tangent_points(form, e)){
+	unsigned_b redundant = ret.size();
+	for(unsigned_b e = 0; e < redundant; e++){
+		std::cout << ret.at(e).print() << std::endl;
+		for(auto c: circle::tangent_points(form, ret.at(e))){
 			//~ std::cout << c.get_gamma(e)* 180/pi_const << "° and " << (form.center.get_gamma(c) + (const decimal_n)(pi_const / 2) *
 					//~ (1 + s.direction_curve * -2)) << "°" << std::endl;
-			if(s.on_segment(c) && 
-				std::abs(std::sin(c.get_gamma(e)) - std::sin(form.center.get_gamma(c) + (const decimal_n)(pi_const / 2) *
+			if((s.on_segment(c) | s_extended.on_segment(c)) && 
+				std::abs(std::sin(c.get_gamma(ret.at(e))) - std::sin(form.center.get_gamma(c) + (const decimal_n)(pi_const / 2) *
 					(1 + !s.direction_curve * -2))) <= 1e-3){
 				//~ std::cout << "BOD CIRKULARU" << std::endl;
 				//~ std::cout << c.print() << std::endl;
 				//~ std::cout << e.print() << std::endl;
-				ret.push_back(e);
+				ret.push_back(ret.at(e));
 				ret_h.push_back(c);
 				break;
 				}
 			}
+	
 		/*
 		 * for(auto c: circle::tangent_points(form_mirror, e)){
 			//~ std::cout << c.get_gamma(e)* 180/pi_const << "° and " << (form.center.get_gamma(c) + (const decimal_n)(pi_const / 2) *
@@ -1087,6 +1187,11 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, wall w){ // the
 			*/
 		}
 	
+	ret.erase(ret.begin(), ret.begin() + (redundant));
+	
+	std::cout << "RET" << std::endl;
+	for(auto o: ret)
+		std::cout << o.print() << std::endl;
 	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	//~ std::cout << "SIZE " << ret.size() << std::endl;
 	if(ret.size()) std::cout << "STEP\n" << std::endl;
@@ -1094,7 +1199,7 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, wall w){ // the
 								//~ (s.on_segment(ret_h.front()))? form.center: form_mirror.center, 
 								//~ s.on_segment(ret_h.front()) ^ s.direction_curve).print_geogebra() << std::endl;
 	for(unsigned_b i = 0; i < ret.size(); i++){
-		bool segment_sel = s.on_segment(ret_h.at(i));
+		bool segment_sel = s.on_segment(ret_h.at(i)) | s_extended.on_segment(ret_h.at(i));
 		decimal_n len_c = step(s.end, ret_h.at(i), 
 								(segment_sel)? form.center: form_mirror.center, 
 								segment_sel ^ s.direction_curve).length();
@@ -1102,15 +1207,24 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, wall w){ // the
 								(segment_sel)? form.center: form_mirror.center, 
 								segment_sel ^ s.direction_curve).print_geogebra() << std::endl;
 		bool not_through = true;
-		for(auto c: step(ret_h.at(i), ret.at(i)).intersection(w)) 
-			if(!(c == ret.at(i))){
-				not_through = false;
-				//~ system("figlet \"goes thru\"");
-				//~ std::cout << step(ret_h.at(i), ret.at(i)).print_geogebra() << std::endl;
-				}
-
-			
-		if(len_c < length && !w.inside(ret_h.at(i)) && not_through){
+		bool not_inside = true;
+		for(auto wc: w_temp){
+			for(auto c: step(ret_h.at(i), ret.at(i)).intersection(wc)){
+				if(!(c == ret.at(i))){
+					not_through = false;
+					break;
+					}
+				if(wc.inside(((segment_sel)? form.center: form_mirror.center)))
+					if(step(ret_h.at(i), ret.at(i)).on_segment(c) && !(ret.at(i) == c)){
+						std::cout << "THROUGH\n" << step(ret_h.at(i), ret.at(i)).print_geogebra() << std::endl;
+						not_through = false;
+						break;
+						}
+					}
+			not_inside &= !wc.inside(ret_h.at(i));
+			}
+		
+		if(len_c < length && not_inside && not_through){
 			length = len_c;
 			ret_c = i;
 			}

@@ -103,7 +103,7 @@ class planner {
 		static auto avoid_linear_phase_5();
 		
 		static std::vector<wall> avoid_circular_phase_0(planner::wall_container w);
-		static std::vector<coordinates> avoid_circular_phase_1(step s, wall w);
+		static std::vector<coordinates> avoid_circular_phase_1(step s, std::vector<wall> w);
 		//~ static auto avoid_phase_2(path p, map &m);
 		/// makes plan geometrically, does not assign speeds or something exact
 		std::vector<coordinates> make_path(std::vector<coordinates> &c, coordinates start, coordinates end, map &m);

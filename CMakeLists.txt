@@ -123,7 +123,7 @@ target_link_libraries(serial -lCppLinuxSerial)
 target_link_libraries(yaml_worker variables ${YAML_CPP_LIBRARIES})
 
 
-set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++17 -g ${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
 
 link_directories(${OpenCV_LIB_DIR})
 target_compile_features(roborave PRIVATE cxx_std_17)
