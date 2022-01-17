@@ -1306,6 +1306,15 @@ std::vector<vector> step::get_point_vectors(step s, wall w){
 
 
 
+std::vector<vector> step::get_point_vectors(line l, std::vector<coordinates> points){
+	std::vector<vector> ret;
+	for(auto c: points)
+		ret.emplace_back(c, l.intersection(l.make_perpendicular(c)));
+	return ret;
+	}
+
+
+
 std::vector<vector> step::get_vectors(std::vector<coordinates> points){
 	return get_vectors(*this, points);
 	}

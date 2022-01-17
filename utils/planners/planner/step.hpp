@@ -41,12 +41,15 @@ class step
 {
 	public:
 	speeds v;
-	enum direction:bool{left = 0, right = 1};
+	enum direction: bool {
+		left = 0, 
+		right = 1
+		};
 	coordinates start;
 	coordinates end;
 	bool direction_curve;
 	std::variant<circle, line> formula;
-	enum equation_type: bool{
+	enum equation_type: bool {
 		line_e = 0,
 		circle_e = 1
 		};
@@ -117,6 +120,7 @@ class step
 		static std::vector<vector> get_vectors(step s, wall w);
 		static std::vector<vector> get_point_vectors(step s, wall w);
 		static std::vector<vector> get_point_vectors(line l, wall w);
+		static std::vector<vector> get_point_vectors(line l, std::vector<coordinates> points);
 		
 		std::vector<decimal_n> get_distances(std::vector<coordinates> points);
 		std::vector<decimal_n> get_distances(wall w);
