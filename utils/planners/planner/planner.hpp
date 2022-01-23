@@ -102,6 +102,8 @@ class planner {
 		static auto avoid_linear_phase_4();
 		static auto avoid_linear_phase_5();
 		
+		static void avoid_get_points(std::vector<std::vector<coordinates>>& temporary, std::vector<wall>& closest_wall);
+		static std::vector<wall> avoid_get_close_walls(map &m, std::vector<wall>& closest_wall);
 		static std::vector<wall> avoid_circular_phase_0(planner::wall_container w);
 		static std::vector<coordinates> avoid_circular_phase_1(step s, std::vector<wall> w);
 		//~ static auto avoid_phase_2(path p, map &m);

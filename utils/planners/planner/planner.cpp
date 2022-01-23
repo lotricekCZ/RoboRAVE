@@ -627,92 +627,10 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 					closest_wall.assign({*std::get<wall *>(closest.second.front())});
 					std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 
-					// confirm duplicates
-					auto is_duplicate = [&](auto a, auto b){
-						unsigned_n coincidences = 0;
-						for(uint8_t i = 0; i < 4; i++){
-							for(uint8_t j = 0; j < 4; j++){
-								coincidences += (a.properties.edges[i] == b.properties.edges[j]);
-								}
-							}
-						return (a.estimate_center() == b.estimate_center()) && coincidences >= 2;
-						};
-
-					
-					// confirm being close
-					auto is_close = [&](auto a, auto b, decimal_n predicate){
-						decimal_n shortest_dist = std::numeric_limits<decimal_n>::infinity();
-						for(uint8_t i = 0; i < 4; i++){
-							shortest_dist = std::min(shortest_dist, step::get_distance(step(a.properties.edges[i], a.properties.edges[(i+1)%4]), b));
-							}
-						return shortest_dist <= predicate;
-						};
-					
-					// adds close walls
-					{
-					bool close = false;
-						do {
-							close = false;
-							for(unsigned_b i = 0; i < m._map_walls.size(); i++){
-								for(auto cls: closest_wall){
-									if((is_close(m._map_walls.at(i), cls, 2 * safe_dist))){
-										bool non_duplicate = true;
-										for(auto chk: closest_wall)
-											non_duplicate &= !is_duplicate(m._map_walls.at(i), chk);
-										
-										if(non_duplicate){
-											closest_wall.push_back(m._map_walls.at(i)); close = true;}
-										}
-									}
-								}
-							} while(close);
-					}
-					// remove duplicates
-					for(unsigned_b i = 0; i < closest_wall.size(); i++)
-						for(unsigned_b j = 0; j < closest_wall.size(); j++)
-							if(is_duplicate(closest_wall.at(i), closest_wall.at(j)) && i != j){
-								closest_wall.erase(closest_wall.begin() + j);
-								j = 0;
-								}
+					planner::avoid_get_close_walls(m, closest_wall);
+					planner::avoid_get_points(temporary, closest_wall);
 					
 					
-					for(auto o: closest_wall){
-						temporary.emplace_back(&o.properties.edges[0], &o.properties.edges[4]);
-						//~ temporary.emplace_back();
-						//~ for(uint8_t i = 0; i < 4; i++)
-							//~ temporary.back().push_back(o.properties.edges[i]);
-						}
-					
-					// erasing them for being too close
-					for(unsigned_b i = 0; i < temporary.size(); i++){
-						for(unsigned_b j = 0; j < temporary.at(i).size(); j++){
-							bool erase = false;
-							for(unsigned_b k = i + 1; k < temporary.size(); k++){
-								for(unsigned_b l = 0; l < temporary.at(k).size(); l++){
-									if(temporary.at(i).at(j).get_distance(temporary.at(k).at(l)) < (5e-2)){
-										//~ std::cout << "ERASING - DISTANCE\n" << temporary.at(i).at(j).print() << std::endl;
-										temporary.at(k).erase(temporary.at(k).begin() + l--);
-										erase = true;
-										}
-									}
-								}
-							if(erase) temporary.at(i).erase(temporary.at(i).begin() + j--);
-							}
-						}
-					
-					// erasing them for touching other walls
-					for(unsigned_b i = 0; i < temporary.size(); i++){
-						for(unsigned_b j = 0; j < temporary.size(); j++){
-							if(i != j){
-								for(unsigned_b k = 0; k < temporary.at(j).size(); k++){
-									if(step::get_distance(temporary.at(j).at(k), closest_wall.at(i)) < (2.5e-1)){
-										//~ std::cout << "ERASING - WALL\n" << temporary.at(j).at(k).print() << std::endl;
-										temporary.at(j).erase(temporary.at(j).begin() + k--);
-										}
-									}
-								}
-							}
-						}
 					
 					coordinates blob_mid(0, 0);
 					for(wall w: closest_wall)
@@ -954,56 +872,11 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 					std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 					std::vector<wall> closest_wall = planner::avoid_circular_phase_0(close_points.at(index));
 					std::vector<std::vector<coordinates>> temporary;
-					// confirm duplicates
-					auto is_duplicate = [&](auto a, auto b){
-						unsigned_n coincidences = 0;
-						for(uint8_t i = 0; i < 4; i++){
-							for(uint8_t j = 0; j < 4; j++){
-								coincidences += (a.properties.edges[i] == b.properties.edges[j]);
-								}
-							}
-						return (a.estimate_center() == b.estimate_center()) && coincidences >= 2;
-						};
-
 					
-					// confirm being close
-					auto is_close = [&](auto a, auto b, decimal_n predicate){
-						decimal_n shortest_dist = std::numeric_limits<decimal_n>::infinity();
-						for(uint8_t i = 0; i < 4; i++){
-							shortest_dist = std::min(shortest_dist, step::get_distance(step(a.properties.edges[i], a.properties.edges[(i+1)%4]), b));
-							}
-						return shortest_dist <= predicate;
-						};
+					planner::avoid_get_close_walls(m, closest_wall);
+					//~ planner::avoid_get_points(temporary, closest_wall);
 					
-					// adds close walls
-					{
-					bool close = false;
-						do {
-							close = false;
-							for(unsigned_b i = 0; i < m._map_walls.size(); i++){
-								for(auto cls: closest_wall){
-									if((is_close(m._map_walls.at(i), cls, 2 * safe_dist))){
-										bool non_duplicate = true;
-										for(auto chk: closest_wall)
-											non_duplicate &= !is_duplicate(m._map_walls.at(i), chk);
-										
-										if(non_duplicate){
-											closest_wall.push_back(m._map_walls.at(i)); close = true;}
-										}
-									}
-								}
-							} while(close);
-					}
-					// remove duplicates
-					for(unsigned_b i = 0; i < closest_wall.size(); i++)
-						for(unsigned_b j = 0; j < closest_wall.size(); j++)
-							if(is_duplicate(closest_wall.at(i), closest_wall.at(j)) && i != j){
-								closest_wall.erase(closest_wall.begin() + j);
-								j = 0;
-								}
-					
-					
-					
+					/*
 					for(auto o: closest_wall){
 						temporary.emplace_back(&o.properties.edges[0], &o.properties.edges[4]);
 						//~ temporary.emplace_back();
@@ -1041,7 +914,7 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 								}
 							}
 						}
-					
+					*/
 					coordinates blob_mid(0, 0);
 					for(wall w: closest_wall)
 						blob_mid = blob_mid + w.estimate_center();
@@ -1530,9 +1403,9 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wal
 			if(s_mirrored.on_segment(c) && 
 				std::abs(std::sin(c.get_gamma(ret.at(e))) - std::sin(form_mirror.center.get_gamma(c) + (const decimal_n)(pi_const / 2) *
 					(1 + s.direction_curve * -2))) <= 1e-3){
-				std::cout << "BOD CIRKULARU 2" << std::endl;
-				std::cout << c.print() << std::endl;
-				std::cout << ret.at(e).print() << std::endl;
+				//~ std::cout << "BOD CIRKULARU 2" << std::endl;
+				//~ std::cout << c.print() << std::endl;
+				//~ std::cout << ret.at(e).print() << std::endl;
 				unsigned_b index = 0;
 				while(ret_hm.size() > index){
 					if(step(s.end, ret_h.at(index), form_mirror.center, !s.direction_curve).length() < step(s.end, c, form_mirror.center, !s.direction_curve).length()){
@@ -1603,10 +1476,10 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wal
 	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	return ret;
 	}
-	
-	
 
-	
+
+
+
 
 unsigned_b planner::avoid_violation_number(planner::wall_container w){
 	constexpr decimal_n safe_dist = robot_radius * safe_constant - 1e-3;
@@ -1617,4 +1490,101 @@ unsigned_b planner::avoid_violation_number(planner::wall_container w){
 			if(v.length() < safe_dist){ ret ++; /* std::cout << "This ruins my sleep" << v.print() << std::endl;*/}
 		}	
 	return ret;
+	}
+
+
+
+
+
+std::vector<wall> planner::avoid_get_close_walls(map &m, std::vector<wall>& closest_wall){
+	constexpr decimal_n safe_dist = robot_radius * safe_constant;
+	// confirm duplicates
+	auto is_duplicate = [&](auto a, auto b){
+		unsigned_n coincidences = 0;
+		for(uint8_t i = 0; i < 4; i++){
+			for(uint8_t j = 0; j < 4; j++){
+				coincidences += (a.properties.edges[i] == b.properties.edges[j]);
+				}
+			}
+		return (a.estimate_center() == b.estimate_center()) && coincidences >= 2;
+		};
+	
+	
+	// confirm being close
+	auto is_close = [&](auto a, auto b, decimal_n predicate){
+		decimal_n shortest_dist = std::numeric_limits<decimal_n>::infinity();
+		for(uint8_t i = 0; i < 4; i++){
+			shortest_dist = std::min(shortest_dist, step::get_distance(step(a.properties.edges[i], a.properties.edges[(i+1)%4]), b));
+			}
+		return shortest_dist <= predicate;
+		};
+	
+	// adds close walls
+	{
+	bool close = false;
+		do {
+			close = false;
+			for(unsigned_b i = 0; i < m._map_walls.size(); i++){
+				for(auto cls: closest_wall){
+					if((is_close(m._map_walls.at(i), cls, 2 * safe_dist))){
+						bool non_duplicate = true;
+						for(auto chk: closest_wall)
+							non_duplicate &= !is_duplicate(m._map_walls.at(i), chk);
+						
+						if(non_duplicate){
+							closest_wall.push_back(m._map_walls.at(i)); close = true;}
+						}
+					}
+				}
+			} while(close);
+	}
+	// remove duplicates
+	for(unsigned_b i = 0; i < closest_wall.size(); i++)
+		for(unsigned_b j = 0; j < closest_wall.size(); j++)
+			if(is_duplicate(closest_wall.at(i), closest_wall.at(j)) && i != j){
+				closest_wall.erase(closest_wall.begin() + j);
+				j = 0;
+				}
+	return closest_wall;
+	}
+
+
+
+
+
+void planner::avoid_get_points(std::vector<std::vector<coordinates>>& temporary, std::vector<wall>& closest_wall){
+	constexpr decimal_n safe_dist = robot_radius * safe_constant;
+	for(auto o: closest_wall){
+		temporary.emplace_back(&o.properties.edges[0], &o.properties.edges[4]);
+		}
+	// erasing them for being too close
+	for(unsigned_b i = 0; i < temporary.size(); i++){
+		for(unsigned_b j = 0; j < temporary.at(i).size(); j++){
+			bool erase = false;
+			for(unsigned_b k = i + 1; k < temporary.size(); k++){
+				for(unsigned_b l = 0; l < temporary.at(k).size(); l++){
+					if(temporary.at(i).at(j).get_distance(temporary.at(k).at(l)) < (5e-2)){
+						//~ std::cout << "ERASING - DISTANCE\n" << temporary.at(i).at(j).print() << std::endl;
+						temporary.at(k).erase(temporary.at(k).begin() + l--);
+						erase = true;
+						}
+					}
+				}
+			if(erase) temporary.at(i).erase(temporary.at(i).begin() + j--);
+			}
+		}
+	
+	// erasing them for touching other walls
+	for(unsigned_b i = 0; i < temporary.size(); i++){
+		for(unsigned_b j = 0; j < temporary.size(); j++){
+			if(i != j){
+				for(unsigned_b k = 0; k < temporary.at(j).size(); k++){
+					if(step::get_distance(temporary.at(j).at(k), closest_wall.at(i)) < (2.5e-1)){
+						//~ std::cout << "ERASING - WALL\n" << temporary.at(j).at(k).print() << std::endl;
+						temporary.at(j).erase(temporary.at(j).begin() + k--);
+						}
+					}
+				}
+			}
+		}
 	}
