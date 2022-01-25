@@ -134,8 +134,10 @@ class step
 		line perpendicular_bisector();
 		
 		static decimal_n length(step s);
+		static decimal_n angle(step s);
 		
 		decimal_n length();
+		decimal_n angle();
 		
 		static coordinates get_center(step s);
 		coordinates get_center();

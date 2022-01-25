@@ -1410,6 +1410,27 @@ decimal_n step::length(){
 
 
 
+
+decimal_n step::angle(step s){
+	switch(s._type){
+		case step::line_e:
+			return s.angle_start;
+		
+		case step::circle_e:
+			return std::abs(s.phi);
+		}
+	return std::numeric_limits<decimal_n>::infinity();
+	}
+
+
+
+
+decimal_n step::angle(){
+	return step::angle(*this);
+	}
+
+
+
 coordinates step::get_center(step s){
 	return ((s._type)? std::get<circle>(s.formula).center: ((s.start + s.end) / 2));
 	}
