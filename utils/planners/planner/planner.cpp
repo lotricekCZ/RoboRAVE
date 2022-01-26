@@ -92,13 +92,13 @@ std::vector<step> planner::plan_make(std::vector<coordinates> selected, map &m, 
 	/// first circle generation block end
 	//~ pre_steps.push_back(avoider::to_steps(circle::tangents(pre_circles.back(), selected.back()), circle(selected.back(), 0), pre_circles.back()));
 	std::vector<path> options = list_options(pre_circles, selected.back(), start);
-	for(auto o: options)
-		std::cout << o.print() << std::endl;
+	//~ for(auto o: options)
+		//~ std::cout << o.print() << std::endl;
 	
 	/// TODO: THIS SECTION
 	
-	std::cout << std::endl;
-	std::cout << options.size() << std::endl;
+	//~ std::cout << std::endl;
+	//~ std::cout << options.size() << std::endl;
 		
 	
 	return steps;
@@ -475,15 +475,14 @@ std::vector<step> planner::avoid(std::vector<step> altered, map& m){
 
 std::vector<path> planner::list_options(std::vector<circle> selected, coordinates end, coordinates start, decimal_n initial_rotation, decimal_n terminal_rotation){
 	std::vector<path> ret;
-	msg("START", start.print())
-	msg("END", end.print())
+	//~ msg("START", start.print())
+	//~ msg("END", end.print())
 	assert(selected.front().is_on(start));
 	uint8_t is_on_zero_r = 0;
 	if(!selected.back().is_on(end, 8e-2)){
 		for(auto coord: selected.back().tangent_points(end)) // all the variants of connecting to an end
 			ret.emplace_back(step(coord, end));
 		} else {
-			std::cout << "WAS ON" << std::endl;
 			for(uint8_t i = 0; i < 2; i++){
 				ret.emplace_back(step(end, end));
 				ret.back().angle_end = ret.back().back().angle_end = 
@@ -581,27 +580,29 @@ std::vector<path> planner::suppress_by_sensibility(std::vector<path> selected){
 
 path planner::avoid(path p, map &m, unsigned_b pit){
 	assert(p.size() != 0 && p.back()._type == step::line_e);
-	std::system("figlet \"AVOID\"");
+	//~ std::system("figlet \"AVOID\"");
 	constexpr decimal_n safe_dist = robot_radius * safe_constant;
 	// there must be only one step in order to give the 
 	// idea which step should be modified with which parameters
 	/// 0(): acknowledge if there are any close_points available
 	path ret_pth = p;
 	unsigned_b index = (p.size() <= pit)? p.size() - 1: pit;
+	unsigned_b lui = 0; // lui = last used index
 	bool is_last = true;
+	
 	do {
 		is_last = (index == 0);
-		std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+		//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 		std::vector<planner::wall_container> 
 		close_points = planner::avoid_phase_0(ret_pth, m);
 		line original(ret_pth.at(index).start, ret_pth.at(index).end);
-		std::cout << "This " << __FILE__ << " " << __LINE__ << "\n\n\n\n\n\n\n\n\n\n\n\n" << std::endl;
+		//~ std::cout << "This " << __FILE__ << " " << __LINE__ << "\n\n\n\n\n\n\n\n\n\n\n\n" << std::endl;
 		switch(ret_pth.at(index)._type){
 			case step::line_e: {
-				std::system("figlet \"Linear start\"");
-				std::system(std::string("figlet \"INDEX\t" + std::to_string(index) + " z " + std::to_string(ret_pth.size() - 1) + "\"").c_str());
-				std::cout << ret_pth.at(index).print_geogebra() << std::endl << std::endl;
-				std::cout << ret_pth.print() << std::endl << std::endl;
+				//~ std::system("figlet \"Linear start\"");
+				//~ std::system(std::string("figlet \"INDEX\t" + std::to_string(index) + " z " + std::to_string(ret_pth.size() - 1) + "\"").c_str());
+				//~ std::cout << ret_pth.at(index).print_geogebra() << std::endl << std::endl;
+				//~ std::cout << ret_pth.print() << std::endl << std::endl;
 				//~ std::cout << "linear start" << std::endl;
 				/// selected all where it either collides or comes close
 				// selects the closest wall
@@ -619,13 +620,13 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 				while(condition){
 					closest = planner::avoid_linear_wall_select(close_points.at(index));
 					// finding the closest wall
-					std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
-					msg("INDEX", index)
-					msg("SIZE", closest.second.size())
-					std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+					//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+					//~ msg("INDEX", index)
+					//~ msg("SIZE", closest.second.size())
+					//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 					if(!closest.second.size()) {index --; std::cout << "this ran" << std::endl; condition ^= condition; break;} // means that no wall violated rule
 					closest_wall.assign({*std::get<wall *>(closest.second.front())});
-					std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+					//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 
 					planner::avoid_get_close_walls(m, closest_wall);
 					planner::avoid_get_points(temporary, closest_wall);
@@ -637,26 +638,27 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 						blob_mid = blob_mid + w.estimate_center();
 					blob_mid = blob_mid / closest_wall.size();
 					//~ wall closest_wall;
-					std::cout << "\nBLOB\n" << blob_mid.print() << std::endl;
-					
+					//~ std::cout << "\nBLOB\n" << blob_mid.print() << std::endl;
+					//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 					/// 1(): lead point vectors from edges to line
-					std::cout << "ZDI" << std::endl;
-					for(auto i: temporary)
-						for(auto o: i)
-							std::cout << o.print() << std::endl;
-					for(auto o: closest_wall)
-						std::cout << o.print_geogebra() << std::endl;
+					//~ std::cout << "ZDI" << std::endl;
+					//~ for(auto i: temporary)
+						//~ for(auto o: i)
+							//~ std::cout << o.print() << std::endl;
+					//~ for(auto o: closest_wall)
+						//~ std::cout << o.print_geogebra() << std::endl;
 					// we have the closest relevant wall, time to generate point vectors.
 					{
+						//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 						std::unique_ptr<std::vector<coordinates>> tmp(new std::vector<coordinates>());
 						for(auto o: temporary)
 							tmp -> insert(tmp -> end(), o.begin(), o.end());
 						auto point_vectors = step::get_point_vectors(original, *tmp);
-						for(auto v: point_vectors)
-							std::cout << v.print() << std::endl;
+						//~ for(auto v: point_vectors)
+							//~ std::cout << v.print() << std::endl;
 						tmp.reset();
 						//~ point_vectors = step::get_point_vectors(original, closest_wall.front());
-						
+						//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 						// sort them by length
 						std::sort(point_vectors.begin(), point_vectors.end(), [](vector a, vector b){return a.length() < b.length();});
 						/// 1-alpha(): start
@@ -672,17 +674,18 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 								//~ break;
 								//~ }
 							}
+						//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 						//~ for(auto p: sides.at(0)){
 							//~ std::cout << p.get_origin().print() << std::endl;
 							//~ std::cout << p.print() << std::endl;
 							//~ }
 						//~ return ret_pth;
-						std::cout << "perpendiculars" << std::endl;
-						for(auto &o: sides){
-							std::cout << "strana" << std::endl;
-							for(auto &v: o)
-								std::cout << v.print() << std::endl;
-							}
+						//~ std::cout << "perpendiculars" << std::endl;
+						//~ for(auto &o: sides){
+							//~ std::cout << "strana" << std::endl;
+							//~ for(auto &v: o)
+								//~ std::cout << v.print() << std::endl;
+							//~ }
 					}
 					/**
 					/// 1-beta(): start
@@ -715,9 +718,9 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 					auto is_visible = [](coordinates c_o, std::vector<wall> w, coordinates a) -> bool{
 						step s(a, c_o);
 						for(auto v: w){
-							std::cout << s.print_geogebra() << std::endl;
+							//~ std::cout << s.print_geogebra() << std::endl;
 							for(auto c: step::intersection(s, v)){
-								std::cout << "\t" << c.print() << std::endl;
+								//~ std::cout << "\t" << c.print() << std::endl;
 								if(!(c == c_o))
 									return false;
 								}
@@ -730,7 +733,7 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 						for(unsigned_b i = 0; i < e -> size(); i++)
 							if(is_visible(e -> at(i), closest_wall, end))
 								ret.push_back(e -> at(i));
-						std::cout << "\nATAK\n" << std::endl;
+						//~ std::cout << "\nATAK\n" << std::endl;
 						for(auto c: ret)
 							std::cout << c.print() << std::endl;
 						return ret;
@@ -743,41 +746,60 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 					tmp_b.reset();
 					
 					
-					std::cout << "\nRAZENI\n" << std::endl;
-					for(auto c: *tmp_a)
-						std::cout << c.print() << std::endl;
+					//~ std::cout << "\nRAZENI\n" << std::endl;
+					//~ for(auto c: *tmp_a)
+						//~ std::cout << c.print() << std::endl;
 						
 					for(auto sel_point: *tmp_a){
-						std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+						//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 						//~ if(tmp -> size() != 1){ // must have only one point selected, if none are selected...
 							//~ std::cout << tmp -> size() << "\tIDK, but " << __FILE__ << " " << __LINE__ << std::endl;
 							//~ tmp.reset();
 							//~ continue;
 							//~ }
-						
+						auto onlytwo = [](step s, map m){
+							std::vector<coordinates> inters;
+							for(auto i: m._map_walls){
+								auto ic = s.intersection(i);
+								inters.insert(inters.end(), ic.begin(), ic.end());
+								}
+							for(coordinates c: inters)
+								if(!(c == s.start) & !(c == s.end)) return false;
+							return true;
+							};
 						/// 3(): ((index)) ? std::get<circle>(ret_pth.at(index - 1).formula): 
+						unsigned_b suitable_circle = 0;
+						/*
+						for(unsigned_b i = ret_pth.size() - 1; i > index; i--){
+							if(ret_pth.at(i)._type == step::circle_e)
+								if(onlytwo(step(ret_pth.at(i).get_center(), sel_point), m)){
+									suitable_circle = i - index - 1;
+									std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+									}
+							}
+						*/
 						std::vector<circle> curve({(circle(ret_pth.front().start, 0)), 
 													circle(sel_point, safe_dist)});
 						if((index + 1) < ret_pth.size())
-							curve.push_back(std::get<circle>(ret_pth.at(index + 1).formula));
+							curve.push_back(std::get<circle>(ret_pth.at(index + 1 + suitable_circle).formula));
 						//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
-						for(auto a: curve)
-							std::cout << "selected\n" << a.print() << std::endl;
+						//~ for(auto a: curve)
+							//~ std::cout << "selected\n" << a.print() << std::endl;
 						//~ std::cout << "selected\n" << curve.at(1).print() << std::endl;
 						//~ tmp.reset();
 						
 						/// 4():
 						std::vector<path> replacement = planner::list_options(curve, ret_pth.at(index + (curve.size() == 3)).end, ret_pth.front().start, 
 								ret_pth.at(index + 2 * (curve.size() == 3)).angle_start);
-						std::cout << "size: " << replacement.size() << std::endl;
+						//~ std::cout << "size: " << replacement.size() << std::endl;
 						for(auto r: replacement){
 							auto r_zero = r;
 							r_zero.delete_zero_length();
-							std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+							//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 							if(!r_zero.at(r_zero.size() - (1 + (curve.size() == 3))).intersection(closest_wall.front()).size()){
-								std::cout << "cesta\n" << r_zero.print() << std::endl;
+								//~ std::cout << "cesta\n" << r_zero.print() << std::endl;
 								close_points = planner::avoid_phase_0(r_zero, m);
-								std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+								//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 								bool has_substitute = false;
 								auto sub = r_zero;
 								if(r_zero.at(r_zero.size() - 1)._type == step::circle_e){
@@ -787,29 +809,29 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 										coordinates halfway = step(r_zero.at(r_zero.size() - 1).start, r_zero.at(r_zero.size() - 1).end).get_center();
 										vector to_sector = vector(r_zero.at(r_zero.size() - 1).get_center(), halfway) >> halfway;
 										sub.at(sub.size() - 1) = step(sub.at(sub.size() - 1).start, sub.at(sub.size() - 1).end, to_sector.get_point());
-										msg("RESULT\n", sub.at(sub.size() - 1).print_geogebra())
+										//~ msg("RESULT\n", sub.at(sub.size() - 1).print_geogebra())
 										}
 									}
-								std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
-								std::cout << "Krok:\n" << close_points.at(r_zero.size() - (1 + (curve.size() == 3))).first -> print_geogebra() << std::endl;
-								std::cout << "VIOLATORI\n" << planner::avoid_violation_number(close_points.at(close_points.size() - (1 + index))) << std::endl;
 								//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
-								if((r_zero.size() - ret_pth.size() + index - 1) < r_zero.size())
-									std::cout << "- 1\n" << r_zero.at(r_zero.size() - ret_pth.size() + index - 1).print_geogebra() << std::endl;
-								if((r_zero.size() - ret_pth.size() + index + 1) < r_zero.size())
-									std::cout << "+ 1\n" << r_zero.at(r_zero.size() - ret_pth.size() + index + 1).print_geogebra() << std::endl;
+								//~ std::cout << "Krok:\n" << close_points.at(r_zero.size() - (1 + (curve.size() == 3))).first -> print_geogebra() << std::endl;
+								//~ std::cout << "VIOLATORI\n" << planner::avoid_violation_number(close_points.at(close_points.size() - (1 + index))) << std::endl;
+								//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+								//~ if((r_zero.size() - ret_pth.size() + index - 1) < r_zero.size())
+									//~ std::cout << "- 1\n" << r_zero.at(r_zero.size() - ret_pth.size() + index - 1).print_geogebra() << std::endl;
+								//~ if((r_zero.size() - ret_pth.size() + index + 1) < r_zero.size())
+									//~ std::cout << "+ 1\n" << r_zero.at(r_zero.size() - ret_pth.size() + index + 1).print_geogebra() << std::endl;
 								//~ auto round = r_zero.at(((r_zero.size() - ret_pth.size() + index + 1) < r_zero.size())?
 									//~ (r_zero.size() - ret_pth.size() + index + 1) : (r_zero.size() - ret_pth.size() + index - 1));
-								std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+								//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 								auto round = r_zero.back();
-								std::cout << "LOCAL BLOBS\n" << 
-									round.start.make_local(blob_mid, -round.angle_start).print() << "\n" <<
-									round.end.make_local(blob_mid, -round.angle_end).print() << "\n" <<
-									round.start.print() << "\n" <<
-									round.end.print() << "\n" <<
-								std::endl;
-								std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
-								auto is_closer_int = [round, blob_mid](){
+								//~ std::cout << "LOCAL BLOBS\n" << 
+									//~ round.start.make_local(blob_mid, -round.angle_start).print() << "\n" <<
+									//~ round.end.make_local(blob_mid, -round.angle_end).print() << "\n" <<
+									//~ round.start.print() << "\n" <<
+									//~ round.end.print() << "\n" <<
+								//~ std::endl;
+								//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+								auto is_closer_int = [round, blob_mid](){	
 										coordinates inter = line(round.angle_start, round.start).intersection(line(round.angle_end, round.end));
 										step axis(inter, step::get_center(round));
 										return axis.intersection(std::get<line>(axis.formula).make_perpendicular(blob_mid)).size() > 0;
@@ -817,8 +839,8 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 										
 								bool same = ((round.start.make_local(blob_mid, -round.angle_start).x * round.end.make_local(blob_mid, -round.angle_end).x)
 											* (1 + -2 * (!is_closer_int() & (round.angle() > pi_const)))) > 0;
-								std::cout << "SAME\n" << same << std::endl;
-								msg("ANGLE", (round.angle() / pi_const)*180.0)
+								//~ std::cout << "SAME\n" << same << std::endl;
+								//~ msg("ANGLE", (round.angle() / pi_const)*180.0)
 								if((same | (curve.size() < 3)) && !planner::avoid_violation_number(close_points.at(close_points.size() - (1 + index)))){ // if the size at the index is equal zero
 									//~ replacement.assign({r_zero});
 									//~ if(std::abs(r_zero.back().angle_start - r_zero.at(r_zero.size() - 2).angle_end) <= 1e-3){
@@ -828,9 +850,9 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 											ret_pth.erase(ret_pth.begin(), ret_pth.begin() + index + 1 + (curve.size() >= 3));
 											ret_pth.insert(ret_pth.begin(), r_zero.begin(), r_zero.end());
 											index = ret_pth.size() - (tmp_size - index + 1) + (curve.size() >= 3);
-											std::cout << "cesta\n" << r_zero.print() << "\nr_zero " << r_zero.size() << "\nret_pth " << ret_pth.size() << "\nindex " << std::to_string(index) << std::endl;
-											std::cout << "This " << __FILE__ << " " << __LINE__ << "\n\n\n\n\n\n\n\n\n\n\n\n" << std::endl;
-											std::cout << "EVEN This " << __FILE__ << " " << __LINE__ << std::endl;
+											//~ std::cout << "cesta\n" << r_zero.print() << "\nr_zero " << r_zero.size() << "\nret_pth " << ret_pth.size() << "\nindex " << std::to_string(index) << std::endl;
+											//~ std::cout << "This " << __FILE__ << " " << __LINE__ << "\n\n\n\n\n\n\n\n\n\n\n\n" << std::endl;
+											//~ std::cout << "EVEN This " << __FILE__ << " " << __LINE__ << std::endl;
 											is_last = (index == 0);
 											condition = false;
 											}
@@ -846,9 +868,9 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 										ret_pth.erase(ret_pth.begin(), ret_pth.begin() + index + 1 + (curve.size() >= 3));
 										ret_pth.insert(ret_pth.begin(), sub.begin(), sub.end());
 										index = ret_pth.size() - (tmp_size - index + 1) + (curve.size() >= 3);
-										std::cout << "cesta\n" << r_zero.print() << "\nr_zero " << r_zero.size() << "\nret_pth " << ret_pth.size() << "\nindex " << std::to_string(index) << std::endl;
-										std::cout << "This " << __FILE__ << " " << __LINE__ << "\n\n\n\n\n\n\n\n\n\n\n\n" << std::endl;
-										std::cout << "EVEN This " << __FILE__ << " " << __LINE__ << std::endl;
+										//~ std::cout << "cesta\n" << r_zero.print() << "\nr_zero " << r_zero.size() << "\nret_pth " << ret_pth.size() << "\nindex " << std::to_string(index) << std::endl;
+										//~ std::cout << "This " << __FILE__ << " " << __LINE__ << "\n\n\n\n\n\n\n\n\n\n\n\n" << std::endl;
+										//~ std::cout << "EVEN This " << __FILE__ << " " << __LINE__ << std::endl;
 										is_last = (index == 0);
 										condition = false;
 										//~ break;
@@ -866,10 +888,10 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 				}
 				
 			case step::circle_e: {
-				std::system("figlet \"Circular start\"");
-				std::system(std::string("figlet \"INDEX\t" + std::to_string(index) + " z " + std::to_string(ret_pth.size() - 1) + "\"").c_str());
-				std::cout << ret_pth.at(index).print_geogebra() << std::endl << std::endl;
-				std::cout << ret_pth.print() << std::endl << std::endl;
+				//~ std::system("figlet \"Circular start\"");
+				//~ std::system(std::string("figlet \"INDEX\t" + std::to_string(index) + " z " + std::to_string(ret_pth.size() - 1) + "\"").c_str());
+				//~ std::cout << ret_pth.at(index).print_geogebra() << std::endl << std::endl;
+				//~ std::cout << ret_pth.print() << std::endl << std::endl;
 				//~ std::cout << "circular start" << std::endl;
 				/// selected all where it either collides or comes close
 				/// 0(): selects the closest wall
@@ -883,9 +905,9 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 				bool condition = true;
 				
 				while(condition){
-					std::cout << "circular loop" << std::endl;
+					//~ std::cout << "circular loop" << std::endl;
 					//~ std::cout << "index odecten: " << (index) << "\t" << ret_pth.size() << std::endl;
-					std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+					//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 					std::vector<wall> closest_wall = planner::avoid_circular_phase_0(close_points.at(index));
 					std::vector<std::vector<coordinates>> temporary;
 					
@@ -934,7 +956,7 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 					coordinates blob_mid(0, 0);
 					for(wall w: closest_wall)
 						blob_mid = blob_mid + w.estimate_center();
-					std::cout << "BLOB MID\n" << (blob_mid / closest_wall.size()).print() << std::endl;
+					//~ std::cout << "BLOB MID\n" << (blob_mid / closest_wall.size()).print() << std::endl;
 					/*
 					if(index != 0)
 						if(ret_pth.at(index - 1)._type == step::line_e)
@@ -963,46 +985,46 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 						//~ for(auto c: v)
 							//~ std::cout << c.print() << std::endl;
 						
-					if(!closest_wall.size()){index--; std::system("figlet \"ESCAPE VIA CONTINUE 700\""); condition = false; continue;}
-					std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
-					for(auto o: closest_wall)
-						std::cout << "CANDIDATE\n" << o.print_geogebra() << std::endl;
+					if(!closest_wall.size()){index--; /* std::system("figlet \"ESCAPE VIA CONTINUE 700\""); */condition = false; continue;}
+					//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+					//~ for(auto o: closest_wall)
+						//~ std::cout << "CANDIDATE\n" << o.print_geogebra() << std::endl;
 					std::vector<coordinates> candidates;
-					std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+					//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 					
-					std::cout << "circle candidate\n" << std::endl;
-					for(auto t: temporary)
-						for(auto c: t)
-							std::cout << c.print() << std::endl;
+					//~ std::cout << "circle candidate\n" << std::endl;
+					//~ for(auto t: temporary)
+						//~ for(auto c: t)
+							//~ std::cout << c.print() << std::endl;
 					
 					
 					candidates = planner::avoid_circular_phase_1(*close_points.at(index).first, closest_wall);
 					temporary.clear();
 					//~ std::unique();
 					for(coordinates cand: candidates){
-						std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
-						std::cout << "circle candidate\n" << cand.print() << std::endl;
-						std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
-						if(!candidates.size()){std::system("figlet \"ESCAPE VIA CONTINUE 707\""); continue;}
+						//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+						//~ std::cout << "circle candidate\n" << cand.print() << std::endl;
+						//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+						if(!candidates.size()){/*std::system("figlet \"ESCAPE VIA CONTINUE 707\"");*/ continue;}
 						//~ std::cout << 
 						std::vector<circle> curve = {(((index - 1)) ? std::get<circle>(ret_pth.at(index - 2).formula): circle(ret_pth.front().start, 0)), 
 										circle(cand, safe_dist), original};
-						std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
-						for(auto c: curve){
-							std::cout << c.center.print() << std::endl;
-							std::cout << c.print() << std::endl;
-							}
-						std::cout << "Possible source " << __FILE__ << " " << __LINE__ << std::endl;
-						std::cout << "konec/zacatek/kruhy" << std::endl;
+						//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+						//~ for(auto c: curve){
+							//~ std::cout << c.center.print() << std::endl;
+							//~ std::cout << c.print() << std::endl;
+							//~ }
+						//~ std::cout << "Possible source " << __FILE__ << " " << __LINE__ << std::endl;
+						//~ std::cout << "konec/zacatek/kruhy" << std::endl;
 						//~ std::cout << ret_pth.at(index).end.print() << std::endl;
 						//~ std::cout << ret_pth.front().start.print() << std::endl;
-						for(auto c: curve) 
-							std::cout << (c.print()) << std::endl;
+						//~ for(auto c: curve) 
+							//~ std::cout << (c.print()) << std::endl;
 						/// 4():
 						std::vector<path> replacement = planner::list_options(curve, ret_pth.at(index).end, ret_pth.front().start, 
 							(((index - 1)) ? (ret_pth.at(index - 2)).angle_start: (ret_pth.front().angle_start)));
-						for(auto o: replacement) std::cout << o.print() << std::endl;
-						std::cout << "pocet cest" << replacement.size() << std::endl;
+						//~ for(auto o: replacement) std::cout << o.print() << std::endl;
+						//~ std::cout << "pocet cest" << replacement.size() << std::endl;
 						for(auto r: replacement){
 							auto r_zero = r;
 							r_zero.delete_zero_length();
@@ -1011,38 +1033,38 @@ path planner::avoid(path p, map &m, unsigned_b pit){
 								if(!(close_points.at(r_zero.size() - 1).first -> intersection(closest_wall.front()).size() 
 									+ planner::avoid_violation_number(close_points.at(r_zero.size() - 2)))){ // if the size at the index is equal zero
 									//~ replacement.assign({r_zero});
-									msg("THAT INDEX\n", r_zero.at(r_zero.size() - 2).print_geogebra())
+									//~ msg("THAT INDEX\n", r_zero.at(r_zero.size() - 2).print_geogebra())
 									unsigned_b tmp_size = ret_pth.size();
 									ret_pth.erase(ret_pth.begin(), ret_pth.begin() + index + 1);
 									ret_pth.insert(ret_pth.begin(), r_zero.begin(), r_zero.end());
 									index = ret_pth.size() - (tmp_size - index + 1);
-									std::cout << "cesta\n" << r_zero.print() << "\nr_zero " << r_zero.size() << "\nret_pth " << ret_pth.size() << "\nindex " << r_zero.size() - (2 + index) << std::endl;
-									std::cout << "This " << __FILE__ << " " << __LINE__ << "\n\n\n\n\n\n\n\n\n\n\n\n" << std::endl;
-									std::cout << "EVEN This " << __FILE__ << " " << __LINE__ << std::endl;
+									//~ std::cout << "cesta\n" << r_zero.print() << "\nr_zero " << r_zero.size() << "\nret_pth " << ret_pth.size() << "\nindex " << r_zero.size() - (2 + index) << std::endl;
+									//~ std::cout << "This " << __FILE__ << " " << __LINE__ << "\n\n\n\n\n\n\n\n\n\n\n\n" << std::endl;
+									//~ std::cout << "EVEN This " << __FILE__ << " " << __LINE__ << std::endl;
 									condition = false;
 									//~ index = r_zero.size() - (2 + index);
 									//~ break;
-									std::cout << "cesta_cela\n" << ret_pth.print() << std::endl << std::endl;
+									//~ std::cout << "cesta_cela\n" << ret_pth.print() << std::endl << std::endl;
 									//~ std::this_thread::sleep_for(std::chrono::seconds(1));
-									std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+									//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 									is_last = (index == 0);
 									break;
 									}
 								}
-							std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+							//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 							}
-						std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+						//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 						if(!condition) break;
 						}
 					}
-				std::cout << "this was from circular" << std::endl;
+				//~ std::cout << "this was from circular" << std::endl;
 				if(!condition) break;
 				//~ std::this_thread::sleep_for(std::chrono::seconds(1));
 				}
-			std::cout << "from circular" << std::endl;
+			//~ std::cout << "from circular" << std::endl;
 			break;
 			}
-		std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+		//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 		//~ for(auto [stp, w]: close_points){
 			//~ std::cout << "step\n"  << stp -> print_geogebra() << "\nvelikost " << w.size() << std::endl;
 			//~ for(unsigned_b i = 0; i < w.size(); i++){
@@ -1074,7 +1096,7 @@ std::vector<std::pair<std::vector<coordinates>, wall>> planner::intersecting_wal
 		if(ret_c.size())
 			ret.emplace_back(ret_c, w);
 		}
-	std::cout << "this runned " << ret.size() << std::endl;
+	//~ std::cout << "this runned " << ret.size() << std::endl;
 	return ret;
 	}
 
@@ -1139,7 +1161,7 @@ planner::wall_container planner::avoid_linear_wall_select(planner::wall_containe
 		for(auto c: std::get<std::vector<coordinates>>(o)){
 			line p = a.first -> perpendicular_bisector();
 			line l(a.first -> end, a.first -> start); // same for std::get<line>(step::formula), but even for circle formulas
-			std::cout << l.intersection(p.make_parallel(c)).print() << std::endl;
+			//~ std::cout << l.intersection(p.make_parallel(c)).print() << std::endl;
 			decimal_n dist_c = a.first -> end.get_distance(l.intersection(p.make_parallel(c))) - safe_dist;
 			if(dist_c < dist){
 				dist = dist_c;
@@ -1167,17 +1189,17 @@ std::vector<coordinates> planner::avoid_linear_phase_2(wall &w, std::deque<vecto
 	decimal_n min = std::numeric_limits<decimal_n>::infinity();
 	unsigned_b min_i = std::numeric_limits<unsigned_b>::infinity();
 	for(auto o: v){
-		std::cout << step(o.get_origin(), s.end).intersection(w).size() << std::endl;
-		for(auto i: step(o.get_origin(), s.end).intersection(w)){
-			std::cout << i.print() << std::endl;
-			}
+		//~ std::cout << step(o.get_origin(), s.end).intersection(w).size() << std::endl;
+		//~ for(auto i: step(o.get_origin(), s.end).intersection(w)){
+			//~ std::cout << i.print() << std::endl;
+			//~ }
 		auto cand = [&](std::vector<coordinates> inter, coordinates c){
 			decimal_n ret = 0;
 			std::vector<coordinates> st = inter;
 			st.push_back(c);
 			
 			for(uint8_t i = 0; i < st.size(); i++){
-				std::cout << st.at(i).print() << std::endl;
+				//~ std::cout << st.at(i).print() << std::endl;
 				ret += st.at(i).get_distance(st.at((i + 1) % st.size()));
 				}
 			return ret;
@@ -1264,14 +1286,14 @@ std::vector<wall> planner::avoid_circular_phase_0(planner::wall_container w){ //
 
 
 std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wall> w){ // the acknowledging phase: to know if any points may be used on the current side
-	std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	constexpr decimal_n safe_dist = robot_radius * safe_constant;
 	decimal_n length = std::numeric_limits<decimal_n>::infinity();
 	unsigned_b ret_c = std::numeric_limits<unsigned_b>::infinity();
 	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	// fundamental return point selectors
-	for(auto u: w)
-		std::cout << u.print_geogebra() << std::endl;
+	//~ for(auto u: w)
+		//~ std::cout << u.print_geogebra() << std::endl;
 	std::vector<coordinates> ret; 
 	std::vector<coordinates> ret_h;
 	
@@ -1298,14 +1320,14 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wal
 		};
 	
 	// erasing duplicates from temporary wall selection
-	std::cout << "WALL SIZE\t" << w.size() << std::endl;
+	//~ std::cout << "WALL SIZE\t" << w.size() << std::endl;
 	for(unsigned_b i = 0; i < w_temp.size(); i++)
 		for(unsigned_b j = i + 1; j < w_temp.size(); j++)
 			if(is_duplicate(w_temp.at(i), w_temp.at(j)))
 				w_temp.erase(w_temp.begin() + j--);
 	
 	// emplacing edges of remaining walls into structured selection
-	std::cout << "WALL_TEMP SIZE\t" << w_temp.size() << std::endl;
+	//~ std::cout << "WALL_TEMP SIZE\t" << w_temp.size() << std::endl;
 	for(auto o: w_temp){
 		temporary -> emplace_back();
 		for(uint8_t i = 0; i < 4; i++)
@@ -1325,7 +1347,7 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wal
 			for(unsigned_b k = i + 1; k < temporary -> size(); k++){
 				for(unsigned_b l = 0; l < temporary -> at(k).size(); l++){
 					if(temporary -> at(i).at(j).get_distance(temporary -> at(k).at(l)) < (5e-2)){
-						std::cout << "ERASING - DISTANCE\n" << temporary -> at(i).at(j).print() << std::endl;
+						//~ std::cout << "ERASING - DISTANCE\n" << temporary -> at(i).at(j).print() << std::endl;
 						temporary -> at(k).erase(temporary -> at(k).begin() + l--);
 						erase = true;
 						}
@@ -1340,7 +1362,7 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wal
 			if(i != j){
 				for(unsigned_b k = 0; k < temporary -> at(j).size(); k++){
 					if(step::get_distance(temporary -> at(j).at(k), w_temp.at(i)) < (2.5e-1)){
-						std::cout << "ERASING - WALL\n" << temporary -> at(j).at(k).print() << std::endl;
+						//~ std::cout << "ERASING - WALL\n" << temporary -> at(j).at(k).print() << std::endl;
 						temporary -> at(j).erase(temporary -> at(j).begin() + k--);
 						}
 					}
@@ -1353,7 +1375,7 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wal
 		ret.insert(ret.end(), s.begin(), s.end());
 	
 	// printing them
-	std::cout << "\nFILTERED\n" << std::endl;
+	//~ std::cout << "\nFILTERED\n" << std::endl;
 	for(auto o: *temporary){
 		for(auto r: o)
 			std::cout << r.print() << std::endl;
@@ -1361,7 +1383,7 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wal
 		
 	temporary.reset();
 	// creating mirrored and extended version of searching steps
-	std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	circle form_mirror((vector(form.center, s.end) >> s.end).get_point(), form.radius);
 	step s_mirrored((vector(s.start, form.center) >> form_mirror.center).get_point(),
 					s.end, form_mirror.center, !s.direction_curve);
@@ -1375,9 +1397,9 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wal
 	 * */
 	//~ std::cout << form_mirror.print() << std::endl;
 	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
-	std::cout << s_mirrored.print_geogebra() << std::endl;
-	std::cout << s_extended.print_geogebra() << std::endl;
-	std::cout << s.print_geogebra() << std::endl;
+	//~ std::cout << s_mirrored.print_geogebra() << std::endl;
+	//~ std::cout << s_extended.print_geogebra() << std::endl;
+	//~ std::cout << s.print_geogebra() << std::endl;
 	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	//~ for(auto w: m._map_walls)
 	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
@@ -1385,7 +1407,7 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wal
 	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	unsigned_b redundant = ret.size();
 	for(unsigned_b e = 0; e < redundant; e++){
-		std::cout << ret.at(e).print() << std::endl;
+		//~ std::cout << ret.at(e).print() << std::endl;
 		//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 		for(auto c: circle::tangent_points(form, ret.at(e))){
 			//~ std::cout << c.get_gamma(e)* 180/pi_const << "° and " << (form.center.get_gamma(c) + (const decimal_n)(pi_const / 2) *
@@ -1403,7 +1425,7 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wal
 				unsigned_b index = 0;
 				while(ret_h.size() > index){
 					//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
-					std::cout << std::to_string(index) << std::endl;
+					//~ std::cout << std::to_string(index) << std::endl;
 					if(step(s.end, ret_h.at(index), form.center, s.direction_curve).length() < step(s.end, c, form.center, s.direction_curve).length()){
 						break;
 						}
@@ -1415,7 +1437,7 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wal
 				break;
 				}
 			}
-		std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+		//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 		//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 		for(auto c: circle::tangent_points(form_mirror, ret.at(e))){
 			//~ std::cout << c.get_gamma(e)* 180/pi_const << "° and " << (form.center.get_gamma(c) + (const decimal_n)(pi_const / 2) *
@@ -1451,11 +1473,11 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wal
 	ret.erase(ret.begin(), std::min(ret.begin() + ret.size() - 1, ret.begin() + (redundant)));
 	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	//~ std::cout << "RET" << std::endl;
-	for(auto o: ret)
-		std::cout << o.print() << std::endl;
+	//~ for(auto o: ret)
+		//~ std::cout << o.print() << std::endl;
 	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	//~ std::cout << "SIZE " << ret.size() << std::endl;
-	if(ret.size()) std::cout << "STEP\n" << std::endl;
+	//~ if(ret.size()) std::cout << "STEP\n" << std::endl;
 	//~ if(ret.size()) std::cout << "STEP\n" << step(s.end, ret_h.front(), 
 								//~ (s.on_segment(ret_h.front()))? form.center: form_mirror.center, 
 								//~ s.on_segment(ret_h.front()) ^ s.direction_curve).print_geogebra() << std::endl;
@@ -1492,12 +1514,12 @@ std::vector<coordinates> planner::avoid_circular_phase_1(step s, std::vector<wal
 			}
 		}
 		*/
-	std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	//~ if (ret.size()) ret.assign({ret.at(ret_c)});
-	for(auto p: ret)
-		std::cout << "BOD\n" << p.print() << std::endl;
-	for(auto p: ret_m)
-		std::cout << "BOD2\n" << p.print() << std::endl;
+	//~ for(auto p: ret)
+		//~ std::cout << "BOD\n" << p.print() << std::endl;
+	//~ for(auto p: ret_m)
+		//~ std::cout << "BOD2\n" << p.print() << std::endl;
 	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	return ret;
 	}
@@ -1583,6 +1605,7 @@ void planner::avoid_get_points(std::vector<std::vector<coordinates>>& temporary,
 		temporary.emplace_back(&o.properties.edges[0], &o.properties.edges[4]);
 		}
 	// erasing them for being too close
+	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	for(unsigned_b i = 0; i < temporary.size(); i++){
 		for(unsigned_b j = 0; j < temporary.at(i).size(); j++){
 			bool erase = false;
@@ -1598,12 +1621,16 @@ void planner::avoid_get_points(std::vector<std::vector<coordinates>>& temporary,
 			if(erase) temporary.at(i).erase(temporary.at(i).begin() + j--);
 			}
 		}
-	
+	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
 	// erasing them for touching other walls
-	for(unsigned_b i = 0; i < temporary.size(); i++){
+	for(unsigned_b i = 0; i < closest_wall.size(); i++){
+		//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+		//~ msg("i", std::to_string(i))
 		for(unsigned_b j = 0; j < temporary.size(); j++){
 			if(i != j){
+				//~ msg("j", std::to_string(j))
 				for(unsigned_b k = 0; k < temporary.at(j).size(); k++){
+					//~ msg("k", std::to_string(k))
 					if(step::get_distance(temporary.at(j).at(k), closest_wall.at(i)) < (2.5e-1)){
 						//~ std::cout << "ERASING - WALL\n" << temporary.at(j).at(k).print() << std::endl;
 						temporary.at(j).erase(temporary.at(j).begin() + k--);
@@ -1612,4 +1639,19 @@ void planner::avoid_get_points(std::vector<std::vector<coordinates>>& temporary,
 				}
 			}
 		}
+	//~ std::cout << "This " << __FILE__ << " " << __LINE__ << std::endl;
+	/*
+	// erasing them for being close to other walls
+	for(unsigned_b i = 0; i < temporary.size(); i++){
+		for(unsigned_b j = 0; j < temporary.size(); j++){
+			if(i != j){
+				for(unsigned_b k = 0; k < temporary.at(j).size(); k++){
+					if(step::get_distance(temporary.at(j).at(k), closest_wall.at(i)) < 2 * safe_dist){
+						//~ std::cout << "ERASING - WALL\n" << temporary.at(j).at(k).print() << std::endl;
+						temporary.at(j).erase(temporary.at(j).begin() + k--);
+						}
+					}
+				}
+			}
+		}*/
 	}
