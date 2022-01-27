@@ -22,6 +22,8 @@
  */
 
 
+#include <cinttypes>
+#include <cstring>
 #include "message_standard.hpp"
 #include "message.hpp"
 
@@ -32,35 +34,37 @@ message::message(){
 	
 }
 
-bool message::decode(uint8_t in[22], content &in){
+
+
+bool message::decode(uint8_t buffer[msg_std::length], message::content &in){
 	
 	// check if it has characters defined in message standard
 	
-	if(in[0] == msg_std::start && in[msg_std::length - 1] == msg_std::end){
+	if(buffer[0] == msg_std::start && buffer[msg_std::length - 1] == msg_std::end){
 		
-		in.receiver			= (in[msg_std::head] & 0b111 << 5) >> 5;
-		in.sender			= (in[msg_std::head] & 0b111 << 2) >> 2;
-		in.type				= (in[msg_std::head] & 0b10) >> 1;
-		in.kind				= (((in[msg_std::head]) << 2) | (in[msg_std::head + 1]  >> 6)) & 0b111;
-		in.message_number 	= (((in[msg_std::head + 1] & 0b111111) << 16) | (in[msg_std::head + 2] << 8) | in[msg_std::head + 3]);		
+		in.receiver			= (buffer[msg_std::head] & 0b111 << 5) >> 5;
+		in.sender			= (buffer[msg_std::head] & 0b111 << 2) >> 2;
+		in.type				= (buffer[msg_std::head] & 0b10) >> 1;
+		in.kind				= (((buffer[msg_std::head]) << 2) | (buffer[msg_std::head + 1]  >> 6)) & 0b111;
+		in.message_number 	= (((buffer[msg_std::head + 1] & 0b111111) << 16) | (buffer[msg_std::head + 2] << 8) | buffer[msg_std::head + 3]);
 		
-		memcpy(in.message_space, in[message_space], msg_std::message_space_size);
+		memcpy(&in.message_space, &buffer[msg_std::message_space], msg_std::message_space_size);
 		return true;	// message is valid
 	} else {
 		return false;	// message is invalid
 	}
 }
 
-void message::encode(content in, uint8_t &buffer[22]){
-	buffer[0] 					= '$';
-	buffer[msg_std::head] 		= (in.receiver << 5) | (in.sender << 2) | (in.type << 1) | (in.kind >> 2);
-	buffer[msg_std::head + 1] 	= (in.kind << 6) | (in.message_number >> 16 & 31);
-	buffer[msg_std::head + 2] 	= in.message_number >> 8 & 255;
-	buffer[msg_std::head + 2] 	= in.message_number & 255;
+void message::encode(message::content &in, uint8_t *buffer[msg_std::length]){
+	*buffer[0] 					= msg_std::start;
+	*buffer[msg_std::head] 		= (in.receiver << 5) | (in.sender << 2) | (in.type << 1) | (in.kind >> 2);
+	*buffer[msg_std::head + 1] 	= (in.kind << 6) | (in.message_number >> 16 & 31);
+	*buffer[msg_std::head + 2] 	= in.message_number >> 8 & 255;
+	*buffer[msg_std::head + 2] 	= in.message_number & 255;
 	
-	memcpy(buffer[msg_std::message_space], in.message_space, msg_std::message_space_size);
+	memcpy(buffer[msg_std::message_space], &in.message_space, msg_std::message_space_size);
 	
-	buffer[msg_std::length - 1] = ';';
+	*buffer[msg_std::length - 1] = msg_std::end;
 }
 
 #endif

@@ -36,6 +36,7 @@ void load_config(){
 	YAML::Node node_properties	 = config["properties"];
 	YAML::Node node_robot		 = node_properties["robot"];
 	YAML::Node node_camera		 = node_properties["camera"];
+	YAML::Node program			 = config["program"];
 	
 	variables::properties::logs::calculations = 			config["logs"]["calculations"].as<std::string>();
 	variables::properties::logs::actions = 					config["logs"]["actions"].as<std::string>();
@@ -73,6 +74,25 @@ void load_config(){
 	variables::limits::minimal::circle = 							node_robot["minimal"]["circle"].as<decimal_n>();
 	variables::limits::maximal::circle = 							node_robot["maximal"]["circle"].as<decimal_n>();
 	//~ variables::properties::camera::size_footage_vertical = 		node_camera["size_footage_vertical"].as<unsigned_n>();
+	
+	// program segment start
+	variables::program::files::chat = program["files"]["chat"].as<std::string>();
+	// program segment end
+	
+	
+	/// sub-file opening
+	YAML::Node config_chat = YAML::LoadFile(variables::program::files::chat)["chat"];
+	// chat segment start
+	variables::chat::port = 							config_chat["port"].as<std::string>();
+	variables::chat::check_frequency = 					config_chat["check_frequency"].as<unsigned_n>();
+	
+	variables::chat::response_timeout::extended = 		config_chat["response_timeout"]["extended"].as<unsigned_n>();
+	variables::chat::response_timeout::normal = 		config_chat["response_timeout"]["normal"].as<unsigned_n>();
+	variables::chat::response_timeout::time_critical = 	config_chat["response_timeout"]["time_critical"].as<unsigned_n>();
+	
+	variables::chat::attempt_count =					config_chat["attempt_count"].as<unsigned_n>();
+	// chat segment end
+	
 	std::cout << variables::properties::information << std::endl;
 	
 	//~ std::ofstream fout("../defines/config.yaml");

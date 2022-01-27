@@ -24,11 +24,14 @@
 #ifndef CHAT_HPP
 #define CHAT_HPP
 
-class chat
-{
+#include <cstring>
+#include <memory>
+#include "serial.hpp"
+
+class chat {
 	public:
 		chat();
-			
+		std::shared_ptr<serial> main_serial;
 	private:
 		/* add your private declarations */
 };

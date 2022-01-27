@@ -22,22 +22,16 @@
  */
 
 
-#include "../../defines/constants.h"
-#include "camera.hpp"
 #include <string>
 #include <vector>
 #include <fstream>
 #include <iostream>
-//~ #include "yaml-cpp/yaml.h"
 
-#include <yaml.h>
+#include "../../defines/constants.h"
+#include "camera.hpp"
 
 
 camera::camera(){
 	
 }
-
-int main(){
-	
-	}
 

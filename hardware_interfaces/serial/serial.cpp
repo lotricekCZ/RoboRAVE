@@ -23,6 +23,7 @@
 
 
 #include <string>
+#include <vector>
 #include "serial.hpp"
 
 
@@ -36,30 +37,46 @@
 
 serial::~serial(){}
 
+
+
 void serial::open(){
-	mn::CppLinuxSerial::SerialPort::Open();
-	}
-	
-void serial::close(){
-	mn::CppLinuxSerial::SerialPort::Close();
+	Open();
 	}
 
-void serial::write(const std::string& data){
-	mn::CppLinuxSerial::SerialPort::Write(data);
-	}
+
 	
-void serial::read(std::string& data){
-	mn::CppLinuxSerial::SerialPort::Read(data);
+void serial::close(){
+	Close();
 	}
+
+
+
+void serial::write(const std::vector<uint8_t>& data){
+	mn::CppLinuxSerial::SerialPort::WriteBinary(data);
+	}
+
+
 	
+void serial::read(std::vector<uint8_t>& data){
+	mn::CppLinuxSerial::SerialPort::ReadBinary(data);
+	}
+
+
+
 void serial::baudrate(speed_t data){
 	mn::CppLinuxSerial::SerialPort::SetBaudRate(data);
 	}
+
+
 	
 void serial::port(std::string data){
 	mn::CppLinuxSerial::SerialPort::SetDevice(data);
 	}
+
+
 	
 void serial::baudrate(mn::CppLinuxSerial::BaudRate data){
 	mn::CppLinuxSerial::SerialPort::SetBaudRate(data);
 	}
+
+

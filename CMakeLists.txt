@@ -68,7 +68,10 @@ target_include_directories(yaml_worker
         ${YAML_CPP_INCLUDE_DIRS}
 )
 add_executable(roborave ${SOURCE_FILES})
+
 include(${CMAKE_CURRENT_SOURCE_DIR}/tests/main_functions/main_functions.txt)
+include(${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/hardware_interfaces.txt)
+
 add_library(log_maintain SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.cpp
 							${CMAKE_CURRENT_SOURCE_DIR}/utils/log_maintainer/log_maintain.hpp)
 							
@@ -94,10 +97,6 @@ add_library(plan_utils 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/plann
 add_library(planner 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/planner.cpp)
 add_library(path	 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/path.cpp)
 
-add_library(serial STATIC ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/serial.cpp
-							${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/serial.hpp
-							)
-
 target_link_libraries(obsolete variables coordinates)
 target_link_libraries(line coordinates)
 target_link_libraries(location coordinates)
@@ -119,7 +118,7 @@ target_link_libraries(avoider location coordinates line circle wall surround_cir
 target_link_libraries(plan_utils location coordinates line circle wall surround_circle candle angles path avoider)
 target_link_libraries(planner location coordinates line circle wall surround_circle candle angles path avoider plan_utils)
 
-target_link_libraries(serial -lCppLinuxSerial)
+#~ target_link_libraries(serial -lCppLinuxSerial)
 target_link_libraries(yaml_worker variables ${YAML_CPP_LIBRARIES})
 
 
@@ -133,12 +132,11 @@ endif()
 target_link_libraries(roborave Threads::Threads 
 					${YAML_CPP_LIBRARIES} ${TORCH_LIBRARIES}
 					log_maintain yaml_worker
-					serial 	variables	coordinates 
 					line 	circle		location 
 					node 	speeds		step
 					wall	obstacle	surround_circle
 					candle	map			dijkstra
 					angles	planner		vector
 					avoider obsolete	path
-					plan_utils
+					plan_utils variables coordinates 
 					)

@@ -69,6 +69,10 @@ properties:
     maximal:
       circle:	3.0
       
+program:
+    files:
+        chat: ../hardware_interfaces/serial/chat.yaml
+        
 information: |
  Roborave robot software, version 0.1.2-a
  © Jakub Ramašeuski, 2021

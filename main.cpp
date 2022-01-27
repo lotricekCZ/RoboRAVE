@@ -692,6 +692,79 @@ int main(int argc, char *argv[]) {
 				coordinates(4, 3), coordinates(-5, 2), 0)) std::cout << o.print() << std::endl;
 			break;
 			}
+			
+		case 82:{ // creates a buffer of message spaces and monitors response on them ./roborave 82  5 1000
+			map m;
+	
+			coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 8), coordinates(-6, 7)};
+			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
+			coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
+			coordinates a[] = {coordinates(3, -3), coordinates(6, 0), coordinates(7, -1), coordinates(4, -4)};
+			coordinates b[] = {coordinates(9, 2), coordinates(9, 3), coordinates(13, 3), coordinates(13, 2)};
+			coordinates d[] = {coordinates(1, 5), coordinates(2, 6), coordinates(0, 8), coordinates(-1, 7)};
+			
+			//~ m.append(candle(coordinates(4,3)));
+			m.append(wall(c));
+			m.append(wall(x));
+			m.append(wall(y));
+			m.append(wall(z));
+			m.append(wall(a));
+			m.append(wall(b));
+			m.append(wall(d));
+			planner p;
+			
+			
+			
+			coordinates end(c_f(argv[2]), c_f(argv[3]));
+			coordinates start(c_f(argv[4]), c_f(argv[5]));
+			path pth(step(start, end));
+			
+			std::cout << pth.at(0).print_geogebra() << std::endl;
+			for(auto w: m._map_walls)
+				std::cout << w.print_geogebra() << std::endl;
+				
+			planner::avoid(pth, m);
+			//~ step::intersection(s, m);
+			break;
+			}
+			
+		case 83:{ // encodes speeds / acceleration into steps ./roborave 83  5 3  -3 2
+			map m;
+	
+			coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 8), coordinates(-6, 7)};
+			coordinates x[] = {coordinates(1, 1), coordinates(0, 2), coordinates(4, 6), coordinates(5, 5)};
+			coordinates y[] = {coordinates(-1, 1), coordinates(0, 2), coordinates(4, -2), coordinates(3, -3)};
+			coordinates z[] = {coordinates(4, 6), coordinates(5, 7), coordinates(9, 3), coordinates(8, 2)};
+			coordinates a[] = {coordinates(3, -3), coordinates(6, 0), coordinates(7, -1), coordinates(4, -4)};
+			coordinates b[] = {coordinates(9, 2), coordinates(9, 3), coordinates(13, 3), coordinates(13, 2)};
+			coordinates d[] = {coordinates(1, 5), coordinates(2, 6), coordinates(0, 8), coordinates(-1, 7)};
+			
+			//~ m.append(candle(coordinates(4,3)));
+			m.append(wall(c));
+			m.append(wall(x));
+			m.append(wall(y));
+			m.append(wall(z));
+			m.append(wall(a));
+			m.append(wall(b));
+			m.append(wall(d));
+			planner p;
+			
+			
+			
+			coordinates end(c_f(argv[2]), c_f(argv[3]));
+			coordinates start(c_f(argv[4]), c_f(argv[5]));
+			path pth(step(start, end));
+			
+			std::cout << pth.at(0).print_geogebra() << std::endl;
+			for(auto w: m._map_walls)
+				std::cout << w.print_geogebra() << std::endl;
+				
+			planner::avoid(pth, m);
+			//~ step::intersection(s, m);
+			break;
+			}
+			
 		}
 	
     uint8_t c = std::thread::hardware_concurrency();	

@@ -21,13 +21,13 @@
  * 
  */
  
-#ifndef CHAT_HPP
-#define CHAT_HPP
+#ifndef MESSAGE_HPP
+#define MESSAGE_HPP
 
 class message
 {
 	public:
-		typedef struct content{
+		typedef struct content {
 			unsigned receiver:3;
 			unsigned sender:3;
 			unsigned type:1; //typ zpravy (0 - prikaz, 1 - data, potvrzovac) - data jsou posilana pres UΑRΤ, prikazy pres I2C
@@ -38,14 +38,14 @@ class message
 			 *  4 - natoc foukac, 5 - roztoc foukac, 6 - vypni foukac, 7 - rezervovano) 
 			 * a (8 - data0, 9 - data1, 10 - data2, 11 - potvrzovac, 12 - rezervovano, 13 - rezervovano, 14 - rezervovano, 15 - rezervovano)*/
 			uint8_t message_space[16]; // prinasi 2^128 moznosti vyuziti (10bitova data po osmi - 80b)
-		};
+		} content;
 		
-		bool decode(uint8_t in[22], content &in);
-		void encode(content in, uint8_t &buffer[22]);
+		bool decode(uint8_t buffer[msg_std::length], message::content &in);
+		void encode(message::content &in, uint8_t *buffer[msg_std::length]);
 		message();
 		
 	private:
 		/* add your private declarations */
 };
 
-#endif /* CHAT_HPP */ 
+#endif /* MESSAGE_HPP */ 

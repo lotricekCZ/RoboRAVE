@@ -33,7 +33,9 @@ class fire_sensor{
 		decimal_n range;
 		chat *_conn;
 		
-		fire_sensor(uint8_t, decimal_n, decimal_n);
+		fire_sensor(uint8_t sensors = 8, 
+					decimal_n spread = 45 /*degrees*/, 
+					decimal_n range = 70 /*cm*/);
 		bool update();
 		std::vector<node> get_data(bool update);
 	private:

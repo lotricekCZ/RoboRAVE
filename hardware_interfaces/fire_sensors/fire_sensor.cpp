@@ -21,11 +21,12 @@
  * 
  */
 
+#include <memory>
+#include <vector>
 
-#include "../serial/chat.cpp"
+#include "../serial/chat.hpp"
 #include "../../utils/data_containers/angles/node/node.hpp"
 #include "fire_sensor.hpp"
-#include <vector>
 
 /*
  * 
@@ -36,7 +37,7 @@
  * 
  */
 
-fire_sensor::fire_sensor(uint8_t sensors = 8, decimal_n spread = 45 /*degrees*/, decimal_n range = 70 /*cm*/){
+fire_sensor::fire_sensor(uint8_t sensors, decimal_n spread, decimal_n range){
 	this -> sensors = std::vector<node> (sensors);
 	this -> range = range;
 	this -> spread = spread;

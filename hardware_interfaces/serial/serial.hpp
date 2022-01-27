@@ -27,24 +27,28 @@
 
 #include <CppLinuxSerial/SerialPort.hpp>
 
-using namespace mn::CppLinuxSerial;
+//~ using namespace mn::CppLinuxSerial;
 
-class serial: public SerialPort
-{	
-	
+class serial: public mn::CppLinuxSerial::SerialPort {	
 	public:
+		using mn::CppLinuxSerial::SerialPort::ReadBinary;
+		using mn::CppLinuxSerial::SerialPort::WriteBinary;
+		using mn::CppLinuxSerial::SerialPort::Open;
+		using mn::CppLinuxSerial::SerialPort::Close;
+		//~ using mn::CppLinuxSerial::BaudRate;
+		
 		void open();
 		void close();
-		void read(std::string&);
-		void write(const std::string&);
+		void read(std::vector<uint8_t> &data);
+		void write(const std::vector<uint8_t> &data);
 		
 		void port(std::string); /// port like "/dev/ttyUSB0"
 		
 		void baudrate(speed_t);
 		void baudrate(mn::CppLinuxSerial::BaudRate);
 		serial(): SerialPort(){}
-		serial(const std::string & a, BaudRate b): SerialPort(a, b){}
-		serial(const std::string & a, speed_t b): SerialPort(a, b){}
+		serial(const std::string &a, mn::CppLinuxSerial::BaudRate b): SerialPort(a, b){}
+		serial(const std::string &a, speed_t b): SerialPort(a, b){}
 		~serial();
 	private:
 		/* add your private declarations */

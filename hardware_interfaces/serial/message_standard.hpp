@@ -1,7 +1,7 @@
 #ifndef MSG_STD
 #define MSG_STD
 
-namespace msg_std{
+namespace msg_std {
 	// this is a format of all messages that are sent
 	const uint8_t length 		= 22;
 	const uint8_t head			= 1;

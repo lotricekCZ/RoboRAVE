@@ -29,8 +29,7 @@
 #define MESSAGE_SPACE_HPP
 
 namespace data{
-	namespace send{
-		
+	namespace send{		
 		typedef struct motor{
 			uint16_t left_steps;
 			uint16_t right_steps; // 4b
@@ -45,13 +44,13 @@ namespace data{
 			unsigned left_erase:1;
 			unsigned right_erase:1;
 			unsigned input_type:6; // 13b
-		};
+			};
 	
 		typedef struct sensor{
 			uint16_t period = 0;
 			unsigned oversampling:5;
 			uint16_t expo_time = 0;	
-		};
+			};
 		
 		void translate_sensor(uint8_t &out[16], sensor in){
 			out[0] = in.period >> 8 	& 255;

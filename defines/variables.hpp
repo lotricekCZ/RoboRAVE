@@ -129,7 +129,27 @@ static class variables { // I hate myself for this!!!
 					} explo;
 					
 				} thresholds;
-
+			
+			static class program {
+				public:
+				static class files {
+					public:
+					static std::string chat;
+					} files;
+				} program;
+				
+			static class chat {
+				public:
+				static std::string port;
+				static uint16_t check_frequency; // 0-65535 is far more than sufficient
+				static class response_timeout {
+					public:
+					static uint16_t extended;
+					static uint16_t normal;
+					static uint16_t time_critical;
+					} response_timeout;
+				static uint8_t attempt_count; // Why would you wait 127-255-512 seconds? It's pointless, data are gone.
+				} chat;
 			
 		variables();
 			

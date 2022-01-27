@@ -21,12 +21,10 @@
  * 
  */
 
-
 #include "chat.hpp"
 
 
-chat::chat()
-{
+chat::chat(){
 	
 }
 

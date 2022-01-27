@@ -69,6 +69,21 @@ unsigned_n variables::properties::camera::size_recognition_vertical;
 unsigned_n variables::properties::camera::size_footage_horizontal;
 unsigned_n variables::properties::camera::size_footage_vertical;
 
+// program segment start
+std::string variables::program::files::chat;
+// program segment end
+
+// chat segment start
+std::string variables::chat::port;
+uint16_t variables::chat::check_frequency;
+
+uint16_t variables::chat::response_timeout::extended;
+uint16_t variables::chat::response_timeout::normal;
+uint16_t variables::chat::response_timeout::time_critical;
+
+uint8_t variables::chat::attempt_count;
+// chat segment end
+
 const decimal_n variables::omega_wheel_const = (pi_const * r_wheel) / (N_wheel * dist_wheel);
 const decimal_n variables::wheel_step_length_const  = (2 * pi_const * r_wheel) / (N_wheel);
 
