@@ -27,5 +27,5 @@ class sensor_driver{
 		virtual void get_data();
 		
 	};
-#include <driver_sensor_array.cxx>
+#include "driver_sensor_array.cxx"
 #endif

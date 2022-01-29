@@ -1,10 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
-#include "motorduino_logic.h"
-#include "../chatchat.h"
-#include "../turbine/turbine.h"
-#include "../motor/motor.h"
-#include "../translator_motor/translator_motor.h"
+
+//~ #include "motorduino_logic.h"
 
 void Logic::read(){
 //Serial.println("N/A");

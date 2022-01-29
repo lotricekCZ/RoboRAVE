@@ -2,6 +2,7 @@ main
 math
 build
 libtorch
+hardware_interfaces/arduino/build
 
 *.gch
 *.o

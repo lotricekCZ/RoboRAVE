@@ -1,8 +1,8 @@
 #ifndef chat_h
 #define chat_h
-class Chat{
+class chat {
 	
-	struct message{
+	struct message {
 		unsigned receiver:3;
 		unsigned sender:3;
 		unsigned type:1; //typ zpravy (0 - prikaz, 1 - data, potvrzovac) - data jsou posilana pres UΑRΤ, prikazy pres I2C
@@ -16,7 +16,7 @@ class Chat{
 		};
 		public:
 			uint8_t buffer[22];
-			Chat(){
+			chat(){
 				buffer[0] = "$";
 				buffer[21] = ";";
 				}
@@ -27,5 +27,5 @@ class Chat{
 			bool debufferize(uint8_t input[20]);	// plni incoming z bufferu
 			void fill_message(uint8_t input[16]);	// plni message space outcomingu
 	};
-	#include <chat.cxx>
+	#include "chat.cpp"
 #endif

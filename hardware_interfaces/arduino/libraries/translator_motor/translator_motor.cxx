@@ -1,40 +1,39 @@
-#include "translator_motor.h"
+#ifndef translator_motor_cxx
+#define translator_motor_cxx
 
-void Translator_motor::fill_input(uint8_t in[16]){
+void translator_motor::fill_input(uint8_t in[16]){
 	for(uint8_t i = 0; i < sizeof(input); i++){
 		input[i] = in[i];
 		}
 	}
 	
-void Translator_motor::compose(uint8_t *out[16], class Motor *Mr, class Motor *Ml){
-	*out[0] = Mr -> motor.remaining_steps >> 8;
-	*out[1] = Mr -> motor.remaining_steps >> 0;
+void translator_motor::compose(uint8_t *out[16], class motor *Mr, class motor *Ml){
+	*out[0] = Mr -> _motor.remaining_steps >> 8;
+	*out[1] = Mr -> _motor.remaining_steps >> 0;
 	
-	*out[2] = Ml -> motor.remaining_steps >> 8;
-	*out[3] = Ml -> motor.remaining_steps >> 0;
+	*out[2] = Ml -> _motor.remaining_steps >> 8;
+	*out[3] = Ml -> _motor.remaining_steps >> 0;
 	
-	*out[4] = Mr -> motor.high_interval >> 6;
-	*out[5] = Mr -> motor.high_interval << 2  | Mr -> motor.direction;
+	*out[4] = Mr -> _motor.high_interval >> 6;
+	*out[5] = Mr -> _motor.high_interval << 2  | Mr -> _motor.direction;
 	
-	*out[6] = Ml -> motor.high_interval >> 6;
-	*out[7] = Ml -> motor.high_interval << 2  | Ml -> motor.direction;
+	*out[6] = Ml -> _motor.high_interval >> 6;
+	*out[7] = Ml -> _motor.high_interval << 2  | Ml -> _motor.direction;
 	
-	*out[8] = Mr -> motor.traveled_steps >> 24;
-	*out[9] = Mr -> motor.traveled_steps >> 16;
+	*out[8] = Mr -> _motor.traveled_steps >> 24;
+	*out[9] = Mr -> _motor.traveled_steps >> 16;
 	
-	*out[10] = Mr -> motor.traveled_steps >> 8;
-	*out[11] = Mr -> motor.traveled_steps >> 0;
+	*out[10] = Mr -> _motor.traveled_steps >> 8;
+	*out[11] = Mr -> _motor.traveled_steps >> 0;
 	
-	*out[12] = Ml -> motor.traveled_steps >> 24;
-	*out[13] = Ml -> motor.traveled_steps >> 16;
+	*out[12] = Ml -> _motor.traveled_steps >> 24;
+	*out[13] = Ml -> _motor.traveled_steps >> 16;
 	
-	*out[14] = Ml -> motor.traveled_steps >> 8;
-	*out[15] = Ml -> motor.traveled_steps >> 0;
-	
-	
+	*out[14] = Ml -> _motor.traveled_steps >> 8;
+	*out[15] = Ml -> _motor.traveled_steps >> 0;
 	}
 	
-void Translator_motor::decompose(){
+void translator_motor::decompose(){
 	data.left_steps = ((input[0] << 8) | input[1]);
 	data.right_steps = ((input[2] << 8) | input[3]);
 	
@@ -55,10 +54,10 @@ void Translator_motor::decompose(){
 	// Serial.println("RIGHT:\t" + String(data.right_mcrs_hi)+"  "+ String(data.right_mcrs_lo)+" STEPS: "+String(data.right_steps)+" " +String(data.right_dir)+"  "+ String(data.right_unchainer));
 	}
 
-void Translator_motor::apply(class Motor *Mri, class Motor *Mle){
+void translator_motor::apply(class motor *Mri, class motor *Mle){
 	// Serial.println("\nAPPLYING\n");
-	class Motor *Mr = Mri;
-	class Motor *Ml = Mle;	
+	class motor *Mr = Mri;
+	class motor *Ml = Mle;	
 	// Serial.println(data.input_type);
 	// Serial.println(data.left_steps);
 	// Serial.println(data.right_steps);
@@ -200,7 +199,7 @@ void Translator_motor::apply(class Motor *Mri, class Motor *Mle){
 		}
 	}
 	
-void Translator_motor::left_rewrite(class Motor *Ml){
+void translator_motor::left_rewrite(class motor *Ml){
 		if(data.left_erase){
 			Ml -> use_motor(data.left_steps, true);
 		}else{
@@ -208,7 +207,7 @@ void Translator_motor::left_rewrite(class Motor *Ml){
 		}
 	}
 
-void Translator_motor::right_rewrite(class Motor *Mr){
+void translator_motor::right_rewrite(class motor *Mr){
 		if(data.right_erase){
 			Mr -> use_motor(data.right_steps, true);
 			}else{
@@ -216,29 +215,30 @@ void Translator_motor::right_rewrite(class Motor *Mr){
 		}
 	}
 	
-void Translator_motor::left_set_speed(class Motor *Ml){
-	Ml -> motor.high_interval = data.left_mcrs_hi;
-	Ml -> motor.low_interval = data.left_mcrs_lo; 
+void translator_motor::left_set_speed(class motor *Ml){
+	Ml -> _motor.high_interval = data.left_mcrs_hi;
+	Ml -> _motor.low_interval = data.left_mcrs_lo; 
 	}
 
-void Translator_motor::right_set_speed(class Motor *Mr){
-	Mr -> motor.high_interval = data.right_mcrs_hi;
-	Mr -> motor.low_interval = data.right_mcrs_lo; 
+void translator_motor::right_set_speed(class motor *Mr){
+	Mr -> _motor.high_interval = data.right_mcrs_hi;
+	Mr -> _motor.low_interval = data.right_mcrs_lo; 
 	}
 
-void Translator_motor::left_set_dir(class Motor *Ml){
-	Ml -> motor.direction = (Motor::dir) data.left_dir;
+void translator_motor::left_set_dir(class motor *Ml){
+	Ml -> _motor.direction = (motor::dir) data.left_dir;
 	}
 	
-void Translator_motor::right_set_dir(class Motor *Mr){
-	Mr -> motor.direction = (Motor::dir) data.right_dir;
+void translator_motor::right_set_dir(class motor *Mr){
+	Mr -> _motor.direction = (motor::dir) data.right_dir;
 	}
 
-void Translator_motor::left_set_chain(class Motor *Ml){
-	Ml -> motor.chain = (Motor::unchainer) data.left_unchainer;
+void translator_motor::left_set_chain(class motor *Ml){
+	Ml -> _motor.chain = (motor::unchainer) data.left_unchainer;
 	}
 
-void Translator_motor::right_set_chain(class Motor *Mr){
-	Mr -> motor.chain = (Motor::unchainer) data.right_unchainer;
+void translator_motor::right_set_chain(class motor *Mr){
+	Mr -> _motor.chain = (motor::unchainer) data.right_unchainer;
 	}
 	
+#endif

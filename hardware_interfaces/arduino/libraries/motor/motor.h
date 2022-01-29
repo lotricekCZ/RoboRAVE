@@ -2,7 +2,7 @@
 #define motor_h
 #include <Arduino.h>
 
-class Motor{
+class motor{
 		public:
 		enum dir{FRONT = 0, BACK = 1, STALLED = 2};
 		enum step_cycle{high = 1, low = 0};
@@ -32,8 +32,8 @@ class Motor{
 		void write_specific_high(uint8_t pin);
 		void write_specific_low(uint8_t pin);
 	public:
-		properties motor = {0, 0, 0, 0, 0, 0, &PORTD, 0, 0, STALLED, low, BUFFER};
-		Motor();
+		properties _motor = {0, 0, 0, 0, 0, 0, &PORTD, 0, 0, STALLED, low, BUFFER};
+		motor();
 		// pro provoz na pozadi
 		void handle_in_background();
 		//moznosti, jak nastavit motor
@@ -47,5 +47,5 @@ class Motor{
 		void set_delays(uint16_t low, uint16_t high);
 	
 	};
-	#include <motor.cxx>
+	#include "motor.cxx"
 #endif

@@ -2,7 +2,7 @@
 #define turbine_sensors_h
 #include <Arduino.h>
 
-class Turbine_sensor{
+class turbine_sensor{
 	typedef struct d{
 		unsigned data_0:10;
 		unsigned data_1:10;
@@ -15,12 +15,12 @@ class Turbine_sensor{
 		d data;
 		void get_data();
 		void compose();
-		Turbine_sensor(){
+		turbine_sensor(){
 			data.adc_0 = 6;
 			data.adc_1 = 7;
 			data.oversampling = 5;
 			};
 };
 
-#include <turbine_sensors.cxx>
+#include "turbine_sensors.cxx"
 #endif // turbine_sensors_h

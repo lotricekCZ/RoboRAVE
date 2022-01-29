@@ -1,8 +1,8 @@
 #ifndef translator_motor_h
 #define translator_motor_h
-#include "../motor.h"
+#include "../motor/motor.h"
 
-class Translator_motor{
+class translator_motor {
 	private:
 		uint8_t	 input[16];
 		struct decomposed_data{
@@ -22,22 +22,22 @@ class Translator_motor{
 			} data {0,0,0,0,0,0,0,0,0,0,0,0,0};
 		//~ struct decomposed_data data{0,0,0,0,0,0,0,0,0,0,0,0,0};
 		
-		void left_set_speed(class Motor *Ml);
-		void left_set_dir(class Motor *Ml);
-		void left_set_chain(class Motor *Ml);
-		void left_rewrite(class Motor *Ml);
+		void left_set_speed(class motor *Ml);
+		void left_set_dir(class motor *Ml);
+		void left_set_chain(class motor *Ml);
+		void left_rewrite(class motor *Ml);
 		
-		void right_set_speed(class Motor *Mr);
-		void right_set_dir(class Motor *Mr);
-		void right_set_chain(class Motor *Mr);
-		void right_rewrite(class Motor *Mr);
+		void right_set_speed(class motor *Mr);
+		void right_set_dir(class motor *Mr);
+		void right_set_chain(class motor *Mr);
+		void right_rewrite(class motor *Mr);
 		
 	public:
-		Translator_motor(){};
-		void apply(class Motor *Mr, class Motor *Ml);
-		void compose(uint8_t *out[16], class Motor *Mr, class Motor *Ml);
+		translator_motor(){};
+		void apply(class motor *Mr, class motor *Ml);
+		void compose(uint8_t *out[16], class motor *Mr, class motor *Ml);
 		void decompose();
 		void fill_input(uint8_t in[16]);
 	};
-
+#include "translator_motor.cxx"
 #endif

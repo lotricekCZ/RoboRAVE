@@ -1,12 +1,13 @@
+#include "../chat/chat.h"
+#include "../turbine/turbine.h"
+#include "../motor/motor.h"
+#include "../translator_motor/translator_motor.h"
+#include "../translator_turbine/translator_turbine.h"
+#include "../turbine_sensors/turbine_sensors.h"
+#include "../translator_sensor/translator_sensor.h"
+
 #ifndef motorduino_logic_h
 #define motorduino_logic_h
-#include <chat.h>
-#include <turbine.h>
-#include <motor.h>
-#include <translator_motor.h>
-#include <translator_turbine.h>
-#include <turbine_sensors.h>
-#include <translator_sensor.h>
 
 enum add_book{IR = 1, GND = 3, MTR = 2, MSR = 0};
 enum msg_type{CMD = 0, DAT = 1};
@@ -20,24 +21,30 @@ enum msg_kind{
 			DND_UND = 6/*Didn`t understand*/
 			}; 
 			
-class Logic{
+class Logic {
 	uint32_t write_ser_time = micros();
-		struct{
+		struct {
 			unsigned is_unapplied:1;
 			unsigned is_unsent:1;
 			unsigned is_pending:1;
-			}flags;
+			} flags;
 	public:
-		class Translator_motor *main_translator_motor;
-		class Translator_turbine *main_translator_turbine;
-		class Motor *main_motor_l;
-		class Motor *main_motor_r;
-		class Turbine *main_turbine;
-		class Chat *main_chat;
-		class Turbine_sensor *sensor;
+		class translator_motor *main_translator_motor;
+		class translator_turbine *main_translator_turbine;
+		class motor *main_motor_l;
+		class motor *main_motor_r;
+		class turbine *main_turbine;
+		class chat *main_chat;
+		class turbine_sensor *sensor;
 		
-		Logic(){DDRD |= 1 <<2; };
-		Logic(class Motor *ml, class Motor *mr, class Turbine *t, class Chat *c, class Translator_motor *tm, class Turbine_sensor *ts, class Translator_turbine *tt){
+		Logic(){DDRD |= 1 << 2;};
+		Logic(class motor *ml, 
+				class motor *mr, 
+				class turbine *t, 
+				class chat *c, 
+				class translator_motor *tm, 
+				class turbine_sensor *ts, 
+				class translator_turbine *tt){
 			DDRD |= 1 << 2;
 			main_motor_l = ml;
 			main_motor_r = mr;
@@ -59,6 +66,7 @@ class Logic{
 	private:
 	
 	};
-	#include <motorduino_logic.cxx>
+	
+#include "motorduino_logic.cxx"
 
 #endif

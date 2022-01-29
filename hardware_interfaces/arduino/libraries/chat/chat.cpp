@@ -1,6 +1,6 @@
-#include <chat.h>
+#include "chat.h"
 
-void Chat::bufferize(){
+void chat::bufferize(){
 	buffer[1] = (outcoming.receiver << 5) | (outcoming.sender << 2) | (outcoming.type << 1) | (outcoming.kind >> 2);
 	buffer[2] = (outcoming.kind << 6) | (outcoming.message_number >> 16);
 	buffer[3] = (outcoming.message_number >> 8);
@@ -9,13 +9,16 @@ void Chat::bufferize(){
 		buffer[i+5] = outcoming.message_space[i];
 		}
 	}
+
 	
-void Chat::fill_message(uint8_t input_message[16]){
+void chat::fill_message(uint8_t input_message[16]){
 	for(uint8_t i = 0; i < sizeof(outcoming.message_space); i++){
 		outcoming.message_space[i] = input_message[i];
 		}
 	}
-bool Chat::debufferize(uint8_t input[20]){
+
+
+bool chat::debufferize(uint8_t input[20]){
 	//~ if(input[0] != '$' && input[21] != ';'){
 		//~ return false;
 		//~ }
@@ -30,8 +33,9 @@ bool Chat::debufferize(uint8_t input[20]){
 		}
 	return true;
 	}
+
 	
-void  Chat::clear_message(){
+void chat::clear_message(){
 	for(uint8_t i = 0; i < sizeof(outcoming); i++){
 			buffer[i] = 0;
 		}

@@ -1,9 +1,9 @@
 #ifndef translator_sensor_h
 #define translator_sensor_h
-#include <driver_sensor_array.h>
+#include "../driver_sensors/driver_sensor_array.h"
 
 
-class Translator_sensor{
+class translator_sensor{
 	
 	public:
 		struct{
@@ -12,12 +12,12 @@ class Translator_sensor{
 			uint32_t last_change = 0;	
 		}presets;
 		uint8_t data[16];
-		Translator_sensor(){};
+		translator_sensor(){};
 		sensor_driver *main_se_dr;
 		void decompose(uint8_t in[16]);
 		void compose();
 		bool is_longer();
 	
 	};
-#include <translator_sensor.cxx>
+#include "translator_sensor.cxx"
 #endif

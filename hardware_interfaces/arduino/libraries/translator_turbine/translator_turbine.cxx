@@ -1,7 +1,7 @@
 #include <translator_turbine.h>
 #include <turbine.h>
 
-void Translator_turbine::fill_input(uint8_t in[16]){
+void translator_turbine::fill_input(uint8_t in[16]){
 	//Serial.println("fill");
 	for(uint8_t i = 0; i < sizeof(input); i++){
 		input[i] = in[i];
@@ -10,7 +10,7 @@ void Translator_turbine::fill_input(uint8_t in[16]){
 	//Serial.println("fillend");
 	}
 	
-void Translator_turbine::decompose(){
+void translator_turbine::decompose(){
 	data.state_duration = (input[0] << 8 | input[1]) >> 2;
 	data.turbine_steps = ((input[1] & 0b11) << 10 | input[2] << 2 | input[3] >> 6);
 	data.stepper_option = input[3] >> 4;
@@ -21,7 +21,7 @@ void Translator_turbine::decompose(){
 	Serial.println(data.hold);//Serial.println(data.turbine_steps);
 	}
 	
-void Translator_turbine::get_data(uint8_t *out[16], class Turbine *tur, class Turbine_sensor *tur_s){
+void translator_turbine::get_data(uint8_t *out[16], class turbine *tur, class turbine_sensor *tur_s){
 	*out[0] = tur -> primary.turbine_steps >> 4;
 	*out[1] = (tur -> primary.turbine_steps << 8) | (tur -> primary.turbine_tilt >> 8);
 	*out[2] = (tur -> primary.turbine_tilt);
@@ -34,7 +34,7 @@ void Translator_turbine::get_data(uint8_t *out[16], class Turbine *tur, class Tu
 	}
 
 
-void Translator_turbine::apply(uint8_t dec, uint8_t *out[16], class Turbine *tur, class Turbine_sensor *tur_s){
+void translator_turbine::apply(uint8_t dec, uint8_t *out[16], class turbine *tur, class turbine_sensor *tur_s){
 	//Serial.println("Apply");
 	uint16_t act_pos = (uint16_t)tur -> primary.turbine_tilt;
 	int16_t dest_pos = data.turbine_tilt - act_pos;
