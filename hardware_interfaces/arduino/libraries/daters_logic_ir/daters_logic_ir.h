@@ -13,7 +13,7 @@ enum msg_kind{
 			SET_ALL = 2			
 			}; 
 			
-class Logic{
+class logic{
 		struct{
 			unsigned is_unapplied:1;
 			unsigned is_periodic:1;
@@ -25,8 +25,8 @@ class Logic{
 		
 		enum add_book my_add;
 		
-		Logic(){};
-		Logic(class chat *c){
+		logic(){};
+		logic(class chat *c){
 			main_chat = c;
 			};
 		void write_ser(enum msg_kind, enum add_book);

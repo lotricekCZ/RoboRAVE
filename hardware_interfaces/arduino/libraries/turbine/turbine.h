@@ -4,7 +4,8 @@
 #include <Servo.h>
 
 enum stepper_options {UP = 1, DOWN = 0, STALLED = 2};
-enum turbine_options {ON = 1, OFF = 0};
+enum turbine_options {ON = 1, OFF = 0, CALIBRATING = 2};
+
 class turbine {
 		protected:
 		Servo esc_signal;
@@ -29,16 +30,24 @@ class turbine {
 			unsigned repeatings:6;
 			uint32_t warm_up_change;
 			uint16_t warm_up_duration;
+			//~ uint16_t pulse_width_us;
 			};
 			void change_stepper_motor_combination(uint8_t input);
 		public:
-			struct _turbine primary = {0, {8,12,4,6,2,3,1,9}, 1000, 0, 1024, 0, OFF, 9, PB2, &PORTB, STALLED, 0, 50, 180, 0, 0, 9000};
-			uint8_t res = (180-50)/64;
+			struct _turbine primary = {0, 
+					{8,12,4,6,2,3,1,9}, 
+					1000, 	0, 	2048, 
+					0, CALIBRATING, 9, 
+					PB2,	&PORTB,	STALLED, 
+					0,		50, 	180, 
+					0, 		0, 		9000};
+			uint8_t res = (180-40)/64;
 			turbine();
 			void move_stepper_motor();
 			void turn_on_turbine();
 			void turn_off_turbine();
 			void handle_in_background();
+			void init_servo();
 			void set_steps(uint16_t input);
 			void set_direction(stepper_options input);
 };

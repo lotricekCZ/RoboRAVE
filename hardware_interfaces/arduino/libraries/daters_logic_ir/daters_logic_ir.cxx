@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-void Logic::read(){
+void logic::read(){
 	//Serial.println(Serial.available());
 	if(Serial.available() > 19){
 		main_chat -> clear_message();
@@ -22,7 +22,7 @@ void Logic::read(){
 	
 	}
 
-void Logic::decide(){
+void logic::decide(){
 	if(flags.is_periodic){
 		if(main_translator_sensor -> is_longer()){
 			main_chat -> fill_message(main_translator_sensor -> data);
@@ -41,7 +41,7 @@ void Logic::decide(){
 	}
 	
 		
-void Logic::decide_sender(){
+void logic::decide_sender(){
 		switch(main_chat -> incoming.sender){
 			case MSR:
 				//Serial.println("e");
@@ -52,7 +52,7 @@ void Logic::decide_sender(){
 		}
 	}
 
-void Logic::decide_kind(){
+void logic::decide_kind(){
 	//Serial.println("g");
 		switch(main_chat -> incoming.kind){
 			case SET_ALL:
@@ -77,7 +77,7 @@ void Logic::decide_kind(){
 		}
 	}	
 
-void Logic::decide_type(){
+void logic::decide_type(){
 		switch(main_chat -> incoming.type){
 			case CMD:
 				//Serial.println("f");
@@ -88,7 +88,7 @@ void Logic::decide_type(){
 		}
 	}	
 	
-void Logic::write_ser(enum msg_kind datatype, enum add_book rec){
+void logic::write_ser(enum msg_kind datatype, enum add_book rec){
 	main_chat -> outcoming.kind = datatype;
 	main_chat -> outcoming.sender = my_add;
 	main_chat -> outcoming.receiver = rec;

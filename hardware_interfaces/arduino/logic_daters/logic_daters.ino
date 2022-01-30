@@ -13,7 +13,7 @@
 #include "../../libraries/daters_logic/daters_logic.h"
 #endif
 
-Logic l;
+logic l;
 sensor_driver s;
 translator_sensor t;
 chat c;
