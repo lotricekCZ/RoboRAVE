@@ -1,4 +1,5 @@
 #define IRDUINO
+//~ #define GNDUINO
 //#define DEBUG   
 
 #ifdef IRDUINO

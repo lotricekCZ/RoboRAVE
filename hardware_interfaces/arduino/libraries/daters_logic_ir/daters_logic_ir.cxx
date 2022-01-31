@@ -4,13 +4,37 @@
 
 void logic::read(){
 	//Serial.println(Serial.available());
-	if(Serial.available() > 19){
-		main_chat -> clear_message();
-		Serial.readBytes(main_chat -> buffer, sizeof(main_chat -> buffer));
-		main_chat -> debufferize(main_chat -> buffer);
-		flags.is_unapplied = true;
-		decide();
+	if(Serial.available() != 0){ // read if there is something to read
+		uint8_t read = Serial.read();
+		internal_serial_buf[index] = read;
+	    uint8_t ri = index + 1;
+	    ri = (ri < msg_std::length? ri: 0);
+		if(internal_serial_buf[index] == msg_std::end){
+			if(internal_serial_buf[ri] == msg_std::start){				
+				for(uint8_t i = ri; i < msg_std::length; i++){
+					main_chat -> buffer[i - ri] = internal_serial_buf[i];
+					} // copy them with an offset of sth
+				for(uint8_t i = 0; i < ri; i++){
+					main_chat -> buffer[i] = internal_serial_buf[ri + i];
+					} // copy them with an offset of sth
+				if(!main_chat -> debufferize(main_chat -> buffer)){
+					// executed if the message was not understood
+					main_chat -> clear_message();
+					//~ main_chat -> outcoming.kind = DND_UND;
+					main_chat -> outcoming.type = CMD;
+					main_chat -> bufferize();
+					for(uint8_t i = 0; i < msg_std::length; i++){
+						Serial.write(main_chat -> buffer[i]);
+						}
+					Serial.flush();
+					return;
+					}
+				flags.is_unapplied = true;			
+				}
+			}
+		index = ri;
 		}
+			
 			
 	if(Wire.available() > 19){
 		main_chat -> clear_message();

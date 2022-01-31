@@ -9,17 +9,17 @@ avrdude=$avrdude_dir/bin/avrdude
 configure=$avrdude_dir/etc/avrdude.conf
 current_dir=`pwd`
 
-#~ while getopts f: flag
-#~ do
-	#~ case "${flag}" in
-		#~ f)	case "${OPTARG}" in
-				#~ stm) compiled_one=logic_stm/logic_stm.ino;;
-				#~ motor) compiled_one=logic_motorduino/logic_motorduino.ino;;
-				#~ ir) compiled_one=logic_daters/logic_daters.ino;;
-				#~ gnd) compiled_one=logic_daters/logic_daters.ino;;
-			#~ esac
-    #~ esac
-#~ done
+while getopts f: flag
+do
+	case "${flag}" in
+		f)	case "${OPTARG}" in
+				stm) binary=build/logic_stm.ino.hex;;
+				motor) binary=build/logic_motorduino.ino.hex;;
+				ir) binary=build/logic_daters.ino.hex;;
+				gnd) binary=build/logic_daters.ino.hex;;
+			esac
+    esac
+done
 
 arduino15=`realpath --relative-to="$current_dir" "$arduino15"`
 

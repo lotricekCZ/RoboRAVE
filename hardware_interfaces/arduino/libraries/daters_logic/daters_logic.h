@@ -1,9 +1,9 @@
 #ifndef motorduino_logic_h
 #define motorduino_logic_h
 
-#include <chat.h>
-#include <driver_sensor_array.h>
-#include <translator_sensor.h>
+#include "../chat/chat.h"
+#include "../driver_sensors/driver_sensor_array.h"
+#include "../translator_sensor/translator_sensor.h"
 
 enum add_book{IR = 1, GND = 3, MTR = 2, MSR = 0};
 enum msg_type{CMD = 0, DAT = 1};
@@ -13,20 +13,22 @@ enum msg_kind{
 			SET_ALL = 2			
 			}; 
 			
-class Logic{
+class logic{
+		uint8_t index = 0;
 		struct{
 			unsigned is_unapplied:1;
 			unsigned is_periodic:1;
 			}flags;
+		uint8_t internal_serial_buf[msg_std::length];
 	public:
 		class sensor_driver *main_driver;
-		class Translator_sensor *main_translator_sensor;
-		class Chat *main_chat;
+		class translator_sensor *main_translator_sensor;
+		class chat *main_chat;
 		
 		enum add_book my_add;
 		
-		Logic(){};
-		Logic(class Chat *c){
+		logic(){};
+		logic(class chat *c){
 			main_chat = c;
 			};
 		void write_ser(enum msg_kind, enum add_book);
@@ -40,6 +42,6 @@ class Logic{
 	private:
 	
 	};
-	#include <daters_logic.cxx>
+	#include "daters_logic.cxx"
 
 #endif

@@ -14,10 +14,12 @@ enum msg_kind{
 			}; 
 			
 class logic{
+	uint8_t index = 0;
 		struct{
 			unsigned is_unapplied:1;
 			unsigned is_periodic:1;
 			}flags;
+	uint8_t internal_serial_buf[msg_std::length];
 	public:
 		class sensor_driver *main_driver;
 		class translator_sensor *main_translator_sensor;
