@@ -1,5 +1,5 @@
 /*
- * perimeter.hpp
+ * translator_lidar.hpp
  * 
  * Copyright 2022 Jakub Ramašeuski <jakub@skaryna.net>
  * 
@@ -21,35 +21,36 @@
  * 
  */
 
+#include "../lidar/lidar.cpp"
 
-#ifndef PERIMETER_HPP
-#define PERIMETER_HPP
-#include <array>
-//~ #include <mutex>
-//~ #include <thread>
+#ifndef TRANSLATOR_LIDAR_HPP
+#define TRANSLATOR_LIDAR_HPP
 
-
-
-class perimeter {
+class translator_lidar{
 	public:
-		class value {
-			public:
-				unsigned distance				:13;
-				unsigned quality				:8;
-				uint64_t last_replaced			:26;
-				unsigned angle					:9;
-				value(uint16_t distance = 0, uint8_t quality = 0, 
-					uint64_t time = 0, uint16_t angle = 0);
-			};
-		uint32_t replace_time = 1000; // ms
-		std::array<perimeter::value, 360> view;
-		perimeter();
-		bool replace(perimeter::value v); // true if replaced
-		bool replace(uint16_t distance = 0, uint8_t quality = 0, uint64_t time = 0, uint16_t angle = 0); // true if replaced
+		struct {
+			unsigned first_index:	9;
+			unsigned last_index:	9;
+			unsigned span:			4; // try to select only every n-th value
+			unsigned current_index:	9;
+			unsigned tolerable_age:	9;
+		} presets;
 		
+		struct value_sh {				// 38 bits, round to 40
+			unsigned distance 	:13;	// 80 - 8000 mm
+			unsigned angle		:9;		// 0-359
+			unsigned age		:16; 	// 65.5 secs
+			};
+			
+		translator_lidar();
+		uint8_t data[16];
+		lidar *main_lidar;
+		void decompose(uint8_t in[16]);
+		bool compose();
+		bool is_longer();
 			
 	private:
 		/* add your private declarations */
 };
 
-#endif /* PERIMETER_HPP */ 
+#endif /* TRANSLATOR_LIDAR_HPP */ 

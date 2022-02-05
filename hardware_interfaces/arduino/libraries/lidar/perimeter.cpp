@@ -21,7 +21,8 @@
  * 
  */
 
-
+#ifndef PERIMETER_CPP
+#define PERIMETER_CPP
 #include "perimeter.hpp"
 
 
@@ -63,3 +64,5 @@ bool perimeter::replace(uint16_t distance, uint8_t quality, uint64_t time, uint1
 	//~ Serial2.println(time);
 	return this -> replace(perimeter::value(distance, quality, time, angle));
 	}
+
+#endif // PERIMETER_CPP

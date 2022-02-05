@@ -88,7 +88,7 @@ void logic::decide_kind(){
 				main_driver -> get_data();
 				main_translator_sensor -> compose();
 				main_chat -> fill_message(main_translator_sensor -> data);
-				write_ser(SND_CON, MSR);
+				write_ser(SND_DAT, MSR);
 				break;
 		}
 	}	

@@ -1,5 +1,5 @@
 /*
- * perimeter.hpp
+ * translator_therm.hpp
  * 
  * Copyright 2022 Jakub Ramašeuski <jakub@skaryna.net>
  * 
@@ -20,36 +20,28 @@
  * 
  * 
  */
+#include <AMG88xx.h>
+#include "../driver_thermo/driver_thermo.cpp"
 
+#ifndef TRANSLATOR_THERM_HPP
+#define TRANSLATOR_THERM_HPP
 
-#ifndef PERIMETER_HPP
-#define PERIMETER_HPP
-#include <array>
-//~ #include <mutex>
-//~ #include <thread>
-
-
-
-class perimeter {
+class translator_therm {
 	public:
-		class value {
-			public:
-				unsigned distance				:13;
-				unsigned quality				:8;
-				uint64_t last_replaced			:26;
-				unsigned angle					:9;
-				value(uint16_t distance = 0, uint8_t quality = 0, 
-					uint64_t time = 0, uint16_t angle = 0);
-			};
-		uint32_t replace_time = 1000; // ms
-		std::array<perimeter::value, 360> view;
-		perimeter();
-		bool replace(perimeter::value v); // true if replaced
-		bool replace(uint16_t distance = 0, uint8_t quality = 0, uint64_t time = 0, uint16_t angle = 0); // true if replaced
-		
+		struct {
+			unsigned first_index:	2;
+			unsigned last_index:	2;
+			unsigned current_index:	2;
+		} presets;
+		translator_therm();
+		uint8_t data[16];
+		thermo_driver *main_th_dr;
+		void decompose(uint8_t in[16]);
+		bool compose();
+		bool is_longer();
 			
 	private:
 		/* add your private declarations */
 };
 
-#endif /* PERIMETER_HPP */ 
+#endif /* TRANSLATOR_THERM_HPP */ 

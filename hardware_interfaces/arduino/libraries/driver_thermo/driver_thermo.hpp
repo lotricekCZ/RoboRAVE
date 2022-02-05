@@ -1,5 +1,5 @@
 /*
- * perimeter.hpp
+ * driver_thermo.hpp
  * 
  * Copyright 2022 Jakub Ramašeuski <jakub@skaryna.net>
  * 
@@ -21,35 +21,24 @@
  * 
  */
 
+#include <AMG88xx.h>
+#include <cinttypes>
 
-#ifndef PERIMETER_HPP
-#define PERIMETER_HPP
-#include <array>
-//~ #include <mutex>
-//~ #include <thread>
+#ifndef DRIVER_THERMO_HPP
+#define DRIVER_THERMO_HPP
 
-
-
-class perimeter {
+class thermo_driver {
 	public:
-		class value {
-			public:
-				unsigned distance				:13;
-				unsigned quality				:8;
-				uint64_t last_replaced			:26;
-				unsigned angle					:9;
-				value(uint16_t distance = 0, uint8_t quality = 0, 
-					uint64_t time = 0, uint16_t angle = 0);
-			};
-		uint32_t replace_time = 1000; // ms
-		std::array<perimeter::value, 360> view;
-		perimeter();
-		bool replace(perimeter::value v); // true if replaced
-		bool replace(uint16_t distance = 0, uint8_t quality = 0, uint64_t time = 0, uint16_t angle = 0); // true if replaced
-		
-			
+		uint16_t refresh =		75;
+		unsigned frame_lock:	1; // To lock frame in order to have still picture
+		uint32_t last_refresh = 0;
+		thermo_driver();
+		Adafruit_AMG88xx * main_thermocam;
+		float grid[AMG88xx_PIXEL_ARRAY_SIZE];
+		void handle_in_background();
+		void capture();
 	private:
 		/* add your private declarations */
 };
 
-#endif /* PERIMETER_HPP */ 
+#endif /* DRIVER_THERMO_HPP */ 

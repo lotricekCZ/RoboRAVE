@@ -22,7 +22,10 @@
  */
 
 #include <cmath>
-	
+
+#ifndef LIDAR_CPP
+#define LIDAR_CPP
+
 #include "perimeter.cpp"
 #include "lidar_standard.hpp"
 #include "lidar.hpp"
@@ -170,13 +173,4 @@ lidar::loop_ret lidar::handle_in_background(){
 	return (lidar::loop_ret)ret;
 	}
 
-
-
-
-
-
-
-
-
-
-
+#endif // LIDAR_CPP

@@ -1,5 +1,5 @@
 /*
- * perimeter.hpp
+ * driver_thermo.cpp
  * 
  * Copyright 2022 Jakub Ramašeuski <jakub@skaryna.net>
  * 
@@ -22,34 +22,26 @@
  */
 
 
-#ifndef PERIMETER_HPP
-#define PERIMETER_HPP
-#include <array>
-//~ #include <mutex>
-//~ #include <thread>
+#include "driver_thermo.hpp"
 
 
+thermo_driver::thermo_driver(){
+	frame_lock = 0;
+	}
+	
+	
 
-class perimeter {
-	public:
-		class value {
-			public:
-				unsigned distance				:13;
-				unsigned quality				:8;
-				uint64_t last_replaced			:26;
-				unsigned angle					:9;
-				value(uint16_t distance = 0, uint8_t quality = 0, 
-					uint64_t time = 0, uint16_t angle = 0);
-			};
-		uint32_t replace_time = 1000; // ms
-		std::array<perimeter::value, 360> view;
-		perimeter();
-		bool replace(perimeter::value v); // true if replaced
-		bool replace(uint16_t distance = 0, uint8_t quality = 0, uint64_t time = 0, uint16_t angle = 0); // true if replaced
-		
-			
-	private:
-		/* add your private declarations */
-};
+void thermo_driver::handle_in_background(){
+	uint32_t now = millis();
+	if((last_refresh + refresh) < now & !frame_lock){
+		capture();
+		last_refresh = now;
+		}
+	}
 
-#endif /* PERIMETER_HPP */ 
+
+void thermo_driver::capture(){
+	main_thermocam -> readPixels(this -> grid);
+	}
+
+

@@ -9,7 +9,7 @@
 #ifndef motorduino_logic_h
 #define motorduino_logic_h
 
-enum add_book{IR = 1, GND = 3, MTR = 2, MSR = 0};
+enum add_book{IR = 1, GND = 3, STM = 4, MTR = 2, MSR = 0};
 enum msg_type{CMD = 0, DAT = 1};
 enum msg_kind{
 			SET_MOT = 0, 	/*Set motor*/

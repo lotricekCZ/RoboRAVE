@@ -70,14 +70,14 @@ void logic::decide(){
 		}
 	if(flags.is_unsent){
 		if(write_ser_time + COOLDOWN < cooldown){
-				write_ser();
+			write_ser();
 			}
 		
 		}
 	if(flags.is_pending){
 		if(write_ser_time + COOLDOWN < cooldown){
-				PORTD &= ~(1 << 2);
-				flags.is_unapplied = 0;
+			PORTD &= ~(1 << 2);
+			flags.is_unapplied = 0;
 			}
 		
 		}

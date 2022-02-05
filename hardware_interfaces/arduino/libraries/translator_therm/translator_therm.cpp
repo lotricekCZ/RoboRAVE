@@ -1,5 +1,5 @@
 /*
- * perimeter.hpp
+ * translator_therm.cpp
  * 
  * Copyright 2022 Jakub Ramašeuski <jakub@skaryna.net>
  * 
@@ -22,34 +22,30 @@
  */
 
 
-#ifndef PERIMETER_HPP
-#define PERIMETER_HPP
-#include <array>
-//~ #include <mutex>
-//~ #include <thread>
+#include "translator_therm.hpp"
+
+
+translator_therm::translator_therm(){
+	
+	}
 
 
 
-class perimeter {
-	public:
-		class value {
-			public:
-				unsigned distance				:13;
-				unsigned quality				:8;
-				uint64_t last_replaced			:26;
-				unsigned angle					:9;
-				value(uint16_t distance = 0, uint8_t quality = 0, 
-					uint64_t time = 0, uint16_t angle = 0);
-			};
-		uint32_t replace_time = 1000; // ms
-		std::array<perimeter::value, 360> view;
-		perimeter();
-		bool replace(perimeter::value v); // true if replaced
-		bool replace(uint16_t distance = 0, uint8_t quality = 0, uint64_t time = 0, uint16_t angle = 0); // true if replaced
-		
-			
-	private:
-		/* add your private declarations */
-};
+void translator_therm::decompose(uint8_t in[16]){
+	presets.first_index = presets.current_index =	in[0] >> 6 & 0b11;
+	presets.last_index = 	in[0] >> 4 & 0b11;
+	main_th_dr -> capture();
+	}
 
-#endif /* PERIMETER_HPP */ 
+
+
+bool translator_therm::compose(){
+	for(uint8_t i = 0; i < 16; i++){
+		data[i] = ((uint8_t)round(main_th_dr -> grid[((i/4) * 2 + (presets.current_index >> 1) & 1) * 8
+											+ ((i) % 4) * 2 + (presets.current_index & 1)]) + 47) & 127; 
+		// constrain to use 7 bits from -47 to 80 deg C so that msb can carry metadata
+		}
+	data[0] = ((presets.current_index) & 0b10) 	<< 7;
+	data[1] = ((presets.current_index) & 0b1) 	<< 8;
+	return presets.last_index == presets.current_index++;
+	}
