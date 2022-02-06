@@ -145,7 +145,7 @@ lidar::loop_ret lidar::handle_in_background(){
 	if(read()) ret = loop_ret::NEW_PACKET | loop_ret::FAIL * (!parse());
 	if(ret & loop_ret::NEW_PACKET == loop_ret::NEW_PACKET){
 		//~ Serial2.println("Packet received");
-		
+		/*
 		uint16_t valid = 0;
 		uint32_t now = millis();
 		if(last_checked > now) last_checked = now;
@@ -168,7 +168,7 @@ lidar::loop_ret lidar::handle_in_background(){
 			Serial2.println(valid);
 			last_checked = now;
 			//~ */
-			}
+			//~ }
 		}
 	return (lidar::loop_ret)ret;
 	}

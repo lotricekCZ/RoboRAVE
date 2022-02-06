@@ -57,6 +57,7 @@ class logic {
 		uint8_t internal_serial_buf[msg_std::length];
 		uint32_t write_ser_time = micros();
 		uint32_t last_sent_time = micros();
+		uint32_t last_sent = millis();
 		struct {
 			unsigned is_unapplied:1;
 			unsigned is_unsent:1;

@@ -34,18 +34,23 @@ translator_therm::translator_therm(){
 void translator_therm::decompose(uint8_t in[16]){
 	presets.first_index = presets.current_index =	in[0] >> 6 & 0b11;
 	presets.last_index = 	in[0] >> 4 & 0b11;
+	//~ Serial2.print("CURR: ");
+	//~ Serial2.println(presets.current_index);
+	//~ Serial2.print("LST: ");
+	//~ Serial2.println(presets.last_index);
 	main_th_dr -> capture();
 	}
 
 
 
 bool translator_therm::compose(){
+	//~ Serial2.println("CMPS");
 	for(uint8_t i = 0; i < 16; i++){
 		data[i] = ((uint8_t)round(main_th_dr -> grid[((i/4) * 2 + (presets.current_index >> 1) & 1) * 8
-											+ ((i) % 4) * 2 + (presets.current_index & 1)]) + 47) & 127; 
+											+ ((i) % 4) * 2 + (presets.current_index & 1)]) + 47) & 0b01111111; 
 		// constrain to use 7 bits from -47 to 80 deg C so that msb can carry metadata
 		}
 	data[0] = ((presets.current_index) & 0b10) 	<< 7;
 	data[1] = ((presets.current_index) & 0b1) 	<< 8;
-	return presets.last_index == presets.current_index++;
+	return presets.last_index != presets.current_index++; // means that there are still pixels waiting to be composed
 	}

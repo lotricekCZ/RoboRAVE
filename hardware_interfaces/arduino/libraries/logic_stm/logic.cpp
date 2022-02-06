@@ -89,6 +89,15 @@ void logic::read(){
 
 void logic::decide(){
 	uint32_t cooldown = micros();
+	uint32_t cd = millis();
+	if((last_sent + 4000) < cd){
+		flags.has_data_therm = 1;
+		uint8_t decos[16];
+		decos[0] = 48;
+		main_translator_therm -> decompose(decos);
+		last_sent = cd;
+		}
+	
 	if(flags.is_unapplied){
 		switch((main_chat -> incoming.receiver)){
 			// Serial.println("\nDEC\n");
@@ -103,24 +112,31 @@ void logic::decide(){
 		}
 	
 	// if there is nothing in send state and also if they had enough time to say something
-	if(!flags.is_unsent && ((last_sent_time + INTER_DELAY) < cooldown)){ 
+	if(!flags.is_unsent && ((last_sent_time + INTER_DELAY) < cooldown)){
 		// look if any of them have something
 		if(flags.has_data_therm){
 			flags.has_data_therm = main_translator_therm -> compose();
 			main_chat -> fill_message(main_translator_therm -> data);
+			Serial2.println("HAS DATA?");
+			for(uint8_t i = 0; i < 16; i++)
+				Serial2.print(main_chat -> buffer[i]);
+			Serial2.println();
+			for(uint8_t i = 0; i < 16; i++)
+				Serial2.print(main_translator_therm -> data[i]);
 			write_ser(SND_THERM, MSR);
 			}
-		
+		/*
 		if(flags.has_data_lidar){
 			flags.has_data_lidar = main_translator_lidar -> compose();
 			main_chat -> fill_message(main_translator_lidar -> data);
 			write_ser(SND_LDR, MSR);
-			}
+			}*/
 		}
 		
 	if(flags.is_unsent){
 		if(write_ser_time + COOLDOWN < cooldown){
 			write_ser();
+			write_ser_time = cooldown;
 			}
 		}
 		
@@ -130,8 +146,9 @@ void logic::decide(){
 			digitalWrite(RS_enable, 0);
 			last_sent_time = cooldown;
 			flags.is_unapplied = 0;
+			flags.is_pending = 0;
+			flags.is_unsent = 0;
 			}
-		
 		}
 	}
 
@@ -191,15 +208,15 @@ void logic::write_ser(enum msg_kind datatype, enum add_book rec){
 	main_chat -> outcoming.receiver = rec;
 	main_chat -> outcoming.message_number = main_chat -> incoming.message_number + 1;
 	main_chat -> outcoming.type = DAT;
+	main_chat -> bufferize();
 	if(!flags.is_unsent){
 		digitalWrite(RS_enable, 1); // That is the RS485 chip leg (I guess)
 		write_ser_time = micros();
 		flags.is_unsent = 1;
 		return;
 		}
-	main_chat -> bufferize();
 	for(uint8_t i = 0; i < msg_std::length; i++){
-		Serial.write(main_chat -> buffer[i]);
+		Serial2.write(main_chat -> buffer[i]);
 		}
 	flags.is_unsent = 0; // message has been sent
 	Serial.flush();
@@ -216,8 +233,9 @@ void logic::write_ser(){
 		flags.is_unsent = 1;
 		return;
 		}
+	main_chat -> bufferize();
 	for(uint8_t i = 0; i < msg_std::length; i++){
-		Serial.write(main_chat -> buffer[i]);
+		Serial2.write(main_chat -> buffer[i]);
 		}
 	flags.is_unsent = 0;
 	Serial.flush();

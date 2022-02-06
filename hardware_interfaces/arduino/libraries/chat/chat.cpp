@@ -1,18 +1,21 @@
 #include "chat.h"
 
 void chat::bufferize(){
+
+	buffer[0] = msg_std::start;
 	buffer[msg_std::head] = (outcoming.receiver << 5) | (outcoming.sender << 2) | (outcoming.type << 1) | (outcoming.kind >> 2);
 	buffer[msg_std::head + 1] = (outcoming.kind << 6) | (outcoming.message_number >> 16);
 	buffer[msg_std::head + 2] = (outcoming.message_number >> 8);
 	buffer[msg_std::head + 3] = (outcoming.message_number);
-	for(uint8_t i = 0; i < 16; i++){
+	for(uint8_t i = 0; i < msg_std::message_space_size; i++){
 		buffer[i + msg_std::message_space] = outcoming.message_space[i];
 		}
+	buffer[msg_std::length - 1] = msg_std::end;
 	}
 
 	
 void chat::fill_message(uint8_t input_message[msg_std::message_space_size]){
-	for(uint8_t i = 0; i < sizeof(outcoming.message_space); i++){
+	for(uint8_t i = 0; i < msg_std::message_space_size; i++){
 		outcoming.message_space[i] = input_message[i];
 		}
 	}

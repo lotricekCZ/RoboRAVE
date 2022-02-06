@@ -47,19 +47,40 @@ void logic::read(){
 	}
 
 void logic::decide(){
+	uint32_t cooldown = micros();
 	if(flags.is_periodic){
 		if(main_translator_sensor -> is_longer()){
 			main_chat -> fill_message(main_translator_sensor -> data);
 			write_ser(SND_CON, MSR);
 			}
 		}
+		
 	if(flags.is_unapplied){
-			if(main_chat -> incoming.receiver == (uint8_t)my_add){
-				//Serial.println("d");			
-				decide_sender();
-				
-				}
+		if(main_chat -> incoming.receiver == (uint8_t)my_add){
+			//Serial.println("d");			
+			decide_sender();
+			}
 		}
+		
+	if(flags.is_unsent){
+		if(write_ser_time + COOLDOWN < cooldown){
+			write_ser();
+			write_ser_time = cooldown;
+			}
+		}
+		
+	
+	if(flags.is_pending){
+		if(write_ser_time + COOLDOWN < cooldown){
+			PORTD &= ~(1 << 3);
+			flags.is_unapplied = 0;
+			flags.is_pending = 0;
+			flags.is_unsent = 0;
+			}
+		}
+		
+		
+	
 		flags.is_unapplied = false;
 	
 	}
@@ -111,18 +132,46 @@ void logic::decide_type(){
 				return;
 		}
 	}	
-	
+
+
+
+
 void logic::write_ser(enum msg_kind datatype, enum add_book rec){
 	main_chat -> outcoming.kind = datatype;
-	main_chat -> outcoming.sender = my_add;
+	main_chat -> outcoming.sender = IR;
 	main_chat -> outcoming.receiver = rec;
 	main_chat -> outcoming.message_number = main_chat -> incoming.message_number + 1;
 	main_chat -> outcoming.type = DAT;
+	main_chat -> outcoming.message_space[msg_std::message_space_size - 1] = (PORTB & 0b11);
 	
 	main_chat -> bufferize();
-	for(uint8_t i = 0; i < sizeof(main_chat -> buffer); i++){
-			Serial.write(main_chat -> buffer[i]);
+	if(!flags.is_unsent){
+		PORTD |= 1 << 3; // That is the RS485 chip leg (I guess)
+		write_ser_time = micros();
+		flags.is_unsent = 1;
+		return;
 		}
+	Serial.write(main_chat -> buffer, msg_std::length);
+	flags.is_unsent = 0; // message has been sent
 	Serial.flush();
+	flags.is_pending = 1;
+	write_ser_time = micros();
 	}
-	
+
+
+
+void logic::write_ser(){
+	if(!flags.is_unsent){
+		PORTD |= 1 << 3; // That is the RS485 chip leg (I guess)
+		write_ser_time = micros();
+		flags.is_unsent = 1;
+		return;
+		}
+	main_chat -> outcoming.message_space[msg_std::message_space_size - 1] = (PORTB & 0b11);
+	main_chat -> bufferize();
+	Serial.write(main_chat -> buffer, msg_std::length);
+	flags.is_unsent = 0;
+	Serial.flush();
+	flags.is_pending = 1;
+	write_ser_time = micros();
+	}

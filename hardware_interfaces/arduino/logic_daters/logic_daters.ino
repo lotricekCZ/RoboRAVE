@@ -2,6 +2,8 @@
 //~ #define GNDUINO
 //#define DEBUG   
 
+#define COOLDOWN 4500   
+
 #ifdef IRDUINO
 #undef daters_logic_h
 #undef driver_sensor_h
@@ -32,6 +34,8 @@ void setup() {
 	l.my_add = GND;
 	#endif
 	#ifdef IRDUINO
+	pinMode(8, INPUT_PULLUP);
+	pinMode(9, INPUT_PULLUP);
 	l.my_add = IR;
 	#endif
 	
@@ -48,18 +52,14 @@ void loop() {
 	l.read();
 	l.decide();
 	#ifdef DEBUG
-	
-	for (uint8_t i = 0; i < 8; i++) {
-	Serial.print(s.data.temp_data[i]);
-	Serial.print("\t");
-	
-	}
-	//digitalWrite(4, HIGH);
-	#ifdef IRDUINO
-	Serial.print(s.data.reference);
-	Serial.print("\n\n\n");
-	
-	#endif
+		for (uint8_t i = 0; i < 8; i++) {
+			Serial.print(s.data.temp_data[i]);
+			Serial.print("\t");
+			}
+		#ifdef IRDUINO
+			Serial.print(s.data.reference);
+			Serial.print("\n\n\n");
+		#endif
 	#endif
 	//~ delay(5);
 }

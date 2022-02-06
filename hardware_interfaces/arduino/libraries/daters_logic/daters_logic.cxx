@@ -44,6 +44,7 @@ void logic::read(){
 
 void logic::decide(){
 	//Serial.println("c");
+	uint32_t cooldown = micros();
 	if(flags.is_periodic){
 		if(main_translator_sensor -> is_longer()){
 			main_chat -> fill_message(main_translator_sensor -> data);
@@ -55,6 +56,25 @@ void logic::decide(){
 				decide_sender();
 				}
 		}
+	
+	if(flags.is_unsent){
+		if(write_ser_time + COOLDOWN < cooldown){
+			write_ser();
+			write_ser_time = cooldown;
+			}
+		}
+		
+	
+	if(flags.is_pending){
+		if(write_ser_time + COOLDOWN < cooldown){
+			PORTD &= ~(1 << 3);
+			flags.is_unapplied = 0;
+			flags.is_pending = 0;
+			flags.is_unsent = 0;
+			}
+		}
+		
+	
 	flags.is_unapplied = false;
 	}
 	
@@ -103,17 +123,45 @@ void logic::decide_type(){
 		}
 	}	
 	
+
+
+	
 void logic::write_ser(enum msg_kind datatype, enum add_book rec){
 	main_chat -> outcoming.kind = datatype;
-	main_chat -> outcoming.sender = my_add;
+	main_chat -> outcoming.sender = GND;
 	main_chat -> outcoming.receiver = rec;
 	main_chat -> outcoming.message_number = main_chat -> incoming.message_number + 1;
 	main_chat -> outcoming.type = DAT;
-	
 	main_chat -> bufferize();
-	for(uint8_t i = 0; i < sizeof(main_chat -> buffer); i++){
-			Serial.write(main_chat -> buffer[i]);
+	if(!flags.is_unsent){
+		PORTD |= 1 << 3; // That is the RS485 chip leg (I guess)
+		write_ser_time = micros();
+		flags.is_unsent = 1;
+		return;
 		}
+	Serial.write(main_chat -> buffer, msg_std::length);
+	flags.is_unsent = 0; // message has been sent
 	Serial.flush();
+	flags.is_pending = 1;
+	write_ser_time = micros();
+	}
+
+
+
+void logic::write_ser(){
+	if(!flags.is_unsent){
+		PORTD |= 1 << 3; // That is the RS485 chip leg (I guess)
+		write_ser_time = micros();
+		flags.is_unsent = 1;
+		return;
+		}
+	main_chat -> bufferize();
+	for(uint8_t i = 0; i < msg_std::length; i++){
+		Serial.write(main_chat -> buffer[i]);
+		}
+	flags.is_unsent = 0;
+	Serial.flush();
+	flags.is_pending = 1;
+	write_ser_time = micros();
 	}
 	

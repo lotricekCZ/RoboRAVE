@@ -3,6 +3,10 @@
 #define INTER_DELAY 10000	// delay that makes sure others have time to express opinions / stop that annoyng thing
 #include <Wire.h>
 
+//~ #define _I2C_HAVE_DEPRECATED_I2C_REMAP 1
+//~ #define I2C_REMAP 0x4
+
+
 //~ TwoWire Wire2(2, I2C_FAST_MODE);
 //~ #define Wire Wire2
 
@@ -29,7 +33,8 @@ logic 				l;
 
 
 void setup() {
-	
+	Wire.begin();
+	_i2c_handle_remap(I2C1, I2C_REMAP);
 	l.main_thermocam = thd.main_thermocam =	&amg;
 	l.main_lidar = tl.main_lidar = 		&ldr;
 	tt.main_th_dr = 					&thd;
@@ -38,8 +43,14 @@ void setup() {
 	l.main_chat = 						&c;
 	// put your setup code here, to run once:
 	pinMode(RS_enable, OUTPUT);
-	Serial2.begin(115200);
+	Serial2.begin(57600);
 	
+	Serial2.print("SDA: ");
+	Serial2.print(I2C1 -> sda_pin);
+	Serial2.print(" SCL: ");
+	Serial2.println(I2C1 -> scl_pin);
+	//~ Serial2.println();
+	/*
 	byte error, address;
 	int nDevices;
 	
@@ -47,7 +58,7 @@ void setup() {
 	Serial2.println("FIRST...");
 	
 	nDevices = 0;
-	for(address = 1; address < 127; address++) {
+	for(address = 10; address < 127; address++) {
 	// The i2c_scanner uses the return value of
 	// the Write.endTransmisstion to see if
 	// a device did acknowledge to the address.
@@ -74,7 +85,7 @@ void setup() {
 	Serial2.println("No I2C devices found");
 	else
 	Serial2.println("done");
-
+	*/
 	
 	
 	delay(1000);
@@ -82,6 +93,7 @@ void setup() {
 	Serial1.begin(115200);
 	l.flags.has_therm = amg.begin();
 	Serial2.print(__LINE__);
+	Serial2.print(l.flags.has_therm);
 	}
 
 void loop() {
