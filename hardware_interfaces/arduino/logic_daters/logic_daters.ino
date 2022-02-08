@@ -1,5 +1,5 @@
-#define IRDUINO
-//~ #define GNDUINO
+//~ #define IRDUINO
+#define GNDUINO
 //#define DEBUG   
 
 #define COOLDOWN 4500   

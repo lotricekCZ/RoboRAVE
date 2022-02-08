@@ -25,20 +25,50 @@
 #ifndef LOGIC_HPP
 #define LOGIC_HPP
 
-class logic
-{	
+#include "../../hardware_interfaces/object_recognition/camera.hpp"
+
+
+enum flow_modes: uint8_t { // flow modes of program, affected by user input buttons
+	ERROR			= 0,
+	INITIALISING	= 1,
+	AWAIT_LAUNCH	= 2,
+	START_MOVING	= 3,
+	ABORT_PROGRAM	= 4,
+	AWAIT_REINIT	= 5
+	};
+
+
+enum path_modes: uint8_t {
+	SEARCHING		= 0, // looks for potential places, creates path to unexplored places
+	HUNTING			= 1, /* knows of a candle, goes for it, still seeks for anothers, 
+	but changes path only if an obstacle appears on the track */
+	};
+
+class logic {
 	// properties of a vehicle
 	node 		main_rotation; 
 	speeds 		main_speeds;	
 	tank 		main_tank;
 	location 	main_location;
+	camera	 	main_camera;
 	
+	//~ auto start = std::chrono::steady_clock::now();
 	// map & planning stuff
 	map 		main_map;
+	planner		main_planner;
+	struct {
+		flow_modes mode = flow_modes::INITIALISING;
+		path_modes mode_hunt = path_modes::SEARCHING;
+		} flags;
+		
 	
 	public:
+		
 		logic();
 		void init();
+		void mainloop();
+		void decide();
+		void read();
 		
 	private:
 		/* add your private declarations */

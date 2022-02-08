@@ -40,7 +40,7 @@
 
 #include "./tank/tank.h"
 #include "./elements/radius/radius.h"
-#include "./utils/logic/logic.cpp"
+#include "./utils/logic/logic.hpp"
 
 #include "./hardware_interfaces/serial/serial.cpp"
 #include "./hardware_interfaces/fire_sensors/fire_sensor.cpp"
@@ -762,6 +762,12 @@ int main(int argc, char *argv[]) {
 				
 			planner::avoid(pth, m);
 			//~ step::intersection(s, m);
+			break;
+			}
+			
+		case 84:{ // encodes speeds / acceleration into steps ./roborave 83  5 3  -3 2
+			logic l;
+			l.init();
 			break;
 			}
 			

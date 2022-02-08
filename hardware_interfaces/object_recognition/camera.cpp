@@ -21,8 +21,18 @@
  * 
  */
 
+#ifndef steady // time point
+	#include <chrono>
+	#define steady std::chrono::time_point<std::chrono::steady_clock>
+#endif
+
+//~ #ifndef duration // time point
+	//~ #include <chrono>
+	//~ #define duration std::chrono::duration<decimal_n>
+//~ #endif
 
 #include <string>
+#include <chrono>
 #include <vector>
 #include <fstream>
 #include <iostream>
@@ -31,7 +41,49 @@
 #include "camera.hpp"
 
 
-camera::camera(){
+camera::camera(decimal_n freq){
 	
-}
+	}
 
+
+
+bool camera::init(){
+	_camera.open(0);
+	_camera.set(cv::VideoCaptureProperties::CAP_PROP_FPS, check_frequency);
+	_camera.set(cv::VideoCaptureProperties::CAP_PROP_FRAME_WIDTH, px_footage_horizontal);
+	_camera.set(cv::VideoCaptureProperties::CAP_PROP_FRAME_WIDTH, px_footage_vertical);
+	
+	//~ std::cout << __LINE__ << std::endl;
+	return _camera.isOpened();
+	}
+
+
+void camera::run(steady used){
+	if(std::chrono::duration<decimal_n>(used - last_used).count() >= (1.0f/check_frequency)){
+		_camera.read(frame);
+		if(frame.empty()) {
+			std::cerr << "ERROR! blank frame grabbed\n";
+			return;
+			}
+		cv::Mat lame = frame;
+		cv::cvtColor(lame, lame, cv::COLOR_BGR2GRAY);
+		cv::blur(lame, lame, cv::Size(5, 5));
+		//~ cv::cvtColor(frame, frame, cv::COLOR_GRAY2BGR);
+		//~ cv::threshold(frame, frame, cv::COLOR_GRAY2BGR);
+		cv::threshold(lame, lame, 20, 255, cv::THRESH_BINARY);
+		cv::cvtColor(lame, lame, cv::COLOR_GRAY2BGR);
+		//~ cv::threshold(frame, frame, 30, 255, cv::THRESH_BINARY);
+		cv::imshow("Hive", lame);
+		cv::bitwise_and(frame, lame, frame);
+		cv::imshow("Live", frame);
+		//~ cv::imshow("Live", lame);
+		cv::waitKey(1);
+		std::cout << "pass" << std::endl;
+		last_used = used;
+		}
+	}
+
+
+//~ #ifdef steady
+	//~ #undef steady
+//~ #endif

@@ -60,6 +60,7 @@ decimal_n variables::thresholds::mAP::line_surround;
 decimal_n variables::thresholds::mAP::line_border;
 decimal_n variables::thresholds::mAP::Maker_Jakub_Ramaseuski;
 
+decimal_n variables::properties::camera::check_frequency;
 decimal_n variables::properties::camera::angle_horizontal;
 decimal_n variables::properties::camera::angle_vertical;
 
@@ -68,6 +69,13 @@ unsigned_n variables::properties::camera::size_recognition_vertical;
 
 unsigned_n variables::properties::camera::size_footage_horizontal;
 unsigned_n variables::properties::camera::size_footage_vertical;
+
+
+// dimensions of robot start
+decimal_n variables::properties::heights::lidar; /// mm
+decimal_n variables::properties::heights::camera; /// mm
+decimal_n variables::properties::heights::fire_sensors; /// mm
+// dimensions of robot end
 
 // program segment start
 std::string variables::program::files::chat;

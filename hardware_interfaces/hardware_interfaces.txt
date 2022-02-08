@@ -22,6 +22,8 @@ target_link_libraries(serial -lCppLinuxSerial)
 target_link_libraries(message Threads::Threads)
 target_link_libraries(chat message serial Threads::Threads)
 target_link_libraries(fire_sensor node chat)
+target_link_libraries(camera variables)
+target_link_libraries(logic camera)
 #~ target_link_libraries(motorduino node)
 
 

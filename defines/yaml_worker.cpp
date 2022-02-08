@@ -65,6 +65,8 @@ void load_config(){
 	variables::thresholds::explo::influence::interesting = 	node_influence["interesting"].as<decimal_n>();
 	variables::thresholds::explo::influence::boring = 		node_influence["boring"].as<decimal_n>();
 	
+	// camera properties
+	variables::properties::camera::check_frequency = 				node_camera["check_frequency"].as<decimal_n>();
 	variables::properties::camera::angle_horizontal = 				node_camera["angle_horizontal"].as<decimal_n>();
 	variables::properties::camera::angle_vertical = 				node_camera["angle_vertical"].as<decimal_n>();
 	variables::properties::camera::size_recognition_horizontal = 	node_camera["size_recognition_horizontal"].as<unsigned_n>();
@@ -83,9 +85,12 @@ void load_config(){
 	/// sub-file opening
 	YAML::Node config_chat = YAML::LoadFile(variables::program::files::chat)["chat"];
 	// chat segment start
-	variables::chat::port = 							config_chat["port"].as<std::string>();
+	#ifdef __arm__
+		variables::chat::port = 							config_chat["port-rpi"].as<std::string>();
+	#else
+		variables::chat::port = 							config_chat["port"].as<std::string>();
+	#endif
 	variables::chat::check_frequency = 					config_chat["check_frequency"].as<unsigned_n>();
-	
 	variables::chat::response_timeout::extended = 		config_chat["response_timeout"]["extended"].as<unsigned_n>();
 	variables::chat::response_timeout::normal = 		config_chat["response_timeout"]["normal"].as<unsigned_n>();
 	variables::chat::response_timeout::time_critical = 	config_chat["response_timeout"]["time_critical"].as<unsigned_n>();

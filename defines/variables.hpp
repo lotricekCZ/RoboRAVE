@@ -44,6 +44,7 @@ static class variables { // I hate myself for this!!!
 				
 			static class camera {
 				public:
+				static decimal_n check_frequency; /// fps
 				static decimal_n angle_horizontal; /// degrees
 				static decimal_n angle_vertical; /// degrees
 				static unsigned_n size_recognition_horizontal; /// px

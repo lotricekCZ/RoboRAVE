@@ -21,12 +21,22 @@
  * 
  */
 
+#include <opencv2/opencv.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/videoio.hpp>
 
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
-class camera
-{
+#ifndef steady // time point
+	#include <chrono>
+	#define steady std::chrono::time_point<std::chrono::steady_clock>
+#endif
+//~ #define steady std::chrono::time_point<std::chrono::steady_clock>
+
+class camera {
 	decimal_n angle_horizontal = 			variables::properties::camera::angle_horizontal;
 	decimal_n angle_vertical = 				variables::properties::camera::angle_vertical;
 	decimal_n height =						variables::properties::heights::camera;
@@ -34,9 +44,16 @@ class camera
 	unsigned_n px_recognition_vertical = 	variables::properties::camera::size_recognition_vertical;
 	unsigned_n px_footage_horizontal = 		variables::properties::camera::size_footage_horizontal;
 	unsigned_n px_footage_vertical = 		variables::properties::camera::size_footage_vertical;
+	decimal_n check_frequency = 			variables::properties::camera::check_frequency; // fps
+	
+	cv::VideoCapture _camera;
+	steady last_used = std::chrono::steady_clock::now();
 	
 	public:
-		camera();
+		cv::Mat frame;
+		camera(decimal_n freq = 5);
+		bool init();
+		void run(steady used = std::chrono::steady_clock::now());
 			
 	private:
 		/* add your private declarations */
