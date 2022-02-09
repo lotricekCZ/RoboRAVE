@@ -25,10 +25,16 @@
 #ifndef RPI_GPIO_HPP
 #define RPI_GPIO_HPP
 
-class rpi_gpio{
+class rpi_gpio {
 	public:
+		const uint8_t serial_pin = 4; // Using the WiringPi numbering
 		rpi_gpio();
-		bool init();
+		void init();
+		steady last_toggled;
+		decimal_n length = 4.5e-3; // toggle state length
+		void enable_serial();
+		void disable_serial();
+		bool run();
 			
 	private:
 		/* add your private declarations */

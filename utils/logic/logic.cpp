@@ -24,20 +24,27 @@
 #include <string>
 #include <iostream>
 #include <chrono>
+#include <cstdio>
 
-#include "../../obsolete/obsolete.hpp"
 #include "../../elements/vector/vector.hpp"
+#include "../../obsolete/obsolete.hpp"
 #include "../../defines/variables.hpp"
 #include "../../defines/typedefines.h"
+
 #include "../data_containers/setters/setters.tpp"
 #include "../data_containers/speeds/speeds.hpp"
 #include "../data_containers/coordinates/coordinates.hpp"
 #include "../data_containers/map/include.hpp"
-#include "../log_maintainer/log_maintain.hpp"
 #include "../data_containers/angles/angles/angles.hpp"
+
+#include "../log_maintainer/log_maintain.hpp"
+
 #include "../planners/avoidance_planner/avoider.hpp"
 #include "../planners/planner/planner.hpp"
+
 #include "../../hardware_interfaces/serial/serial.hpp"
+#include "../../hardware_interfaces/serial/chat.hpp"
+#include "../../hardware_interfaces/gpio/rpi_gpio.hpp"
 
 #include "../../tank/tank.h"
 
@@ -51,7 +58,7 @@ logic::logic(){
 
 
 void logic::init(){
-	//~ auto start = std::chrono::steady_clock::now();
+	steady now = time_now;
 	//~ auto end = std::chrono::steady_clock::now();
 	//~ std::chrono::duration<double> elapsed_seconds = end - start;
 	
@@ -63,12 +70,12 @@ void logic::init(){
 	// set pins as outputs
 	printf("Why yes it is, thank you\n");
 	#endif
-	serial s(variables::chat::port, 57600);
+	main_serial = serial(variables::chat::port, 57600);
 	try{
-		//~ s.open();
+		main_serial.open();
 		//~ for(uint16_t i = 0; i < 32768; i++)
-		//~ s.write(std::vector<uint8_t>({'D', 'U'}));
-		//~ s.close();
+		main_serial.write(std::vector<uint8_t>({'D', 'U'}));
+		//~ main_serial.close();
 		} catch (mn::CppLinuxSerial::Exception e) {
 			std::cout << "Would you mind connecting some spare\n serial interface on "<< 
 				variables::chat::port <<", you dimwitt?" << std::endl;
@@ -78,6 +85,12 @@ void logic::init(){
 	main_camera.init();
 	
 	/// TODO: make it work better than setting a single value, by reading the line sensors
+	steady end = time_now;
+	std::chrono::duration<decimal_n> elapsed_seconds = end - now;
+	printf("Logic inited in %f s.\n", elapsed_seconds.count());
+	while(flags.mode != START_MOVING){
+		flags.mode = (std::cin.get() == 'e')? START_MOVING: flags.mode;
+		}
 	mainloop();
 	}
 
@@ -85,9 +98,8 @@ void logic::init(){
 
 
 void logic::mainloop(){
-	
 	while(1){
-		auto start = std::chrono::steady_clock::now();
+		auto start = time_now;
 		
 		read();
 		decide();
@@ -96,13 +108,24 @@ void logic::mainloop(){
 
 
 
-void logic::read(){
-	main_camera.run();
+void logic::read(steady now){
+	main_camera.run(now);
+	main_chat.run(now);
+	steady next = now;
+	std::cout << "IN WAITING: " << main_serial.in_waiting() << std::endl;
+	main_serial.write(std::vector<uint8_t>({'D', 'U'}));
+	while(std::chrono::duration<decimal_n> (next - now).count() < 10)
+		next = time_now;
+	main_serial.write(std::vector<uint8_t>({'D', 'U'}));
+	main_serial.write(std::vector<uint8_t>({'D', 'U', 'U'}));
+	std::cout << "IN WAITING: " << main_serial.in_waiting() << std::endl;
+	main_serial.write(std::vector<uint8_t>({'D', 'U'}));
+	
 	}
 
 
 
-void logic::decide(){
+void logic::decide(steady now){
 	
 	}
 

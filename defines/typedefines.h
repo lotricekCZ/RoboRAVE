@@ -41,4 +41,14 @@
 	#define signed_h int128_t
 #endif
 
+#ifndef time_now // time now macro
+	#include <chrono>
+	#define time_now std::chrono::steady_clock::now()
+#endif
+
+#ifndef steady // time point
+	#include <chrono>
+	#define steady std::chrono::time_point<std::chrono::steady_clock>
+#endif
+
 #endif

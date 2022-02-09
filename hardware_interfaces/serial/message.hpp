@@ -24,8 +24,9 @@
 #ifndef MESSAGE_HPP
 #define MESSAGE_HPP
 
-class message
-{
+#include "message_standard.hpp"
+
+class message {
 	public:
 		typedef struct content {
 			unsigned receiver:3;

@@ -1,7 +1,7 @@
 /*
- * chat.cpp
+ * message_pair.hpp
  * 
- * Copyright 2021 Jakub Ramašeuski <jakub@skaryna.net>
+ * Copyright 2022 Jakub Ramašeuski <jakub@skaryna.net>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,28 +21,28 @@
  * 
  */
 
-#include "chat.hpp"
+
+#ifndef MESSAGE_PAIR_HPP
+#define MESSAGE_PAIR_HPP
+
+#include <utility>
+#include "../../defines/typedefines.h"
+#include "message.hpp"
 
 
-chat::chat(){
-	
-	}
+class message_pair: public std::pair<message, message> {
+	public:
+		using std::pair<message, message>::first;
+		using std::pair<message, message>::second;
+		steady appear_first;
+		steady try_last;
+		uint8_t tries = 0;
+		bool awaits_second; // some messages (e. g. Motorduino) needn't a confirmator/response message
+		void answer(message m);
+		message_pair();
+			
+	private:
+		/* add your private declarations */
+};
 
-
-
-bool chat::run(steady now){
-	//~ while(){}
-	for(unsigned_b i = 0; i < input_queue.size(); i++)
-		for(auto &q: output_queue)
-			if(answers_query(input_queue.at(i), q)){
-				q.answer(input_queue.at(i));
-				input_queue.erase(input_queue.begin() + i--);
-				}
-	
-	}
-
-
-
-bool chat::answers_query(message m, message_pair mp){
-	return true;
-	}
+#endif /* MESSAGE_PAIR_HPP */ 

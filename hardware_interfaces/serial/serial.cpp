@@ -24,6 +24,15 @@
 
 #include <string>
 #include <vector>
+#include <cstdio>
+#include <cstdlib>
+
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#include "../../defines/typedefines.h"
 #include "serial.hpp"
 
 
@@ -34,7 +43,14 @@
 
 //~ serial::serial(const std::string &device, speed_t baudRate){
 	//~ }
-
+int c_open(std::string f){
+	return open(f.c_str(), O_RDONLY);
+	}
+	
+void c_close(int fd){
+	close(fd);
+	}
+	
 serial::~serial(){}
 
 
@@ -52,31 +68,45 @@ void serial::close(){
 
 
 void serial::write(const std::vector<uint8_t>& data){
-	mn::CppLinuxSerial::SerialPort::WriteBinary(data);
+	WriteBinary(data);
 	}
 
 
 	
 void serial::read(std::vector<uint8_t>& data){
-	mn::CppLinuxSerial::SerialPort::ReadBinary(data);
+	ReadBinary(data);
 	}
 
 
 
 void serial::baudrate(speed_t data){
-	mn::CppLinuxSerial::SerialPort::SetBaudRate(data);
+	SetBaudRate(data);
 	}
 
 
 	
 void serial::port(std::string data){
-	mn::CppLinuxSerial::SerialPort::SetDevice(data);
+	_port = data;
+	SetDevice(data);
 	}
 
 
 	
 void serial::baudrate(mn::CppLinuxSerial::BaudRate data){
-	mn::CppLinuxSerial::SerialPort::SetBaudRate(data);
+	SetBaudRate(data);
+	}
+
+
+	
+signed_b serial::in_waiting(){
+	int fd;
+	
+	fd = c_open(_port);
+	signed_b bytes_available;
+	ioctl(fd, FIONREAD, &bytes_available);
+	//~ c_close(fd);
+	
+	return bytes_available;
 	}
 
 

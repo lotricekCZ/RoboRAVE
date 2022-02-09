@@ -1,7 +1,7 @@
 /*
- * chat.cpp
+ * message_pair.cpp
  * 
- * Copyright 2021 Jakub Ramašeuski <jakub@skaryna.net>
+ * Copyright 2022 Jakub Ramašeuski <jakub@skaryna.net>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,28 +21,20 @@
  * 
  */
 
-#include "chat.hpp"
+
+#include "message_pair.hpp"
 
 
-chat::chat(){
+message_pair::message_pair()
+	: std::pair<message, message>(){
+	
+	}
+	
+
+
+
+void message_pair::answer(message m){
 	
 	}
 
 
-
-bool chat::run(steady now){
-	//~ while(){}
-	for(unsigned_b i = 0; i < input_queue.size(); i++)
-		for(auto &q: output_queue)
-			if(answers_query(input_queue.at(i), q)){
-				q.answer(input_queue.at(i));
-				input_queue.erase(input_queue.begin() + i--);
-				}
-	
-	}
-
-
-
-bool chat::answers_query(message m, message_pair mp){
-	return true;
-	}

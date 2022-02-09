@@ -26,15 +26,18 @@
 #define SERIAL_HPP
 
 #include <CppLinuxSerial/SerialPort.hpp>
-
+#include <sys/ioctl.h>
 //~ using namespace mn::CppLinuxSerial;
 
 class serial: public mn::CppLinuxSerial::SerialPort {	
 	public:
+		std::string _port = "";
 		using mn::CppLinuxSerial::SerialPort::ReadBinary;
 		using mn::CppLinuxSerial::SerialPort::WriteBinary;
 		using mn::CppLinuxSerial::SerialPort::Open;
 		using mn::CppLinuxSerial::SerialPort::Close;
+		using mn::CppLinuxSerial::SerialPort::SetDevice;
+		using mn::CppLinuxSerial::SerialPort::SetBaudRate;
 		//~ using mn::CppLinuxSerial::BaudRate;
 		
 		void open();
@@ -46,8 +49,11 @@ class serial: public mn::CppLinuxSerial::SerialPort {
 		
 		void baudrate(speed_t);
 		void baudrate(mn::CppLinuxSerial::BaudRate);
+		signed_b in_waiting();
 		serial(): SerialPort(){}
-		serial(const std::string &a, mn::CppLinuxSerial::BaudRate b): SerialPort(a, b){}
+		serial(const std::string &a, mn::CppLinuxSerial::BaudRate b): SerialPort(a, b){
+			_port = a;
+			}
 		serial(const std::string &a, speed_t b): SerialPort(a, b){}
 		~serial();
 	private:

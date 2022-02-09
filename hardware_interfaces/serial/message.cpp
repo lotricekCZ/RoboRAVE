@@ -24,7 +24,7 @@
 
 #include <cinttypes>
 #include <cstring>
-#include "message_standard.hpp"
+
 #include "message.hpp"
 
 #ifndef MESSAGE_CPP

@@ -1,7 +1,9 @@
 chat:
     port: 		/dev/ttyUSB0
     port-rpi: 	/dev/ttyS0
-    check_frequency:    75 # Hz
+    max_queue_global:	100 # messages
+    max_queue_sensor:	10 # messages
+    check_frequency:	75 # Hz
     response_timeout:
         extended:       2000 # ms
         normal:         1000 # ms

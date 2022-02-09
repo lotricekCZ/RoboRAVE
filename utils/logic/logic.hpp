@@ -26,7 +26,7 @@
 #define LOGIC_HPP
 
 #include "../../hardware_interfaces/object_recognition/camera.hpp"
-
+#include "../../hardware_interfaces/serial/chat.hpp"
 
 enum flow_modes: uint8_t { // flow modes of program, affected by user input buttons
 	ERROR			= 0,
@@ -52,6 +52,12 @@ class logic {
 	location 	main_location;
 	camera	 	main_camera;
 	
+	
+	// hardware peripheries
+	//~ camera	 	main_camera;
+	serial		main_serial;
+	chat	 	main_chat;
+	
 	//~ auto start = std::chrono::steady_clock::now();
 	// map & planning stuff
 	map 		main_map;
@@ -67,8 +73,8 @@ class logic {
 		logic();
 		void init();
 		void mainloop();
-		void decide();
-		void read();
+		void decide(steady now = time_now);
+		void read(steady now = time_now);
 		
 	private:
 		/* add your private declarations */

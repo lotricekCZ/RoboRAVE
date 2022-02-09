@@ -4,29 +4,38 @@ set(CMAKE_C_COMPILER "/usr/bin/gcc")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)	
 
-
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 find_package(PkgConfig REQUIRED)
 
 
-add_library(chat SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/chat.cpp)
-add_library(camera SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/object_recognition/camera.cpp)
-add_library(fire_sensor SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/fire_sensors/fire_sensor.cpp)
-add_library(message SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/message.cpp)
+add_library(chat 			SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/chat.cpp)
+add_library(camera 			SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/object_recognition/camera.cpp)
+add_library(fire_sensor 	SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/fire_sensors/fire_sensor.cpp)
+add_library(message 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/message.cpp)
+add_library(gpio 			SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/gpio/rpi_gpio.cpp)
+add_library(message_pair 	SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/message_pair.cpp)
+
 add_library(serial STATIC ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/serial.cpp)
+#~ add_library(serial SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/serial.cpp)
 #~ add_library(mf1 SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/main_functions/main_functions21-40.cpp)
 #~ add_library(mf2 SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/main_functions/main_functions41-60.cpp)
 
+IF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
+	target_link_libraries(gpio -lWiring)
+ENDIF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
+
 target_link_libraries(serial -lCppLinuxSerial)
 target_link_libraries(message Threads::Threads)
-target_link_libraries(chat message serial Threads::Threads)
+target_link_libraries(message_pair message)
+target_link_libraries(chat message message_pair Threads::Threads)
 target_link_libraries(fire_sensor node chat)
 target_link_libraries(camera variables)
-target_link_libraries(logic camera)
+target_link_libraries(logic camera chat)
+
 #~ target_link_libraries(motorduino node)
 
 
 set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
 
-target_link_libraries(roborave chat message serial)
+target_link_libraries(roborave chat message serial gpio)

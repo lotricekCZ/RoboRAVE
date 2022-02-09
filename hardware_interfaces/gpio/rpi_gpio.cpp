@@ -22,9 +22,10 @@
  */
 
 #ifdef __arm__
-#include <wiringPi.h>
+	#include <wiringPi.h>
 #endif
 
+#include "../../defines/typedefines.h"
 #include "rpi_gpio.hpp"
 
 
@@ -34,13 +35,39 @@ rpi_gpio::rpi_gpio(){
 
 
 
-bool rpi_gpio::init(){
+void rpi_gpio::init(){
 	#ifdef __arm__
-	wiringPiSetup(); // NOTE: This needs root privilege to use
-	#else
-	return true;
+		wiringPiSetup(); // NOTE: This needs root privilege to use
+		pinMode(serial_pin, OUTPUT); // WiringPi is quite similar to Wiring on Arduino
 	#endif
-	
 	}
+
+
+void rpi_gpio::enable_serial(){
+	#ifdef __arm__
+		wiringPiSetup(); // NOTE: This needs root privilege to use
+		digitalWrite(serial_pin, HIGH); // WiringPi is quite similar to Wiring on Arduino
+		while(digitalRead(serial_pin) != HIGH);
+	#endif
+	}
+
+
+
+void rpi_gpio::disable_serial(){
+	#ifdef __arm__
+		wiringPiSetup(); // NOTE: This needs root privilege to use
+		digitalWrite(serial_pin, LOW); // WiringPi is quite similar to Wiring on Arduino
+		while(digitalRead(serial_pin) != LOW);
+	#endif
+	}
+
+
+
+bool rpi_gpio::run(){
+	#ifdef __arm__
+		
+	#endif
+	}
+
 
 

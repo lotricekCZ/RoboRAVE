@@ -26,12 +26,21 @@
 
 #include <cstring>
 #include <memory>
+#include <deque>
+#include "../../defines/typedefines.h"
 #include "serial.hpp"
+#include "message.hpp"
+#include "message_pair.hpp"
 
 class chat {
 	public:
 		chat();
 		std::shared_ptr<serial> main_serial;
+		std::deque<message> input_queue; // messages that aren't still assigned to query
+		std::deque<message_pair> output_queue;
+		bool run(steady now = time_now); // iterates through message queue, searching for responses.
+		bool answers_query(message m, message_pair mp);
+		
 	private:
 		/* add your private declarations */
 };
