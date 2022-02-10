@@ -24,6 +24,7 @@
 #ifndef MESSAGE_HPP
 #define MESSAGE_HPP
 
+#include <array>
 #include "message_standard.hpp"
 
 class message {
@@ -39,11 +40,16 @@ class message {
 			 *  4 - natoc foukac, 5 - roztoc foukac, 6 - vypni foukac, 7 - rezervovano) 
 			 * a (8 - data0, 9 - data1, 10 - data2, 11 - potvrzovac, 12 - rezervovano, 13 - rezervovano, 14 - rezervovano, 15 - rezervovano)*/
 			uint8_t message_space[16]; // prinasi 2^128 moznosti vyuziti (10bitova data po osmi - 80b)
-		} content;
+			};
 		
+		content _content;
+		bool decode(std::array<uint8_t, msg_std::length> buffer, message::content &in);
 		bool decode(uint8_t buffer[msg_std::length], message::content &in);
+		
 		void encode(message::content &in, uint8_t *buffer[msg_std::length]);
 		message();
+		message(std::array<uint8_t, msg_std::length> c);
+		message(message::content c);
 		
 	private:
 		/* add your private declarations */

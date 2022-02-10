@@ -26,7 +26,7 @@
 
 
 message_pair::message_pair()
-	: std::pair<message, message>(){
+	: std::pair<message, std::vector<message>>(){
 	
 	}
 	

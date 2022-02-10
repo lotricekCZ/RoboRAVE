@@ -38,6 +38,7 @@ class serial: public mn::CppLinuxSerial::SerialPort {
 		using mn::CppLinuxSerial::SerialPort::Close;
 		using mn::CppLinuxSerial::SerialPort::SetDevice;
 		using mn::CppLinuxSerial::SerialPort::SetBaudRate;
+		using mn::CppLinuxSerial::SerialPort::InWaiting;
 		//~ using mn::CppLinuxSerial::BaudRate;
 		
 		void open();

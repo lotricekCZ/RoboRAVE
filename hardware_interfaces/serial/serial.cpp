@@ -99,14 +99,7 @@ void serial::baudrate(mn::CppLinuxSerial::BaudRate data){
 
 	
 signed_b serial::in_waiting(){
-	int fd;
-	
-	fd = c_open(_port);
-	signed_b bytes_available;
-	ioctl(fd, FIONREAD, &bytes_available);
-	//~ c_close(fd);
-	
-	return bytes_available;
+	return (signed_b)InWaiting();
 	}
 
 

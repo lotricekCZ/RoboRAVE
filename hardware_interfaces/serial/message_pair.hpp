@@ -30,10 +30,10 @@
 #include "message.hpp"
 
 
-class message_pair: public std::pair<message, message> {
+class message_pair: public std::pair<message, std::vector<message>> {
 	public:
-		using std::pair<message, message>::first;
-		using std::pair<message, message>::second;
+		using std::pair<message, std::vector<message>>::first;
+		using std::pair<message, std::vector<message>>::second;
 		steady appear_first;
 		steady try_last;
 		uint8_t tries = 0;

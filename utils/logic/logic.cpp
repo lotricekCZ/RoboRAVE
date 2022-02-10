@@ -74,7 +74,7 @@ void logic::init(){
 	try{
 		main_serial.open();
 		//~ for(uint16_t i = 0; i < 32768; i++)
-		main_serial.write(std::vector<uint8_t>({'D', 'U'}));
+		//~ main_serial.write(std::vector<uint8_t>({'D', 'U'}));
 		//~ main_serial.close();
 		} catch (mn::CppLinuxSerial::Exception e) {
 			std::cout << "Would you mind connecting some spare\n serial interface on "<< 
@@ -83,6 +83,7 @@ void logic::init(){
 			}
 	std::cout << variables::chat::port << std::endl;
 	main_camera.init();
+	main_chat.init(main_serial);
 	
 	/// TODO: make it work better than setting a single value, by reading the line sensors
 	steady end = time_now;
@@ -109,17 +110,18 @@ void logic::mainloop(){
 
 
 void logic::read(steady now){
+	std::cout << "IN WAITING: " << main_serial.in_waiting() << std::endl;
+	//~ std::vector<uint8_t> grabbed(main_serial.in_waiting());
+	
 	main_camera.run(now);
 	main_chat.run(now);
 	steady next = now;
-	std::cout << "IN WAITING: " << main_serial.in_waiting() << std::endl;
-	main_serial.write(std::vector<uint8_t>({'D', 'U'}));
-	while(std::chrono::duration<decimal_n> (next - now).count() < 10)
+	
+	//~ main_serial.write(std::vector<uint8_t>({'D', 'U', 69}));
+	while(std::chrono::duration<decimal_n> (next - now).count() < 0.1f)
 		next = time_now;
-	main_serial.write(std::vector<uint8_t>({'D', 'U'}));
-	main_serial.write(std::vector<uint8_t>({'D', 'U', 'U'}));
-	std::cout << "IN WAITING: " << main_serial.in_waiting() << std::endl;
-	main_serial.write(std::vector<uint8_t>({'D', 'U'}));
+	std::cout << "PASS" << std::endl;
+	//~ main_serial.write(std::vector<uint8_t>({'D', 'U', 'K', 'E', 'B', 'A', 'B'}));
 	
 	}
 

@@ -25,6 +25,7 @@
 #include <cinttypes>
 #include <cstring>
 
+#include "../../defines/typedefines.h"
 #include "message.hpp"
 
 #ifndef MESSAGE_CPP
@@ -32,7 +33,19 @@
 
 message::message(){
 	
-}
+	}
+
+
+
+message::message(message::content c){
+	this -> _content = c;
+	}
+
+
+
+message::message(std::array<uint8_t, msg_std::length> c){
+	decode(c, this -> _content);
+	}
 
 
 
@@ -50,10 +63,23 @@ bool message::decode(uint8_t buffer[msg_std::length], message::content &in){
 		
 		memcpy(&in.message_space, &buffer[msg_std::message_space], msg_std::message_space_size);
 		return true;	// message is valid
-	} else {
-		return false;	// message is invalid
+		} else {
+			return false;	// message is invalid
+			}
 	}
-}
+
+
+
+bool message::decode(std::array<uint8_t, msg_std::length> buffer, message::content &in){
+	uint8_t bfr[msg_std::length];
+	for(unsigned_b i = 0; i < msg_std::length; i++)
+		bfr[i] = buffer.at(i);
+	return decode(bfr, in);
+	// check if it has characters defined in message standard
+	
+	}
+
+
 
 void message::encode(message::content &in, uint8_t *buffer[msg_std::length]){
 	*buffer[0] 					= msg_std::start;
@@ -65,6 +91,6 @@ void message::encode(message::content &in, uint8_t *buffer[msg_std::length]){
 	memcpy(buffer[msg_std::message_space], &in.message_space, msg_std::message_space_size);
 	
 	*buffer[msg_std::length - 1] = msg_std::end;
-}
+	}
 
 #endif
