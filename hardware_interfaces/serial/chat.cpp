@@ -60,22 +60,15 @@ bool chat::run(steady now){
 						input_buffer.erase(input_buffer.begin(), input_buffer.begin() + offset);
 						std::cout << "EMPLACED STH" << std::endl;
 						}
-						
 			}
 		}
 
 	for(unsigned_b i = 0; i < input_queue.size(); i++)
 		for(auto &q: output_queue)
-			if(answers_query(input_queue.at(i), q)){
+			if(q.answers_query(input_queue.at(i))){
 				q.answer(input_queue.at(i));
 				input_queue.erase(input_queue.begin() + i--);
 				}
 	return true;
 	}
 
-
-
-bool chat::answers_query(message m, message_pair mp){
-	std::cout << "" << std::endl;
-	return true;
-	}

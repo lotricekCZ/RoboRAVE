@@ -46,6 +46,10 @@
 #include "../../hardware_interfaces/serial/chat.hpp"
 #include "../../hardware_interfaces/gpio/rpi_gpio.hpp"
 
+// hradware peripherals
+#include "../../hardware_interfaces/fire_sensors/fire_sensor.hpp"
+#include "../../hardware_interfaces/lidar/lidar.hpp"
+
 #include "../../tank/tank.h"
 
 #include "logic.hpp"
@@ -64,6 +68,10 @@ void logic::init(){
 	
 	//~ std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 	main_rotation.angle = pi_const / 2;
+	
+	main_fire_sensor = 	fire_sensor(main_chat);
+	main_lidar = 		lidar(main_chat);
+	
 	#ifdef __arm__
 	// RaspberryPi specific code
 	// set pins as outputs

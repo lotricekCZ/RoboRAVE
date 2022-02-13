@@ -36,7 +36,14 @@ void load_config(){
 	YAML::Node node_properties	 = config["properties"];
 	YAML::Node node_robot		 = node_properties["robot"];
 	YAML::Node node_camera		 = node_properties["camera"];
+	YAML::Node addressbook		 = config["addressbook"];
 	YAML::Node program			 = config["program"];
+	
+	variables::addressbook::master = 						addressbook["master"].as<uint8_t>();
+	variables::addressbook::irduino = 						addressbook["irduino"].as<uint8_t>();
+	variables::addressbook::motorduino = 					addressbook["motorduino"].as<uint8_t>();
+	variables::addressbook::gndduino = 						addressbook["gndduino"].as<uint8_t>();
+	variables::addressbook::stm = 							addressbook["stm"].as<uint8_t>();
 	
 	variables::properties::logs::calculations = 			config["logs"]["calculations"].as<std::string>();
 	variables::properties::logs::actions = 					config["logs"]["actions"].as<std::string>();

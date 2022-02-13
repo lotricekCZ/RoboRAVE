@@ -32,8 +32,7 @@
 #define ANGLES_ANGLES_HPP
 
 
-class angles: public std::vector<node>
-{
+class angles: public std::vector<node> {
 	public:
 		using std::vector<node>::push_back;
 		using std::vector<node>::emplace_back;

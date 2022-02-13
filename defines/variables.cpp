@@ -29,6 +29,13 @@ std::string variables::properties::logs::calculations;
 std::string variables::properties::logs::actions;
 
 
+uint8_t variables::addressbook::master;
+uint8_t variables::addressbook::irduino;
+uint8_t variables::addressbook::motorduino;
+uint8_t variables::addressbook::gndduino;
+uint8_t variables::addressbook::stm;
+
+
 decimal_n variables::thresholds::explo::influence::candle;
 decimal_n variables::thresholds::explo::influence::candle_blown;
 decimal_n variables::thresholds::explo::influence::interesting;

@@ -32,6 +32,17 @@ static class variables { // I hate myself for this!!!
 	public:
 		static const decimal_n omega_wheel_const;
 		static const decimal_n wheel_step_length_const;
+		
+		static class addressbook {
+			public:
+			static uint8_t master;
+			static uint8_t irduino;
+			static uint8_t motorduino;
+			static uint8_t gndduino;
+			static uint8_t stm;
+			} addressbook;
+
+		
 		static class properties {
 			public:
 			static std::string information;

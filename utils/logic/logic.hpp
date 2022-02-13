@@ -25,8 +25,11 @@
 #ifndef LOGIC_HPP
 #define LOGIC_HPP
 
-#include "../../hardware_interfaces/object_recognition/camera.hpp"
 #include "../../hardware_interfaces/serial/chat.hpp"
+#include "../../hardware_interfaces/object_recognition/camera.hpp"
+#include "../../hardware_interfaces/fire_sensors/fire_sensor.hpp"
+#include "../../hardware_interfaces/lidar/lidar.hpp"
+#include <memory>
 
 enum flow_modes: uint8_t { // flow modes of program, affected by user input buttons
 	ERROR			= 0,
@@ -57,11 +60,15 @@ class logic {
 	//~ camera	 	main_camera;
 	serial		main_serial;
 	chat	 	main_chat;
+	fire_sensor	main_fire_sensor;
+	lidar		main_lidar;
+	
 	
 	//~ auto start = std::chrono::steady_clock::now();
 	// map & planning stuff
 	map 		main_map;
 	planner		main_planner;
+	angles		main_angles;
 	struct {
 		flow_modes mode = flow_modes::INITIALISING;
 		path_modes mode_hunt = path_modes::SEARCHING;

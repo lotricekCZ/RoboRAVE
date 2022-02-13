@@ -26,7 +26,7 @@
 
 
 angles::angles()
-	: vector<node>()
+	: std::vector<node>()
 {
 	for(unsigned_n i = 0; i < 360; i ++){
 		emplace_back(0.0f, (decimal_n)i);

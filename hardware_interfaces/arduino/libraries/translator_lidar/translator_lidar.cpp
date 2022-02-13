@@ -33,9 +33,11 @@ translator_lidar::translator_lidar(){
 
 void translator_lidar::decompose(uint8_t in[16]){
 	presets.first_index = presets.current_index =	in[0] << 1 | in[1] >> 7;
-	presets.first_index =	in[1] << 2 | in[2] >> 6;
+	presets.last_index =	in[1] << 2 | in[2] >> 6;
 	presets.span = 	15 & (in[2] >> 2);
+	presets.tolerable_age = in[2] << 7 | in[3] >> 1;
 	}
+
 
 
 bool translator_lidar::compose(){

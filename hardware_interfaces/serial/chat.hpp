@@ -30,8 +30,10 @@
 #include <deque>
 #include "../../defines/typedefines.h"
 #include "serial.hpp"
+#include "serial_peripheral.hpp"
 #include "message.hpp"
 #include "message_pair.hpp"
+#include "addressbook.hpp"
 
 class chat {
 	public:
@@ -41,7 +43,6 @@ class chat {
 		std::deque<message> input_queue; // messages that aren't still assigned to query
 		std::deque<message_pair> output_queue;
 		bool run(steady now = time_now); // iterates through message queue, searching for responses.
-		bool answers_query(message m, message_pair mp);
 		std::deque<uint8_t> input_buffer;
 		void init(serial &s);
 	private:

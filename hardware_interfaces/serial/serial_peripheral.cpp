@@ -1,5 +1,5 @@
 /*
- * message_pair.hpp
+ * serial_peripheral.cpp
  * 
  * Copyright 2022 Jakub Ramašeuski <jakub@skaryna.net>
  * 
@@ -22,35 +22,36 @@
  */
 
 
-#ifndef MESSAGE_PAIR_HPP
-#define MESSAGE_PAIR_HPP
-
-#include <utility>
-#include <vector>
-#include <memory>
-#include "../../defines/typedefines.h"
+#include "chat.hpp"
 #include "serial_peripheral.hpp"
-#include "message.hpp"
+
+class chat;
 
 
-class message_pair: public std::pair<message, message> {
-	public:
-		using std::pair<message, message>::first;
-		using std::pair<message, message>::second;
-		std::shared_ptr<serial_peripheral> periphery;
-		steady appear_first;
-		steady try_last;
-		uint8_t tries = 0;
-		
-		bool awaits_second; // some messages (e. g. Motorduino) needn't a confirmator/response message
-		void answer(message m);
-		void answer();
-		bool answers_query(message m);
-		message_pair();
-		message_pair(std::shared_ptr<serial_peripheral> p);
-			
-	private:
-		/* add your private declarations */
-};
+serial_peripheral::serial_peripheral(){
+	}
 
-#endif /* MESSAGE_PAIR_HPP */ 
+
+
+serial_peripheral::serial_peripheral(chat *c){
+	_conn = c;
+	}
+
+
+
+serial_peripheral::serial_peripheral(chat &c){
+	_conn = &c;
+	}
+
+
+
+void serial_peripheral::fill_input(message in){
+	input = in;
+	}
+
+
+
+std::vector<uint8_t> serial_peripheral::get_comp_kind(uint8_t kind){
+	for(auto [key, kinds]: comp_kinds) if(key == kind) return kinds;
+	return std::vector<uint8_t>();
+	}

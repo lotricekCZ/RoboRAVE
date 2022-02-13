@@ -43,11 +43,12 @@
 #include "./utils/logic/logic.hpp"
 
 #include "./hardware_interfaces/serial/serial.cpp"
-#include "./hardware_interfaces/fire_sensors/fire_sensor.cpp"
+#include "./hardware_interfaces/fire_sensors/fire_sensor.hpp"
+#include "./hardware_interfaces/lidar/lidar.hpp"
+
 #include "./tests/main_functions/main_functions1-20.hpp"
 #include "./tests/main_functions/main_functions21-40.hpp"
 #include "./tests/main_functions/main_functions41-60.hpp"
-
 
 
 

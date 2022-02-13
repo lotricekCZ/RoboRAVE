@@ -1,9 +1,17 @@
 # Tresholds to treat detected stuff like if they were there
 # Remember, NO indentation by tabs!!!
-version: &software_version "v0.1.2-a"
+version: &software_version "v0.1.3-a"
 logs:
     actions:	../logs/actions/actions.txt
     calculations:	../logs/actions/calculations.md
+
+# {IR = 1, GND = 3, STM = 4, MTR = 2, MSR = 0};
+addressbook:
+    master:		0
+    irduino:	1
+    motorduino:	2
+    gndduino:	3
+    stm:		4
 
 thresholds:
   # mean Average perception needed to recognise object
@@ -75,5 +83,5 @@ program:
         chat: ../hardware_interfaces/serial/chat.yaml
         
 information: |
- Roborave robot software, version 0.1.2-a
- © Jakub Ramašeuski, 2021
+ Roborave robot software, version 0.1.3-a
+ © Jakub Ramašeuski, 2021, 2022

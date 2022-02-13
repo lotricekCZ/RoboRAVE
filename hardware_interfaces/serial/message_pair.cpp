@@ -25,16 +25,39 @@
 #include "message_pair.hpp"
 
 
-message_pair::message_pair()
-	: std::pair<message, std::vector<message>>(){
+message_pair::message_pair() : std::pair<message, message>(){
 	
 	}
 	
 
 
+message_pair::message_pair(std::shared_ptr<serial_peripheral> p) : std::pair<message, message>(){
+	periphery = p;
+	}
+
+
 
 void message_pair::answer(message m){
-	
+	periphery -> fill_input(m);
+	periphery -> decode();
+	periphery -> answer();
+	}
+
+
+
+void message_pair::answer(){
+	periphery -> answer();
+	}
+
+
+
+bool message_pair::answers_query(message m){
+	if(this -> first._content.receiver == m._content.sender &&
+		this -> first._content.message_number <= m._content.message_number)
+		for(uint8_t kind: periphery -> get_comp_kind(m._content.kind))
+			if(m._content.kind == kind)
+				return true;
+	return false;
 	}
 
 

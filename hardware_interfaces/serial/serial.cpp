@@ -99,7 +99,7 @@ void serial::baudrate(mn::CppLinuxSerial::BaudRate data){
 
 	
 signed_b serial::in_waiting(){
-	return (signed_b)InWaiting();
+	return (signed_b)Available();
 	}
 
 

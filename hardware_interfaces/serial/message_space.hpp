@@ -30,7 +30,7 @@
 
 namespace data{
 	namespace send{		
-		typedef struct motor{
+		struct motor{
 			uint16_t left_steps;
 			uint16_t right_steps; // 4b
 			unsigned left_mcrs_hi:14;
