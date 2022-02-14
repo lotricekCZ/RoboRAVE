@@ -27,6 +27,7 @@
 
 #include <map>
 #include <vector>
+#include <iostream>
 
 #include "../../defines/typedefines.h"
 #include "../../defines/variables.hpp"
@@ -42,23 +43,23 @@ class serial_peripheral{
 		serial_peripheral();
 		serial_peripheral(chat *_c);
 		serial_peripheral(chat &_c);
+		~serial_peripheral();
 		
-		
-		chat * _conn;
+		//~ chat * _conn;
 		message output;
 		message input;
 		//~ T * peripheral; // peripheral that actually stands behind
 		std::map<uint8_t, std::vector<uint8_t>> comp_kinds; // complementary kinds
 		
 		std::vector<uint8_t> get_comp_kind(uint8_t kind);
-		
+		void get_comp_kind(uint8_t kind, std::vector<uint8_t> &v);
 		void fill_input(message in);
 		virtual void run(){}
 		virtual void question(){}
 		virtual void answer(){}
 		virtual void decode(){}
 		virtual void encode(){}
-		virtual void update(){}
+		virtual void update(){std::cout << "This is reason for hate crime" << std::endl;}
 	private:
 		/* add your private declarations */
 	};

@@ -23,6 +23,7 @@
 
 #include <memory>
 #include <vector>
+#include <iostream>
 
 #include "../serial/chat.hpp"
 #include "../../utils/data_containers/angles/node/node.hpp"
@@ -48,6 +49,8 @@ fire_sensor::fire_sensor(uint8_t sensors, decimal_n spread, decimal_n range) : s
 
 fire_sensor::fire_sensor(chat *c, uint8_t sensors, decimal_n spread, decimal_n range) : serial_peripheral(c){
 	this -> sensors = std::vector<node> (sensors);
+	this -> _conn = c;
+	printf("_conn pointer = %p\n", _conn);
 	this -> range = range;
 	this -> spread = spread;
 	this -> comp_kinds = table;
@@ -56,12 +59,18 @@ fire_sensor::fire_sensor(chat *c, uint8_t sensors, decimal_n spread, decimal_n r
 
 
 fire_sensor::fire_sensor(chat &c, uint8_t sensors, decimal_n spread, decimal_n range) : serial_peripheral(c){
+	this -> _conn = &c;
+	printf("_conn = %p\n", _conn);
 	this -> sensors = std::vector<node> (sensors);
 	this -> range = range;
 	this -> spread = spread;
 	this -> comp_kinds = table;
 	}
 
+
+fire_sensor::~fire_sensor(){
+	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	}
 
 /*
 bool fire_sensor::update(){
@@ -78,6 +87,10 @@ std::vector<node> fire_sensor::get_data(bool update = false){
 
 
 void fire_sensor::question(){
+	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
+	printf("main = %p\n", _conn);
+	this -> _conn -> question(output, this);
+	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	return;
 	}
 
@@ -94,18 +107,18 @@ void fire_sensor::decode(){
 		this -> sensors.at(i).intensity = (input._content.message_space[i] << 2) | 
 				((input._content.message_space[8 + i/4] >> (2 * (3 - i))) & 0b11);
 		}
-	this -> reference = ((0b11 & input._content.message_space[10]) << 8) | input._content.message_space[11];
+	this -> presets.reference = ((0b11 & input._content.message_space[10]) << 8) | input._content.message_space[11];
 	return;
 	}
 
 
 
 void fire_sensor::encode(){
-	this -> output._content.message_space[0] = this -> period >> 8 		& 255;
-	this -> output._content.message_space[1] = this -> period			& 255;
-	this -> output._content.message_space[2] = this -> oversampling		& 31;
-	this -> output._content.message_space[3] = this -> expo_time >> 8	& 255;
-	this -> output._content.message_space[4] = this -> expo_time		& 255;
+	this -> output._content.message_space[0] = this -> presets.period >> 8 		& 255;
+	this -> output._content.message_space[1] = this -> presets.period			& 255;
+	this -> output._content.message_space[2] = this -> presets.oversampling		& 31;
+	this -> output._content.message_space[3] = this -> presets.expo_time >> 8	& 255;
+	this -> output._content.message_space[4] = this -> presets.expo_time		& 255;
 	return;
 	}
 
@@ -120,7 +133,20 @@ void fire_sensor::run(){
 
 void fire_sensor::update(){
 	//~ message
+	std::cout << "This is fire sensor" << std::endl;
 	return;
 	}
 
 
+/*
+fire_sensor& fire_sensor::operator=(const fire_sensor& rhs) {
+	// fire_sensor stuff here
+	
+	// serial_peripheral stuff
+	//~ serial_peripheral::operator=(rhs.);
+	
+	return *this;
+	}
+*/	
+	
+	

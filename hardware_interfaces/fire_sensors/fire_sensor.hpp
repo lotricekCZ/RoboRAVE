@@ -28,8 +28,9 @@
 #include <vector>
 #include <map>
 
-class fire_sensor: public virtual serial_peripheral{
+class fire_sensor: public serial_peripheral{
 	public:
+		//~ using serial_peripheral::operator=;
 		enum kinds: uint8_t{
 			SND_DAT = 0,	/* Send data */
 			SND_CON = 1,	/* Send data continuously */
@@ -37,18 +38,20 @@ class fire_sensor: public virtual serial_peripheral{
 			};
 		const static std::map<uint8_t, std::vector<uint8_t>> table;
 		//~ using serial_peripheral::comp_kinds;
-		unsigned reference:		10;
 		std::vector<node> sensors;
 		
-		// these are the settings
-		unsigned_n period		:16;
-		unsigned_n oversampling	:5;
-		unsigned_n expo_time	:16;
-		
+		struct{
+			unsigned reference:		10;
+			// these are the settings
+			unsigned_n period		:16;
+			unsigned_n oversampling	:5;
+			unsigned_n expo_time	:16;
+			} presets;
 		decimal_n spread;
 		decimal_n range;
 
 		chat *_conn;
+		//~ using serial_peripheral::_conn;
 		fire_sensor(uint8_t sensors = 8, 
 					decimal_n spread = 45, /*degrees*/ 
 					decimal_n range = 70 /*cm*/);
@@ -62,15 +65,19 @@ class fire_sensor: public virtual serial_peripheral{
 					uint8_t sensors = 8, 
 					decimal_n spread = 45, /*degrees*/ 
 					decimal_n range = 70 /*cm*/);
-		
+
+		~fire_sensor();
+
 		//~ bool update();
 		//~ std::vector<node> get_data(bool update);
-		void run();
-		void question();
-		void answer();
-		void decode();
-		void encode();
-		void update();
+		void run() override;
+		void question() override;
+		void answer() override;
+		void decode() override;
+		void encode() override;
+		void update() override;
+		
+		//~ fire_sensor& operator=(const fire_sensor& rhs);
 	private:
 		/* add your private declarations */
 };

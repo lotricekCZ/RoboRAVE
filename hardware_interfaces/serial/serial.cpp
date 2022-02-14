@@ -60,6 +60,12 @@ void serial::open(){
 	}
 
 
+
+//~ bool serial::is_opened(){
+	//~ return IsOpen();
+	//~ }
+
+
 	
 void serial::close(){
 	Close();

@@ -39,8 +39,10 @@ class serial: public mn::CppLinuxSerial::SerialPort {
 		using mn::CppLinuxSerial::SerialPort::SetDevice;
 		using mn::CppLinuxSerial::SerialPort::SetBaudRate;
 		using mn::CppLinuxSerial::SerialPort::Available;
+		//~ using mn::CppLinuxSerial::SerialPort::IsOpen;
 		//~ using mn::CppLinuxSerial::BaudRate;
 		
+		//~ bool is_opened();
 		void open();
 		void close();
 		void read(std::vector<uint8_t> &data);

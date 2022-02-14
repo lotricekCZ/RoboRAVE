@@ -25,6 +25,7 @@
 #define CHAT_HPP
 
 #include <cstring>
+#include <variant>
 #include <memory>
 #include <array>
 #include <deque>
@@ -40,11 +41,18 @@ class chat {
 		chat();
 		chat(serial &s);
 		serial *main_serial;
-		std::deque<message> input_queue; // messages that aren't still assigned to query
-		std::deque<message_pair> output_queue;
+		std::vector<message> input_queue; // messages that aren't still assigned to query
+		std::vector<message_pair> output_queue;
 		bool run(steady now = time_now); // iterates through message queue, searching for responses.
 		std::deque<uint8_t> input_buffer;
 		void init(serial &s);
+		void send(message_pair &m, steady now = time_now);
+		void question(message m, fire_sensor* f);
+		//~ void question(message m, std::shared_ptr<motors> m);
+		void question(message m, lidar* l);
+		//~ void question(message m, std::shared_ptr<turbine> t);
+		//~ void question(message m, std::shared_ptr<ground_sensors> g);
+		//~ void question(message m, std::shared_ptr<thermocam> t);
 	private:
 		/* add your private declarations */
 };

@@ -30,17 +30,23 @@ class chat;
 
 serial_peripheral::serial_peripheral(){
 	}
-
+	
 
 
 serial_peripheral::serial_peripheral(chat *c){
-	_conn = c;
+	
 	}
 
 
 
 serial_peripheral::serial_peripheral(chat &c){
-	_conn = &c;
+	
+	}
+
+
+	
+serial_peripheral::~serial_peripheral(){
+	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	}
 
 
@@ -54,4 +60,11 @@ void serial_peripheral::fill_input(message in){
 std::vector<uint8_t> serial_peripheral::get_comp_kind(uint8_t kind){
 	for(auto [key, kinds]: comp_kinds) if(key == kind) return kinds;
 	return std::vector<uint8_t>();
+	}
+
+
+
+void serial_peripheral::get_comp_kind(uint8_t kind, std::vector<uint8_t> &v){
+	for(auto [key, kinds]: comp_kinds) if(key == kind) {v = kinds; return;}
+	v = std::vector<uint8_t>();
 	}

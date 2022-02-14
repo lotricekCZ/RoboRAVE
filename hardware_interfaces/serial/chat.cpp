@@ -22,27 +22,74 @@
  */
 
 #include "chat.hpp"
-
+#include <stdexcept>
 
 chat::chat(){
-	
+	output_queue = std::vector<message_pair>();
 	}
 
 
 
 chat::chat(serial &s){
+	output_queue = std::vector<message_pair>();
 	this -> main_serial = &s;
 	}
 
 
+
 void chat::init(serial &s){
+	//~ output_queue = std::vector<message_pair>();
 	this -> main_serial = &s;
 	//~ this -> main_serial -> open();
 	}
 
 
 
+void chat::question(message m, lidar* l){
+
+	//~ this -> output_queue.push_back(a);
+	l -> update();
+	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	}
+
+
+
+void chat::question(message m, fire_sensor* f){
+	//~ std::shared_ptr<message_pair> a(new );
+	printf("this = %p\n", this);
+	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	output_queue.emplace_back((fire_sensor*)f, m);
+	printf("size: %i\n", output_queue.size());
+	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
+	f -> update();
+	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
+	}
+
+
+
+void chat::send(message_pair &m, steady now){
+	std::cout << "BEFORE: " << std::chrono::duration_cast<std::chrono::seconds>(m.try_last.time_since_epoch()).count() << std::endl;
+	m.try_last = now;
+	m.tries++;
+	std::cout << "AFTER: " << std::chrono::duration_cast<std::chrono::seconds>(m.try_last.time_since_epoch()).count() << std::endl;
+	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	std::array<uint8_t, msg_std::length> bfr;
+	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	m.first.encode(m.first._content, bfr);
+	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	std::vector<uint8_t> sended(&bfr[0], &bfr[msg_std::length]);
+	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	printf("BEEN THERE: %i\n", __LINE__);
+	main_serial -> write(sended);
+	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
+	}
+
+
+
 bool chat::run(steady now){
+	
 	if(main_serial -> in_waiting() != 0){
 		std::vector<uint8_t> appended(main_serial -> in_waiting());
 		main_serial -> read(appended);
@@ -62,13 +109,30 @@ bool chat::run(steady now){
 						}
 			}
 		}
-
+	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 	for(unsigned_b i = 0; i < input_queue.size(); i++)
 		for(auto &q: output_queue)
 			if(q.answers_query(input_queue.at(i))){
 				q.answer(input_queue.at(i));
 				input_queue.erase(input_queue.begin() + i--);
-				}
+				} 
+	
+	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	printf("size: %i\n", output_queue.size());
+	for(unsigned_b i = 0; i < output_queue.size(); i++){
+		//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+		if(std::chrono::duration<decimal_n>(now - output_queue.at(i).try_last).count() >= 0.5f){
+			//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+			if(output_queue.at(i).tries >= variables::chat::attempt_count) {output_queue.erase(output_queue.begin() + i--); continue;}
+			std::cout << "Length: " << std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count() << std::endl;
+			std::cout << "Length: " << std::chrono::duration_cast<std::chrono::seconds>(output_queue.at(i).try_last.time_since_epoch()).count() << std::endl;
+			//~ printf("Length: %fs\n", std::chrono::duration<decimal_n>(q.try_last).count());
+			printf("Length: %fs\n", std::chrono::duration<decimal_n>(now - output_queue.at(i).try_last).count());
+			send(output_queue.at(i));
+			std::cout << "OUTSIDE: " << std::chrono::duration_cast<std::chrono::seconds>(output_queue.at(i).try_last.time_since_epoch()).count() << std::endl;
+			//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+			}
+		}
 	return true;
 	}
 

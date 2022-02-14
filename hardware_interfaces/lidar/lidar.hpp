@@ -34,8 +34,10 @@
 #include "../../defines/typedefines.h"
 
 
-class lidar: public virtual serial_peripheral {
+class lidar: public serial_peripheral {
 	public:
+		using serial_peripheral::operator=;
+	
 		uint8_t convert: 1; // please to convert what he captured
 		
 		

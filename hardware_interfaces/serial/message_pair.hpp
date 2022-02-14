@@ -26,18 +26,26 @@
 #define MESSAGE_PAIR_HPP
 
 #include <utility>
+#include <variant>
 #include <vector>
 #include <memory>
 #include "../../defines/typedefines.h"
 #include "serial_peripheral.hpp"
+#include "../lidar/lidar.hpp"
+#include "../fire_sensors/fire_sensor.hpp"
 #include "message.hpp"
+#include <cinttypes>
 
-
-class message_pair: public std::pair<message, message> {
+class message_pair{
 	public:
-		using std::pair<message, message>::first;
-		using std::pair<message, message>::second;
-		std::shared_ptr<serial_peripheral> periphery;
+		message first;
+		message second;
+		std::variant<fire_sensor*, 
+					lidar*/*, 
+					std::shared_ptr<ground_sensors>, 
+					std::shared_ptr<turbine>, 
+					std::shared_ptr<thermocam>, 
+					std::shared_ptr<motors>*/> periphery;
 		steady appear_first;
 		steady try_last;
 		uint8_t tries = 0;
@@ -46,8 +54,26 @@ class message_pair: public std::pair<message, message> {
 		void answer(message m);
 		void answer();
 		bool answers_query(message m);
-		message_pair();
-		message_pair(std::shared_ptr<serial_peripheral> p);
+		void question();
+		message_pair(message m = message());
+		message_pair(fire_sensor* p, message m = message());
+		message_pair(lidar* p, message m = message());
+		/*
+		message_pair& operator=(message_pair other){
+			std::cout << "copy assignment of A\n";
+			std::swap(first, other.first);
+			std::swap(second, other.second);
+			std::swap(periphery, other.periphery);
+			std::swap(appear_first, other.appear_first);
+			std::swap(try_last, other.try_last);
+			std::swap(tries, other.tries);
+			std::swap(awaits_second, other.awaits_second);
+			return *this;
+			}*/
+		//~ message_pair(ground_sensors* p, message m = message());
+		//~ message_pair(turbine* p, message m = message());
+		//~ message_pair(thermocam* p, message m = message());
+		//~ message_pair(motors* p, message m = message());
 			
 	private:
 		/* add your private declarations */

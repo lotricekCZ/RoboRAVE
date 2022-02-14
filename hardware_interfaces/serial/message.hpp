@@ -46,7 +46,7 @@ class message {
 		bool decode(std::array<uint8_t, msg_std::length> buffer, message::content &in);
 		bool decode(uint8_t buffer[msg_std::length], message::content &in);
 		
-		void encode(message::content &in, uint8_t *buffer[msg_std::length]);
+		void encode(message::content &in, std::array<uint8_t, msg_std::length> &buffer);
 		message();
 		message(std::array<uint8_t, msg_std::length> c);
 		message(message::content c);

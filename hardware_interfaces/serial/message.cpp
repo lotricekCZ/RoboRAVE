@@ -32,7 +32,7 @@
 #define MESSAGE_CPP
 
 message::message(){
-	
+	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 
 
@@ -81,16 +81,17 @@ bool message::decode(std::array<uint8_t, msg_std::length> buffer, message::conte
 
 
 
-void message::encode(message::content &in, uint8_t *buffer[msg_std::length]){
-	*buffer[0] 					= msg_std::start;
-	*buffer[msg_std::head] 		= (in.receiver << 5) | (in.sender << 2) | (in.type << 1) | (in.kind >> 2);
-	*buffer[msg_std::head + 1] 	= (in.kind << 6) | (in.message_number >> 16 & 31);
-	*buffer[msg_std::head + 2] 	= in.message_number >> 8 & 255;
-	*buffer[msg_std::head + 2] 	= in.message_number & 255;
+void message::encode(message::content &in, std::array<uint8_t, msg_std::length> &buffer){
+	buffer[0] 					= msg_std::start;
+	buffer[msg_std::head] 		= (in.receiver << 5) | (in.sender << 2) | (in.type << 1) | (in.kind >> 2);
+	buffer[msg_std::head + 1] 	= (in.kind << 6) | (in.message_number >> 16 & 31);
+	buffer[msg_std::head + 2] 	= in.message_number >> 8 & 255;
+	buffer[msg_std::head + 2] 	= in.message_number & 255;
 	
-	memcpy(buffer[msg_std::message_space], &in.message_space, msg_std::message_space_size);
+	for(uint8_t i = 0; i < msg_std::message_space_size; i++)
+		buffer[msg_std::message_space + i] = in.message_space[i];
 	
-	*buffer[msg_std::length - 1] = msg_std::end;
+	buffer[msg_std::length - 1] = msg_std::end;
 	}
 
 #endif
