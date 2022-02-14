@@ -61,142 +61,35 @@ void translator_motor::apply(class motor *Mri, class motor *Mle){
 	// Serial.println(data.input_type);
 	// Serial.println(data.left_steps);
 	// Serial.println(data.right_steps);
-	switch((uint8_t)data.input_type){
-		case 1: 						// premaze left
-			left_rewrite(Ml);
-			break;
-			
-		case 2:							// premaze right
-			right_rewrite(Mr); 
-			break;
-			
-		case 3:							// premaze r&l
+	if(data.input_type & 0b1){ // right motor
+		if((data.input_type >> 5) & 0b1){ // chaining
+			right_set_chain(Mr);
+			}
+		if((data.input_type >> 4) & 0b1){ // direction
+			right_set_dir(Mr);
+			}
+		if((data.input_type >> 3) & 0b1){ // rewrite
 			right_rewrite(Mr);
-			left_rewrite(Ml);
-			break;
-			
-		case 4:							// nastavi velikost impulzu left
-			left_set_speed(Ml);
-			break;
-			
-		case 5:							// nastavi velikost impulzu right
+			}
+		if((data.input_type >> 2) & 0b1){ // speed
 			right_set_speed(Mr);
-			break;
-			
-		case 6:							// nastavi velikost impulzu r&l
-			left_set_speed(Ml);
-			right_set_speed(Mr);
-			break;
-			
-		case 7:
-			left_set_dir(Ml);			//  nastavi smer left
-			break;
-			
-		case 8:
-			right_set_dir(Mr);			//  nastavi smer right
-			break;
-			
-		case 9:
-			right_set_dir(Mr);			//  nastavi smer r&l
-			left_set_dir(Ml);
-			break;
-			
-		case 10:
-			left_set_dir(Ml);			//  nastavi smer a prepise left
-			left_rewrite(Ml);
-			break;
-			
-		case 11:
-			right_set_dir(Mr);			//  nastavi smer a prepise right
-			right_rewrite(Mr);
-			break;
-			
-		case 12:						//  nastavi smer a prepise r&l
-			right_set_dir(Mr);
-			left_set_dir(Ml);
-			right_rewrite(Mr);
-			left_rewrite(Ml);
-			break;
-			
-		case 13:						//  nastavi retezeni left
-			left_set_chain(Ml);
-			break;
-			
-		case 14:						//  nastavi retezeni right
-			right_set_chain(Mr);
-			break;
-			
-		case 15:						//  nastavi retezeni r&l
-			right_set_chain(Mr);
-			left_set_chain(Ml);
-			break;
-			
-		case 16:						//  nastavi retezeni a smer left
-			left_set_chain(Ml);
-			left_set_dir(Ml);
-			break;
-			
-		case 17:						//  nastavi retezeni a smer right
-			right_set_chain(Mr);
-			right_set_dir(Mr);
-			break;
-			
-		case 18:						//  nastavi retezeni a smer r&l
-			right_set_chain(Mr);
-			left_set_chain(Ml);
-			right_set_dir(Mr);
-			left_set_dir(Ml);
-			break;
-		case 19:
-			left_rewrite(Ml);
-			left_set_chain(Ml);
-			left_set_dir(Ml);
-			left_set_speed(Ml);
-			break;
-			
-		case 20:
-			right_rewrite(Mr);
-			right_set_chain(Mr);
-			right_set_dir(Mr);
-			right_set_speed(Mr);
-			break;
-		case 21:
-			right_rewrite(Mr);
-			right_set_chain(Mr);
-			right_set_dir(Mr);
-			right_set_speed(Mr);
-			left_rewrite(Ml);
-			left_set_chain(Ml);
-			left_set_dir(Ml);
-			left_set_speed(Ml);
-			break;
-			
-		case 22:
-			//left_rewrite(Ml);
-			left_set_chain(Ml);
-			left_set_dir(Ml);
-			left_set_speed(Ml);
-			break;
-			
-		case 23:
-			//right_rewrite(Mr);
-			right_set_chain(Mr);
-			right_set_dir(Mr);
-			right_set_speed(Mr);
-			break;
-			
-		case 24:
-			//right_rewrite(Mr);
-			right_set_chain(Mr);
-			right_set_dir(Mr);
-			right_set_speed(Mr);
-			//left_rewrite(Ml);
-			left_set_chain(Ml);
-			left_set_dir(Ml);
-			left_set_speed(Ml);
-			break;
-			
+			}
 		}
+
+	if(data.input_type >> 1 & 0b1){ // right motor
+		if((data.input_type >> 5) & 0b1){ // chaining
+			left_set_chain(Ml);
+			}
+		if((data.input_type >> 4) & 0b1){ // direction
+			leftt_set_dir(Ml);
+			}
+		if((data.input_type >> 3) & 0b1){ // rewrite
+			left_rewrite(Ml);
+			}
+		if((data.input_type >> 2) & 0b1){ // speed
+			left_set_speed(Ml);
+			}
+		}	
 	}
 	
 void translator_motor::left_rewrite(class motor *Ml){
