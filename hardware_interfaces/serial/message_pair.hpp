@@ -33,6 +33,7 @@
 #include "serial_peripheral.hpp"
 #include "../lidar/lidar.hpp"
 #include "../fire_sensors/fire_sensor.hpp"
+#include "../motors/motors.hpp"
 #include "message.hpp"
 #include <cinttypes>
 
@@ -41,11 +42,11 @@ class message_pair{
 		message first;
 		message second;
 		std::variant<fire_sensor*, 
-					lidar*/*, 
-					std::shared_ptr<ground_sensors>, 
-					std::shared_ptr<turbine>, 
-					std::shared_ptr<thermocam>, 
-					std::shared_ptr<motors>*/> periphery;
+					lidar*,
+					motors*/*, 
+					ground_sensors*, 
+					turbine*, 
+					thermocam*, */> periphery;
 		steady appear_first;
 		steady try_last;
 		uint8_t tries = 0;
@@ -58,6 +59,7 @@ class message_pair{
 		message_pair(message m = message());
 		message_pair(fire_sensor* p, message m = message());
 		message_pair(lidar* p, message m = message());
+		message_pair(motors* mr, message m = message());
 		/*
 		message_pair& operator=(message_pair other){
 			std::cout << "copy assignment of A\n";

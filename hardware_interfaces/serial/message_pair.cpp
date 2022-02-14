@@ -51,6 +51,16 @@ message_pair::message_pair(lidar* p, message m){
 	}
 
 
+
+message_pair::message_pair(motors* mr, message m){
+	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	this -> first = m;
+	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	//~ periphery = p;
+	periphery.emplace<motors*>(mr);
+	}
+
+
 /*
 message_pair::message_pair(std::shared_ptr<motors> p, message m) : std::pair<message, message>(){
 	this -> first = m;

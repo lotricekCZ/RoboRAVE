@@ -46,9 +46,16 @@ void chat::init(serial &s){
 
 
 void chat::question(message m, lidar* l){
-
-	//~ this -> output_queue.push_back(a);
+	output_queue.emplace_back((lidar*)l, m);
 	l -> update();
+	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	}
+
+
+
+void chat::question(message m, motors* mr){
+	output_queue.emplace_back((motors*)mr, m);
+	mr -> update();
 	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
 	}
 
@@ -56,11 +63,8 @@ void chat::question(message m, lidar* l){
 
 void chat::question(message m, fire_sensor* f){
 	//~ std::shared_ptr<message_pair> a(new );
-	printf("this = %p\n", this);
 	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 	output_queue.emplace_back((fire_sensor*)f, m);
-	printf("size: %i\n", output_queue.size());
-	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	f -> update();
 	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
@@ -74,14 +78,10 @@ void chat::send(message_pair &m, steady now){
 	m.try_last = now;
 	m.tries++;
 	std::cout << "AFTER: " << std::chrono::duration_cast<std::chrono::seconds>(m.try_last.time_since_epoch()).count() << std::endl;
-	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 	std::array<uint8_t, msg_std::length> bfr;
-	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 	m.first.encode(m.first._content, bfr);
-	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 	std::vector<uint8_t> sended(&bfr[0], &bfr[msg_std::length]);
-	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
-	printf("BEEN THERE: %i\n", __LINE__);
+	//~ printf("BEEN THERE: %i\n", __LINE__);
 	main_serial -> write(sended);
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	}

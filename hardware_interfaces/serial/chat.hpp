@@ -38,6 +38,7 @@
 
 class chat {
 	public:
+		enum message_t: uint8_t{COMMAND = 0, DATA = 1};
 		chat();
 		chat(serial &s);
 		serial *main_serial;
@@ -48,11 +49,11 @@ class chat {
 		void init(serial &s);
 		void send(message_pair &m, steady now = time_now);
 		void question(message m, fire_sensor* f);
-		//~ void question(message m, std::shared_ptr<motors> m);
+		void question(message m, motors* mr);
 		void question(message m, lidar* l);
-		//~ void question(message m, std::shared_ptr<turbine> t);
-		//~ void question(message m, std::shared_ptr<ground_sensors> g);
-		//~ void question(message m, std::shared_ptr<thermocam> t);
+		//~ void question(message m, turbine* t);
+		//~ void question(message m, ground_sensors* g);
+		//~ void question(message m, thermocam* t);
 	private:
 		/* add your private declarations */
 };
