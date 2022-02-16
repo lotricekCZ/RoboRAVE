@@ -121,11 +121,9 @@ bool chat::run(steady now){
 	printf("size: %i\n", output_queue.size());
 	for(unsigned_b i = 0; i < output_queue.size(); i++){
 		//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
-		if(std::chrono::duration<decimal_n>(now - output_queue.at(i).try_last).count() >= 0.5f){
+		if(std::chrono::duration<decimal_n>(now - output_queue.at(i).try_last) >= std::chrono::milliseconds(output_queue.at(i).response_timeout)){
 			//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 			if(output_queue.at(i).tries >= variables::chat::attempt_count) {output_queue.erase(output_queue.begin() + i--); continue;}
-			std::cout << "Length: " << std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count() << std::endl;
-			std::cout << "Length: " << std::chrono::duration_cast<std::chrono::seconds>(output_queue.at(i).try_last.time_since_epoch()).count() << std::endl;
 			//~ printf("Length: %fs\n", std::chrono::duration<decimal_n>(q.try_last).count());
 			printf("Length: %fs\n", std::chrono::duration<decimal_n>(now - output_queue.at(i).try_last).count());
 			send(output_queue.at(i));

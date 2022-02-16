@@ -50,16 +50,16 @@ class message_pair{
 		steady appear_first;
 		steady try_last;
 		uint8_t tries = 0;
-		
+		unsigned_b response_timeout = variables::chat::response_timeout::normal;
 		bool awaits_second; // some messages (e. g. Motorduino) needn't a confirmator/response message
 		void answer(message m);
 		void answer();
 		bool answers_query(message m);
 		void question();
-		message_pair(message m = message());
-		message_pair(fire_sensor* p, message m = message());
-		message_pair(lidar* p, message m = message());
-		message_pair(motors* mr, message m = message());
+		message_pair(message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
+		message_pair(fire_sensor* p, message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
+		message_pair(lidar* p, message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
+		message_pair(motors* mr, message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
 		/*
 		message_pair& operator=(message_pair other){
 			std::cout << "copy assignment of A\n";

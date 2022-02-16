@@ -25,73 +25,42 @@
 #include "message_pair.hpp"
 #include <cinttypes>
 
-message_pair::message_pair(message m){
-	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+message_pair::message_pair(message m, unsigned_b timeout){
 	this -> first = m;
+	this -> response_timeout = variables::chat::response_timeout::normal;
 	}
 	
 
 
-message_pair::message_pair(fire_sensor* p, message m){
-	//~ std::cout << __FILE__ << std::enddl;
-	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+message_pair::message_pair(fire_sensor* p, message m, unsigned_b timeout){
 	this -> first = m;
+	this -> response_timeout = variables::chat::response_timeout::normal;
 	periphery.emplace<fire_sensor*>(p);
-	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 
 
 
-message_pair::message_pair(lidar* p, message m){
-	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+message_pair::message_pair(lidar* p, message m, unsigned_b timeout){
 	this -> first = m;
-	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
-	//~ periphery = p;
+	this -> response_timeout = variables::chat::response_timeout::normal;
 	periphery.emplace<lidar*>(p);
 	}
 
 
 
-message_pair::message_pair(motors* mr, message m){
-	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+message_pair::message_pair(motors* mr, message m, unsigned_b timeout){
 	this -> first = m;
-	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
-	//~ periphery = p;
+	this -> response_timeout = variables::chat::response_timeout::time_critical;
 	periphery.emplace<motors*>(mr);
 	}
 
 
-/*
-message_pair::message_pair(std::shared_ptr<motors> p, message m) : std::pair<message, message>(){
-	this -> first = m;
-	periphery = p;
-	}
 
-
-
-message_pair::message_pair(std::shared_ptr<turbine> p, message m) : std::pair<message, message>(){
-	this -> first = m;
-	periphery = p;
-	}
-
-
-
-message_pair::message_pair(std::shared_ptr<thermocam> p, message m) : std::pair<message, message>(){
-	this -> first = m;
-	periphery = p;
-	}
-
-
-
-message_pair::message_pair(std::shared_ptr<ground_sensors> p, message m) : std::pair<message, message>(){
-	this -> first = m;
-	periphery = p;
-	}
-*/
 
 
 void message_pair::question(){
-	//~ std::visit([](auto arg){arg -> encode();}, periphery);
+	std::visit([](auto arg){arg -> encode();}, periphery);
 	//~ this -> first()
 	// this cannot be that easy - template arguments
 	//~ std::get<periphery.index()>(periphery) -> fill_input(m);
