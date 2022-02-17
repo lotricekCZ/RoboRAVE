@@ -54,27 +54,15 @@ turbine::turbine(chat &c) : serial_peripheral(c){
 	}
 
 
+
 turbine::~turbine(){
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	}
 
-/*
-bool turbine::update(){
-	/// TODO: update
-	return false;
-	}
-
-std::vector<node> turbine::get_data(bool update = false){
-	std::vector<node> ret;
-	/// TODO: get data
-	return ret;
-	}
-*/
 
 
 void turbine::question(){
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
-	printf("main = %p\n", _conn);
 	this -> _conn -> question(output, this);
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	return;
@@ -89,23 +77,7 @@ void turbine::answer(){
 
 
 void turbine::decode(){
-	right_data.remaining_steps = input._content.message_space[0] << 8 | input._content.message_space[1];
-	
-	left_data.remaining_steps = input._content.message_space[2] << 8 | input._content.message_space[3];
-	
-	right_data.high_interval = input._content.message_space[4] << 6 | input._content.message_space[5] >> 2;
-	left_data.high_interval = input._content.message_space[6] << 6 | input._content.message_space[7] >> 2;
-	right_data.direction = (turbine::direction) (input._content.message_space[5] & 0b11);
-	left_data.direction = (turbine::direction) (input._content.message_space[7] & 0b11);
-	
-	right_data.traveled_steps = (input._content.message_space[8] << 24)
-								| (input._content.message_space[9] << 16)
-								| (input._content.message_space[10] << 8)
-								| (input._content.message_space[11]);
-	left_data.traveled_steps = (input._content.message_space[12] << 24)
-								| (input._content.message_space[13] << 16)
-								| (input._content.message_space[14] << 8)
-								| (input._content.message_space[15]);
+	// No sensor means there aren't any reasonable data
 	return;
 	}
 
@@ -115,24 +87,19 @@ void turbine::encode(){
 	this -> output._content.receiver = variables::addressbook::motorduino;
 	this -> output._content.sender = variables::addressbook::master;
 	this -> output._content.type = chat::COMMAND;
+	this -> output._content.kind = MOV_TRB;
 	
-	this -> output._content.message_space[0] = left.scheduled_steps >> 8;
-	this -> output._content.message_space[1] = left.scheduled_steps;
-	
-	this -> output._content.message_space[2] = right.scheduled_steps >> 8;
-	this -> output._content.message_space[3] = right.scheduled_steps;
-
-	this -> output._content.message_space[4] = left.high_interval >> 6;
-	this -> output._content.message_space[5] = left.high_interval << 2 | left.direction;
-	this -> output._content.message_space[6] = right.high_interval >> 6;
-	this -> output._content.message_space[7] = right.high_interval << 2 | right.direction;
-
-	this -> output._content.message_space[8] = left.low_interval >> 6;
-	this -> output._content.message_space[9] = left.low_interval << 2 | left.chain;
-	this -> output._content.message_space[10] = right.low_interval >> 6;
-	this -> output._content.message_space[11] = right.low_interval << 2 | right.chain;
-										
-	this -> output._content.message_space[12] = erase_flags | (right.rewrite << 1) | left.rewrite;
+	this -> output._content.message_space[0] = data.state_duration >> 6;
+	this -> output._content.message_space[1] = data.state_duration << 2 
+												| ((data.turbine_steps >> 10) & 0b11);
+	this -> output._content.message_space[2] = data.state_duration >> 2;
+	this -> output._content.message_space[3] = data.state_duration << 10 
+												| (((uint8_t)data.stepper_dir & 0b11) << 4) 
+												| (((uint8_t)data.motor_opt & 0b1) << 3)
+												| (((uint8_t)data.option & 0b111));
+	this -> output._content.message_space[4] = (data.hold << 7) 
+												| data.turbine_tilt >> 5;
+	this -> output._content.message_space[5] = (data.turbine_tilt << 3); 
 	}
 
 
@@ -148,18 +115,4 @@ void turbine::update(){
 	//~ message
 	std::cout << "This is motor" << std::endl;
 	return;
-	}
-
-
-/*
-turbine& turbine::operator=(const turbine& rhs) {
-	// turbine stuff here
-	
-	// serial_peripheral stuff
-	//~ serial_peripheral::operator=(rhs.);
-	
-	return *this;
-	}
-*/	
-	
-	
+	}	

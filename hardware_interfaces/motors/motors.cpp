@@ -115,6 +115,7 @@ void motors::encode(){
 	this -> output._content.receiver = variables::addressbook::motorduino;
 	this -> output._content.sender = variables::addressbook::master;
 	this -> output._content.type = chat::COMMAND;
+	this -> output._content.kind = motors::SET_MOT;
 	
 	this -> output._content.message_space[0] = left.scheduled_steps >> 8;
 	this -> output._content.message_space[1] = left.scheduled_steps;

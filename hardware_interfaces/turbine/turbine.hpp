@@ -36,13 +36,18 @@ class turbine: public serial_peripheral{
 			STALLED = 	2
 			};
 			
+		enum stepper_hold: bool {
+			YES = 		1, 
+			NO = 		0,
+			};
+			
 		enum turbine_options: uint8_t {
 			ON = 			1,
 			OFF = 			0,
 			CALIBRATING = 	2
 			};
 						
-		enum options{
+		enum options_mot: uint8_t {
 			srt_t = 0,		// Start turbine
 			stp_t = 1,      // Stop turbine
 			mov_p = 2,      // Move on position
@@ -51,7 +56,15 @@ class turbine: public serial_peripheral{
 			spd_t = 5,      // Set speed turbine
 			spd_m = 6       // Set speed mover
 			};
-
+		
+		enum options: uint8_t {
+			MOV_TRB = 1,	/* move with turbine */
+			SRT_TRB = 2,	/* start turbine */
+			STP_TRB = 3,	/* stop turbine */
+			GTD_TRB = 5,	/* Get data turbine */
+			DND_UND = 6,	/* Didn`t understand */
+			SET_TRB = 7 	/* Setup turbine */
+			};
 		
 		const static std::map<uint8_t, std::vector<uint8_t>> table;
 		
@@ -64,22 +77,19 @@ class turbine: public serial_peripheral{
 			uint8_t fan_speed;
 			turbine::turbine_options motor_opt;
 			
-			unsigned hold: 		1;
+			stepper_hold hold;
 			
 			unsigned option: 	3;
 			unsigned has_data: 	1;
 		} data {4096, 0,
-				2048, 16000,
-				16000, 16000,
-				state::BUFFER, state::BUFFER,
-				direction::FRONT, direction::FRONT,
-				1, 1, 0
+				2048, stepper_options::STALLED,
+				150, turbine_options::OFF, 
+				stepper_hold::NO, (uint8_t)options_mot::stp_t, 0
 				};
 		
 		struct _turbine {
 			//zalezitosti pulsu
-			uint16_t state_duration;
-			uint32_t last_change;
+			uint16_t state_duration: 14;
 			unsigned turbine_tilt:12; // aktualni natoceni na skale od 0-4096 
 			unsigned turbine_steps:12;
 			//zalezitosti turbiny
@@ -91,7 +101,6 @@ class turbine: public serial_peripheral{
 			unsigned repeatings:6;
 			uint32_t warm_up_change;
 			uint16_t warm_up_duration;
-			//~ uint16_t pulse_width_us;
 			};
 
 
@@ -130,9 +139,11 @@ class turbine: public serial_peripheral{
 		/* add your private declarations */
 };
 
-const std::map<uint8_t, std::vector<uint8_t>> turbine::table = {{turbine::SET_MOT, {turbine::SET_MOT}},
-																{turbine::GTD_MOT, {turbine::GTD_MOT}},
-																{turbine::DND_UND, {turbine::DND_UND}},
+const std::map<uint8_t, std::vector<uint8_t>> turbine::table = {{turbine::MOV_TRB, {turbine::MOV_TRB}},
+																{turbine::SRT_TRB, {turbine::SRT_TRB}},
+																{turbine::STP_TRB, {turbine::STP_TRB}},
+																{turbine::GTD_TRB, {turbine::GTD_TRB}},
+																{turbine::SET_TRB, {turbine::SET_TRB}},
 																};
 
 #endif /* TURBINE_HPP */ 
