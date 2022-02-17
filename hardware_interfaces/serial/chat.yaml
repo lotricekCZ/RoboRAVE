@@ -8,4 +8,5 @@ chat:
         extended:       2000 # ms
         normal:         1000 # ms
         time_critical:  500 # ms
+    port_delay:			4500 # us
     attempt_count:      20

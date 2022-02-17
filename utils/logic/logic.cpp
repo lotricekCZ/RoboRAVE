@@ -69,9 +69,11 @@ void logic::init(){
 	//~ std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 	main_rotation.angle = pi_const / 2;
 	
+	printf("main = %p\n", &main_chat);
 	main_fire_sensor = 	fire_sensor(main_chat);
 	main_lidar = 		lidar(main_chat);
-	
+	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
+	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	#ifdef __arm__
 	// RaspberryPi specific code
 	// set pins as outputs
@@ -79,6 +81,9 @@ void logic::init(){
 	printf("Why yes it is, thank you\n");
 	#endif
 	main_serial = serial(variables::chat::port, 57600);
+	main_camera.init();
+	main_gpio.init();
+	main_chat.init(main_serial, main_gpio);
 	try{
 		main_serial.open();
 		//~ for(uint16_t i = 0; i < 32768; i++)
@@ -90,15 +95,15 @@ void logic::init(){
 			return;
 			}
 	std::cout << variables::chat::port << std::endl;
-	main_camera.init();
-	main_chat.init(main_serial);
-	
+	main_fire_sensor.question();
 	/// TODO: make it work better than setting a single value, by reading the line sensors
 	steady end = time_now;
 	std::chrono::duration<decimal_n> elapsed_seconds = end - now;
 	printf("Logic inited in %f s.\n", elapsed_seconds.count());
-	while(flags.mode != START_MOVING){
-		flags.mode = (std::cin.get() == 'e')? START_MOVING: flags.mode;
+	
+	while(flags.mode != START_MOVING && std::chrono::duration<decimal_n>(time_now - end).count() > 1.0f){
+		//~ flags.mode = (std::cin.get() == 'e')? START_MOVING: flags.mode;
+		flags.mode = START_MOVING;
 		}
 	mainloop();
 	}
@@ -109,8 +114,8 @@ void logic::init(){
 void logic::mainloop(){
 	while(1){
 		auto start = time_now;
-		
 		read();
+		apply();
 		decide();
 		}
 	}
@@ -136,6 +141,12 @@ void logic::read(steady now){
 
 
 void logic::decide(steady now){
+	
+	}
+
+
+
+void logic::apply(steady now){
 	
 	}
 

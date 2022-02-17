@@ -45,8 +45,8 @@ void rpi_gpio::init(){
 
 void rpi_gpio::enable_serial(){
 	#ifdef __arm__
-		wiringPiSetup(); // NOTE: This needs root privilege to use
 		digitalWrite(serial_pin, HIGH); // WiringPi is quite similar to Wiring on Arduino
+		last_toggled = time_now;
 		while(digitalRead(serial_pin) != HIGH);
 	#endif
 	}
@@ -55,10 +55,19 @@ void rpi_gpio::enable_serial(){
 
 void rpi_gpio::disable_serial(){
 	#ifdef __arm__
-		wiringPiSetup(); // NOTE: This needs root privilege to use
-		digitalWrite(serial_pin, LOW); // WiringPi is quite similar to Wiring on Arduino
+		digitalWrite(serial_pin, LOW);
+		last_toggled = time_now;
 		while(digitalRead(serial_pin) != LOW);
 	#endif
+	}
+
+
+
+bool rpi_gpio::get_state(){
+	#ifdef __arm__
+	return (digitalRead(serial_pin));
+	#endif
+	return true;
 	}
 
 
@@ -67,6 +76,7 @@ bool rpi_gpio::run(){
 	#ifdef __arm__
 		
 	#endif
+	return true;
 	}
 
 

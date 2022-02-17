@@ -103,6 +103,7 @@ void load_config(){
 	variables::chat::response_timeout::time_critical = 	config_chat["response_timeout"]["time_critical"].as<unsigned_n>();
 	
 	variables::chat::attempt_count =					config_chat["attempt_count"].as<unsigned_n>();
+	variables::chat::port_delay =					config_chat["port_delay"].as<unsigned_b>();
 	// chat segment end
 	
 	std::cout << variables::properties::information << std::endl;

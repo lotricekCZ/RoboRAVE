@@ -37,9 +37,18 @@ chat::chat(serial &s){
 
 
 
-void chat::init(serial &s){
+chat::chat(serial &s, rpi_gpio &r){
+	output_queue = std::vector<message_pair>();
+	this -> main_serial = &s;
+	this -> main_gpio = &r;
+	}
+
+
+
+void chat::init(serial &s, rpi_gpio &r){
 	//~ output_queue = std::vector<message_pair>();
 	this -> main_serial = &s;
+	this -> main_gpio = &r;
 	//~ this -> main_serial -> open();
 	}
 
@@ -61,6 +70,14 @@ void chat::question(message m, motors* mr){
 
 
 
+void chat::question(message m, turbine* t){
+	output_queue.emplace_back((turbine*)t, m);
+	t -> update();
+	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	}
+
+
+
 void chat::question(message m, fire_sensor* f){
 	//~ std::shared_ptr<message_pair> a(new );
 	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
@@ -75,6 +92,7 @@ void chat::question(message m, fire_sensor* f){
 
 void chat::send(message_pair &m, steady now){
 	std::cout << "BEFORE: " << std::chrono::duration_cast<std::chrono::seconds>(m.try_last.time_since_epoch()).count() << std::endl;
+	if(m.first._content.message_number == 0) m.first._content.message_number = message_num++;
 	m.try_last = now;
 	m.tries++;
 	std::cout << "AFTER: " << std::chrono::duration_cast<std::chrono::seconds>(m.try_last.time_since_epoch()).count() << std::endl;
@@ -124,7 +142,19 @@ bool chat::run(steady now){
 		if(std::chrono::duration<decimal_n>(now - output_queue.at(i).try_last) >= std::chrono::milliseconds(output_queue.at(i).response_timeout)){
 			//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 			if(output_queue.at(i).tries >= variables::chat::attempt_count) {output_queue.erase(output_queue.begin() + i--); continue;}
-			//~ printf("Length: %fs\n", std::chrono::duration<decimal_n>(q.try_last).count());
+			
+			// check if it can use serial port
+			if(now > message_send_time){ /* means message_send_time happened in the past, 
+				otherwise it waits for message to be send */
+				if(main_gpio -> get_state()){ // it is high and thus it was not so long ago
+					if((now - main_gpio -> last_toggled) >= std::chrono::microseconds(variables::chat::port_delay)){
+						// if the time since last toggled overpassed
+						main_gpio -> disable_serial();
+						}
+					break;
+					}
+				} 
+				//~ >= std::chrono::milliseconds(output_queue.at(i).response_timeout))
 			printf("Length: %fs\n", std::chrono::duration<decimal_n>(now - output_queue.at(i).try_last).count());
 			send(output_queue.at(i));
 			std::cout << "OUTSIDE: " << std::chrono::duration_cast<std::chrono::seconds>(output_queue.at(i).try_last.time_since_epoch()).count() << std::endl;

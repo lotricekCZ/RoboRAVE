@@ -12,14 +12,13 @@ void translator_turbine::fill_input(uint8_t in[msg_std::message_space_size]){
 	}
 	
 void translator_turbine::decompose(){
-	/*
 	data.state_duration = (input[0] << 8 | input[1]) >> 2;
 	data.turbine_steps = ((input[1] & 0b11) << 10 | input[2] << 2 | input[3] >> 6);
 	data.turbine_tilt = input[4] << 5 | input[5] >> 3;
 	data.stepper_option = input[3] >> 4;
 	data.motor_option = input[3] >> 3;
 	data.option = input[3];
-	data.hold = input[4] >> 7;*/
+	data.hold = input[4] >> 7;
 	Serial.println(data.hold);//Serial.println(data.turbine_steps);
 	}
 	

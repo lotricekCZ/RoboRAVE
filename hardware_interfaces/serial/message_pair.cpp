@@ -27,14 +27,14 @@
 
 message_pair::message_pair(message m, unsigned_b timeout){
 	this -> first = m;
-	this -> response_timeout = variables::chat::response_timeout::normal;
+	this -> response_timeout = timeout;
 	}
 	
 
 
 message_pair::message_pair(fire_sensor* p, message m, unsigned_b timeout){
 	this -> first = m;
-	this -> response_timeout = variables::chat::response_timeout::normal;
+	this -> response_timeout = timeout;
 	periphery.emplace<fire_sensor*>(p);
 	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 	}
@@ -43,7 +43,7 @@ message_pair::message_pair(fire_sensor* p, message m, unsigned_b timeout){
 
 message_pair::message_pair(lidar* p, message m, unsigned_b timeout){
 	this -> first = m;
-	this -> response_timeout = variables::chat::response_timeout::normal;
+	this -> response_timeout = timeout;
 	periphery.emplace<lidar*>(p);
 	}
 
@@ -51,21 +51,22 @@ message_pair::message_pair(lidar* p, message m, unsigned_b timeout){
 
 message_pair::message_pair(motors* mr, message m, unsigned_b timeout){
 	this -> first = m;
-	this -> response_timeout = variables::chat::response_timeout::time_critical;
+	this -> response_timeout = timeout;
 	periphery.emplace<motors*>(mr);
 	}
 
 
 
+message_pair::message_pair(turbine* t, message m, unsigned_b timeout){
+	this -> first = m;
+	this -> response_timeout = timeout;
+	periphery.emplace<turbine*>(t);
+	}
+
 
 
 void message_pair::question(){
 	std::visit([](auto arg){arg -> encode();}, periphery);
-	//~ this -> first()
-	// this cannot be that easy - template arguments
-	//~ std::get<periphery.index()>(periphery) -> fill_input(m);
-	//~ std::get<periphery.index())>(periphery) -> decode();
-	//~ std::get<periphery.index())>(periphery) -> answer();
 	}
 
 

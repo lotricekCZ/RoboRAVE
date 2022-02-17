@@ -29,6 +29,9 @@
 #include "../../hardware_interfaces/object_recognition/camera.hpp"
 #include "../../hardware_interfaces/fire_sensors/fire_sensor.hpp"
 #include "../../hardware_interfaces/lidar/lidar.hpp"
+#include "../../hardware_interfaces/gpio/rpi_gpio.hpp"
+#include "../../hardware_interfaces/turbine/turbine.hpp"
+
 #include <memory>
 
 enum flow_modes: uint8_t { // flow modes of program, affected by user input buttons
@@ -62,6 +65,8 @@ class logic {
 	chat	 	main_chat;
 	fire_sensor	main_fire_sensor;
 	lidar		main_lidar;
+	turbine		main_turbine;
+	rpi_gpio	main_gpio;
 	
 	
 	//~ auto start = std::chrono::steady_clock::now();
@@ -82,6 +87,7 @@ class logic {
 		void mainloop();
 		void decide(steady now = time_now);
 		void read(steady now = time_now);
+		void apply(steady now = time_now); // applies data gained from peripherals
 		
 	private:
 		/* add your private declarations */

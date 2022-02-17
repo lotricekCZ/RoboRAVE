@@ -31,9 +31,9 @@ class rpi_gpio {
 		rpi_gpio();
 		void init();
 		steady last_toggled;
-		decimal_n length = 4.5e-3; // toggle state length
 		void enable_serial();
 		void disable_serial();
+		bool get_state();
 		bool run();
 			
 	private:

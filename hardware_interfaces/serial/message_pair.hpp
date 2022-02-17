@@ -34,6 +34,7 @@
 #include "../lidar/lidar.hpp"
 #include "../fire_sensors/fire_sensor.hpp"
 #include "../motors/motors.hpp"
+#include "../turbine/turbine.hpp"
 #include "message.hpp"
 #include <cinttypes>
 
@@ -43,9 +44,9 @@ class message_pair{
 		message second;
 		std::variant<fire_sensor*, 
 					lidar*,
+					turbine*, 
 					motors*/*, 
 					ground_sensors*, 
-					turbine*, 
 					thermocam*, */> periphery;
 		steady appear_first;
 		steady try_last;
@@ -56,10 +57,13 @@ class message_pair{
 		void answer();
 		bool answers_query(message m);
 		void question();
+		
 		message_pair(message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
+		
 		message_pair(fire_sensor* p, message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
 		message_pair(lidar* p, message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
-		message_pair(motors* mr, message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
+		message_pair(motors* mr, message m = message(), unsigned_b timeout = variables::chat::response_timeout::time_critical);
+		message_pair(turbine* t, message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
 		/*
 		message_pair& operator=(message_pair other){
 			std::cout << "copy assignment of A\n";
@@ -73,7 +77,6 @@ class message_pair{
 			return *this;
 			}*/
 		//~ message_pair(ground_sensors* p, message m = message());
-		//~ message_pair(turbine* p, message m = message());
 		//~ message_pair(thermocam* p, message m = message());
 		//~ message_pair(motors* p, message m = message());
 			

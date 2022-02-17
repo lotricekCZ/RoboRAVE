@@ -114,6 +114,11 @@ void fire_sensor::decode(){
 
 
 void fire_sensor::encode(){
+	this -> output._content.receiver = variables::addressbook::irduino;
+	this -> output._content.sender = variables::addressbook::master;
+	this -> output._content.type = chat::COMMAND;
+	this -> output._content.kind = fire_sensor::SND_DAT;
+	
 	this -> output._content.message_space[0] = this -> presets.period >> 8 		& 255;
 	this -> output._content.message_space[1] = this -> presets.period			& 255;
 	this -> output._content.message_space[2] = this -> presets.oversampling		& 31;
