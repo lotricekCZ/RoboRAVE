@@ -32,18 +32,21 @@
 #define MESSAGE_CPP
 
 message::message(){
+	this -> _content.message_number = 0;
 	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 
 
 
 message::message(message::content c){
+	this -> _content.message_number = 0;
 	this -> _content = c;
 	}
 
 
 
 message::message(std::array<uint8_t, msg_std::length> c){
+	this -> _content.message_number = 0;
 	decode(c, this -> _content);
 	}
 
@@ -86,7 +89,7 @@ void message::encode(message::content &in, std::array<uint8_t, msg_std::length> 
 	buffer[msg_std::head] 		= (in.receiver << 5) | (in.sender << 2) | (in.type << 1) | (in.kind >> 2);
 	buffer[msg_std::head + 1] 	= (in.kind << 6) | (in.message_number >> 16 & 31);
 	buffer[msg_std::head + 2] 	= in.message_number >> 8 & 255;
-	buffer[msg_std::head + 2] 	= in.message_number & 255;
+	buffer[msg_std::head + 3] 	= in.message_number & 255;
 	
 	for(uint8_t i = 0; i < msg_std::message_space_size; i++)
 		buffer[msg_std::message_space + i] = in.message_space[i];

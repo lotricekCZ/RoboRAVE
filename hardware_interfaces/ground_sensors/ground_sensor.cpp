@@ -1,5 +1,5 @@
 /*
- * fire_sensor.cpp
+ * ground_sensor.cpp
  * 
  * Copyright 2021 Jakub Ramašeuski <jakub@skaryna.net>
  * 
@@ -27,58 +27,54 @@
 
 #include "../serial/chat.hpp"
 #include "../../utils/data_containers/angles/node/node.hpp"
-#include "fire_sensor.hpp"
+#include "ground_sensor.hpp"
 
 /*
  * 
- * name: fire_sensor
+ * name: ground_sensor
  * @param sensors - number of sensors included
  * @param spread - spread of each sensor 
  * @param range - general range of sensors
  * 
  */
 
-fire_sensor::fire_sensor(uint8_t sensors, decimal_n spread, decimal_n range) : serial_peripheral(){
-	this -> sensors = std::vector<node> (sensors);
-	this -> range = range;
-	this -> spread = spread;
+ground_sensor::ground_sensor() : serial_peripheral(){
+	for(uint16_t o: ground_sensor::angles)
+		this -> sensors.push_back(node(0.0f, (decimal_n)o));
 	this -> comp_kinds = table;
 	}
 
 
 
-fire_sensor::fire_sensor(chat *c, uint8_t sensors, decimal_n spread, decimal_n range) : serial_peripheral(c){
-	this -> sensors = std::vector<node> (sensors);
-	this -> _conn = c;
+ground_sensor::ground_sensor(chat *c) : serial_peripheral(c){
+	//~ this -> sensors = std::vector<node> ();
+ 	for(uint16_t o: ground_sensor::angles)
+		this -> sensors.emplace_back(0.0f, (decimal_n)o);
 	printf("_conn pointer = %p\n", _conn);
-	this -> range = range;
-	this -> spread = spread;
 	this -> comp_kinds = table;
 	}
 
 
 
-fire_sensor::fire_sensor(chat &c, uint8_t sensors, decimal_n spread, decimal_n range) : serial_peripheral(c){
+ground_sensor::ground_sensor(chat &c) : serial_peripheral(c){
 	this -> _conn = &c;
-	printf("_conn = %p\n", _conn);
-	this -> sensors = std::vector<node> (sensors);
-	this -> range = range;
-	this -> spread = spread;
+	for(uint16_t o: ground_sensor::angles)
+		this -> sensors.push_back(node(0.0f, (decimal_n)o));
 	this -> comp_kinds = table;
 	}
 
 
-fire_sensor::~fire_sensor(){
+ground_sensor::~ground_sensor(){
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	}
 
 /*
-bool fire_sensor::update(){
+bool ground_sensor::update(){
 	/// TODO: update
 	return false;
 	}
 
-std::vector<node> fire_sensor::get_data(bool update = false){
+std::vector<node> ground_sensor::get_data(bool update = false){
 	std::vector<node> ret;
 	/// TODO: get data
 	return ret;
@@ -86,7 +82,7 @@ std::vector<node> fire_sensor::get_data(bool update = false){
 */
 
 
-void fire_sensor::question(){
+void ground_sensor::question(){
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	printf("main = %p\n", _conn);
 	this -> _conn -> question(output, this);
@@ -96,13 +92,13 @@ void fire_sensor::question(){
 
 
 
-void fire_sensor::answer(){
+void ground_sensor::answer(){
 	return;
 	}
 
 
 
-void fire_sensor::decode(){
+void ground_sensor::decode(){
 	for(uint8_t i = 0; i < 8; i++){
 		this -> sensors.at(i).intensity = (input._content.message_space[i] << 2) | 
 				((input._content.message_space[8 + i/4] >> (2 * (3 - i))) & 0b11);
@@ -113,11 +109,11 @@ void fire_sensor::decode(){
 
 
 
-void fire_sensor::encode(){
-	this -> output._content.receiver = variables::addressbook::irduino;
+void ground_sensor::encode(){
+	this -> output._content.receiver = variables::addressbook::gndduino;
 	this -> output._content.sender = variables::addressbook::master;
 	this -> output._content.type = chat::COMMAND;
-	this -> output._content.kind = fire_sensor::SND_DAT;
+	this -> output._content.kind = ground_sensor::SND_DAT;
 	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 	this -> output._content.message_space[0] = this -> presets.period >> 8 		& 255;
 	this -> output._content.message_space[1] = this -> presets.period			& 255;
@@ -129,23 +125,23 @@ void fire_sensor::encode(){
 
 
 
-void fire_sensor::run(){
+void ground_sensor::run(){
 	//~ message
 	return;
 	}
 
 
 
-void fire_sensor::update(){
+void ground_sensor::update(){
 	//~ message
-	std::cout << "This is fire sensor" << std::endl;
+	std::cout << "This is ground sensor" << std::endl;
 	return;
 	}
 
 
 /*
-fire_sensor& fire_sensor::operator=(const fire_sensor& rhs) {
-	// fire_sensor stuff here
+ground_sensor& ground_sensor::operator=(const ground_sensor& rhs) {
+	// ground_sensor stuff here
 	
 	// serial_peripheral stuff
 	//~ serial_peripheral::operator=(rhs.);

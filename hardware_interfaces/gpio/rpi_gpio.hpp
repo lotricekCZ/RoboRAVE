@@ -28,6 +28,10 @@
 class rpi_gpio {
 	public:
 		const uint8_t serial_pin = 4; // Using the WiringPi numbering
+		#ifndef __arm__
+		bool placeholder = false;
+		#endif
+		
 		rpi_gpio();
 		void init();
 		steady last_toggled;

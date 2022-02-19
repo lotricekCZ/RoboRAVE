@@ -41,6 +41,15 @@ message_pair::message_pair(fire_sensor* p, message m, unsigned_b timeout){
 
 
 
+message_pair::message_pair(ground_sensor* p, message m, unsigned_b timeout){
+	this -> first = m;
+	this -> response_timeout = timeout;
+	periphery.emplace<ground_sensor*>(p);
+	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	}
+
+
+
 message_pair::message_pair(lidar* p, message m, unsigned_b timeout){
 	this -> first = m;
 	this -> response_timeout = timeout;
@@ -66,7 +75,8 @@ message_pair::message_pair(turbine* t, message m, unsigned_b timeout){
 
 
 void message_pair::question(){
-	std::visit([](auto arg){arg -> encode();}, periphery);
+	//~ &message_pair::first, this,
+	std::visit([this](auto arg){arg -> encode(); this -> first = arg -> output;}, periphery);
 	}
 
 
@@ -95,10 +105,12 @@ bool message_pair::answers_query(message m){
 	std::visit([&kind, m](auto arg){
 		kind = (arg -> get_comp_kind(m._content.kind));}, periphery);
 	if(this -> first._content.receiver == m._content.sender &&
-		this -> first._content.message_number <= m._content.message_number)
-		for(uint8_t kind: kind)
+		this -> first._content.message_number <= m._content.message_number){
+		for(uint8_t kind: kind){
 			if(m._content.kind == kind)
 				return true;
+				}
+		}
 	return false;
 	}
 

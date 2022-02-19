@@ -52,6 +52,7 @@ class chat {
 		std::deque<uint8_t> input_buffer;
 		void init(serial &s, rpi_gpio &r);
 		void send(message_pair &m, steady now = time_now);
+		void question(message m, ground_sensor* f);
 		void question(message m, fire_sensor* f);
 		void question(message m, motors* mr);
 		void question(message m, lidar* l);

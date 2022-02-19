@@ -33,6 +33,7 @@
 #include "serial_peripheral.hpp"
 #include "../lidar/lidar.hpp"
 #include "../fire_sensors/fire_sensor.hpp"
+#include "../ground_sensors/ground_sensor.hpp"
 #include "../motors/motors.hpp"
 #include "../turbine/turbine.hpp"
 #include "message.hpp"
@@ -45,9 +46,9 @@ class message_pair{
 		std::variant<fire_sensor*, 
 					lidar*,
 					turbine*, 
-					motors*/*, 
-					ground_sensors*, 
-					thermocam*, */> periphery;
+					ground_sensor*, 
+					motors*
+					/*, thermocam* */> periphery;
 		steady appear_first;
 		steady try_last;
 		uint8_t tries = 0;
@@ -60,6 +61,7 @@ class message_pair{
 		
 		message_pair(message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
 		
+		message_pair(ground_sensor* p, message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
 		message_pair(fire_sensor* p, message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
 		message_pair(lidar* p, message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
 		message_pair(motors* mr, message m = message(), unsigned_b timeout = variables::chat::response_timeout::time_critical);

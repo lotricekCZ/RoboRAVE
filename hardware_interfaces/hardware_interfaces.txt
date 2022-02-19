@@ -18,6 +18,7 @@ add_library(serial_peripheral 	SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_inter
 add_library(motors			 	SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/motors/motors.cpp)
 add_library(turbine			 	SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/turbine/turbine.cpp)
 add_library(fire_sensor 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/fire_sensors/fire_sensor.cpp)
+add_library(ground_sensor 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/ground_sensors/ground_sensor.cpp)
 add_library(lidar		 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/lidar/lidar.cpp)
 
 add_library(serial STATIC ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/serial.cpp)
@@ -35,10 +36,11 @@ target_link_libraries(message_pair message)
 target_link_libraries(chat message serial_peripheral fire_sensor lidar message_pair Threads::Threads)
 target_link_libraries(motors serial_peripheral)
 target_link_libraries(turbine serial_peripheral)
+target_link_libraries(ground_sensor node serial_peripheral)
 target_link_libraries(fire_sensor node serial_peripheral)
 target_link_libraries(lidar node serial_peripheral)
 target_link_libraries(camera variables)
-target_link_libraries(logic camera chat lidar gpio turbine fire_sensor serial_peripheral)
+target_link_libraries(logic camera chat ground_sensor lidar gpio turbine fire_sensor serial_peripheral)
 
 #~ target_link_libraries(motorduino node)
 

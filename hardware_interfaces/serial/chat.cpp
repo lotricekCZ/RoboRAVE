@@ -58,6 +58,7 @@ void chat::question(message m, lidar* l){
 	output_queue.emplace_back((lidar*)l, m);
 	l -> update();
 	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	this -> output_queue.back().question();
 	}
 
 
@@ -66,6 +67,7 @@ void chat::question(message m, motors* mr){
 	output_queue.emplace_back((motors*)mr, m);
 	mr -> update();
 	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	this -> output_queue.back().question();
 	}
 
 
@@ -74,6 +76,7 @@ void chat::question(message m, turbine* t){
 	output_queue.emplace_back((turbine*)t, m);
 	t -> update();
 	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	this -> output_queue.back().question();
 	}
 
 
@@ -86,11 +89,26 @@ void chat::question(message m, fire_sensor* f){
 	f -> update();
 	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
+	this -> output_queue.back().question();
+	}
+
+
+
+void chat::question(message m, ground_sensor* f){
+	//~ std::shared_ptr<message_pair> a(new );
+	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	output_queue.emplace_back((ground_sensor*)f, m);
+	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
+	f -> update();
+	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
+	this -> output_queue.back().question();
 	}
 
 
 
 void chat::send(message_pair &m, steady now){
+	//~ std::ofstream o("Ahoy.bin", std::ios::out | std::ios::app | std::ios::binary);
 	std::cout << "BEFORE: " << std::chrono::duration_cast<std::chrono::seconds>(m.try_last.time_since_epoch()).count() << std::endl;
 	if(m.first._content.message_number == 0) m.first._content.message_number = message_num++;
 	m.try_last = now;
@@ -99,9 +117,22 @@ void chat::send(message_pair &m, steady now){
 	std::array<uint8_t, msg_std::length> bfr;
 	m.first.encode(m.first._content, bfr);
 	std::vector<uint8_t> sended(&bfr[0], &bfr[msg_std::length]);
+	printf("\tsender:\t\t%u\n\treceiver:\t%u\n\ttype:\t\t%u\n\tkind:\t\t%u\n\tnumber:\t\t%u\n\tbyteload:\t\t", 
+		m.first._content.sender,
+		m.first._content.receiver,
+		m.first._content.type,
+		m.first._content.kind,
+		m.first._content.message_number
+		);
+	for(auto o: m.first._content.message_space) printf("%x  ", o);
+	//~ for(auto i: sended)
+		//~ std::cout << i << " ";
+	std::cout << std::endl;
 	//~ printf("BEEN THERE: %i\n", __LINE__);
+	//~ o.flush();
+	//~ o.close();
 	main_serial -> write(sended);
-	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
+	//~ std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	}
 
 
@@ -121,6 +152,13 @@ bool chat::run(steady now){
 						for(unsigned_b i = 0; i < msg_std::length; i++)
 							msg.at(i) = input_buffer.at(i + offset);
 						input_queue.emplace_back(msg);
+						printf("\n----RECEIVED----\n\tsender:\t\t%u\n\treceiver:\t%u\n\ttype:\t\t%u\n\tkind:\t\t%u\n\tnumber:\t\t%u\n\tbyteload:\t\t", 
+							input_queue.back()._content.sender,
+							input_queue.back()._content.receiver,
+							input_queue.back()._content.type,
+							input_queue.back()._content.kind,
+							input_queue.back()._content.message_number
+							);
 						// clearing the buffer from that message and from what came before
 						input_buffer.erase(input_buffer.begin(), input_buffer.begin() + offset);
 						std::cout << "EMPLACED STH" << std::endl;
@@ -129,10 +167,11 @@ bool chat::run(steady now){
 		}
 	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 	for(unsigned_b i = 0; i < input_queue.size(); i++)
-		for(auto &q: output_queue)
-			if(q.answers_query(input_queue.at(i))){
-				q.answer(input_queue.at(i));
+		for(unsigned_b o = 0; o < output_queue.size(); o++)
+			if(output_queue.at(o).answers_query(input_queue.at(i))){
+				output_queue.at(o).answer(input_queue.at(i));
 				input_queue.erase(input_queue.begin() + i--);
+				output_queue.erase(output_queue.begin() + o--); // NEEDS TO BE ANSWERED !!!
 				} 
 	
 	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
@@ -144,8 +183,9 @@ bool chat::run(steady now){
 			if(output_queue.at(i).tries >= variables::chat::attempt_count) {output_queue.erase(output_queue.begin() + i--); continue;}
 			
 			// check if it can use serial port
+			/*
 			if(now > message_send_time){ /* means message_send_time happened in the past, 
-				otherwise it waits for message to be send */
+				otherwise it waits for message to be send * /
 				if(main_gpio -> get_state()){ // it is high and thus it was not so long ago
 					if((now - main_gpio -> last_toggled) >= std::chrono::microseconds(variables::chat::port_delay)){
 						// if the time since last toggled overpassed
@@ -153,7 +193,7 @@ bool chat::run(steady now){
 						}
 					break;
 					}
-				} 
+				} */
 				//~ >= std::chrono::milliseconds(output_queue.at(i).response_timeout))
 			printf("Length: %fs\n", std::chrono::duration<decimal_n>(now - output_queue.at(i).try_last).count());
 			send(output_queue.at(i));

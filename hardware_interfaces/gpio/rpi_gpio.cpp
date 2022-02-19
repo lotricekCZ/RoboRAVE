@@ -46,9 +46,11 @@ void rpi_gpio::init(){
 void rpi_gpio::enable_serial(){
 	#ifdef __arm__
 		digitalWrite(serial_pin, HIGH); // WiringPi is quite similar to Wiring on Arduino
-		last_toggled = time_now;
 		while(digitalRead(serial_pin) != HIGH);
+	#else
+		placeholder = true;
 	#endif
+	last_toggled = time_now;
 	}
 
 
@@ -56,18 +58,21 @@ void rpi_gpio::enable_serial(){
 void rpi_gpio::disable_serial(){
 	#ifdef __arm__
 		digitalWrite(serial_pin, LOW);
-		last_toggled = time_now;
 		while(digitalRead(serial_pin) != LOW);
+	#else
+		placeholder = false;
 	#endif
+	last_toggled = time_now;
 	}
 
 
 
 bool rpi_gpio::get_state(){
 	#ifdef __arm__
-	return (digitalRead(serial_pin));
+		return (digitalRead(serial_pin));
+	#else
+		return (placeholder);
 	#endif
-	return true;
 	}
 
 
