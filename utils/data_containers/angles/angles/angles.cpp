@@ -25,14 +25,14 @@
 #include "angles.hpp"
 
 
-angles::angles()
-	: std::vector<node>()
-{
+angles::angles() : std::vector<node>(){
 	for(unsigned_n i = 0; i < 360; i ++){
 		emplace_back(0.0f, (decimal_n)i);
 		}
 	std::sort(this -> begin(), this -> end(), [](node a, node b){return (a.angle < b.angle);});
 }
+
+
 
 node angles::get_angle(unsigned_n angle){
 	//~ std::cout << angle << std::endl;
@@ -45,11 +45,14 @@ node angles::get_angle(unsigned_n angle){
 		}
 	return node(-1);
 	}
+
+
 	
-angles::~angles()
-{
+angles::~angles(){
 	
-}
+	}
+
+
 
 angles angles::load_virtual_circular(coordinates c, map &m, decimal_n min, decimal_n max, decimal_n step = 10){
 	angles ret;
@@ -98,7 +101,9 @@ angles angles::load_virtual_circular(coordinates c, map &m, decimal_n min, decim
 	
 	std::sort(ret.begin(), ret.end(), [](node a, node b){return (a.angle < b.angle);});
 	return ret;
-}
+	}
+
+
 
 // loads the virtual angles on any coordinate on the map... Well at least this is what it should do and partially does
 angles angles::load_virtual(coordinates a, map &m){

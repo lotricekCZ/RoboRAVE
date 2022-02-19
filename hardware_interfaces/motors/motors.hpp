@@ -30,7 +30,7 @@
 
 class motors: public serial_peripheral{
 	public:
-	
+		unsigned_b queue = 0;
 		enum direction: uint8_t {
 			FRONT = 	0, 
 			BACK = 		1, 

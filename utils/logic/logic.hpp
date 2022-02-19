@@ -28,6 +28,7 @@
 #include "../../hardware_interfaces/serial/chat.hpp"
 #include "../../hardware_interfaces/object_recognition/camera.hpp"
 #include "../../hardware_interfaces/fire_sensors/fire_sensor.hpp"
+#include "../../hardware_interfaces/ground_sensors/ground_sensor.hpp"
 #include "../../hardware_interfaces/lidar/lidar.hpp"
 #include "../../hardware_interfaces/gpio/rpi_gpio.hpp"
 #include "../../hardware_interfaces/turbine/turbine.hpp"
@@ -63,6 +64,7 @@ class logic {
 	//~ camera	 	main_camera;
 	serial		main_serial;
 	chat	 	main_chat;
+	ground_sensor	main_ground_sensor;
 	fire_sensor	main_fire_sensor;
 	lidar		main_lidar;
 	turbine		main_turbine;
@@ -88,7 +90,7 @@ class logic {
 		void decide(steady now = time_now);
 		void read(steady now = time_now);
 		void apply(steady now = time_now); // applies data gained from peripherals
-		
+		steady test = time_now;
 	private:
 		/* add your private declarations */
 };

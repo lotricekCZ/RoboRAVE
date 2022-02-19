@@ -71,6 +71,7 @@ void logic::init(){
 	
 	printf("main = %p\n", &main_chat);
 	main_fire_sensor = 	fire_sensor(main_chat);
+	main_ground_sensor = 		ground_sensor(main_chat);
 	main_lidar = 		lidar(main_chat);
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
@@ -96,6 +97,7 @@ void logic::init(){
 			}
 	std::cout << variables::chat::port << std::endl;
 	main_fire_sensor.question();
+	main_ground_sensor.question();
 	/// TODO: make it work better than setting a single value, by reading the line sensors
 	steady end = time_now;
 	std::chrono::duration<decimal_n> elapsed_seconds = end - now;
@@ -123,7 +125,11 @@ void logic::mainloop(){
 
 
 void logic::read(steady now){
-	std::cout << "IN WAITING: " << main_serial.in_waiting() << std::endl;
+	if(std::chrono::duration<decimal_n>(now - test).count() >= 0.10f){
+		main_ground_sensor.question();
+		test = now;
+		}
+	//~ std::cout << "IN WAITING: " << main_serial.in_waiting() << std::endl;
 	//~ std::vector<uint8_t> grabbed(main_serial.in_waiting());
 	
 	main_camera.run(now);
@@ -131,9 +137,9 @@ void logic::read(steady now){
 	steady next = now;
 	
 	//~ main_serial.write(std::vector<uint8_t>({'D', 'U', 69}));
-	while(std::chrono::duration<decimal_n> (next - now).count() < 0.1f)
-		next = time_now;
-	std::cout << "PASS" << std::endl;
+	//~ while(std::chrono::duration<decimal_n> (next - now).count() < 0.1f)
+		//~ next = time_now;
+	//~ std::cout << "PASS" << std::endl;
 	//~ main_serial.write(std::vector<uint8_t>({'D', 'U', 'K', 'E', 'B', 'A', 'B'}));
 	
 	}

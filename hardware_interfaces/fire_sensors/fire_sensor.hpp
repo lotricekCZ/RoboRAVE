@@ -30,6 +30,7 @@
 
 class fire_sensor: public serial_peripheral{
 	public:
+		unsigned_b queue = 0;
 		//~ using serial_peripheral::operator=;
 		enum kinds: uint8_t{
 			SND_DAT = 0,	/* Send data */

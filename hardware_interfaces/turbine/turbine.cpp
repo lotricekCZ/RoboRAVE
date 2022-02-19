@@ -87,7 +87,7 @@ void turbine::encode(){
 	this -> output._content.receiver = variables::addressbook::motorduino;
 	this -> output._content.sender = variables::addressbook::master;
 	this -> output._content.type = chat::COMMAND;
-	this -> output._content.kind = MOV_TRB;
+	this -> output._content.kind = turbine::MOV_TRB;
 	
 	this -> output._content.message_space[0] = data.state_duration >> 6;
 	this -> output._content.message_space[1] = data.state_duration << 2 

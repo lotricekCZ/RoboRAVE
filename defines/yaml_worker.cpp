@@ -103,9 +103,11 @@ void load_config(){
 	variables::chat::response_timeout::time_critical = 	config_chat["response_timeout"]["time_critical"].as<unsigned_n>();
 	
 	variables::chat::attempt_count =					config_chat["attempt_count"].as<unsigned_n>();
-	variables::chat::port_delay =					config_chat["port_delay"].as<unsigned_b>();
-	// chat segment end
+	variables::chat::port_delay =						config_chat["port_delay"].as<unsigned_b>();
 	
+	variables::chat::max_queue_sensor =					config_chat["max_queue_sensor"].as<unsigned_n>();
+	variables::chat::max_queue_global =					config_chat["max_queue_global"].as<unsigned_b>();
+	// chat segment end
 	std::cout << variables::properties::information << std::endl;
 	
 	//~ std::ofstream fout("../defines/config.yaml");

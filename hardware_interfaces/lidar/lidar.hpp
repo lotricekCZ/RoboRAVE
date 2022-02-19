@@ -36,8 +36,8 @@
 
 class lidar: public serial_peripheral {
 	public:
-		using serial_peripheral::operator=;
-	
+		//~ using serial_peripheral::operator=;
+		unsigned_b queue = 0;
 		uint8_t convert: 1; // please to convert what he captured
 		
 		
@@ -69,7 +69,7 @@ class lidar: public serial_peripheral {
 		const static std::map<uint8_t, std::vector<uint8_t>> table;
 		decimal_n range;
 		angles * sight;
-		
+		chat * _conn;
 		lidar(decimal_n rng = 170 /* cm */);
 		lidar(chat *c, decimal_n rng = 170 /* cm */);
 		lidar(chat &c, decimal_n rng = 170 /* cm */);

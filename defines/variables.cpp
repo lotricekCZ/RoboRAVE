@@ -98,6 +98,8 @@ uint16_t variables::chat::response_timeout::time_critical;
 
 uint8_t variables::chat::attempt_count;
 unsigned_b variables::chat::port_delay;
+unsigned_n variables::chat::max_queue_sensor;
+unsigned_n variables::chat::max_queue_global;
 // chat segment end
 
 const decimal_n variables::omega_wheel_const = (pi_const * r_wheel) / (N_wheel * dist_wheel);

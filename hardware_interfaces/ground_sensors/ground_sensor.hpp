@@ -31,7 +31,7 @@
 
 class ground_sensor: public serial_peripheral{
 	public:
-		//~ using serial_peripheral::operator=;
+		unsigned_b queue = 0;
 		enum kinds: uint8_t{
 			SND_DAT = 0,	/* Send data */
 			SND_CON = 1,	/* Send data continuously */

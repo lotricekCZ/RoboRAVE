@@ -89,7 +89,9 @@ std::vector<node> fire_sensor::get_data(bool update = false){
 void fire_sensor::question(){
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	printf("main = %p\n", _conn);
+	if(queue >= variables::chat::max_queue_sensor) return;
 	this -> _conn -> question(output, this);
+	queue++;
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	return;
 	}
@@ -97,6 +99,7 @@ void fire_sensor::question(){
 
 
 void fire_sensor::answer(){
+	queue--;
 	return;
 	}
 

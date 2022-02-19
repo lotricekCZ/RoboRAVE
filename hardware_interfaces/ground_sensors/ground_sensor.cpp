@@ -84,8 +84,10 @@ std::vector<node> ground_sensor::get_data(bool update = false){
 
 void ground_sensor::question(){
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
-	printf("main = %p\n", _conn);
+	//~ printf("main = %p\n", _conn);
+	if(queue >= variables::chat::max_queue_sensor) return;
 	this -> _conn -> question(output, this);
+	queue++;
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	return;
 	}
@@ -93,6 +95,7 @@ void ground_sensor::question(){
 
 
 void ground_sensor::answer(){
+	queue--;
 	return;
 	}
 

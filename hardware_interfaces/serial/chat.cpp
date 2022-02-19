@@ -165,22 +165,28 @@ bool chat::run(steady now){
 						}
 			}
 		}
-	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
-	for(unsigned_b i = 0; i < input_queue.size(); i++)
-		for(unsigned_b o = 0; o < output_queue.size(); o++)
+	//~ printf("%s: %i\n", __FUNCTION__, __LINE__);
+	for(unsigned_b i = 0; i < input_queue.size(); i++){
+		//~ printf("%s: %i\n", __FUNCTION__, __LINE__);
+		for(unsigned_b o = 0; o < output_queue.size(); o++){
+			//~ printf("%s: %i\t\t%u/%u\n", __FUNCTION__, __LINE__, o, output_queue.size());
 			if(output_queue.at(o).answers_query(input_queue.at(i))){
+				//~ printf("%s: %i\n", __FUNCTION__, __LINE__);
 				output_queue.at(o).answer(input_queue.at(i));
 				input_queue.erase(input_queue.begin() + i--);
 				output_queue.erase(output_queue.begin() + o--); // NEEDS TO BE ANSWERED !!!
-				} 
-	
+				if(input_queue.size() == 0) break;
+				}
+			}
+		}
+	//~ printf("%s: %i\n", __FUNCTION__, __LINE__);
 	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
-	printf("size: %i\n", output_queue.size());
+	//~ printf("size: %i\n", output_queue.size());
 	for(unsigned_b i = 0; i < output_queue.size(); i++){
 		//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
 		if(std::chrono::duration<decimal_n>(now - output_queue.at(i).try_last) >= std::chrono::milliseconds(output_queue.at(i).response_timeout)){
 			//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
-			if(output_queue.at(i).tries >= variables::chat::attempt_count) {output_queue.erase(output_queue.begin() + i--); continue;}
+			if(output_queue.at(i).tries >= variables::chat::attempt_count) {output_queue.at(i).answer(); output_queue.erase(output_queue.begin() + i--); continue;}
 			
 			// check if it can use serial port
 			/*

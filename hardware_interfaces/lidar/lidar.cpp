@@ -21,7 +21,7 @@
  * 
  */
 
-
+#include "../serial/chat.hpp"
 #include "lidar.hpp"
 
 
@@ -50,12 +50,16 @@ lidar::lidar(chat &c, decimal_n rng) : serial_peripheral(c) {
 
 
 void lidar::question(){
+	if(queue >= variables::chat::max_queue_sensor) return;
+	this -> _conn -> question(output, this);
+	queue++;
 	return;
 	}
 
 
 
 void lidar::answer(){
+	queue--;
 	return;
 	}
 

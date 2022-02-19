@@ -74,8 +74,10 @@ std::vector<node> motors::get_data(bool update = false){
 
 void motors::question(){
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
-	printf("main = %p\n", _conn);
+	//~ printf("main = %p\n", _conn);
+	if(queue >= variables::chat::max_queue_sensor) return;
 	this -> _conn -> question(output, this);
+	queue++;
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	return;
 	}
@@ -83,6 +85,7 @@ void motors::question(){
 
 
 void motors::answer(){
+	queue--;
 	return;
 	}
 

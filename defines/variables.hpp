@@ -162,6 +162,8 @@ static class variables { // I hate myself for this!!!
 					} response_timeout;
 				static uint8_t attempt_count; // Why would you wait 127-255-512 seconds? It's pointless, data are gone.
 				static unsigned_b port_delay; // us
+				static unsigned_n max_queue_sensor;
+				static unsigned_n max_queue_global;
 				} chat;
 			
 		variables();
