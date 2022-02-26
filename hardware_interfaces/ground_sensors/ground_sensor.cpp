@@ -83,19 +83,17 @@ std::vector<node> ground_sensor::get_data(bool update = false){
 
 
 void ground_sensor::question(){
-	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	//~ printf("main = %p\n", _conn);
 	if(queue >= variables::chat::max_queue_sensor) return;
 	this -> _conn -> question(output, this);
 	queue++;
-	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	return;
 	}
 
 
 
 void ground_sensor::answer(){
-	queue--;
+	if(queue != 0) queue--;
 	return;
 	}
 
@@ -117,7 +115,7 @@ void ground_sensor::encode(){
 	this -> output._content.sender = variables::addressbook::master;
 	this -> output._content.type = chat::COMMAND;
 	this -> output._content.kind = ground_sensor::SND_DAT;
-	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	
 	this -> output._content.message_space[0] = this -> presets.period >> 8 		& 255;
 	this -> output._content.message_space[1] = this -> presets.period			& 255;
 	this -> output._content.message_space[2] = this -> presets.oversampling		& 31;

@@ -19,6 +19,7 @@ add_library(motors			 	SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/mo
 add_library(turbine			 	SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/turbine/turbine.cpp)
 add_library(fire_sensor 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/fire_sensors/fire_sensor.cpp)
 add_library(ground_sensor 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/ground_sensors/ground_sensor.cpp)
+add_library(thermocam	 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/thermocam/thermocam.cpp)
 add_library(lidar		 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/lidar/lidar.cpp)
 
 add_library(serial STATIC ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial/serial.cpp)
@@ -37,6 +38,7 @@ target_link_libraries(chat message serial_peripheral fire_sensor lidar message_p
 target_link_libraries(motors serial_peripheral)
 target_link_libraries(turbine serial_peripheral)
 target_link_libraries(ground_sensor node serial_peripheral)
+target_link_libraries(thermocam node serial_peripheral)
 target_link_libraries(fire_sensor node serial_peripheral)
 target_link_libraries(lidar node serial_peripheral)
 target_link_libraries(camera variables)

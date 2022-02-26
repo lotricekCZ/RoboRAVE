@@ -45,7 +45,8 @@ message_pair::message_pair(ground_sensor* p, message m, unsigned_b timeout){
 	this -> first = m;
 	this -> response_timeout = timeout;
 	periphery.emplace<ground_sensor*>(p);
-	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+	printf("response: %i\n", timeout);
 	}
 
 
@@ -70,6 +71,14 @@ message_pair::message_pair(turbine* t, message m, unsigned_b timeout){
 	this -> first = m;
 	this -> response_timeout = timeout;
 	periphery.emplace<turbine*>(t);
+	}
+
+
+
+message_pair::message_pair(thermocam* th, message m, unsigned_b timeout){
+	this -> first = m;
+	this -> response_timeout = timeout;
+	periphery.emplace<thermocam*>(th);
 	}
 
 

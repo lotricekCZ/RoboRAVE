@@ -40,6 +40,11 @@
 class chat {
 	public:
 		enum message_t: uint8_t{COMMAND = 0, DATA = 1};
+		enum rs485_state: uint8_t{FREE = 0, 
+								OPENING = 1, 
+								SEND = 2, 
+								CLOSING = 3
+								} port_state = rs485_state::FREE;
 		chat();
 		chat(serial &s);
 		chat(serial &s, rpi_gpio &r);
@@ -48,19 +53,23 @@ class chat {
 		rpi_gpio *main_gpio;
 		std::vector<message> input_queue; // messages that aren't still assigned to query
 		std::vector<message_pair> output_queue;
+		message_pair *held;
 		bool run(steady now = time_now); // iterates through message queue, searching for responses.
 		std::deque<uint8_t> input_buffer;
 		void init(serial &s, rpi_gpio &r);
-		void send(message_pair &m, steady now = time_now);
+		void send(message_pair *m, steady now = time_now);
+		bool stage(steady now = time_now);
 		void question(message m, ground_sensor* f);
 		void question(message m, fire_sensor* f);
 		void question(message m, motors* mr);
 		void question(message m, lidar* l);
+		void question(message m, thermocam* t);
 		void question(message m, turbine* t);
+		bool handle_port(steady now = time_now); // true when it's SEND
 		steady message_send_time = time_now;
 		uint32_t message_num = 1;
+		
 		//~ void question(message m, ground_sensors* g);
-		//~ void question(message m, thermocam* t);
 	private:
 		/* add your private declarations */
 };

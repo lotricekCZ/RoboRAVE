@@ -63,6 +63,15 @@ void chat::question(message m, lidar* l){
 
 
 
+void chat::question(message m, thermocam* th){
+	output_queue.emplace_back((thermocam*) th, m);
+	th -> update();
+	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	this -> output_queue.back().question();
+	}
+
+
+
 void chat::question(message m, motors* mr){
 	output_queue.emplace_back((motors*)mr, m);
 	mr -> update();
@@ -107,32 +116,108 @@ void chat::question(message m, ground_sensor* f){
 
 
 
-void chat::send(message_pair &m, steady now){
+/*
+printf("\tsender:\t\t%u\n\treceiver:\t%u\n\ttype:\t\t%u\n\tkind:\t\t%u\n\tnumber:\t\t%u\n\tbyteload:\t\t", 
+	m.first._content.sender,
+	m.first._content.receiver,
+	m.first._content.type,
+	m.first._content.kind,
+	m.first._content.message_number
+	);
+for(auto o: m.first._content.message_space) printf("%x  ", o);
+std::cout << std::endl;
+*/
+
+
+void chat::send(message_pair *m, steady now){
 	//~ std::ofstream o("Ahoy.bin", std::ios::out | std::ios::app | std::ios::binary);
-	std::cout << "BEFORE: " << std::chrono::duration_cast<std::chrono::seconds>(m.try_last.time_since_epoch()).count() << std::endl;
-	if(m.first._content.message_number == 0) m.first._content.message_number = message_num++;
-	m.try_last = now;
-	m.tries++;
-	std::cout << "AFTER: " << std::chrono::duration_cast<std::chrono::seconds>(m.try_last.time_since_epoch()).count() << std::endl;
+	//~ std::cout << "BEFORE: " << std::chrono::duration_cast<std::chrono::seconds>(m.try_last.time_since_epoch()).count() << std::endl;
+	bool pin_state = main_gpio -> get_state();
+	if(m -> first._content.message_number == 0) m -> first._content.message_number = message_num++;
+	m -> try_last = now;
+	m -> tries++;
+	std::cout << "AFTER: " << std::chrono::duration_cast<std::chrono::seconds>(m -> try_last.time_since_epoch()).count() << std::endl;
 	std::array<uint8_t, msg_std::length> bfr;
-	m.first.encode(m.first._content, bfr);
+	m -> first.encode(m -> first._content, bfr);
 	std::vector<uint8_t> sended(&bfr[0], &bfr[msg_std::length]);
-	printf("\tsender:\t\t%u\n\treceiver:\t%u\n\ttype:\t\t%u\n\tkind:\t\t%u\n\tnumber:\t\t%u\n\tbyteload:\t\t", 
-		m.first._content.sender,
-		m.first._content.receiver,
-		m.first._content.type,
-		m.first._content.kind,
-		m.first._content.message_number
-		);
-	for(auto o: m.first._content.message_space) printf("%x  ", o);
-	//~ for(auto i: sended)
-		//~ std::cout << i << " ";
-	std::cout << std::endl;
-	//~ printf("BEEN THERE: %i\n", __LINE__);
-	//~ o.flush();
-	//~ o.close();
 	main_serial -> write(sended);
-	//~ std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
+	printf("DISABLING SERIAL, IN next 4.5s nothing\n");
+	}
+
+
+
+bool chat::handle_port(steady now){
+	//~ bool pin_state = main_gpio -> get_state();
+	if(port_state == FREE && now >= message_send_time){
+		port_state = OPENING; // after it will be closed
+		message_send_time = now + std::chrono::milliseconds(variables::chat::port_delay);
+		printf("DISABLING SERIAL\n");
+		return 0;
+		}
+	
+	if(port_state == OPENING && now >= message_send_time){
+		port_state = SEND; // after it will be closed
+		message_send_time = now + std::chrono::milliseconds(variables::chat::port_delay);
+		printf("DISABLING SERIAL\n");
+		return 0;
+		}
+	
+	if(port_state == SEND && now >= message_send_time){
+		port_state = SEND; // after it will be closed
+		message_send_time = now + std::chrono::milliseconds(variables::chat::port_delay);
+		printf("DISABLING SERIAL\n");
+		return 1;
+		}
+		
+	if(port_state == CLOSING && now >= message_send_time){
+		port_state = FREE; // after it will be closed
+		main_gpio -> disable_serial();
+		printf("SERIAL DISABLED\n");
+		return 0;
+		}
+	return 0;
+	}
+
+
+
+bool chat::stage(steady now){
+	switch(port_state){
+		case rs485_state::FREE: {
+			printf("OPENING\n");
+			port_state = rs485_state::OPENING;
+			main_gpio -> enable_serial();
+			message_send_time = time_now;
+			return 0;
+			}
+
+		case rs485_state::OPENING: {
+			if(std::chrono::duration<decimal_n>(now - message_send_time) 
+				>= std::chrono::microseconds(variables::chat::port_delay)){
+				port_state = rs485_state::SEND;
+				printf("SEND\n");
+				} else {return 0;}
+			[[fallthrough]];
+			}
+
+		case rs485_state::SEND: {
+			send(held, now);
+			message_send_time = time_now;
+			port_state = rs485_state::CLOSING;
+			printf("CLOSING\n");
+			return 1;
+			}
+
+		case rs485_state::CLOSING: {
+			if(std::chrono::duration<decimal_n>(now - message_send_time) 
+				>= std::chrono::microseconds(variables::chat::port_delay)){
+				main_gpio -> disable_serial();
+				port_state = rs485_state::FREE;
+				printf("CLOSED\n");
+				}
+			return 0;
+			}
+
+		}
 	}
 
 
@@ -165,13 +250,10 @@ bool chat::run(steady now){
 						}
 			}
 		}
-	//~ printf("%s: %i\n", __FUNCTION__, __LINE__);
+		
 	for(unsigned_b i = 0; i < input_queue.size(); i++){
-		//~ printf("%s: %i\n", __FUNCTION__, __LINE__);
 		for(unsigned_b o = 0; o < output_queue.size(); o++){
-			//~ printf("%s: %i\t\t%u/%u\n", __FUNCTION__, __LINE__, o, output_queue.size());
 			if(output_queue.at(o).answers_query(input_queue.at(i))){
-				//~ printf("%s: %i\n", __FUNCTION__, __LINE__);
 				output_queue.at(o).answer(input_queue.at(i));
 				input_queue.erase(input_queue.begin() + i--);
 				output_queue.erase(output_queue.begin() + o--); // NEEDS TO BE ANSWERED !!!
@@ -179,32 +261,29 @@ bool chat::run(steady now){
 				}
 			}
 		}
-	//~ printf("%s: %i\n", __FUNCTION__, __LINE__);
-	//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
-	//~ printf("size: %i\n", output_queue.size());
-	for(unsigned_b i = 0; i < output_queue.size(); i++){
-		//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
-		if(std::chrono::duration<decimal_n>(now - output_queue.at(i).try_last) >= std::chrono::milliseconds(output_queue.at(i).response_timeout)){
-			//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
-			if(output_queue.at(i).tries >= variables::chat::attempt_count) {output_queue.at(i).answer(); output_queue.erase(output_queue.begin() + i--); continue;}
-			
-			// check if it can use serial port
-			/*
-			if(now > message_send_time){ /* means message_send_time happened in the past, 
-				otherwise it waits for message to be send * /
-				if(main_gpio -> get_state()){ // it is high and thus it was not so long ago
-					if((now - main_gpio -> last_toggled) >= std::chrono::microseconds(variables::chat::port_delay)){
-						// if the time since last toggled overpassed
-						main_gpio -> disable_serial();
+		
+	switch(port_state){
+		case rs485_state::FREE: {
+			for(unsigned_b i = 0; i < output_queue.size(); i++){
+				//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+				if(std::chrono::duration<decimal_n>(now - output_queue.at(i).try_last) 
+					>= std::chrono::milliseconds(output_queue.at(i).response_timeout)){
+					//~ printf("RESPONSE IS HERE!\n");
+					if(output_queue.at(i).tries >= variables::chat::attempt_count) {
+						output_queue.at(i).answer();
+						output_queue.erase(output_queue.begin() + i--);
+						continue;
 						}
+					port_state = rs485_state::OPENING;
+					held = &output_queue.at(i);
 					break;
 					}
-				} */
-				//~ >= std::chrono::milliseconds(output_queue.at(i).response_timeout))
-			printf("Length: %fs\n", std::chrono::duration<decimal_n>(now - output_queue.at(i).try_last).count());
-			send(output_queue.at(i));
-			std::cout << "OUTSIDE: " << std::chrono::duration_cast<std::chrono::seconds>(output_queue.at(i).try_last.time_since_epoch()).count() << std::endl;
-			//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+				}
+			if(port_state == rs485_state::FREE) break;
+			port_state = rs485_state::FREE;
+			}
+		default: {
+			stage(now);
 			}
 		}
 	return true;

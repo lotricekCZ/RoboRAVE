@@ -34,6 +34,7 @@
 #include "../lidar/lidar.hpp"
 #include "../fire_sensors/fire_sensor.hpp"
 #include "../ground_sensors/ground_sensor.hpp"
+#include "../thermocam/thermocam.hpp"
 #include "../motors/motors.hpp"
 #include "../turbine/turbine.hpp"
 #include "message.hpp"
@@ -47,8 +48,9 @@ class message_pair{
 					lidar*,
 					turbine*, 
 					ground_sensor*, 
-					motors*
-					/*, thermocam* */> periphery;
+					motors*, 
+					thermocam*
+					> periphery;
 		steady appear_first;
 		steady try_last;
 		uint8_t tries = 0;
@@ -66,6 +68,7 @@ class message_pair{
 		message_pair(lidar* p, message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
 		message_pair(motors* mr, message m = message(), unsigned_b timeout = variables::chat::response_timeout::time_critical);
 		message_pair(turbine* t, message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
+		message_pair(thermocam* th, message m = message(), unsigned_b timeout = variables::chat::response_timeout::normal);
 		/*
 		message_pair& operator=(message_pair other){
 			std::cout << "copy assignment of A\n";

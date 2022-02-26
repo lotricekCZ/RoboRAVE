@@ -85,7 +85,7 @@ void motors::question(){
 
 
 void motors::answer(){
-	queue--;
+	if(queue != 0) queue--;
 	return;
 	}
 

@@ -99,7 +99,7 @@ void fire_sensor::question(){
 
 
 void fire_sensor::answer(){
-	queue--;
+	if(queue != 0) queue--;
 	return;
 	}
 

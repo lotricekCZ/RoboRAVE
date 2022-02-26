@@ -30,6 +30,7 @@
 
 class turbine: public serial_peripheral{
 	public:
+		unsigned_b queue = 0;
 		enum stepper_options: uint8_t {
 			UP = 		1, 
 			DOWN = 		0,

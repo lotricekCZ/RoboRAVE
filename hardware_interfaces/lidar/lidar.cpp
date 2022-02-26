@@ -59,7 +59,7 @@ void lidar::question(){
 
 
 void lidar::answer(){
-	queue--;
+	if(queue != 0) queue--;
 	return;
 	}
 

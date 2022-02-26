@@ -71,6 +71,7 @@ void turbine::question(){
 
 
 void turbine::answer(){
+	if(queue != 0) queue--;
 	return;
 	}
 
