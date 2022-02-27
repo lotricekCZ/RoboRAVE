@@ -28,7 +28,16 @@ add_library(serial STATIC ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/serial
 #~ add_library(mf2 SHARED ${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/main_functions/main_functions41-60.cpp)
 
 IF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
-	target_link_libraries(gpio -lWiring)
+	# Locate libraries and headers
+	find_package(WiringPi REQUIRED)
+	find_package(Threads REQUIRED) 
+	
+	# Include headers
+	include_directories(${WIRINGPI_INCLUDE_DIRS}) 
+	
+	# Link against libraries
+	target_link_libraries(gpio ${WIRINGPI_LIBRARIES}) 
+	target_link_libraries(gpio ${CMAKE_THREAD_LIBS_INIT}) 
 ENDIF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
 
 target_link_libraries(serial -lCppLinuxSerial)

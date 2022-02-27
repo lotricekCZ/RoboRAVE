@@ -81,7 +81,7 @@ void translator_motor::apply(class motor *Mri, class motor *Mle){
 			left_set_chain(Ml);
 			}
 		if((data.input_type >> 4) & 0b1){ // direction
-			leftt_set_dir(Ml);
+			left_set_dir(Ml);
 			}
 		if((data.input_type >> 3) & 0b1){ // rewrite
 			left_rewrite(Ml);
