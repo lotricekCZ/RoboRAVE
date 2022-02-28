@@ -50,7 +50,7 @@ bool translator_therm::compose(){
 											+ ((i) % 4) * 2 + (presets.current_index & 1)]) + 47) & 0b01111111; 
 		// constrain to use 7 bits from -47 to 80 deg C so that msb can carry metadata
 		}
-	data[0] = ((presets.current_index) & 0b10) 	<< 7;
-	data[1] = ((presets.current_index) & 0b1) 	<< 8;
+	data[0] |= ((presets.current_index) & 0b10) 	<< 6;
+	data[1] |= ((presets.current_index) & 0b1) 	<< 7;
 	return presets.last_index != presets.current_index++; // means that there are still pixels waiting to be composed
 	}

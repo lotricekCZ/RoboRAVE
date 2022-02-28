@@ -1,6 +1,6 @@
 chat:
     port: 		/dev/ttyUSB0
-    port-rpi: 	/dev/ttyS0
+    port-rpi: 	/dev/serial0
     max_queue_global:	100 # messages
     max_queue_sensor:	10 # messages
     check_frequency:	75 # Hz
@@ -8,5 +8,5 @@ chat:
         extended:       2000 # ms
         normal:         1000 # ms
         time_critical:  500 # ms
-    port_delay:			4500 # us
+    port_delay:			4000 # us
     attempt_count:      20

@@ -65,7 +65,6 @@ class chat {
 		void question(message m, lidar* l);
 		void question(message m, thermocam* t);
 		void question(message m, turbine* t);
-		bool handle_port(steady now = time_now); // true when it's SEND
 		steady message_send_time = time_now;
 		uint32_t message_num = 1;
 		

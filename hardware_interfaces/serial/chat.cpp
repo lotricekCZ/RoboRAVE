@@ -145,41 +145,6 @@ void chat::send(message_pair *m, steady now){
 	}
 
 
-
-bool chat::handle_port(steady now){
-	//~ bool pin_state = main_gpio -> get_state();
-	if(port_state == FREE && now >= message_send_time){
-		port_state = OPENING; // after it will be closed
-		message_send_time = now + std::chrono::milliseconds(variables::chat::port_delay);
-		printf("DISABLING SERIAL\n");
-		return 0;
-		}
-	
-	if(port_state == OPENING && now >= message_send_time){
-		port_state = SEND; // after it will be closed
-		message_send_time = now + std::chrono::milliseconds(variables::chat::port_delay);
-		printf("DISABLING SERIAL\n");
-		return 0;
-		}
-	
-	if(port_state == SEND && now >= message_send_time){
-		port_state = SEND; // after it will be closed
-		message_send_time = now + std::chrono::milliseconds(variables::chat::port_delay);
-		printf("DISABLING SERIAL\n");
-		return 1;
-		}
-		
-	if(port_state == CLOSING && now >= message_send_time){
-		port_state = FREE; // after it will be closed
-		main_gpio -> disable_serial();
-		printf("SERIAL DISABLED\n");
-		return 0;
-		}
-	return 0;
-	}
-
-
-
 bool chat::stage(steady now){
 	switch(port_state){
 		case rs485_state::FREE: {

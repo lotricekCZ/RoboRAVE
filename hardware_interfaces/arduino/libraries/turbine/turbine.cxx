@@ -42,7 +42,7 @@ void turbine::change_stepper_motor_combination(uint8_t input){
 void turbine::move_stepper_motor(){
 	switch(primary.stepper_direction){
 		case UP:
-			if(primary.turbine_tilt != 2048){
+			if(primary.turbine_tilt != 4095){
 				primary.pulse_number += 1;
 				primary.turbine_tilt += 1;
 			} else {

@@ -69,19 +69,19 @@ void logic::init(){
 	//~ std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 	main_rotation.angle = pi_const / 2;
 	
-	printf("main = %p\n", &main_chat);
-	main_fire_sensor = 	fire_sensor(main_chat);
-	main_ground_sensor = 		ground_sensor(main_chat);
-	main_lidar = 		lidar(main_chat);
-	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
-	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
+	main_fire_sensor = 		fire_sensor(main_chat);
+	main_ground_sensor = 	ground_sensor(main_chat);
+	main_lidar = 			lidar(main_chat);
+	
 	#ifdef __arm__
-	// RaspberryPi specific code
-	// set pins as outputs
-	// set pins as outputs
-	printf("Why yes it is, thank you\n");
+		// RaspberryPi specific code
+		// set pins as outputs
+		// set pins as outputs
+		main_serial = serial(variables::chat::port, 115200);	
+	#else
+		main_serial = serial(variables::chat::port, 57600);	
 	#endif
-	main_serial = serial(variables::chat::port, 57600);
+	
 	main_camera.init();
 	main_gpio.init();
 	main_chat.init(main_serial, main_gpio);
@@ -95,7 +95,7 @@ void logic::init(){
 				variables::chat::port <<", you dimwitt?" << std::endl;
 			return;
 			}
-	std::cout << variables::chat::port << std::endl;
+	
 	main_fire_sensor.question();
 	main_ground_sensor.question();
 	/// TODO: make it work better than setting a single value, by reading the line sensors
@@ -125,7 +125,7 @@ void logic::mainloop(){
 
 
 void logic::read(steady now){
-	if(std::chrono::duration<decimal_n>(now - test).count() >= 0.10f){
+	if(std::chrono::duration<decimal_n>(now - test).count() >= 0.25){
 		main_ground_sensor.question();
 		test = now;
 		}

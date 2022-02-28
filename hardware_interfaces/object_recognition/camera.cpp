@@ -51,7 +51,7 @@ bool camera::init(){
 	_camera.open(0);
 	_camera.set(cv::VideoCaptureProperties::CAP_PROP_FPS, check_frequency);
 	_camera.set(cv::VideoCaptureProperties::CAP_PROP_FRAME_WIDTH, px_footage_horizontal);
-	_camera.set(cv::VideoCaptureProperties::CAP_PROP_FRAME_WIDTH, px_footage_vertical);
+	_camera.set(cv::VideoCaptureProperties::CAP_PROP_FRAME_HEIGHT, px_footage_vertical);
 	
 	//~ std::cout << __LINE__ << std::endl;
 	return _camera.isOpened();
