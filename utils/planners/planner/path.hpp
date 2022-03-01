@@ -25,6 +25,11 @@
 #ifndef PATH_HPP
 #define PATH_HPP
 
+#include <vector>
+#include <string>
+#include "step.hpp"
+
+//~ #include <sstream>
 
 class path: public std::vector<step> {
 	public:

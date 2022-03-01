@@ -92,7 +92,7 @@ void logic::init(){
 		//~ main_serial.close();
 		} catch (mn::CppLinuxSerial::Exception e) {
 			std::cout << "Would you mind connecting some spare\n serial interface on "<< 
-				variables::chat::port <<", you dimwitt?" << std::endl;
+				variables::chat::port << ", you dimwitt?" << std::endl;
 			return;
 			}
 	
@@ -105,6 +105,7 @@ void logic::init(){
 	
 	while(flags.mode != START_MOVING && std::chrono::duration<decimal_n>(time_now - end).count() > 1.0f){
 		//~ flags.mode = (std::cin.get() == 'e')? START_MOVING: flags.mode;
+		main_ground_sensor.question();
 		flags.mode = START_MOVING;
 		}
 	mainloop();

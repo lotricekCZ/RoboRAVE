@@ -18,10 +18,10 @@ file(GLOB SOURCE_FILES
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 find_package(PkgConfig REQUIRED)
-pkg_search_module(OpenCV REQUIRED opencv4)
 pkg_search_module(YAML_CPP REQUIRED yaml-cpp)
-#~ find_package(yaml-cpp)
+
 if(HasOpenCV)
+	pkg_search_module(OpenCV REQUIRED opencv4)
 	if (OpenCV_FOUND)
 	    # If the package has been found, several variables will
 	    # be set, you can find the full list with descriptions
@@ -98,6 +98,7 @@ add_library(avoider 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/avoidanc
 add_library(plan_utils 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/planner_utils.cpp)
 add_library(planner 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/planner.cpp)
 add_library(path	 		SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/planners/planner/path.cpp)
+add_library(path_wrapper	SHARED ${CMAKE_CURRENT_SOURCE_DIR}/utils/logic/path_wrapper.cpp)
 
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/hardware_interfaces/hardware_interfaces.txt)
@@ -121,6 +122,7 @@ target_link_libraries(angles map location coordinates wall surround_circle candl
 target_link_libraries(avoider location coordinates line circle wall surround_circle candle angles path)
 target_link_libraries(plan_utils location coordinates line circle wall surround_circle candle angles path avoider)
 target_link_libraries(planner location coordinates line circle wall surround_circle candle angles path avoider plan_utils)
+target_link_libraries(path_wrapper planner location coordinates line circle wall surround_circle candle angles path avoider plan_utils)
 target_link_libraries(logic location coordinates line circle wall surround_circle candle angles path avoider plan_utils)
 
 #~ target_link_libraries(serial -lCppLinuxSerial)
@@ -144,5 +146,5 @@ target_link_libraries(roborave Threads::Threads
 					angles	planner		vector
 					avoider obsolete	path
 					plan_utils variables coordinates 
-					logic
+					logic path_wrapper 
 					)

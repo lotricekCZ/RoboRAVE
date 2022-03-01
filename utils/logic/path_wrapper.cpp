@@ -1,7 +1,7 @@
 /*
- * speeds.hpp
+ * path_wrapper.cpp
  * 
- * Copyright 2020 Jakub Ramašeuski <jakub@skaryna.net>
+ * Copyright 2022 Jakub Ramašeuski <jakub@skaryna.net>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,25 +21,27 @@
  * 
  */
 
-#include "../../../defines/constants.h"
-#include "../setters/setters.tpp"
 
-#ifndef UTILS_DATA_CONTAINERS_SPEEDS_SPEEDS_HPP
-#define UTILS_DATA_CONTAINERS_SPEEDS_SPEEDS_HPP
+#include "path_wrapper.hpp"
 
 
-class speeds: public setters<decimal_n>
-{
-	public:
-		decimal_n left;
-		decimal_n right;
-		speeds();
-		speeds(decimal_n, decimal_n);
-		~speeds() = default;
-		signed_n to_hw_speed(decimal_n);
-		decimal_n from_hw_speed(decimal_n);
-	private:
-		/* add your private declarations */
-};
+path_wrapper::path_wrapper(std::vector<step> copy, bool start, bool end): path(copy, start, end) {
+	
+	}
 
-#endif /* UTILS_DATA_CONTAINERS_SPEEDS_SPEEDS_HPP */ 
+
+
+path_wrapper::path_wrapper(const path& copy): path(copy) {
+	
+	}
+
+
+
+path_wrapper::path_wrapper(step copy, bool start, bool end, bool complete): path(copy, start, end, complete) {
+	
+	}
+
+
+
+
+

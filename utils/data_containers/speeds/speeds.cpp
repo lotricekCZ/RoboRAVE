@@ -39,10 +39,6 @@ speeds::speeds(decimal_n left, decimal_n right)
 	
 }
 
-speeds::~speeds()
-{
-	
-}
 
 signed_n speeds::to_hw_speed(decimal_n speed){ // 2^15 - 1 = overflow
 	//~ std::cout << (2.0 * pi_const * r_wheel)/(N_wheel * speed) << std::endl;
