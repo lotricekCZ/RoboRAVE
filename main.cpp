@@ -41,6 +41,7 @@
 #include "./tank/tank.h"
 #include "./elements/radius/radius.h"
 #include "./utils/logic/logic.hpp"
+#include "./utils/logic/path_wrapper.hpp"
 
 #include "./hardware_interfaces/serial/serial.cpp"
 #include "./hardware_interfaces/fire_sensors/fire_sensor.hpp"
@@ -769,6 +770,16 @@ int main(int argc, char *argv[]) {
 		case 84:{ // encodes speeds / acceleration into steps ./roborave 83  5 3  -3 2
 			logic l;
 			l.init();
+			break;
+			}
+			
+		case 85:{ // subdivides steps for acceleration ./roborave 85
+			path p(step(coordinates(-3, -6), coordinates(6, 7)));
+			path_wrapper pw(p);
+			do{
+				pw.translate();
+				} while(++pw.head < pw.size());
+			printf("%s", pw.print().c_str());
 			break;
 			}
 			

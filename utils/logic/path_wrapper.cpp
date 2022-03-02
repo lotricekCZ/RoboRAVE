@@ -23,7 +23,9 @@
 
 
 #include "path_wrapper.hpp"
+#include "../../elements/vector/vector.hpp"
 
+typedef vector col_v;
 
 path_wrapper::path_wrapper(std::vector<step> copy, bool start, bool end): path(copy, start, end) {
 	
@@ -43,5 +45,42 @@ path_wrapper::path_wrapper(step copy, bool start, bool end, bool complete): path
 
 
 
+std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
+	std::array<motors::motor, 2> ret;
+	uint8_t status = 0;
+	switch(this -> at(head)._type){
+		case step::circle_e: {
+			break;
+			}
+			
+		case step::line_e: {
+			decimal_n min_speed = std::max(variables::limits::minimal::wheel_velocity, std::min(now_speeds.left, now_speeds.right)); 
+			// Only place where going back is used when retracting (hopefully)
+			decimal_n length = this -> at(head).length();
+			decimal_n time = length / min_speed;
+			
+			if(time >= variables::step::acceleration_time){
+				coordinates inter = col_v(this -> at(head).start, 
+							min_speed * variables::step::acceleration_time, 
+							(this -> at(head).start.get_gamma(this -> at(head).end)), 1).get_point();
+				this -> insert(this -> begin() + (head), step(this -> at(head).start, inter));
+				this -> at(head + 1) = step(inter, this -> at(head + 1).end);
+				status = 0b11111;
+				}
+			//~ ret.at(0).scheduled_steps = ret.at(1).scheduled_steps = 
+			break;
+			}
+		}
+	return std::make_pair(status, ret);
+	}
 
 
+
+decimal_n path_wrapper::get_velocity(decimal_n x){ // sigmoid is used in these calculations
+	// (top_speed - low_speed) / (1 + (acceleration_const + x^2)^(-(x - offset))) + low_speed
+	constexpr unsigned_b acceleration_const = 128;
+	constexpr decimal_n offset = 0.9;
+	
+	return (variables::limits::maximal::wheel_velocity - variables::limits::minimal::wheel_velocity)
+			/ std::pow((1 + (acceleration_const + std::pow(x, 2))), (-(x - offset))) + variables::limits::minimal::wheel_velocity;
+	}

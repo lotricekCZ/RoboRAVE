@@ -31,8 +31,8 @@
 class speeds: public setters<decimal_n>
 {
 	public:
-		decimal_n left;
-		decimal_n right;
+		decimal_n left = 0;
+		decimal_n right = 0;
 		speeds();
 		speeds(decimal_n, decimal_n);
 		~speeds() = default;

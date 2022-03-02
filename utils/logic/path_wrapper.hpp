@@ -26,6 +26,9 @@
 #define PATH_WRAPPER_HPP
 
 #include "../planners/planner/path.hpp"
+#include "../../elements/vector/vector.hpp"
+#include "../../hardware_interfaces/serial/serial_peripheral.hpp"
+#include "../../hardware_interfaces/motors/motors.hpp"
 
 class path_wrapper: public path {
 	public:
@@ -33,8 +36,7 @@ class path_wrapper: public path {
 		path_wrapper(std::vector<step> copy, bool start = true, bool end = true);
 		path_wrapper(const path& copy);
 		path_wrapper(step copy, bool start = true, bool end = false, bool complete = false);
-		//~ decimal_n angle_start = 0;
-		//~ decimal_n angle_end = 0;
+		//~ decimal_n now_angle = 0;
 		
 		using path::push_back;
 		using path::pop_back;
@@ -87,6 +89,11 @@ class path_wrapper: public path {
 		using path::get_intersections_all;
 		using path::get_intersections;
 		
+		unsigned_b head = 0; // to know which step to translate
+		decimal_n speed_level = 0;
+		speeds now_speeds(0, 0);
+		decimal_n get_velocity(decimal_n x);
+		std::pair<uint8_t, std::array<motors::motor, 2>> translate();
 	private:
 		/* add your private declarations */
 };

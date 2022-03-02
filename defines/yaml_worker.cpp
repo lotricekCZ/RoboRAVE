@@ -80,8 +80,14 @@ void load_config(){
 	variables::properties::camera::size_recognition_vertical = 		node_camera["size_recognition_vertical"].as<unsigned_n>();
 	variables::properties::camera::size_footage_horizontal = 		node_camera["size_footage_horizontal"].as<unsigned_n>();
 	variables::properties::camera::size_footage_vertical = 			node_camera["size_footage_vertical"].as<unsigned_n>();
+
 	variables::limits::minimal::circle = 							node_robot["minimal"]["circle"].as<decimal_n>();
 	variables::limits::maximal::circle = 							node_robot["maximal"]["circle"].as<decimal_n>();
+	variables::limits::minimal::wheel_velocity = 					node_robot["minimal"]["wheel_velocity"].as<decimal_n>();
+	variables::limits::maximal::wheel_velocity = 					node_robot["maximal"]["wheel_velocity"].as<decimal_n>();
+
+	variables::robot::wheel::radius = 								node_robot["wheel"]["radius"].as<decimal_n>();
+	variables::robot::wheel::steps = 								node_robot["wheel"]["steps"].as<unsigned_b>();
 	//~ variables::properties::camera::size_footage_vertical = 		node_camera["size_footage_vertical"].as<unsigned_n>();
 	
 	// program segment start
@@ -107,6 +113,8 @@ void load_config(){
 	
 	variables::chat::max_queue_sensor =					config_chat["max_queue_sensor"].as<unsigned_n>();
 	variables::chat::max_queue_global =					config_chat["max_queue_global"].as<unsigned_b>();
+	
+	variables::step::acceleration_time = config["step"]["acceleration_time"].as<decimal_n>();
 	// chat segment end
 	std::cout << variables::properties::information << std::endl;
 	

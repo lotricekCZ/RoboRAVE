@@ -58,6 +58,9 @@ decimal_n variables::limits::maximal::wheel_velocity;
 decimal_n variables::limits::minimal::circle;
 decimal_n variables::limits::maximal::circle;
 
+decimal_n variables::robot::wheel::radius;
+unsigned_b variables::robot::wheel::steps;
+
 decimal_n variables::properties::widths::robot;
 
 decimal_n variables::thresholds::mAP::candle;
@@ -101,6 +104,7 @@ unsigned_b variables::chat::port_delay;
 unsigned_n variables::chat::max_queue_sensor;
 unsigned_n variables::chat::max_queue_global;
 // chat segment end
+decimal_n variables::step::acceleration_time; /// s
 
 const decimal_n variables::omega_wheel_const = (pi_const * r_wheel) / (N_wheel * dist_wheel);
 const decimal_n variables::wheel_step_length_const  = (2 * pi_const * r_wheel) / (N_wheel);

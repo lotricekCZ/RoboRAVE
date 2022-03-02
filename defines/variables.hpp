@@ -80,6 +80,16 @@ static class variables { // I hate myself for this!!!
 			} properties;
 		
 		
+		static class robot {
+			public:
+			static class wheel{
+				public:
+			    static decimal_n radius;
+			    static unsigned_b steps;
+				} wheel;
+			} robot;
+			
+		
 		static class limits {
 			public:
 			static class maximal {
@@ -165,6 +175,11 @@ static class variables { // I hate myself for this!!!
 				static unsigned_n max_queue_sensor;
 				static unsigned_n max_queue_global;
 				} chat;
+				
+			static class step {
+				public:
+				static decimal_n acceleration_time;
+				} step;
 			
 		variables();
 			
