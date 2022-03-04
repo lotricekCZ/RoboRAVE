@@ -106,8 +106,8 @@ unsigned_n variables::chat::max_queue_global;
 // chat segment end
 decimal_n variables::step::acceleration_time; /// s
 
-const decimal_n variables::omega_wheel_const = (pi_const * r_wheel) / (N_wheel * dist_wheel);
-const decimal_n variables::wheel_step_length_const  = (2 * pi_const * r_wheel) / (N_wheel);
+decimal_n variables::omega_wheel_const = (pi_const * variables::robot::wheel::radius) / (variables::robot::wheel::steps * dist_wheel);
+decimal_n variables::wheel_step_length_const  = (2.0f * pi_const * variables::robot::wheel::radius) / (variables::robot::wheel::steps);
 
 variables::variables(){
 	

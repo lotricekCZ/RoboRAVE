@@ -118,6 +118,8 @@ void load_config(){
 	// chat segment end
 	std::cout << variables::properties::information << std::endl;
 	
+	variables::omega_wheel_const = (pi_const * variables::robot::wheel::radius) / (variables::robot::wheel::steps * dist_wheel);
+	variables::wheel_step_length_const  = (2.0f * pi_const * variables::robot::wheel::radius) / (variables::robot::wheel::steps);
 	//~ std::ofstream fout("../defines/config.yaml");
 	//~ fout << config;	
 	}

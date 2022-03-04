@@ -33,7 +33,7 @@
 /// 	candle
 #define candle_r	0.03f //	m radius of circle	
 
-#define MAX_DISTANCE 170 //maximum distance to have 3 cm difference between lines that are 1 degree apart
+#define MAX_DISTANCE 170 // in cm, maximum distance to have 3 cm difference between lines that are 1 degree apart
 
 
 

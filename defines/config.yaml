@@ -74,20 +74,21 @@ properties:
     
     minimal:
       circle:	0.1
-      wheel_velocity: 8.4374093119667 # m/s
-      #~ wheel_velocity: 0.084374093119667 # m/s
+      #~ wheel_velocity: 8.4374093119667 # m/s
+      wheel_velocity: 0.084374093119667 # m/s
     
     maximal:
       circle:	3.0
-      #~ wheel_velocity: 0.674951546669682 # m/s
-      wheel_velocity: 67.4951546669682 # m/s
+      wheel_velocity: 0.674951546669682 # m/s
+      #~ wheel_velocity: 67.4951546669682 # m/s
       
 program:
     files:
         chat: ../hardware_interfaces/serial/chat.yaml
 
 step:
-    acceleration_time: 				0.4
+    #~ acceleration_time: 				0.4
+    acceleration_time: 				1
 
 information: |
  Roborave robot software, version 0.1.3-a

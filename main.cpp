@@ -777,9 +777,40 @@ int main(int argc, char *argv[]) {
 			path p(step(coordinates(-3, -6), coordinates(6, 7)));
 			path_wrapper pw(p);
 			do{
-				pw.translate();
+				auto o = pw.translate();
+				printf("%i, %i\n", o.second.at(0).scheduled_steps, o.second.at(1).scheduled_steps);
 				} while(++pw.head < pw.size());
 			printf("%s", pw.print().c_str());
+			break;
+			}
+			
+		case 86:{ // subdivides steps for acceleration ./roborave 85
+			path p(step(coordinates(-3, -6), coordinates(6, 7)));
+			path_wrapper pw(p);
+			for(uint8_t i = 0; i <= 30; i++){
+				printf("%f\n", pw.get_velocity((decimal_n)i/10.0f));
+				}
+			break;
+			}
+			
+		case 87:{ // subdivides steps for acceleration ./roborave 85
+			path p(step(coordinates(-3, -6), coordinates(6, 7)));
+			path_wrapper pw(p);
+			for(uint8_t i = 0; i <= 30; i++){
+				printf("(%f,%f)\n", (decimal_n)i/10.0f, pw.get_derivative((decimal_n)i/10.0f));
+				}
+			break;
+			}
+			
+		case 88:{ // subdivides steps for acceleration ./roborave 85
+			path p(step(coordinates(-3, -6), coordinates(6, 7)));
+			path_wrapper pw(p);
+			for(uint8_t i = 0; i <= 30; i++){
+				printf("(%f,%f)\t", (decimal_n)i/10.0f, pw.get_derivative((decimal_n)i/10.0f));
+				printf("(%f,%f)\t", (decimal_n)i/10.0f, pw.get_velocity((decimal_n)i/10.0f));
+				printf("(%f,%f)\t", (decimal_n)i/10.0f, pw.get_derivative((decimal_n)i/10.0f) / pw.get_velocity((decimal_n)i/10.0f));
+				printf("(%f,%f)\n", (decimal_n)i/10.0f, pw.get_velocity((decimal_n)i/10.0f) / pw.get_derivative((decimal_n)i/10.0f));
+				}
 			break;
 			}
 			

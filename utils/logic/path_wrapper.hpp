@@ -91,8 +91,11 @@ class path_wrapper: public path {
 		
 		unsigned_b head = 0; // to know which step to translate
 		decimal_n speed_level = 0;
-		speeds now_speeds(0, 0);
+		decimal_n remainder = 0; // what's left after division
+		speeds now_speeds = speeds(0, 0);
 		decimal_n get_velocity(decimal_n x);
+		decimal_n get_closest(decimal_n x);
+		decimal_n get_derivative(decimal_n x);
 		std::pair<uint8_t, std::array<motors::motor, 2>> translate();
 	private:
 		/* add your private declarations */
