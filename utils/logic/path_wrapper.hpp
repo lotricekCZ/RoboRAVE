@@ -89,13 +89,18 @@ class path_wrapper: public path {
 		using path::get_intersections_all;
 		using path::get_intersections;
 		
+		steady last = time_now;
+		std::chrono::duration<decimal_n> duration;
 		unsigned_b head = 0; // to know which step to translate
 		decimal_n speed_level = 0;
 		decimal_n remainder = 0; // what's left after division
 		speeds now_speeds = speeds(0, 0);
+		
 		decimal_n get_velocity(decimal_n x);
 		decimal_n get_closest(decimal_n x);
 		decimal_n get_derivative(decimal_n x);
+		bool its_time(steady now = time_now);
+		bool has_next();
 		std::pair<uint8_t, std::array<motors::motor, 2>> translate();
 	private:
 		/* add your private declarations */

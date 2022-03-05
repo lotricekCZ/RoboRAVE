@@ -155,6 +155,20 @@ void motors::update(){
 	}
 
 
+
+bool motors::assign(std::array<motors::motor, 2> in, uint8_t status){
+	this -> left = in.at(0);
+	this -> right = in.at(1);
+	this -> erase_flags = status;
+	if(queue >= variables::chat::max_queue_sensor) return false;
+	encode();
+	question();
+	//~ message
+	std::cout << "This is motor" << std::endl;
+	return true;
+	}
+
+
 /*
 motors& motors::operator=(const motors& rhs) {
 	// motors stuff here

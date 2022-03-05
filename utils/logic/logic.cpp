@@ -67,12 +67,15 @@ void logic::init(){
 	//~ std::chrono::duration<double> elapsed_seconds = end - start;
 	
 	//~ std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
+	
+	//~ main_path_wrapper = path_wrapper(path(step(coordinates(-3, -6), coordinates(6, 7))));
+	
 	main_rotation.angle = pi_const / 2;
 	
 	main_fire_sensor = 		fire_sensor(main_chat);
 	main_ground_sensor = 	ground_sensor(main_chat);
 	main_lidar = 			lidar(main_chat);
-	
+	main_motors = 			motors(main_chat);
 	#ifdef __arm__
 		// RaspberryPi specific code
 		// set pins as outputs
@@ -117,9 +120,9 @@ void logic::init(){
 void logic::mainloop(){
 	while(1){
 		auto start = time_now;
-		read();
-		apply();
-		decide();
+		read(start);
+		apply(start);
+		decide(start);
 		}
 	}
 
@@ -127,7 +130,7 @@ void logic::mainloop(){
 
 void logic::read(steady now){
 	if(std::chrono::duration<decimal_n>(now - test).count() >= 0.25){
-		main_ground_sensor.question();
+		//~ main_ground_sensor.question();
 		test = now;
 		}
 	//~ std::cout << "IN WAITING: " << main_serial.in_waiting() << std::endl;
@@ -154,7 +157,10 @@ void logic::decide(steady now){
 
 
 void logic::apply(steady now){
-	
+	if(main_path_wrapper.has_next() && main_path_wrapper.its_time()){
+		auto app = main_path_wrapper.translate();
+		main_motors.assign(app.second, app.first);
+		}
 	}
 
 

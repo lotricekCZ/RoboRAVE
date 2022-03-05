@@ -50,6 +50,7 @@ std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
 	uint8_t status = 0;
 	switch(this -> at(head)._type){
 		case step::circle_e: {
+			speed_level = 0; // dynamically change
 			remainder = 0;
 			break;
 			}
@@ -63,7 +64,7 @@ std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
 			decimal_n length = this -> at(head).length();
 			decimal_n time = length / min_speed;
 			
-			if(time >= variables::step::acceleration_time){
+			if(time >= variables::step::acceleration_time && speed_level / 3 < 0.75){
 				coordinates inter = col_v(this -> at(head).start, 
 							min_speed * variables::step::acceleration_time, 
 							(this -> at(head).start.get_gamma(this -> at(head).end)), 1).get_point();
@@ -73,21 +74,15 @@ std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
 				}
 			
 			decimal_n steps = this -> at(head).length() / variables::wheel_step_length_const;
-			decimal_n x = get_closest(min_speed) + 0.4;
-			x = (x > 3)? 3: (x < 0)? 0: x;
-			decimal_n speed = get_velocity(x);
+			speed_level += 0.1;
+			speed_level = (speed_level > 3)? 3: (speed_level < 0)? 0: speed_level;
+			
+			decimal_n speed = get_velocity(speed_level);
 			now_speeds.left = now_speeds.right = speed;
-			printf("x: %f\n", x);
-			printf("sp: %f\n", now_speeds.left);
-			printf("sr: %f\n", now_speeds.right);
-			printf("speed: %.4f m/s\n", speed);
-			printf("period: %i us\n", now_speeds.to_hw_speed(speed));
-			//~ printf("frequency: %.4f s", speed);
 			remainder += (steps - std::floor(steps));
 			ret.at(0).scheduled_steps = ret.at(1).scheduled_steps = std::floor(steps) + std::floor(remainder);
 			ret.at(0).high_interval = ret.at(0).low_interval = 
 				ret.at(1).high_interval = ret.at(1).low_interval = std::floor(now_speeds.to_hw_speed(speed));
-			printf("period 2: %i s\n", ret.at(0).high_interval);
 			remainder -= std::floor(remainder); // this is to assure that not so many steps are lost
 			break;
 			}
@@ -109,19 +104,32 @@ decimal_n path_wrapper::get_velocity(decimal_n x){ // sigmoid is used in these c
 
 
 
+bool path_wrapper::its_time(steady now){ 
+	return std::chrono::duration<decimal_n>(now - last) >= duration;
+	}
+
+
+
+bool path_wrapper::has_next(){ 
+	return head < this -> size();
+	}
+
+
+
 decimal_n path_wrapper::get_closest(decimal_n x){
 	decimal_n ret = 0;
 	decimal_n diff = std::numeric_limits<decimal_n>::infinity();
 	decimal_n y = get_derivative(x);
 	for(uint8_t i = 0; i < 30; i++){
-		decimal_n diff_c = std::abs(get_velocity((decimal_n)i / 10.0f) - (y));
-		printf("\t%f\n", diff_c);
+		decimal_n diff_c =  std::abs(get_velocity((decimal_n)i / 10.0f)/(y) - 1);
+		//~ printf("\t%f\n", diff_c);
 		if(diff_c < diff){
 			diff = diff_c;
-			printf("CHANGE %f\t%f\n\n\n", (decimal_n)i / 10.0f, diff_c);
+			
 			ret = (decimal_n)i / 10.0f;
 			}
 		}
+	//~ printf("RETURN %f", ret);
 	return ret;
 	}
 
@@ -203,5 +211,5 @@ decimal_n path_wrapper::get_derivative(decimal_n x){ // derivative of that sigmo
 					acceleration_const 
 					+ std::pow(x, 2)
 					)
-				);
+				); // BLACK METAL!!!
 	}

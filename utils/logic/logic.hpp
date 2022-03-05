@@ -32,6 +32,7 @@
 #include "../../hardware_interfaces/lidar/lidar.hpp"
 #include "../../hardware_interfaces/gpio/rpi_gpio.hpp"
 #include "../../hardware_interfaces/turbine/turbine.hpp"
+#include "path_wrapper.hpp"
 
 #include <memory>
 
@@ -68,8 +69,9 @@ class logic {
 	fire_sensor	main_fire_sensor;
 	lidar		main_lidar;
 	turbine		main_turbine;
+	motors		main_motors;
 	rpi_gpio	main_gpio;
-	
+	path_wrapper main_path_wrapper = path_wrapper(path(step(coordinates(-3, -6), coordinates(6, 7))));
 	
 	//~ auto start = std::chrono::steady_clock::now();
 	// map & planning stuff

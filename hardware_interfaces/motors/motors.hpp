@@ -114,6 +114,7 @@ class motors: public serial_peripheral{
 		void decode() override;
 		void encode() override;
 		void update() override;
+		void assign();
 		
 		//~ motors& operator=(const motors& rhs);
 	private:
