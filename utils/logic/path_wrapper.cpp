@@ -59,8 +59,8 @@ std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
 			
 			decimal_n min_speed = std::max(variables::limits::minimal::wheel_velocity, std::min(now_speeds.left, now_speeds.right)); 
 			// Only place where going back is used when retracting (hopefully)
-			printf("sp now: %f\n", now_speeds.left);
-			printf("sr now: %f\n", now_speeds.right);
+			//~ printf("sp now: %f\n", now_speeds.left);
+			//~ printf("sr now: %f\n", now_speeds.right);
 			decimal_n length = this -> at(head).length();
 			decimal_n time = length / min_speed;
 			
@@ -87,6 +87,8 @@ std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
 			break;
 			}
 		}
+	last = time_now;
+	duration = std::chrono::microseconds(((unsigned_b)ret.at(0).scheduled_steps * (unsigned_b)ret.at(0).high_interval));
 	return std::make_pair(status, ret);
 	}
 
@@ -105,6 +107,8 @@ decimal_n path_wrapper::get_velocity(decimal_n x){ // sigmoid is used in these c
 
 
 bool path_wrapper::its_time(steady now){ 
+	if(std::chrono::duration<decimal_n>(now - last) >= duration)
+		printf("\nTIME: %f\tDUR: %f\n", std::chrono::duration<decimal_n>(now - last).count(), duration.count());
 	return std::chrono::duration<decimal_n>(now - last) >= duration;
 	}
 

@@ -26,6 +26,7 @@
 #define MOTORS_HPP
 
 #include <vector>
+#include <array>
 #include <map>
 
 class motors: public serial_peripheral{
@@ -114,7 +115,7 @@ class motors: public serial_peripheral{
 		void decode() override;
 		void encode() override;
 		void update() override;
-		void assign();
+		bool assign(std::array<motors::motor, 2> in, uint8_t status);
 		
 		//~ motors& operator=(const motors& rhs);
 	private:

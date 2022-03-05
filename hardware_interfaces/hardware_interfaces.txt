@@ -51,7 +51,7 @@ target_link_libraries(thermocam node serial_peripheral)
 target_link_libraries(fire_sensor node serial_peripheral)
 target_link_libraries(lidar node serial_peripheral)
 target_link_libraries(camera variables)
-target_link_libraries(logic camera chat ground_sensor lidar gpio turbine fire_sensor serial_peripheral)
+target_link_libraries(logic camera motors chat ground_sensor lidar gpio turbine fire_sensor serial_peripheral)
 
 #~ target_link_libraries(motorduino node)
 
