@@ -27,6 +27,7 @@
 
 #include "../planners/planner/path.hpp"
 #include "../../elements/vector/vector.hpp"
+#include "../data_containers/angles/node/node.hpp"
 #include "../../hardware_interfaces/serial/serial_peripheral.hpp"
 #include "../../hardware_interfaces/motors/motors.hpp"
 
@@ -88,7 +89,7 @@ class path_wrapper: public path {
 		
 		using path::get_intersections_all;
 		using path::get_intersections;
-		
+		steady first = time_now; // to have steps anchored in time
 		steady last = time_now;
 		std::chrono::duration<decimal_n> duration;
 		unsigned_b head = 0; // to know which step to translate
@@ -96,6 +97,7 @@ class path_wrapper: public path {
 		decimal_n remainder = 0; // what's left after division
 		speeds now_speeds = speeds(0, 0);
 		
+		node backtrack(steady point);
 		decimal_n get_velocity(decimal_n x);
 		decimal_n get_closest(decimal_n x);
 		decimal_n get_derivative(decimal_n x);

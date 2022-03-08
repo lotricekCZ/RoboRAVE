@@ -165,3 +165,46 @@ void logic::apply(steady now){
 
 
 
+void logic::fill(fire_sensor *p){
+	for(uint8_t i = 0; i < p -> sensors.size(); i++){
+		unsigned_b current = p -> sensors.at(i).intensity;
+		unsigned_b next = p -> sensors.at((i + 1) % p -> sensors.size()).intensity;
+		for(uint8_t j = 0; j < (unsigned_b)p -> spread; j++){
+			main_angles.at(i * (unsigned_b)p -> spread + j).intensity = (((current * ((unsigned_b)p -> spread - j)) + next * j) 
+																		/ (unsigned_b)p -> spread);
+			}
+		}
+	p -> has_data = false;
+	}
+
+
+
+void logic::fill(ground_sensor *p){
+	/*
+	 for(auto o: p -> sensors){
+		main_angles.at((unsigned_n)o.angle) = o.intensity;
+		main_angles.at(((unsigned_n)o.angle + 1) % 360) = o.intensity;
+		main_angles.at(((unsigned_n)o.angle < 1) * 360 + (unsigned_n)o.angle - 1) = o.intensity;
+		} */
+	// there is no structure to hold the ground sensor data
+	p -> has_data = false;
+	}
+
+
+
+void logic::fill(lidar *p){
+	// it is important to backtrack the step to import anything to a map
+	while(p -> conv_vals.size()){
+		auto back = p -> conv_vals.back();
+		node backtracked = main_path_wrapper.backtrack(back.time); // find where it was this much time ago.
+		p -> conv_vals.erase(p -> conv_vals.end());
+		}
+	}
+
+
+
+void logic::fill(thermocam *p){
+	
+	}
+
+

@@ -89,6 +89,9 @@ std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
 		}
 	last = time_now;
 	duration = std::chrono::microseconds(((unsigned_b)ret.at(0).scheduled_steps * (unsigned_b)ret.at(0).high_interval));
+	this -> at(head).time_start = std::chrono::duration<decimal_n>(first - last).count();
+	this -> at(head).time = duration.count();
+	this -> at(head).v = now_speeds;
 	return std::make_pair(status, ret);
 	}
 
@@ -116,6 +119,40 @@ bool path_wrapper::its_time(steady now){
 
 bool path_wrapper::has_next(){ 
 	return head < this -> size();
+	}
+
+
+
+node path_wrapper::backtrack(steady point){ 
+	decimal_n time = std::chrono::duration<decimal_n>(point - first).count();
+	step affector; // the one in which an effect occured
+	if(time <= 0 && this -> size() > 0) return node(this -> front().angle_start, this -> front().start);
+	for(unsigned_b head_n = head; head_n <= head; head_n--){
+		if(time >= this -> at(head_n).time_start){
+			affector = this -> at(head_n); // the one, whose start is older than current
+			break;
+			}
+		}
+	
+	decimal_n delta = (time - affector.time_start);
+	if(delta > affector.time) return node(affector.angle_end, affector.end);
+	
+	switch(affector._type){
+		case step::line_e: {
+			return node(affector.angle_start, col_v(affector.start, 
+						affector.v.left * (delta), affector.angle_start).get_point());
+			}
+			
+		case step::circle_e: {
+			decimal_n angle_start_angle = affector.get_center().get_gamma(affector.start);
+			decimal_n difference_angle = angle_start_angle + delta * affector.omega * (1 + ((affector.direction_curve)? -2: 0));
+			col_v help = col_v(affector.get_center(), 
+				affector.start.get_distance(affector.get_center()), 
+				difference_angle);
+			return node(help.angle() + ((affector.direction_curve)? -0.5f: 0.5f) * pi_const, help.get_point());
+			break;
+			}
+		}
 	}
 
 

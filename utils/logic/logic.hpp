@@ -92,6 +92,10 @@ class logic {
 		void decide(steady now = time_now);
 		void read(steady now = time_now);
 		void apply(steady now = time_now); // applies data gained from peripherals
+		void fill(fire_sensor *p);
+		void fill(ground_sensor *p);
+		void fill(lidar *p);
+		void fill(thermocam *p);
 		steady test = time_now;
 	private:
 		/* add your private declarations */

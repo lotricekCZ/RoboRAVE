@@ -94,6 +94,7 @@ void ground_sensor::question(){
 
 void ground_sensor::answer(){
 	if(queue != 0) queue--;
+	has_data = 1;
 	return;
 	}
 

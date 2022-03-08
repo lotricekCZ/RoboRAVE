@@ -39,7 +39,7 @@ class chat;
 class serial_peripheral{
 	public:
 		unsigned receiver:	3;
-		
+		unsigned has_data:	1;
 		serial_peripheral();
 		serial_peripheral(chat *_c);
 		serial_peripheral(chat &_c);

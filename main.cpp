@@ -814,6 +814,28 @@ int main(int argc, char *argv[]) {
 			break;
 			}
 			
+		case 89:{ // tests some path if it can understand what backtrack means ./roborave 85
+			path p(
+				std::vector<step>({
+					step(coordinates(0, 0), coordinates(3, 0)),
+					step(coordinates(3, 0), coordinates(4, 1), coordinates(3, 1)),
+					step(coordinates(4, 1), coordinates(4, 4)),
+					step(coordinates(4, 4), coordinates(3, 5), coordinates(3, 4)),
+					step(coordinates(3, 5), coordinates(-3, 5)),
+					step(coordinates(-3, 5), coordinates(-4, 4), coordinates(-3, 4)),
+					step(coordinates(-4, 4), coordinates(-4, 0))
+					})
+				);
+			path_wrapper pw(p);
+			for(uint8_t i = 0; i <= 30; i++){
+				printf("(%f,%f)\t", (decimal_n)i/10.0f, pw.get_derivative((decimal_n)i/10.0f));
+				printf("(%f,%f)\t", (decimal_n)i/10.0f, pw.get_velocity((decimal_n)i/10.0f));
+				printf("(%f,%f)\t", (decimal_n)i/10.0f, pw.get_derivative((decimal_n)i/10.0f) / pw.get_velocity((decimal_n)i/10.0f));
+				printf("(%f,%f)\n", (decimal_n)i/10.0f, pw.get_velocity((decimal_n)i/10.0f) / pw.get_derivative((decimal_n)i/10.0f));
+				}
+			break;
+			}
+			
 		}
 	
     uint8_t c = std::thread::hardware_concurrency();	

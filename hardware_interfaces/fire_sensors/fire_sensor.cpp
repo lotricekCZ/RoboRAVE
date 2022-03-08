@@ -100,6 +100,7 @@ void fire_sensor::question(){
 
 void fire_sensor::answer(){
 	if(queue != 0) queue--;
+	has_data = 1;
 	return;
 	}
 

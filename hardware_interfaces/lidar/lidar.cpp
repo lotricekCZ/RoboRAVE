@@ -60,6 +60,7 @@ void lidar::question(){
 
 void lidar::answer(){
 	if(queue != 0) queue--;
+	has_data = 1;
 	return;
 	}
 

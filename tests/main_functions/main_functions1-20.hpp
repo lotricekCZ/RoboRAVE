@@ -37,7 +37,7 @@
 #include <ctime>
 #include <iostream>
 
-#define dont_comp
+//~ #define dont_comp
 
 #ifndef dont_comp
 

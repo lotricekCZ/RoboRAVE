@@ -29,18 +29,19 @@ class chat;
 
 
 serial_peripheral::serial_peripheral(){
+	has_data = 0;
 	}
 	
 
 
 serial_peripheral::serial_peripheral(chat *c){
-	
+	has_data = 0;
 	}
 
 
 
 serial_peripheral::serial_peripheral(chat &c){
-	
+	has_data = 0;
 	}
 
 
