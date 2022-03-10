@@ -71,11 +71,11 @@ class tank{
 		
 		
 		decimal_n get_omega(decimal_n x, decimal_n y){
-			return ((decimal_n)joystick_range - abs((decimal_n)y)) * ((decimal_n)x / (decimal_n)joystick_range) + (decimal_n)x;
+			return ((decimal_n)joystick_range - std::abs((decimal_n)y)) * ((decimal_n)x / (decimal_n)joystick_range) + (decimal_n)x;
 			}
 		
 		decimal_n get_velocity(decimal_n x, decimal_n y){
-			return ((decimal_n)joystick_range - abs((decimal_n)x)) * ((decimal_n)y / (decimal_n)joystick_range) + (decimal_n)y;
+			return ((decimal_n)joystick_range - std::abs((decimal_n)x)) * ((decimal_n)y / (decimal_n)joystick_range) + (decimal_n)y;
 			}
 	
 	};

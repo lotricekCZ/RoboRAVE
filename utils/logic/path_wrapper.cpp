@@ -52,6 +52,38 @@ std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
 		case step::circle_e: {
 			speed_level = 0; // dynamically change
 			remainder = 0;
+			decimal_n max_speed = std::max(variables::limits::minimal::wheel_velocity, 
+										std::max(now_speeds.left, now_speeds.right)) * 0.8;
+				// this max speed will be used for the faster (longer) lane
+				/// Notice the 20% drop - possibly change
+			decimal_n radius = this -> at(head).start.get_distance(this -> at(head).get_center());
+			decimal_n lengths[2] = {((radius - (10.0f * (decimal_n)dist_wheel / 2.0f)) * this -> at(head).angle()), 
+									((radius + (10.0f * (decimal_n)dist_wheel / 2.0f)) * this -> at(head).angle())};
+			/// TODO: THE 10x multiplier may be removed
+			decimal_n ratio = (std::min(lengths[0], lengths[1]) / std::max(lengths[0], lengths[1]));
+			decimal_n low_speed = max_speed * ratio;
+			if(std::abs(low_speed) != 0 && std::abs(low_speed) < variables::limits::minimal::wheel_velocity){
+				decimal_n anti_ratio = variables::limits::minimal::wheel_velocity / low_speed;
+				low_speed *= std::abs(anti_ratio); // so that the sign doesn't change
+				max_speed *= std::abs(anti_ratio);
+				}
+			decimal_n time = std::max(lengths[0], lengths[1]) / max_speed;
+			//~ printf("time needed %f s\n", time);
+			
+			speeds s(((this -> at(head).direction_curve)? max_speed: low_speed),
+					((!this -> at(head).direction_curve)? max_speed: low_speed));
+			
+			ret.at(0).high_interval = ret.at(0).low_interval = std::floor(now_speeds.to_hw_speed(s.left));
+			ret.at(1).high_interval = ret.at(1).low_interval = std::floor(now_speeds.to_hw_speed(s.right));
+			ret.at(0).scheduled_steps = std::floor((double)(1e6 * (double)time) / ret.at(0).high_interval);
+			ret.at(1).scheduled_steps = std::floor((double)(1e6 * (double)time) / ret.at(1).high_interval);
+			printf("right:\n\tsteps: %i\n\ttime:%i\nright:\n\tsteps: %i\n\ttime:%i\n", 
+				ret.at(0).scheduled_steps,
+				ret.at(0).high_interval,
+				ret.at(1).scheduled_steps,
+				ret.at(1).high_interval
+				);
+			now_speeds = s;
 			break;
 			}
 			
@@ -64,7 +96,7 @@ std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
 			decimal_n length = this -> at(head).length();
 			decimal_n time = length / min_speed;
 			
-			if(time >= variables::step::acceleration_time && speed_level / 3 < 0.75){
+			if(time >= variables::step::acceleration_time && speed_level / 3.0f < 0.75f){
 				coordinates inter = col_v(this -> at(head).start, 
 							min_speed * variables::step::acceleration_time, 
 							(this -> at(head).start.get_gamma(this -> at(head).end)), 1).get_point();

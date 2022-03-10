@@ -75,19 +75,23 @@ properties:
     minimal:
       circle:	0.1
       #~ wheel_velocity: 8.4374093119667 # m/s
+      #~ wheel_velocity: 0.2 # m/s
       wheel_velocity: 0.084374093119667 # m/s
+      #~ wheel_velocity: 8.4374093119667 # cm/s
+      #~ wheel_velocity: 84.374093119667 # mm/s
     
     maximal:
       circle:	3.0
       wheel_velocity: 0.674951546669682 # m/s
-      #~ wheel_velocity: 67.4951546669682 # m/s
+      #~ wheel_velocity: 67.4951546669682 # cm/s
+      #~ wheel_velocity: 674.951546669682 # mm/s
       
 program:
     files:
         chat: ../hardware_interfaces/serial/chat.yaml
 
 step:
-    #~ acceleration_time: 				0.4
+    #~ acceleration_time: 				14
     acceleration_time: 				0.6
 
 information: |
