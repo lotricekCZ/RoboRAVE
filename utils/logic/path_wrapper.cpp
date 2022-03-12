@@ -73,10 +73,16 @@ std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
 			speeds s(((this -> at(head).direction_curve)? max_speed: low_speed),
 					((!this -> at(head).direction_curve)? max_speed: low_speed));
 			
-			ret.at(0).high_interval = ret.at(0).low_interval = std::floor(now_speeds.to_hw_speed(s.left));
-			ret.at(1).high_interval = ret.at(1).low_interval = std::floor(now_speeds.to_hw_speed(s.right));
+			ret.at(0).high_interval = ret.at(0).low_interval = std::floor(std::abs(now_speeds.to_hw_speed(s.left)));
+			ret.at(1).high_interval = ret.at(1).low_interval = std::floor(std::abs(now_speeds.to_hw_speed(s.right)));
 			ret.at(0).scheduled_steps = std::floor((double)(1e6 * (double)time) / ret.at(0).high_interval);
 			ret.at(1).scheduled_steps = std::floor((double)(1e6 * (double)time) / ret.at(1).high_interval);
+			ret.at(0).chain = ((ret.at(0).scheduled_steps == 0)? motors::state::OFF: motors::state::BUFFER);
+			ret.at(1).chain = ((ret.at(1).scheduled_steps == 0)? motors::state::OFF: motors::state::BUFFER);
+			ret.at(0).direction = (s.left > 0)? motors::direction::FRONT: 
+									((s.left == 0)? motors::direction::STALLED: motors::direction::BACK);
+			ret.at(1).direction = (s.right > 0)? motors::direction::FRONT: 
+									((s.right == 0)? motors::direction::STALLED: motors::direction::BACK);
 			printf("right:\n\tsteps: %i\n\ttime: %i\nright:\n\tsteps: %i\n\ttime: %i\n", 
 				ret.at(0).scheduled_steps,
 				ret.at(0).high_interval,
@@ -116,6 +122,10 @@ std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
 			ret.at(0).scheduled_steps = ret.at(1).scheduled_steps = std::floor(steps) + std::floor(remainder);
 			ret.at(0).high_interval = ret.at(0).low_interval = 
 				ret.at(1).high_interval = ret.at(1).low_interval = std::floor(now_speeds.to_hw_speed(speed));
+			ret.at(0).direction = (speed > 0)? motors::direction::FRONT: 
+									((speed == 0)? motors::direction::STALLED: motors::direction::BACK);
+			ret.at(1).direction = (speed > 0)? motors::direction::FRONT: 
+									((speed == 0)? motors::direction::STALLED: motors::direction::BACK);
 			remainder -= std::floor(remainder); // this is to assure that not so many steps are lost
 			break;
 			}
