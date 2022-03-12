@@ -9,7 +9,7 @@ logs:
 addressbook:
     master:		0
     irduino:	1
-    motorduino:	2
+    motorduino: 2
     gndduino:	3
     stm:		4
 

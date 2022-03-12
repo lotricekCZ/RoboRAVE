@@ -137,7 +137,7 @@ void motors::encode(){
 	this -> output._content.message_space[10] = right.low_interval >> 6;
 	this -> output._content.message_space[11] = right.low_interval << 2 | right.chain;
 										
-	this -> output._content.message_space[12] = erase_flags | (right.rewrite << 1) | left.rewrite;
+	this -> output._content.message_space[12] = (erase_flags << 2) | (right.rewrite << 1) | left.rewrite;
 	}
 
 

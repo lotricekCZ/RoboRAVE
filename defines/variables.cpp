@@ -29,11 +29,11 @@ std::string variables::properties::logs::calculations;
 std::string variables::properties::logs::actions;
 
 
-uint8_t variables::addressbook::master;
-uint8_t variables::addressbook::irduino;
-uint8_t variables::addressbook::motorduino;
-uint8_t variables::addressbook::gndduino;
-uint8_t variables::addressbook::stm;
+unsigned_n variables::addressbook::master = 255;
+unsigned_n variables::addressbook::irduino = 255;
+unsigned_n variables::addressbook::motorduino = 255;
+unsigned_n variables::addressbook::gndduino = 255;
+unsigned_n variables::addressbook::stm = 255;
 
 
 decimal_n variables::thresholds::explo::influence::candle;

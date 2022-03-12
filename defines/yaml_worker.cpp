@@ -39,11 +39,11 @@ void load_config(){
 	YAML::Node addressbook		 = config["addressbook"];
 	YAML::Node program			 = config["program"];
 	
-	variables::addressbook::master = 						addressbook["master"].as<uint8_t>();
-	variables::addressbook::irduino = 						addressbook["irduino"].as<uint8_t>();
-	variables::addressbook::motorduino = 					addressbook["motorduino"].as<uint8_t>();
-	variables::addressbook::gndduino = 						addressbook["gndduino"].as<uint8_t>();
-	variables::addressbook::stm = 							addressbook["stm"].as<uint8_t>();
+	variables::addressbook::master = 						addressbook["master"].as<unsigned_n>();
+	variables::addressbook::irduino = 						addressbook["irduino"].as<unsigned_n>();
+	variables::addressbook::motorduino = 					addressbook["motorduino"].as<unsigned_n>();
+	variables::addressbook::gndduino = 						addressbook["gndduino"].as<unsigned_n>();
+	variables::addressbook::stm = 							addressbook["stm"].as<unsigned_n>();
 	
 	variables::properties::logs::calculations = 			config["logs"]["calculations"].as<std::string>();
 	variables::properties::logs::actions = 					config["logs"]["actions"].as<std::string>();

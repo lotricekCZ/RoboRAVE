@@ -104,7 +104,6 @@ std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
 							(this -> at(head).start.get_gamma(this -> at(head).end)), 1).get_point();
 				this -> insert(this -> begin() + (head), step(this -> at(head).start, inter));
 				this -> at(head + 1) = step(inter, this -> at(head + 1).end);
-				status = 0b11111;
 				}
 			
 			decimal_n steps = this -> at(head).length() / variables::wheel_step_length_const;
@@ -127,6 +126,7 @@ std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
 	this -> at(head).time_start = std::chrono::duration<decimal_n>(first - last).count();
 	this -> at(head).time = duration.count();
 	this -> at(head).v = now_speeds;
+	status = 0b111111;
 	return std::make_pair(status, ret);
 	}
 

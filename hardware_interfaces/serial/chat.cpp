@@ -57,7 +57,7 @@ void chat::init(serial &s, rpi_gpio &r){
 void chat::question(message m, lidar* l){
 	output_queue.emplace_back((lidar*)l, m);
 	l -> update();
-	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	this -> output_queue.back().awaits_second = (m._content.receiver == ((0b111 & variables::addressbook::motorduino)));
 	this -> output_queue.back().question();
 	}
 
@@ -66,7 +66,7 @@ void chat::question(message m, lidar* l){
 void chat::question(message m, thermocam* th){
 	output_queue.emplace_back((thermocam*) th, m);
 	th -> update();
-	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	this -> output_queue.back().awaits_second = (m._content.receiver == (0b111 & variables::addressbook::motorduino));
 	this -> output_queue.back().question();
 	}
 
@@ -85,7 +85,7 @@ void chat::question(message m, motors* mr){
 void chat::question(message m, turbine* t){
 	output_queue.emplace_back((turbine*)t, m);
 	t -> update();
-	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	this -> output_queue.back().awaits_second = (m._content.receiver == (0b111 & variables::addressbook::motorduino));
 	this -> output_queue.back().question();
 	}
 
@@ -97,7 +97,7 @@ void chat::question(message m, fire_sensor* f){
 	output_queue.emplace_back((fire_sensor*)f, m);
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	f -> update();
-	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	this -> output_queue.back().awaits_second = (m._content.receiver == (0b111 & variables::addressbook::motorduino));
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	this -> output_queue.back().question();
 	}
@@ -110,7 +110,7 @@ void chat::question(message m, ground_sensor* f){
 	output_queue.emplace_back((ground_sensor*)f, m);
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	f -> update();
-	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	this -> output_queue.back().awaits_second = (m._content.receiver == (0b111 & variables::addressbook::motorduino));
 	std::cout << __PRETTY_FUNCTION__ << ": " << __LINE__ << std::endl;
 	this -> output_queue.back().question();
 	}
@@ -142,6 +142,46 @@ void chat::send(message_pair *m, steady now){
 	m -> first.encode(m -> first._content, bfr);
 	std::vector<uint8_t> sended(&bfr[0], &bfr[msg_std::length]);
 	main_serial -> write(sended);
+	printf("\n----SEND----\n\tsender:\t\t%u\n\treceiver:\t%u\n\ttype:\t\t%u\n\tkind:\t\t%u\n\tnumber:\t\t%u\n\tbyteload:\t\t", 
+			m -> first._content.sender,
+			m -> first._content.receiver,
+			m -> first._content.type,
+			m -> first._content.kind,
+			m -> first._content.message_number
+			);
+	printf("\n----MATCH----\n\tmotorduino:\t\t%u\n\sender:\t%u\n\tresult:\t%d\n", 
+			(0b111 & variables::addressbook::motorduino),
+			0b111 & m -> first._content.receiver,
+			m -> first._content.type,
+			((0b111 & variables::addressbook::motorduino) == (uint8_t)(0b111 & m -> first._content.receiver))
+			);
+
+	if(((0b111 & (uint8_t)m -> first._content.receiver)) == (uint8_t)(0b111 & variables::addressbook::motorduino)){
+		std::cout << "MATCH" << std::endl;
+		uint16_t left_steps = ((m -> first._content.message_space[0] << 8) | m -> first._content.message_space[1]);
+		uint16_t right_steps = ((m -> first._content.message_space[2] << 8) | m -> first._content.message_space[3]);
+		
+		uint16_t left_mcrs_hi = ((m -> first._content.message_space[4] << 6) | ((m -> first._content.message_space[5] & 0b11111100)  >> 2));
+		uint16_t left_dir = (0b11 & m -> first._content.message_space[5]);
+		uint16_t right_mcrs_hi = ((m -> first._content.message_space[6] << 6) | (m -> first._content.message_space[7] & 0b11111100) >> 2);
+		uint16_t right_dir = (0b11 & m -> first._content.message_space[7]);
+		
+		uint16_t left_mcrs_lo = ((m -> first._content.message_space[8] << 6) | ((m -> first._content.message_space[9] & 0b11111100) >> 2));
+		uint16_t left_unchainer = (0b11 & m -> first._content.message_space[9]);
+		uint16_t right_mcrs_lo = ((m -> first._content.message_space[10] << 6) | ((m -> first._content.message_space[11] & 0b11111100) >> 2));
+		uint16_t right_unchainer = (0b11 & m -> first._content.message_space[11]);
+		
+		uint16_t left_erase = (0b1 & (m -> first._content.message_space[12] & 0b00000001));
+		uint16_t right_erase = (0b1 & ((m -> first._content.message_space[12] & 0b00000010) >> 1));
+		uint16_t input_type = m -> first._content.message_space[12] >> 2;
+		std::cout << "LEFT:\t"  <<  std::to_string(left_mcrs_hi) << "  " <<  std::to_string(left_mcrs_lo) 
+			<< " STEPS: " << std::to_string(left_steps) <<  " "  <<  std::to_string(left_dir) << "  " 
+			<<  std::to_string(left_unchainer) << std::endl;
+		std::cout << "RIGHT:\t"  <<  std::to_string(right_mcrs_hi) << "  " <<  std::to_string(right_mcrs_lo) 
+			<< " STEPS: " << std::to_string(right_steps) << " "  << std::to_string(right_dir) << "  " <<  
+			std::to_string(right_unchainer) << std::endl;
+		std::cout << "OPTION:\t"  <<  std::to_string(input_type) << std::endl; 
+		}
 	}
 
 
@@ -184,6 +224,7 @@ bool chat::stage(steady now){
 			}
 
 		}
+	return 0;
 	}
 
 
@@ -231,7 +272,7 @@ bool chat::run(steady now){
 	switch(port_state){
 		case rs485_state::FREE: {
 			for(unsigned_b i = 0; i < output_queue.size(); i++){
-				printf("%s: %i\n", __FUNCTION__, __LINE__);
+				//~ printf("%s: %i\n", __FUNCTION__, __LINE__);
 				if(std::chrono::duration<decimal_n>(now - output_queue.at(i).try_last) 
 					>= std::chrono::milliseconds(output_queue.at(i).response_timeout)){
 					//~ printf("RESPONSE IS HERE!\n");

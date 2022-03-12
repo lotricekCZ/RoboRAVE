@@ -35,11 +35,11 @@ static class variables { // I hate myself for this!!!
 		
 		static class addressbook {
 			public:
-			static uint8_t master;
-			static uint8_t irduino;
-			static uint8_t motorduino;
-			static uint8_t gndduino;
-			static uint8_t stm;
+			static unsigned_n master;
+			static unsigned_n irduino;
+			static unsigned_n motorduino;
+			static unsigned_n gndduino;
+			static unsigned_n stm;
 			} addressbook;
 
 		
