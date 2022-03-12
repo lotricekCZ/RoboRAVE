@@ -504,7 +504,7 @@ int main(int argc, char *argv[]) {
 			break;
 			}
 		
-		case 74:{ // listing possible options ./roborave 74  4 3  -3 2
+		case 74:{ // listing possible options Chci
 			map m;
 	
 			coordinates c[] = {coordinates(-10, 3), coordinates(-11, 4), coordinates(-7, 8), coordinates(-6, 7)};
@@ -828,7 +828,11 @@ int main(int argc, char *argv[]) {
 				);
 			std::cout << p.print() << std::endl;
 			path_wrapper pw(p);
-			while(pw.has_next()) {pw.translate(); ++pw.head;}
+			while(pw.has_next())
+				if(pw.its_time()){
+					pw.translate(); 
+					++pw.head;
+					}
 			break;
 			}
 			

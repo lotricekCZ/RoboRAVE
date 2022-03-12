@@ -60,9 +60,14 @@ bool camera::init(){
 
 void camera::run(steady used){
 	if(std::chrono::duration<decimal_n>(used - last_used).count() >= (1.0f/check_frequency)){
+		if(!_camera.isOpened()){
+			std::cerr << "ERROR! Camera not opened.\n";
+			return;
+			}
 		_camera.read(frame);
 		if(frame.empty()) {
 			std::cerr << "ERROR! blank frame grabbed\n";
+			last_used = used;
 			return;
 			}
 		cv::Mat lame = frame;

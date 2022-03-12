@@ -105,7 +105,7 @@ void logic::init(){
 	steady end = time_now;
 	std::chrono::duration<decimal_n> elapsed_seconds = end - now;
 	printf("Logic inited in %f s.\n", elapsed_seconds.count());
-	
+	std::this_thread::sleep_for(std::chrono::milliseconds(75));
 	while(flags.mode != START_MOVING && std::chrono::duration<decimal_n>(time_now - end).count() > 1.0f){
 		//~ flags.mode = (std::cin.get() == 'e')? START_MOVING: flags.mode;
 		main_ground_sensor.question();
@@ -157,9 +157,19 @@ void logic::decide(steady now){
 
 
 void logic::apply(steady now){
-	if(main_path_wrapper.has_next() && main_path_wrapper.its_time()){
-		auto app = main_path_wrapper.translate();
-		main_motors.assign(app.second, app.first);
+	//~ std::cout << main_path_wrapper.has_next() << std::endl;
+	if(main_path_wrapper.has_next()){
+		//~ printf("HAS TIME %d\n\n\n", main_path_wrapper.its_time(now));
+		if(main_path_wrapper.its_time(now)){
+			//~ printf("HAS NEXT\n\n\n");
+			auto app = main_path_wrapper.translate();
+			if(main_motors.queue < 10){
+				main_path_wrapper.head++;
+				main_motors.assign(app.second, app.first);
+				main_motors.question();
+				}
+			if(!main_path_wrapper.has_next()) std::cout << "NOPE\n\n" << std::endl;
+			}
 		}
 	}
 

@@ -77,13 +77,15 @@ std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
 			ret.at(1).high_interval = ret.at(1).low_interval = std::floor(now_speeds.to_hw_speed(s.right));
 			ret.at(0).scheduled_steps = std::floor((double)(1e6 * (double)time) / ret.at(0).high_interval);
 			ret.at(1).scheduled_steps = std::floor((double)(1e6 * (double)time) / ret.at(1).high_interval);
-			printf("right:\n\tsteps: %i\n\ttime:%i\nright:\n\tsteps: %i\n\ttime:%i\n", 
+			printf("right:\n\tsteps: %i\n\ttime: %i\nright:\n\tsteps: %i\n\ttime: %i\n", 
 				ret.at(0).scheduled_steps,
 				ret.at(0).high_interval,
 				ret.at(1).scheduled_steps,
 				ret.at(1).high_interval
 				);
 			now_speeds = s;
+			this -> at(head).omega = this -> at(head).angle() / time;
+			this -> at(head).v = s;
 			break;
 			}
 			
@@ -121,6 +123,7 @@ std::pair<uint8_t, std::array<motors::motor, 2>> path_wrapper::translate(){
 		}
 	last = time_now;
 	duration = std::chrono::microseconds(((unsigned_b)ret.at(0).scheduled_steps * (unsigned_b)ret.at(0).high_interval));
+	//~ printf("setted time: %f = %i * %i\n", duration.count(), (unsigned_b)ret.at(0).scheduled_steps, (unsigned_b)ret.at(0).high_interval);
 	this -> at(head).time_start = std::chrono::duration<decimal_n>(first - last).count();
 	this -> at(head).time = duration.count();
 	this -> at(head).v = now_speeds;

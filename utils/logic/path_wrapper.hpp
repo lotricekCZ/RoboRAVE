@@ -91,7 +91,7 @@ class path_wrapper: public path {
 		using path::get_intersections;
 		steady first = time_now; // to have steps anchored in time
 		steady last = time_now;
-		std::chrono::duration<decimal_n> duration;
+		std::chrono::duration<decimal_n> duration = std::chrono::microseconds(0);
 		unsigned_b head = 0; // to know which step to translate
 		decimal_n speed_level = 0;
 		decimal_n remainder = 0; // what's left after division

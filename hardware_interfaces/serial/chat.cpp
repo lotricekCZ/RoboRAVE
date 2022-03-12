@@ -75,7 +75,8 @@ void chat::question(message m, thermocam* th){
 void chat::question(message m, motors* mr){
 	output_queue.emplace_back((motors*)mr, m);
 	mr -> update();
-	this -> output_queue.back().awaits_second = (m._content.receiver == variables::addressbook::motorduino);
+	this -> output_queue.back().awaits_second = 1;
+	this -> output_queue.back().tries = variables::chat::attempt_count - 1;
 	this -> output_queue.back().question();
 	}
 
@@ -141,14 +142,13 @@ void chat::send(message_pair *m, steady now){
 	m -> first.encode(m -> first._content, bfr);
 	std::vector<uint8_t> sended(&bfr[0], &bfr[msg_std::length]);
 	main_serial -> write(sended);
-	printf("DISABLING SERIAL, IN next 4.5s nothing\n");
 	}
 
 
 bool chat::stage(steady now){
 	switch(port_state){
 		case rs485_state::FREE: {
-			printf("OPENING\n");
+			std::cout << "OPENING" << std::endl;
 			port_state = rs485_state::OPENING;
 			main_gpio -> enable_serial();
 			message_send_time = time_now;
@@ -159,7 +159,7 @@ bool chat::stage(steady now){
 			if(std::chrono::duration<decimal_n>(now - message_send_time) 
 				>= std::chrono::microseconds(variables::chat::port_delay)){
 				port_state = rs485_state::SEND;
-				printf("SEND\n");
+				std::cout << "SEND" << std::endl;
 				} else {return 0;}
 			[[fallthrough]];
 			}
@@ -168,7 +168,8 @@ bool chat::stage(steady now){
 			send(held, now);
 			message_send_time = time_now;
 			port_state = rs485_state::CLOSING;
-			printf("CLOSING\n");
+			std::cout << "CLOSING" << std::endl;
+			//~ printf("CLOSING\n");
 			return 1;
 			}
 
@@ -177,7 +178,7 @@ bool chat::stage(steady now){
 				>= std::chrono::microseconds(variables::chat::port_delay)){
 				main_gpio -> disable_serial();
 				port_state = rs485_state::FREE;
-				printf("CLOSED\n");
+				std::cout << "CLOSED" << std::endl;
 				}
 			return 0;
 			}
@@ -230,14 +231,15 @@ bool chat::run(steady now){
 	switch(port_state){
 		case rs485_state::FREE: {
 			for(unsigned_b i = 0; i < output_queue.size(); i++){
-				//~ printf("%s: %i\n", __PRETTY_FUNCTION__, __LINE__);
+				printf("%s: %i\n", __FUNCTION__, __LINE__);
 				if(std::chrono::duration<decimal_n>(now - output_queue.at(i).try_last) 
 					>= std::chrono::milliseconds(output_queue.at(i).response_timeout)){
 					//~ printf("RESPONSE IS HERE!\n");
 					if(output_queue.at(i).tries >= variables::chat::attempt_count) {
 						output_queue.at(i).answer();
 						output_queue.erase(output_queue.begin() + i--);
-						continue;
+						if(output_queue.size() != 0) continue;
+						break;
 						}
 					port_state = rs485_state::OPENING;
 					held = &output_queue.at(i);

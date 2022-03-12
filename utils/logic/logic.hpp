@@ -71,7 +71,17 @@ class logic {
 	turbine		main_turbine;
 	motors		main_motors;
 	rpi_gpio	main_gpio;
-	path_wrapper main_path_wrapper = path_wrapper(path(step(coordinates(-3, -6), coordinates(6, 7))));
+	path_wrapper main_path_wrapper = path_wrapper(
+					path(std::vector<step>({
+						step(coordinates(0, 0), coordinates(3, 0)),
+						step(coordinates(3, 0), coordinates(4, 1), coordinates(3, 1), 0),
+						step(coordinates(4, 1), coordinates(4, 4)),
+						step(coordinates(4, 4), coordinates(3, 5), coordinates(3, 4), 0),
+						step(coordinates(3, 5), coordinates(-3, 5)),
+						step(coordinates(-3, 5), coordinates(-4, 4), coordinates(-3, 4), 0),
+						step(coordinates(-4, 4), coordinates(-4, 0))
+						}
+						)));
 	
 	//~ auto start = std::chrono::steady_clock::now();
 	// map & planning stuff
