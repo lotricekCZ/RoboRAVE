@@ -205,8 +205,20 @@ void logic::fill(ground_sensor *p){
 void logic::fill(lidar *p){
 	// it is important to backtrack the step to import anything to a map
 	while(p -> conv_vals.size()){
-		auto back = p -> conv_vals.back();
-		node backtracked = main_path_wrapper.backtrack(back.time); // find where it was this much time ago.
+		//  
+		if(p -> conv_vals.back().distance <= (variables::limits::maximal::lidar_distance * 10)){
+			auto back = p -> conv_vals.back();
+			node backtracked = main_path_wrapper.backtrack(back.time); // find where it was this much time ago.
+			coordinates touch = backtracked.position._coordinates + backtracked.position._coordinates.make_local(p -> conv_vals.back().distance / 10.0f, 
+							((std::asin(std::sin(((pi_const * (p -> conv_vals.back().angle / 180.0f))) - backtracked.angle)) + pi_const)));
+			bool no_overlap = true;
+			for(line l: main_map._map_borders)
+				if(step(backtracked.position._coordinates, touch).intersection(l).size() != 0){
+					no_overlap = false;
+					break;
+					}
+			if(no_overlap) main_map._map.emplace_back(touch, location::type::_barrier_p);
+			}
 		p -> conv_vals.erase(p -> conv_vals.end());
 		}
 	}

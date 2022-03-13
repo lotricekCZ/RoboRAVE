@@ -85,7 +85,8 @@ void load_config(){
 	variables::limits::maximal::circle = 							node_robot["maximal"]["circle"].as<decimal_n>();
 	variables::limits::minimal::wheel_velocity = 					node_robot["minimal"]["wheel_velocity"].as<decimal_n>();
 	variables::limits::maximal::wheel_velocity = 					node_robot["maximal"]["wheel_velocity"].as<decimal_n>();
-
+	variables::limits::maximal::lidar_distance = 					node_robot["maximal"]["lidar_distance"].as<decimal_n>();
+	
 	variables::robot::wheel::radius = 								node_robot["wheel"]["radius"].as<decimal_n>();
 	variables::robot::wheel::steps = 								node_robot["wheel"]["steps"].as<unsigned_b>();
 	//~ variables::properties::camera::size_footage_vertical = 		node_camera["size_footage_vertical"].as<unsigned_n>();

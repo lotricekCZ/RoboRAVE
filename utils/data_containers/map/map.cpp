@@ -42,10 +42,10 @@ std::vector<location> map::grid(int s_height = 0, int s_width = 0, int height = 
 	while(ht <= he){
 		while(wt <= we){
 			b.emplace_back(ht, wt, location::_unknown);
-			wt += map_raster;
+			wt += variables::map::raster;
 			}
 		wt = w;
-		ht += map_raster;
+		ht += variables::map::raster;
 		}
 	return b;
 	}
@@ -267,8 +267,8 @@ void map::edit_map(wall w){
 			}
 		}
 	/// doplneni polovicnim rastrem
-	for(decimal_n x = limits[1].x; x < limits[0].x; x += (map_raster/2)){
-		for(decimal_n y = limits[1].y; y < limits[0].y; y += (map_raster/2)){
+	for(decimal_n x = limits[1].x; x < limits[0].x; x += (variables::map::raster/2)){
+		for(decimal_n y = limits[1].y; y < limits[0].y; y += (variables::map::raster/2)){
 			coordinates c(x, y);
 			if(w.inside(c)){
 				std::cout << c.print() << std::endl;
@@ -290,8 +290,8 @@ void map::edit_map(surround_circle w){
 	//~ std::cout << limits[0].print() << std::endl;
 	//~ std::cout << limits[1].print() << std::endl;
 	/// doplneni polovicnim rastrem
-	for(decimal_n x = limits[1].x; x < limits[0].x; x += (map_raster/2)){
-		for(decimal_n y = limits[1].y; y < limits[0].y; y += (map_raster/2)){
+	for(decimal_n x = limits[1].x; x < limits[0].x; x += (variables::map::raster/2)){
+		for(decimal_n y = limits[1].y; y < limits[0].y; y += (variables::map::raster/2)){
 			coordinates c(x, y);
 			if(w.inside(c)){
 				std::cout << c.print() << std::endl;
@@ -313,8 +313,8 @@ void map::edit_map(candle w){
 	//~ std::cout << limits[0].print() << std::endl;
 	//~ std::cout << limits[1].print() << std::endl;
 	/// doplneni polovicnim rastrem
-	for(decimal_n x = limits[1].x; x < limits[0].x; x += (map_raster/2)){
-		for(decimal_n y = limits[1].y; y < limits[0].y; y += (map_raster/2)){
+	for(decimal_n x = limits[1].x; x < limits[0].x; x += (variables::map::raster/2)){
+		for(decimal_n y = limits[1].y; y < limits[0].y; y += (variables::map::raster/2)){
 			coordinates c(x, y);
 			if(w.inside(c)){
 				std::cout << c.print() << std::endl;

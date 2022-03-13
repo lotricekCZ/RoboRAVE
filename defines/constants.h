@@ -16,7 +16,6 @@
 #define robot_radius 0.75 // in meters
 #define safe_constant 1.1 // odchylka kolik musi byt pocitano robot_radiusu, aby se nebouralo
 
-#define map_raster 	15 // in milimeters, x and y difference of unknown points
 #define map_unit 	30 // distance to be multiplied by influence
 #define map_l 		1500 // in milimeters, x and y difference of unknown points
 #define map_h 		map_l // in milimeters, x and y difference of unknown points

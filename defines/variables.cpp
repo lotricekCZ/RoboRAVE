@@ -58,6 +58,8 @@ decimal_n variables::limits::maximal::wheel_velocity;
 decimal_n variables::limits::minimal::circle;
 decimal_n variables::limits::maximal::circle;
 
+decimal_n variables::limits::maximal::lidar_distance = 50; // cm
+
 decimal_n variables::robot::wheel::radius;
 unsigned_b variables::robot::wheel::steps;
 
@@ -90,6 +92,10 @@ decimal_n variables::properties::heights::fire_sensors; /// mm
 // program segment start
 std::string variables::program::files::chat;
 // program segment end
+
+// map segment start
+decimal_n variables::map::raster = 100; // mm
+// map segment end
 
 // chat segment start
 std::string variables::chat::port;

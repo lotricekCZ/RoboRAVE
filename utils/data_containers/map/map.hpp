@@ -52,6 +52,7 @@ class map
 		std::vector<wall> _map_walls;
 		std::vector<candle> _map_candles;
 		std::vector<surround_circle> _map_surround_circles;
+		std::vector<line> _map_borders;
 		
 		std::vector<location *> strip(std::array<coordinates, 2>);
 		location interest_calculate();

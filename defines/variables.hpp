@@ -41,6 +41,11 @@ static class variables { // I hate myself for this!!!
 			static unsigned_n gndduino;
 			static unsigned_n stm;
 			} addressbook;
+			
+		static class map {
+			public:
+			static decimal_n raster;
+			} map;
 
 		
 		static class properties {
@@ -96,6 +101,7 @@ static class variables { // I hate myself for this!!!
 				public:
 				static decimal_n wheel_velocity;		/// m*s^-1 maximal wheel velocity that is allowed and proably safe (3ms:3ms)
 				static decimal_n circle;				/// REMOVE AFTER plan_make tests
+				static decimal_n lidar_distance;		/// Maximal distance for perimeter search
 				//~ static decimal_n circle 		= 0.4; /// m maximal allowed circle, speed is key.
 				static unsigned_n period;				/// us, maximal time between pulses 
 				} maximal;
