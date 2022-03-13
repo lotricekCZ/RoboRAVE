@@ -1,6 +1,7 @@
 void motor::write_specific_high(uint8_t pin){
 	*_motor.stepper_register |= (1 << pin);
-			
+	//~ Serial.println("Input type\t" + String(data.input_type));
+	//~ Serial.print("I");
 	//switch((uint8_t)_motor.stepper_register){
 		//case (uint8_t)&PORTD:
 			//PORTD |= (uint8_t)(1 << pin);
@@ -16,6 +17,7 @@ void motor::write_specific_high(uint8_t pin){
 	
 void motor::write_specific_low(uint8_t pin){
 	*_motor.stepper_register &= ~(1 << pin);
+	//~ Serial.print("L");
 			//PORTD &= ~(1 << pin);
 			//break;
 		//case (uint8_t)&PORTC:
@@ -128,10 +130,14 @@ void motor::step_decision(){
 void motor::handle_in_background(){
 	switch((uint8_t)_motor.direction){
 		case 1:
+			//~ Serial.print("REMAINS: ");
+			//~ Serial.println(_motor.remaining_steps);
 			write_specific_high(_motor.direction_pin);
 			step_decision();
 			break;
 		case 0:
+			//~ Serial.print("REMAINS: ");
+			//~ Serial.println(_motor.remaining_steps);
 			write_specific_low(_motor.direction_pin);
 			step_decision();
 			break;

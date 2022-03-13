@@ -234,6 +234,8 @@ bool chat::run(steady now){
 	if(main_serial -> in_waiting() != 0){
 		std::vector<uint8_t> appended(main_serial -> in_waiting());
 		main_serial -> read(appended);
+		for(auto a: appended)
+			printf("%c", a);
 		for(uint8_t a: appended){
 			input_buffer.push_back(a);
 			if(a == msg_std::end)
