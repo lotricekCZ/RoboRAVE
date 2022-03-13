@@ -55,46 +55,46 @@ void translator_motor::decompose(){
 	}
 
 void translator_motor::apply(class motor *Mri, class motor *Mle){
-	Serial.println("\nAPPLYING\n");
+	//~ Serial.println("\nAPPLYING\n");
 	class motor *Mr = Mri;
 	class motor *Ml = Mle;	
 
 	if(data.input_type & 0b1){ // right motor
-		Serial.print("RIGHT\t");
+		//~ Serial.print("RIGHT\t");
 		if((data.input_type >> 5) & 0b1){ // chaining
-			Serial.print("C");
+			//~ Serial.print("C");
 			right_set_chain(Mr);
 			}
 		if((data.input_type >> 4) & 0b1){ // direction
-			Serial.print("D");
+			//~ Serial.print("D");
 			right_set_dir(Mr);
 			}
 		if((data.input_type >> 3) & 0b1){ // rewrite
-			Serial.print("R");
+			//~ Serial.print("R");
 			right_rewrite(Mr);
 			}
 		if((data.input_type >> 2) & 0b1){ // speed
-			Serial.println("S\n");
+			//~ Serial.println("S\n");
 			right_set_speed(Mr);
 			}
 		}
 
 	if(data.input_type >> 1 & 0b1){ // right motor
-		Serial.print("LEFT\t");
+		//~ Serial.print("LEFT\t");
 		if((data.input_type >> 5) & 0b1){ // chaining
-			Serial.print("C");
+			//~ Serial.print("C");
 			left_set_chain(Ml);
 			}
 		if((data.input_type >> 4) & 0b1){ // direction
-			Serial.print("D");
+			//~ Serial.print("D");
 			left_set_dir(Ml);
 			}
 		if((data.input_type >> 3) & 0b1){ // rewrite
-			Serial.print("R");
+			//~ Serial.print("R");
 			left_rewrite(Ml);
 			}
 		if((data.input_type >> 2) & 0b1){ // speed
-			Serial.println("S");
+			//~ Serial.println("S");
 			left_set_speed(Ml);
 			}
 		}	

@@ -35,8 +35,8 @@ void turbine::turn_off_turbine(){
 void turbine::change_stepper_motor_combination(uint8_t input){
 	*primary.selected_register &= !(0b1111 << (primary.first_of_four));
 	*primary.selected_register |= (input << (primary.first_of_four));
-	//Serial.println(String(*primary.selected_register, BIN));
-	//Serial.println(String(primary.pulses[input]));
+	// Serial.println(String(*primary.selected_register, BIN));
+	// Serial.println(String(primary.pulses[input]));
 	}
 
 void turbine::move_stepper_motor(){
@@ -127,20 +127,20 @@ void turbine::handle_in_background(){
 		uint32_t sum = primary.warm_up_change + (uint32_t)3000000 + 
 				(uint32_t)(primary.warm_up_change >= 512) * (uint32_t)1000000;
 		if(micros_now >= sum){
-			Serial.println("MIKRA");
-			Serial.println(esc_signal.read());
+			//~ Serial.println("MIKRA");
+			//~ Serial.println(esc_signal.read());
 			switch(esc_signal.read()){
 				case 0:
-					Serial.println("UP");
+					//~ Serial.println("UP");
 					esc_signal.write(180);	
 					break;
 				case 180:
-					Serial.println("STABLE");
+					//~ Serial.println("STABLE");
 					turn_on_turbine();
 					//~ delay(4000);
 					break;
 				default:
-					Serial.println("DOWN");
+					//~ Serial.println("DOWN");
 					if(had_attached){
 						esc_signal.write(0);
 						break;
@@ -166,7 +166,7 @@ void turbine::handle_in_background(){
 						esc_signal.write(res*64);
 					}
 					else{
-						esc_signal.write(res*primary.repeatings);
+						esc_signal.write(res * primary.repeatings);
 					}
 					break;
 				case OFF:
@@ -175,7 +175,7 @@ void turbine::handle_in_background(){
 							esc_signal.writeMicroseconds(1010);
 						}
 						else{
-							esc_signal.write(res*primary.repeatings + 1);
+							esc_signal.write(res * primary.repeatings + 1);
 						}
 					break;
 				}

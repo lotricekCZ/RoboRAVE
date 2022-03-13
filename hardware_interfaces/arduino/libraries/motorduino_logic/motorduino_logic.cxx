@@ -109,6 +109,8 @@ void logic::decide_kind(){
 				main_translator_turbine -> fill_input(main_chat -> incoming.message_space);
 				main_translator_turbine -> decompose();
 				main_translator_turbine -> apply((uint8_t)main_chat -> incoming.kind, *main_chat -> incoming.message_space, main_turbine, sensor);
+				main_translator_motor -> compose(*main_chat -> outcoming.message_space, main_motor_r, main_motor_l);
+				write_ser(GTD_MOT, MSR);
 				break;
 			case SRT_TRB:
 				main_translator_turbine -> fill_input(main_chat -> incoming.message_space);
