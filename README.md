@@ -1,10 +1,13 @@
 # R<sub>e</sub>(a) = d<sub>m</sub> <sup>e</sup>
+(Status: vyřazen)
+Tento projekt byl tvořen jako software pro robota určeného pro hašení svíček v 
+soutěži RoboRAVE v kategorii pro střední školy.
+Výsledné stvoření mělo být schopno rozpoznávat objekty v zorném poli a 
+orientace v prostoru, stejně tak se pohybovat po herním poli nikoliv na základě náhody,
+ale ze "zvědavosti" - periferie(=senzory) měly nějaký rangě a snímaný úhel a měly být zaznamenávané
+veškeré proběhlé kroky. Na základě těchto informací šlo určit prozkoumanou plochu a vybírána místa zajímavá pro prozkoumání.
 
-Tento projekt je tvořen jako software pro robota určeného pro hašení svíček.
-Výsledné stvoření by mělo být schopno rozpoznávat objekty v zorném poli a 
-orientace v prostoru.
-
-
+Repozitář obsahuje atypické členění zdrojových souborů, které je, díky bohu, překonáno.
 
 ---
 
