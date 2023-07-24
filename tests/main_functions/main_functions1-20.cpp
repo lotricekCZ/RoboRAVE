@@ -30,7 +30,7 @@ namespace mf {
 	
 	void function1(){
 		#ifndef dont_comp
-		log_writer("dear Odin, fuck you", "general.txt");
+		log_writer("Somehow, wrong log message slipped in.", "general.txt");
 		#endif
 		}
 		

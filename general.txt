@@ -1,3 +1,3 @@
-[2020-12-19 14:08:32] @ 1608383312 s: dear Odin, fuck you
-[2020-12-19 14:08:43] @ 1608383323 s: dear Odin, fuck you
-[2020-12-19 14:09:22] @ 1608383362 s: dear Odin, fuck you
+[2020-12-19 14:08:32] @ 1608383312 s: Somehow, wrong log message slipped in.
+[2020-12-19 14:08:43] @ 1608383323 s: Somehow, wrong log message slipped in.
+[2020-12-19 14:09:22] @ 1608383362 s: Somehow, wrong log message slipped in.
