@@ -17,7 +17,7 @@ Nikdy jsem nepočítal s jakoukoliv spoluprací (PCB design & assembly, programo
 Maturita. A šibeniční termín, jak vidno, poslední commit byl přidán den před konáním soutěže v 23:09, kdy již byla má neúčast jistá.
 
 ## Kde hledat výkladní skříň kódu?
-[step.hpp](./utils/planners/planner/step.hpp)
+[step.hpp](./utils/planners/planner/step.hpp) a jeho .cpp source je jeden ze světlejších částí kódu, neboť byl ten, který musel fungovat velmi spolehlivě díky čemuž se mu dostalo nezvyklého množství pozornosti.
 
 <a style="padding:0.5em; text-decoration:none; margin:0.5em; border-radius:0.95em; background-color:#308; font-size: 20px; font-weight:800;" href=./utils/planners/planner/plans/metody_planovani.md>metody plánování </a> 
 =======
