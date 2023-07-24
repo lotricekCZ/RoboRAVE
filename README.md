@@ -18,6 +18,7 @@ Maturita. A šibeniční termín, jak vidno, poslední commit byl přidán den p
 
 ## Kde hledat výkladní skříň kódu?
 [step.hpp](./utils/planners/planner/step.hpp)
+
 <a style="padding:0.5em; text-decoration:none; margin:0.5em; border-radius:0.95em; background-color:#308; font-size: 20px; font-weight:800;" href=./utils/planners/planner/plans/metody_planovani.md>metody plánování </a> 
 =======
 
